@@ -1,0 +1,25 @@
+{# 
+  Event
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+{% if usage == 'framework' %}
+  {% set template_namespace = '@framework' %}
+  {% set template_file = 'body.twig' %}
+{% else %}
+  {% set template_namespace = '@phpManufaktur/Event/Template' %}
+  {% set template_file = 'backend/body.twig' %}
+{% endif %}
+{% extends template_file(template_namespace, template_file) %}
+{% block title %}{{ 'Event - About'|trans }}{% endblock %}
+
+{% block content %}
+  <div id="event_content">
+    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' %}
+      <p>@todo: About Event</p>
+  </div>
+{% endblock content %}
