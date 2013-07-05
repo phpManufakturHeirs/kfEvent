@@ -1,0 +1,40 @@
+{
+  "name":"Event",
+  "guid":"DC674566-0F4E-4E6D-A325-101915925BA5",
+  "category":"extension",
+  "group":"phpManufaktur",
+  "vendor":"phpManufaktur",
+  "type":"application",
+  "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Event",
+  "namespace": "phpManufaktur\\Event",
+  "link":{
+    "about":"\/event\/about"
+  },
+  "release": {
+    "number" : "2.0.10",
+    "date" : "2013-07-05"
+  },
+  "description": {
+    "en": {
+      "title":"Event management for kitFramework",
+      "short": "Event management for kitFramework",
+      "long": "Complete event management for use with the kitFramework",
+      "url": "https:\/\/kit2.phpmanufaktur.de"
+    }
+  },
+  "require": {
+    "framework": {
+      "release": "0.18"
+    }
+  },
+  "license":"MIT License",
+  "download": {
+    "availability":"public",
+    "agreement":"free",
+    "github":{
+      "organization":"phpManufaktur",
+      "repository":"kfEvent"
+    },
+    "url":"https:\/\/github.com\/phpManufaktur\/kfEvent"
+  }
+}
