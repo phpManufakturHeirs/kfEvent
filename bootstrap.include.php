@@ -15,6 +15,8 @@ use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use phpManufaktur\Event\Data\Setup\Setup;
 use phpManufaktur\Event\Control\Backend\About;
+use phpManufaktur\Event\Control\Backend\ContactList as EventContactList;
+use phpManufaktur\Event\Control\Backend\ContactEdit as EventContactEdit;
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
@@ -52,11 +54,32 @@ $app->get('/event/cms/{cms}', function ($cms) use ($app) {
 });
 
 // About dialog
-$app->get('/admin/event/about', function (Request $request) use ($app) {
+$app->get('/admin/event/about', function () use ($app) {
     $About = new About($app);
     return $About->exec();
 });
 
+// Contact List
+$app->match('/admin/event/contact/list', function() use($app) {
+    $ContactList = new EventContactList($app);
+    return $ContactList->exec();
+});
+$app->match('/admin/event/contact/list/page/{page}', function($page) use ($app) {
+    $ContactList = new EventContactList($app);
+    $ContactList->setCurrentPage($page);
+    return $ContactList->exec();
+});
+
+// Contact create and edit
+$app->match('/admin/event/contact/edit', function() use($app) {
+    $ContactEdit = new EventContactEdit($app);
+    return $ContactEdit->exec();
+});
+$app->match('/admin/event/contact/edit/id/{contact_id}', function($contact_id) use($app) {
+    $ContactEdit = new EventContactEdit($app);
+    $ContactEdit->setContactID($contact_id);
+    return $ContactEdit->exec();
+});
 
 $app->match('/admin/event/setup', function() use($app) {
     $Setup = new Setup($app);

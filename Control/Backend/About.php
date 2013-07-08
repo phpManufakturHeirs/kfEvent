@@ -1,7 +1,7 @@
 <?php
 
 /**
- * propangas24
+ * Event
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
  * @link https://addons.phpmanufaktur.de/propangas24

@@ -1,10 +1,10 @@
 {# 
-  WinCalc
+  Event
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
   @link https://github.com/phpManufaktur/kitFramework/wiki  
-  @copyright 2012 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% spaceless %}
@@ -17,9 +17,9 @@
       <meta name="robots" content="noindex,nofollow" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
-      {% block css %}
+      {% block stylesheet %}
         <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
-      {% endblock css %}
+      {% endblock stylesheet %}
       {% block jquery %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       {% endblock jquery %} 

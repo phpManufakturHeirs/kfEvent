@@ -62,10 +62,10 @@ class Backend {
                 'link' => FRAMEWORK_URL.'/admin/event/contact/list'.self::$usage_param,
                 'active' => ($active == 'contact_list')
             ),
-            'contact' => array(
+            'contact_edit' => array(
                 'text' => 'Contact',
                 'link' => FRAMEWORK_URL.'/admin/event/contact/edit'.self::$usage_param,
-                'active' => ($active == 'contact')
+                'active' => ($active == 'contact_edit')
             ),
             'groups' => array(
                 'text' => 'Groups',
@@ -95,7 +95,7 @@ class Backend {
      */
     public function setMessage($message, $params=array())
     {
-        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend.message.twig'),
+        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/message.twig'),
             array('message' => $this->app['translator']->trans($message, $params)));
     }
 

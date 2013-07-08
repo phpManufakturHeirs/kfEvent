@@ -1,0 +1,99 @@
+/*
+  Contact
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de/FacebookGallery
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+*/
+
+.clear {
+  clear: both;
+  width: 1px;
+  height: 1px;
+}
+.contact_form {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+}
+.contact_form label {
+  clear: both;
+  float: left;
+  width: 100px;
+  text-align: right;
+  margin: 0 0 10px 0;
+  padding: 3px 5px 0 0;
+}
+label[for=form_password_first] {
+  display: none;
+}
+.contact_form label.required:after {
+  content: '*';
+  color: #da251d;
+  background-color: transparent;
+  font-weight: bold;
+}
+.contact_form select,
+.contact_form input {
+  float: left;
+  width: 150px;
+  margin: 0 0 10px 0;
+}
+.contact_form textarea {
+  float: left;
+  width: 300px;
+  height: 100px;
+  margin: 0 0 10px 0;
+}
+#form_person_0_person_gender {
+  float: left;
+  width: 250px;
+}
+#form_person_0_person_gender input {
+  clear: left;
+  float:left;
+  width: 15px;
+  margin: 5px 10px 0 0;
+  padding: 0;
+}
+#form_person_0_person_gender label {
+  clear: none;
+  float: left;
+  width: 50px;
+  text-align: left;
+}
+#form_person_0_person_gender label.required:after {
+  content: none;
+}
+input#form_zip {
+  width: 40px;
+}
+input#form_city {
+  width: 100px;
+  margin: 0 0 10px 5px;
+}
+.contact_form input[type=submit] {
+  width: 150px;
+}
+.contact_form input[type=checkbox] {
+  float: left;
+  width: 15px;
+  padding: 0;
+  margin: 5px 10px 0 0;
+}
+select#form_person_0_person_birthday_day,
+select#form_person_0_person_birthday_month {
+  width: 40px;
+}
+select#form_person_0_person_birthday_year {
+  width: 60px;
+}
+
+#form_options label {
+  clear: none;
+  text-align: left;
+  width: 300px;
+}
+

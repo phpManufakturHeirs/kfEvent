@@ -15,5 +15,6 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
-
+    'Contact list'
+        => 'Kontakte, Übersicht'
 );

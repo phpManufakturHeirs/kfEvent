@@ -1,0 +1,112 @@
+{# 
+  Event
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+{% if extra.usage == 'framework' %}
+  {% set template_namespace = '@framework' %}
+  {% set template_file = 'body.twig' %}
+{% else %}
+  {% set template_namespace = '@phpManufaktur/Event/Template' %}
+  {% set template_file = 'backend/body.twig' %}
+{% endif %}
+{% extends template_file(template_namespace, template_file) %}
+{% block title %}{{ 'Contact list'|trans }}{% endblock %}
+{% block stylesheet %}
+  {{ parent() }}
+  {% if extra.usage == 'framework' %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
+  {% endif %}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/contact.list.css" media="screen, projection" />
+{% endblock stylesheet %}
+{% block content %}
+  <div id="event_content">
+    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' with {toolbar: extra.toolbar} only %}
+    
+    {% if message|length > 0 %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+      
+    <div id="contact_list">
+
+      {#  
+          The pagination serve a automatic 1 2 3 ... 17 18 19 pagination and 
+          navigation for the table if it contain more rows than specified in: 
+          /Contact/Control/Dialog/Simple/SimpleList.json 
+          Changes here must be also done at the footer of the table!
+       #}  
+      {% include '@phpManufaktur/Contact/Template/default/backend/simple/pagination.twig' with {
+        currentPage: current_page,
+        paginationPath: pagination_route,
+        lastPage: last_page,
+        showAlwaysFirstAndLast: true,
+        addParameter: '?order=' ~ order_by|join(',') ~ '&direction=' ~ order_direction ~ '&usage=' ~ extra.usage
+      } only %}
+
+      <table>
+        <thead>
+          <tr>  
+            {# 
+                Enable an automatic ordering of the table by the columns, just
+                clicking at the head of the column. Default order is specified in:
+                /Contact/Control/Dialog/Simple/SimpleList.json
+             #}
+            {% set order_by_str = order_by|join(',') %}
+            {% for head in list.0|keys %}
+              {% if head in columns %}
+                {% set head_order = order_direction %}
+                {% set head_class = head %}
+                {% if (head == order_by_str) %}
+                  {% if (head_order == 'asc') %}
+                    {% set head_order = 'desc' %}                
+                    {% set head_class = head_class ~ ' active asc' %}
+                  {% else %}
+                    {% set head_order = 'asc' %}
+                    {% set head_class = head_class ~ ' active desc' %}
+                  {% endif %}
+                {% endif %}  
+                {% set head_link = pagination_route ~ current_page ~ '?order=' ~ head ~ '&direction=' ~ head_order ~ '&usage=' ~ extra.usage %}
+                <th class="{{ head_class }}"><a href="{{ head_link }}">{{ head|trans }}</a></th>  
+              {% endif %}
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% set i = 0 %}
+          {% for contact in list %}
+            <tr class="{{ cycle(['flop','flip'], i) }}">
+              {% for column, value in contact %} 
+                {% if column in columns %}
+                  {% if column == 'contact_id' %}
+                    <td class="{{ column }}"><a href="{{ contact_route }}{{ value }}?usage={{ extra.usage }}">{{ '%05d'|format(value) }}</a></td>
+                  {% elseif column == 'communication_email' %}
+                    <td class="{{ column }}"><a href="mailto:{{ value }}">{{ value }}</a></td>
+                  {% else %}
+                    <td class="{{ column }}">{{ value }}</td>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </tr>
+            {% set i = i+1 %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {#
+          See top of the table for more information!
+       #}
+      {% include '@phpManufaktur/Contact/Template/default/backend/simple/pagination.twig' with {
+        currentPage: current_page,
+        paginationPath: pagination_route,
+        lastPage: last_page,
+        showAlwaysFirstAndLast: true,
+        addParameter: '?order=' ~ order_by|join(',') ~ '&direction=' ~ order_direction ~ '&usage=' ~ extra.usage
+      } only %}
+
+    </div>  
+  </div>
+{% endblock content %}
