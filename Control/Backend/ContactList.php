@@ -30,8 +30,8 @@ class ContactList extends Backend {
                 'list' => 'backend/contact.list.twig'
             ),
             'route' => array(
-                'pagination' => '/admin/event/contact/list/page/',
-                'contact' => '/admin/event/contact/edit/id/'
+                'pagination' => '/admin/event/contact/list/page/{page}?order={order}&direction={direction}&usage='.self::$usage,
+                'contact' => '/admin/event/contact/edit/id/{contact_id}?usage='.self::$usage
             )
         );
         $this->SimpleContactList = new SimpleContactList($this->app, $options);

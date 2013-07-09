@@ -27,6 +27,9 @@ class ContactEdit extends Backend {
                 'namespace' => '@phpManufaktur/Event/Template',
                 'message' => 'backend/message.twig',
                 'contact' => 'backend/contact.edit.twig'
+            ),
+            'route' => array(
+                'action' => '/admin/event/contact/edit?usage='.self::$usage
             )
         ));
     }

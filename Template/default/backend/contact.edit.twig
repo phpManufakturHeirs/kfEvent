@@ -29,17 +29,8 @@
     {% if message|length > 0 %}
       <div class="message">{{ message }}</div>
     {% endif %}
+  
+    {% include '@phpManufaktur/Contact/Template/default/backend/form/contact.edit.person.twig' %}
       
-    <div class="contact_form">
-      <form action="{{ FRAMEWORK_URL }}/admin/event/contact/edit?usage={{ extra.usage }}" method="post">
-        {{ form_widget(form) }}
-          {{ dump(form.vars.value) }}
-        <div>
-          <label for="submit">&nbsp;</label>
-          <input type="submit" name="submit" />
-        </div>
-        <div class="clear"></div>  
-      </form>
-    </div>  
   </div>
 {% endblock content %}
