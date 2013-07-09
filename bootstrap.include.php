@@ -21,6 +21,9 @@ use phpManufaktur\Event\Control\Backend\ContactEdit as EventContactEdit;
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
 
+// scan the /Locale/Custom directory and add all available languages
+$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale/Custom');
+
 /**
  * Will be called by the iframe embedded within the CMS.
  * Get the base informations of the CMS, autologin the user into kitFramework
