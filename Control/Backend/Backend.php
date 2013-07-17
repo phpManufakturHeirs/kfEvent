@@ -64,7 +64,7 @@ class Backend {
             ),
             'contact_edit' => array(
                 'text' => 'Contact',
-                'link' => FRAMEWORK_URL.'/admin/event/contact/edit'.self::$usage_param,
+                'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
                 'active' => ($active == 'contact_edit')
             ),
             'groups' => array(

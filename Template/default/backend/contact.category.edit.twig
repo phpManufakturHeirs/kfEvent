@@ -7,7 +7,7 @@
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
-{% if usage == 'framework' %}
+{% if extra.usage == 'framework' %}
   {% set template_namespace = '@framework' %}
   {% set template_file = 'body.twig' %}
 {% else %}
@@ -15,21 +15,22 @@
   {% set template_file = 'backend/body.twig' %}
 {% endif %}
 {% extends template_file(template_namespace, template_file) %}
-{% block title %}{{ 'Event - About'|trans }}{% endblock %}
+{% block title %}{{ 'Contact list'|trans }}{% endblock %}
 {% block stylesheet %}
   {{ parent() }}
-  {% if usage == 'framework' %}
+  {% if extra.usage == 'framework' %}
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
   {% endif %}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/contact.edit.css" media="screen, projection" />
 {% endblock stylesheet %}
-
 {% block content %}
   <div id="event_content">
-    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' %}
+    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' with {toolbar: extra.toolbar} only %}
+    {% if message|length > 0 %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+  
+    {% include '@phpManufaktur/Contact/Template/default/backend/form/edit.category.twig' %}
       
-    <div class="event_logo">
-      <img src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/image/logo_375x250.jpg" width="375" height="250" alt="Event for kitFramework" />
-    </div>  
-    <p>@todo: About Event</p>
   </div>
 {% endblock content %}

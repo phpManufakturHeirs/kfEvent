@@ -31,7 +31,10 @@ class ContactList extends Backend {
             ),
             'route' => array(
                 'pagination' => '/admin/event/contact/list/page/{page}?order={order}&direction={direction}&usage='.self::$usage,
-                'contact' => '/admin/event/contact/edit/id/{contact_id}?usage='.self::$usage
+                'contact' => array(
+                    'person' => '/admin/event/contact/person/edit/id/{contact_id}?usage='.self::$usage,
+                    'company' => '/admin/event/contact/company/edit/id/{contact_id}?usage='.self::$usage
+                )
             )
         );
         $this->SimpleContactList = new SimpleContactList($this->app, $options);
