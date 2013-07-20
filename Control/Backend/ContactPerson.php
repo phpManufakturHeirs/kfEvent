@@ -52,4 +52,4 @@ class ContactPerson extends Backend {
         return $this->SimpleContactPerson->exec($extra);
     }
 
-} // class Backend
+}

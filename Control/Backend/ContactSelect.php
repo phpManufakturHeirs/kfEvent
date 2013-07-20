@@ -52,6 +52,7 @@ class ContactSelect extends Backend {
 
     public function exec()
     {
+
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')
@@ -59,4 +60,4 @@ class ContactSelect extends Backend {
         return $this->SimpleContactSelect->exec($extra);
     }
 
-} // class Backend
+}
