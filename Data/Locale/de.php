@@ -15,6 +15,104 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
+    '- delete field -'
+        => '- Feld löschen -',
+    '- new extra field -'
+        => '- neues Zusatzfeld -',
+    '- new group -'
+        => '- neue Gruppe -',
+
+    'Add category'
+        => 'Kategorie hinzufügen',
+    'Add extra field'
+        => 'Zusatzfeld hinzufügen',
+    'Add group'
+        => 'Gruppe hinzufügen',
+    'Add tag'
+        => 'Markierung hinzufügen',
+    'Add title'
+        => 'Titel hinzufügen',
+
     'Contact list'
-        => 'Kontakte, Übersicht'
+        => 'Kontakte, Übersicht',
+    'Create a new extra field'
+        => 'Ein neues Zusatzfeld anlegen',
+    'Create a new group'
+        => 'Eine neue Gruppe anlegen',
+
+    'Date'
+        => 'Datum',
+    'Date and Time'
+        => 'Datum und Uhrzeit',
+    'delete this extra field'
+        => 'dieses Zusatzfeld löschen',
+
+    'Field name'
+        => 'Bezeichner',
+    'Field name (translated)'
+        => 'Bezeichner (übersetzt)',
+    'Description'
+        => 'Beschreibung',
+    'Description (translated)'
+        => 'Beschreibung (übersetzt)',
+
+    'Extra field'
+        => 'Zusatzfeld',
+    'Extra fields'
+        => 'Zusatzfelder',
+
+    'Field type'
+        => 'Feld Typ',
+    'Float'
+        => 'Dezimalzahl',
+
+    'go back'
+        => 'Zurück',
+    'Group'
+        => 'Gruppe',
+    'Group name'
+        => 'Gruppen Bezeichner',
+    'Group name (translated)'
+        => 'Gruppen Bezeichner (übersetzt)',
+    'Groups'
+        => 'Gruppen',
+
+    'Int'
+        => 'Ganzzahl',
+    'Integer'
+        => 'Ganzzahl',
+
+    'Location Tags'
+        => 'Veranstaltungsorte',
+
+    'Name'
+        => 'Bezeichner',
+    'Name (translated)'
+        => 'Bezeichner (übersetzt)',
+
+    'Organizer Tags'
+        => 'Veranstalter',
+
+    'Please select at minimum one tag for the %type%.'
+        => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
+    'Participant Tags'
+        => 'Teilnehmer',
+
+    'Text - 256 characters'
+        => 'Text - max. 256 Zeichen',
+    'Text - HTML'
+        => 'Text - HTML formatiert',
+    'Text - plain'
+        => 'Text - unformatiert',
+    'The group list is empty, please define a group!'
+        => 'Es existieren keine Gruppen, bitte legen Sie eine Gruppe an!',
+    'The identifier %identifier% already exists!'
+        => 'Der Bezeichner %identifier% existiert bereits!',
+    'The record with the ID %id% was successfull inserted.'
+        => 'Der Datensatz mit der ID %id% wurde erfolgreich eingefügt.',
+    'The record with the ID %id% was successfull updated.'
+        => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
+    'Type'
+        => 'Typ'
+
 );
