@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
   {% endif %}
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/contact.edit.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/go.back.css" media="screen, projection" />
 {% endblock stylesheet %}
 {% block content %}
   <div id="event_content">
@@ -30,7 +31,16 @@
       <div class="message">{{ message }}</div>
     {% endif %}
   
-    {% include '@phpManufaktur/Contact/Template/default/backend/form/list.tag.twig' %}
+    {% include '@phpManufaktur/Event/Template/default/backend/go.back.twig' with {
+      links: {
+        0: {
+          url: FRAMEWORK_URL ~ '/admin/event/contact/tag/edit?usage=' ~ extra.usage,
+          text: 'Add tag'
+        }
+      }
+    } only %}  
       
+    {% include '@phpManufaktur/Contact/Template/default/backend/form/list.tag.twig' %}
+    
   </div>
 {% endblock content %}
