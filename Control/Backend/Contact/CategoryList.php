@@ -37,6 +37,7 @@ class CategoryList extends Backend {
 
     public function exec()
     {
+
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')
