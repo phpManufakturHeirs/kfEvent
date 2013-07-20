@@ -54,4 +54,4 @@ class ContactList extends Backend {
         return $this->SimpleContactList->exec($extra);
     }
 
-} // class Backend
+}
