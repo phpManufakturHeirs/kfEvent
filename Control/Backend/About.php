@@ -29,4 +29,4 @@ class About extends Backend {
             ));
     }
 
-} // class Backend
+}

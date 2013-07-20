@@ -32,7 +32,7 @@ class Backend {
         if (self::$usage != 'framework') {
             $app['translator']->setLocale($this->app['session']->get('CMS_LOCALE', 'en'));
         }
-    } // __construct()
+    }
 
     /**
      * Get the toolbar for all backend dialogs
@@ -67,10 +67,10 @@ class Backend {
                 'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
                 'active' => ($active == 'contact_edit')
             ),
-            'groups' => array(
+            'group' => array(
                 'text' => 'Groups',
-                'link' => FRAMEWORK_URL.'/admin/event/groups'.self::$usage_param,
-                'active' => ($active == 'list')
+                'link' => FRAMEWORK_URL.'/admin/event/group/list'.self::$usage_param,
+                'active' => ($active == 'group')
             ),
 
             'about' => array(
@@ -80,7 +80,7 @@ class Backend {
                 ),
         );
         return $toolbar_array;
-    } // getToolbar()
+    }
 
     /**
      * @return the $message
@@ -99,11 +99,6 @@ class Backend {
             array('message' => $this->app['translator']->trans($message, $params)));
     }
 
-    public function setUnformattedMessage($message)
-    {
-        self::$message = $message;
-    }
-
     public function clearMessage()
     {
         self::$message = '';
@@ -118,4 +113,4 @@ class Backend {
     {
         return !empty(self::$message);
     }
- } // class Backend
+ }
