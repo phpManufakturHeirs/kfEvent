@@ -25,6 +25,10 @@ use phpManufaktur\Event\Control\Backend\Contact\TitleList as EventTitleList;
 use phpManufaktur\Event\Control\Backend\Contact\TitleEdit as EventTitleEdit;
 use phpManufaktur\Event\Control\Backend\Contact\TagList as EventTagList;
 use phpManufaktur\Event\Control\Backend\Contact\TagEdit as EventTagEdit;
+use phpManufaktur\Event\Control\Backend\GroupList as EventGroupList;
+use phpManufaktur\Event\Control\Backend\GroupEdit as EventGroupEdit;
+use phpManufaktur\Event\Control\Backend\ExtraFieldList as EventExtraFieldList;
+use phpManufaktur\Event\Control\Backend\ExtraFieldEdit as EventExtraFieldEdit;
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
@@ -86,6 +90,11 @@ $app->match('/admin/event/contact/select', function() use($app) {
     $select = new EventContactSelect($app);
     return $select->exec();
 });
+$app->match('/admin/event/contact/edit/id/{contact_id}', function($contact_id) use($app) {
+    $select = new EventContactSelect($app);
+    $select->setContactID($contact_id);
+    return $select->exec();
+});
 $app->match('/admin/event/contact/person/edit', function() use($app) {
     $contact =  new EventContactPerson($app);
     return $contact->exec();
@@ -142,6 +151,34 @@ $app->match('/admin/event/contact/tag/edit/id/{tag_id}', function($tag_id) use($
     $tag = new EventTagEdit($app);
     $tag->setTagID($tag_id);
     return $tag->exec();
+});
+
+$app->match('/admin/event/group/list', function() use($app) {
+    $group = new EventGroupList($app);
+    return $group->exec();
+});
+$app->match('/admin/event/group/edit', function() use($app) {
+    $group = new EventGroupEdit($app);
+    return $group->exec();
+});
+$app->match('/admin/event/group/edit/id/{group_id}', function($group_id) use($app) {
+    $group = new EventGroupEdit($app);
+    $group->setGroupID($group_id);
+    return $group->exec();
+});
+
+$app->match('/admin/event/extra/field/list', function() use($app) {
+    $field = new EventExtraFieldList($app);
+    return $field->exec();
+});
+$app->match('/admin/event/extra/field/edit', function() use($app) {
+    $field = new EventExtraFieldEdit($app);
+    return $field->exec();
+});
+$app->match('/admin/event/extra/field/edit/id/{type_id}', function($type_id) use($app) {
+    $field = new EventExtraFieldEdit($app);
+    $field->setTypeID($type_id);
+    return $field->exec();
 });
 
 $app->match('/admin/event/setup', function() use($app) {
