@@ -39,25 +39,26 @@ class Extra
     public function createTable()
     {
         $table = self::$table_name;
+        $table_extra_type = FRAMEWORK_TABLE_PREFIX.'event_extra_type';
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
         `extra_id` INT(11) NOT NULL AUTO_INCREMENT,
-        `extra_type_id` INT(11) NOT NULL DEFAULT '-1',
+        `extra_type_id` INT(11) DEFAULT NULL,
         `extra_type_name` VARCHAR(64) NOT NULL DEFAULT '',
         `group_id` INT(11) NOT NULL DEFAULT '-1',
+        `event_id` INT(11) NOT NULL DEFAULT '-1',
         `extra_type` ENUM('TEXT','HTML','VARCHAR','INT','FLOAT','DATE','DATETIME') NOT NULL DEFAULT 'VARCHAR',
-        `extra_name` VARCHAR(64) NOT NULL DEFAULT '',
         `extra_text` TEXT NOT NULL,
         `extra_html` TEXT NOT NULL,
-        `extra_varchar` VARCHAR(256) NOT NULL DEFAULT '',
+        `extra_varchar` VARCHAR(255) NOT NULL DEFAULT '',
         `extra_int` INT(11) NOT NULL DEFAULT '0',
         `extra_float` FLOAT NOT NULL DEFAULT '0',
         `extra_date` DATE NOT NULL DEFAULT '0000-00-00',
         `extra_datetime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
         `extra_time` TIME NOT NULL DEFAULT '00:00:00',
-        `extra_type_timestamp` TIMESTAMP,
+        `extra_timestamp` TIMESTAMP,
         PRIMARY KEY (`extra_id`),
-        INDEX (`extra_type_id`,`group_id`)
+        INDEX (`group_id`)
         )
     COMMENT='The table for extra fields'
     ENGINE=InnoDB
@@ -73,5 +74,24 @@ EOD;
         }
     }
 
+
+    public function selectByGroupID($group_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `group_id`='$group_id'";
+            $results = $this->app['db']->fetchAll($SQL);
+            $extras = array();
+            foreach ($results as $extra) {
+                $record = array();
+                foreach ($extra as $key => $value) {
+                    $record[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+                $extras[] = $record;
+            }
+            return $extras;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 
 }
