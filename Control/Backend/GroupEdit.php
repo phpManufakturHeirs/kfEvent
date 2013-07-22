@@ -15,12 +15,20 @@ use phpManufaktur\Event\Control\Backend\Backend;
 use phpManufaktur\Event\Data\Event\Group as GroupData;
 use phpManufaktur\Contact\Control\Contact as ContactControl;
 use phpManufaktur\Event\Data\Event\ExtraType;
+use phpManufaktur\Event\Data\Event\ExtraGroup;
+use phpManufaktur\Event\Data\Event\OrganizerTag;
+use phpManufaktur\Event\Data\Event\LocationTag;
+use phpManufaktur\Event\Data\Event\ParticipantTag;
 
 class GroupEdit extends Backend {
 
     protected $GroupData = null;
     protected $ContactControl = null;
     protected $ExtraType = null;
+    protected $ExtraGroup = null;
+    protected $OrganizerTag = null;
+    protected $LocationTag = null;
+    protected $ParticipantTag = null;
 
     protected static $group_id = -1;
 
@@ -31,6 +39,10 @@ class GroupEdit extends Backend {
         $this->GroupData = new GroupData($this->app);
         $this->ContactControl = new ContactControl($this->app);
         $this->ExtraType = new ExtraType($this->app);
+        $this->ExtraGroup = new ExtraGroup($this->app);
+        $this->OrganizerTag = new OrganizerTag($this->app);
+        $this->LocationTag = new LocationTag($this->app);
+        $this->ParticipantTag = new ParticipantTag($this->app);
     }
 
     /**
@@ -45,6 +57,9 @@ class GroupEdit extends Backend {
 
     protected function getFormFields($data)
     {
+        // get the extra fields for this group
+        $extra_field_ids = $this->ExtraGroup->selectTypeIDByGroupID(self::$group_id);
+
         $form = $this->app['form.factory']->createBuilder('form')
         ->add('group_id', 'hidden', array(
             'data' => $data['group_id']
@@ -74,7 +89,7 @@ class GroupEdit extends Backend {
             'multiple' => true,
             'required' => true,
             'label' => 'Organizer Tags',
-            'data' => explode(',', $data['group_organizer_contact_tags'])
+            'data' => $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id)
         ))
         ->add('group_location_contact_tags', 'choice', array(
             'choices' => $this->ContactControl->getTagArrayForTwig(),
@@ -82,7 +97,7 @@ class GroupEdit extends Backend {
             'multiple' => true,
             'required' => true,
             'label' => 'Location Tags',
-            'data' => explode(',', $data['group_location_contact_tags'])
+            'data' => $this->LocationTag->selectTagNamesByGroupID(self::$group_id)
         ))
         ->add('group_participant_contact_tags', 'choice', array(
             'choices' => $this->ContactControl->getTagArrayForTwig(),
@@ -90,18 +105,17 @@ class GroupEdit extends Backend {
             'multiple' => true,
             'required' => true,
             'label' => 'Participant Tags',
-            'data' => explode(',', $data['group_participant_contact_tags'])
+            'data' => $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id)
         ))
         ->add('group_extra_fields', 'hidden', array(
-            'data' => $data['group_extra_fields']
+            'data' => implode(',', $extra_field_ids)
         ));
 
-        // insert the existing extra fields
-        $extra_fields = (!empty($data['group_extra_fields'])) ? explode(',', $data['group_extra_fields']) : array();
+        // insert the extra fields
         $choice_extra_field = $this->ExtraType->getArrayForTwig();
-        foreach ($extra_fields as $extra_type_id) {
-            $type = $this->ExtraType->select($extra_type_id);
-            $form->add("extra_field_$extra_type_id", 'choice', array(
+        foreach ($extra_field_ids as $type_id) {
+            $type = $this->ExtraType->select($type_id);
+            $form->add("extra_field_".$type_id, 'choice', array(
                 'choices' => array($type['extra_type_type'] => ucfirst(strtolower($type['extra_type_type']))),
                 'empty_value' => '- delete field -',
                 'multiple' => false,
@@ -109,10 +123,11 @@ class GroupEdit extends Backend {
                 'label' => ucfirst(str_replace('_', ' ', strtolower($type['extra_type_name']))),
                 'data' => $type['extra_type_type']
             ));
+            // remove the type name from the possible selections
             unset($choice_extra_field[$type['extra_type_name']]);
         }
 
-        // add an extra field
+        // add selection for an extra field
         $form->add('add_extra_field', 'choice', array(
             'choices' => $choice_extra_field,
             'empty_value' => '- please select -',
@@ -138,7 +153,7 @@ class GroupEdit extends Backend {
         }
         elseif (false === ($group = $this->GroupData->select(self::$group_id))) {
             $group = $this->GroupData->getDefaultRecord();
-            $this->setMessage('The group with the ID %group_id% does not exists!', array('%group_id%' => self::$group_id));
+            $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$group_id));
             self::$group_id = -1;
         }
 
@@ -156,7 +171,7 @@ class GroupEdit extends Backend {
                 foreach ($group_extra_fields as $extra_type_id) {
                     if (is_null($group["extra_field_$extra_type_id"])) {
                         // delete the field
-                        unset($group_extra_fields[array_search($extra_type_id, $group_extra_fields)]);
+                        $this->ExtraGroup->deleteTypeByGroup($extra_type_id, self::$group_id);
                     }
                 }
                 if (!is_null($group['add_extra_field'])) {
@@ -164,10 +179,12 @@ class GroupEdit extends Backend {
                     if (false === ($type = $this->ExtraType->selectName($group['add_extra_field']))) {
                         throw new \Exception(sprintf('The extra type field %s does not exists!', $group['add_extra_field']));
                     }
-                    $group_extra_fields[] = $type['extra_type_id'];
+                    $data = array(
+                        'group_id' => self::$group_id,
+                        'extra_type_id' => $type['extra_type_id']
+                    );
+                    $this->ExtraGroup->insert($data);
                 }
-
-
 
                 if (self::$group_id < 1) {
                     // insert a new group
@@ -202,23 +219,31 @@ class GroupEdit extends Backend {
                     }
 
                     if ($check) {
-                        $organizer = array();
+                        // insert organizer tags
                         foreach ($group['group_organizer_contact_tags'] as $key => $value)
-                            $organizer[] = $value;
-                        $location = array();
+                            $this->OrganizerTag->insert(array(
+                                'group_id' => self::$group_id,
+                                'tag_name' => $value
+                            ));
+
+                        // insert location tags
                         foreach ($group['group_location_contact_tags'] as $key => $value)
-                            $location[] = $value;
-                        $participant = array();
+                            $this->LocationTag->insert(array(
+                                'group_id' => self::$group_id,
+                                'tag_name' => $value
+                            ));
+
+                        // insert participant tags
                         foreach ($group['group_participant_contact_tags'] as $key => $value)
-                            $participant[] = $value;
+                            $this->ParticipantTag->insert(array(
+                                'group_id' => self::$group_id,
+                                'tag_name' => $value
+                            ));
+
                         $data = array(
                             'group_name' => $group_name,
                             'group_status' => 'ACTIVE',
                             'group_description' => $group['group_description'],
-                            'group_organizer_contact_tags' => implode(',', $organizer),
-                            'group_location_contact_tags' => implode(',', $location),
-                            'group_participant_contact_tags' => implode(',', $participant),
-                            'group_extra_fields' => implode(',', $group_extra_fields)
                         );
                         $this->GroupData->insert($data, self::$group_id);
                         $this->setMessage('The record with the ID %id% was successfull inserted.',
@@ -244,22 +269,62 @@ class GroupEdit extends Backend {
                         $check = false;
                     }
                     if ($check) {
-                        $organizer = array();
-                        foreach ($group['group_organizer_contact_tags'] as $key => $value)
-                            $organizer[] = $value;
-                        $location = array();
-                        foreach ($group['group_location_contact_tags'] as $key => $value)
-                            $location[] = $value;
-                        $participant = array();
-                        foreach ($group['group_participant_contact_tags'] as $key => $value)
-                            $participant[] = $value;
+                        // get the actual organizer tags
+                        $organizer_tags = $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id);
+                        foreach ($organizer_tags as $old_tag) {
+                            if (!in_array($old_tag, $group['group_organizer_contact_tags'])) {
+                                // delete this tag
+                                $this->OrganizerTag->deleteTagByGroup($old_tag, self::$group_id);
+                            }
+                        }
+                        foreach ($group['group_organizer_contact_tags'] as $new_tag) {
+                            if (!in_array($new_tag, $organizer_tags)) {
+                                // insert a new tag
+                                $this->OrganizerTag->insert(array(
+                                    'group_id' => self::$group_id,
+                                    'tag_name' => $new_tag
+                                ));
+                            }
+                        }
+
+                        // get the actual location tags
+                        $location_tags = $this->LocationTag->selectTagNamesByGroupID(self::$group_id);
+                        foreach ($location_tags as $old_tag) {
+                            if (!in_array($old_tag, $group['group_location_contact_tags'])) {
+                                // delete this tag
+                                $this->LocationTag->deleteTagByGroup($old_tag, self::$group_id);
+                            }
+                        }
+                        foreach ($group['group_location_contact_tags'] as $new_tag) {
+                            if (!in_array($new_tag, $location_tags)) {
+                                // insert a new tag
+                                $this->LocationTag->insert(array(
+                                    'group_id' => self::$group_id,
+                                    'tag_name' => $new_tag
+                                ));
+                            }
+                        }
+
+                        $participant_tags = $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id);
+                        foreach ($participant_tags as $old_tag) {
+                            if (!in_array($old_tag, $group['group_participant_contact_tags'])) {
+                                // delete this tag
+                                $this->ParticipantTag->deleteTagByGroup($old_tag, self::$group_id);
+                            }
+                        }
+                        foreach ($group['group_participant_contact_tags'] as $new_tag) {
+                            if (!in_array($new_tag, $participant_tags)) {
+                                // insert a new tag
+                                $this->ParticipantTag->insert(array(
+                                    'group_id' => self::$group_id,
+                                    'tag_name' => $new_tag
+                                ));
+                            }
+                        }
+
                         $data = array(
                             'group_status' => $group['group_status'],
                             'group_description' => $group['group_description'],
-                            'group_organizer_contact_tags' => implode(',', $organizer),
-                            'group_location_contact_tags' => implode(',', $location),
-                            'group_participant_contact_tags' => implode(',', $participant),
-                            'group_extra_fields' => implode(',', $group_extra_fields)
                         );
                         $this->GroupData->update($data, self::$group_id);
                         $this->setMessage('The record with the ID %id% was successfull updated.',
