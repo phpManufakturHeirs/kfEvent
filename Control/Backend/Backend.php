@@ -42,15 +42,15 @@ class Backend {
      */
     public function getToolbar($active) {
         $toolbar_array = array(
-            'list' => array(
+            'event_list' => array(
                 'text' => 'Event list',
                 'link' => FRAMEWORK_URL.'/admin/event/list'.self::$usage_param,
-                'active' => ($active == 'list')
+                'active' => ($active == 'event_list')
             ),
-            'event' => array(
+            'event_edit' => array(
                 'text' => 'Event',
                 'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
-                'active' => ($active == 'event')
+                'active' => ($active == 'event_edit')
             ),
             'registrations' => array(
                 'text' => 'Registrations',
