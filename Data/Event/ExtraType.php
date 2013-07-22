@@ -252,4 +252,12 @@ EOD;
         }
     }
 
+    public function delete($extra_type_id)
+    {
+        try {
+            $this->app['db']->delete(self::$table_name, array('extra_type_id' => $extra_type_id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }
