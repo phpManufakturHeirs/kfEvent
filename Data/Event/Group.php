@@ -39,18 +39,16 @@ class Group
     public function createTable()
     {
         $table = self::$table_name;
+
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
         `group_id` INT(11) NOT NULL AUTO_INCREMENT,
         `group_name` VARCHAR(64) NOT NULL DEFAULT '',
         `group_description` TEXT NOT NULL,
-        `group_organizer_contact_tags` VARCHAR(512) NOT NULL DEFAULT '',
-        `group_location_contact_tags` VARCHAR(512) NOT NULL DEFAULT '',
-        `group_participant_contact_tags` VARCHAR(512) NOT NULL DEFAULT '',
-        `group_extra_fields` VARCHAR(512) NOT NULL DEFAULT '',
         `group_status` ENUM('ACTIVE', 'LOCKED', 'DELETED') NOT NULL DEFAULT 'ACTIVE',
         `group_timestamp` TIMESTAMP,
-        PRIMARY KEY (`group_id`)
+        PRIMARY KEY (`group_id`),
+        UNIQUE (`group_name`)
         )
     COMMENT='The group definition table for Events'
     ENGINE=InnoDB
@@ -72,10 +70,10 @@ EOD;
             'group_id' => -1,
             'group_name' => '',
             'group_description' => '',
-            'group_organizer_contact_tags' => '',
+       //     'group_organizer_contact_tags' => '',
             'group_location_contact_tags' => '',
             'group_participant_contact_tags' => '',
-            'group_extra_fields' => '',
+      //      'group_extra_fields' => '',
             'group_status' => 'ACTIVE',
             'group_timestamp' => '0000-00-00 00:00:00'
         );
@@ -124,6 +122,23 @@ EOD;
             else {
                 return false;
             }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Return the group name for the given group ID
+     *
+     * @param integer $group_id
+     * @throws \Exception
+     * @return string group name
+     */
+    public function getGroupName($group_id)
+    {
+        try {
+            $SQL = "SELECT `group_name` FROM `".self::$table_name."` WHERE `group_id`='$group_id'";
+            return $this->app['db']->fetchColumn($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
@@ -192,6 +207,27 @@ EOD;
             if (!empty($update)) {
                 $this->app['db']->update(self::$table_name, $update, array('group_id' => $group_id));
             }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Return a array with all available groups, prepared for usage with TWIG
+     *
+     * @throws \Exception
+     * @return array
+     */
+    public function getArrayForTwig()
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `group_status` != 'DELETED' ORDER BY `group_name` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+            $groups = array();
+            foreach ($results as $group) {
+                $groups[$group['group_id']] = ucfirst(strtolower($group['group_name']));
+            }
+            return $groups;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
