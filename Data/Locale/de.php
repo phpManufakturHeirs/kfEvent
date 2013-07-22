@@ -56,6 +56,10 @@ return array(
     'Description (translated)'
         => 'Beschreibung (übersetzt)',
 
+    'Event date from'
+        => 'Beginn der Veranstaltung',
+    'Event date to'
+        => 'Ende der Veranstaltung',
     'Extra field'
         => 'Zusatzfeld',
     'Extra fields'
@@ -108,6 +112,10 @@ return array(
         => 'Es existieren keine Gruppen, bitte legen Sie eine Gruppe an!',
     'The identifier %identifier% already exists!'
         => 'Der Bezeichner %identifier% existiert bereits!',
+    'The record with the ID %id% does not exists!'
+        => 'Der Datensatz mit der ID %id% existiert nicht!',
+    'The record with the ID %id% was successfull deleted.'
+        => 'Der Datensatz mit der ID %id% wurde gelöscht.',
     'The record with the ID %id% was successfull inserted.'
         => 'Der Datensatz mit der ID %id% wurde erfolgreich eingefügt.',
     'The record with the ID %id% was successfull updated.'
