@@ -67,7 +67,7 @@ class ExtraFieldEdit extends Backend {
         }
         elseif (false === ($type = $this->ExtraType->select(self::$type_id))) {
             $type = $this->ExtraType->getDefaultRecord();
-            $this->setMessage('The extra type with the ID %type_id% does not exists!', array('%type_id%' => self::$type_id));
+            $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$type_id));
             self::$type_id = -1;
         }
 
@@ -80,6 +80,7 @@ class ExtraFieldEdit extends Backend {
             if ($form->isValid()) {
                 $type = $form->getData();
                 self::$type_id = $type['extra_type_id'];
+
                 if (self::$type_id < 1) {
                     // insert a new extra field
                     $matches = array();
@@ -103,6 +104,12 @@ class ExtraFieldEdit extends Backend {
                         $this->setMessage('The record with the ID %id% was successfull inserted.',
                             array('%id%' => self::$type_id));
                     }
+                }
+                elseif (!empty($type['delete'])) {
+                    // delete the extra field
+                    $this->ExtraType->delete(self::$type_id);
+                    $this->setMessage('The record with the ID %id% was successfull deleted.', array('%id%' => self::$type_id));
+                    self::$type_id = -1;
                 }
                 else {
                     // update a extra field
