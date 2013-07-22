@@ -29,6 +29,7 @@ use phpManufaktur\Event\Control\Backend\GroupList as EventGroupList;
 use phpManufaktur\Event\Control\Backend\GroupEdit as EventGroupEdit;
 use phpManufaktur\Event\Control\Backend\ExtraFieldList as EventExtraFieldList;
 use phpManufaktur\Event\Control\Backend\ExtraFieldEdit as EventExtraFieldEdit;
+use phpManufaktur\Event\Control\Backend\EventEdit;
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
@@ -179,6 +180,11 @@ $app->match('/admin/event/extra/field/edit/id/{type_id}', function($type_id) use
     $field = new EventExtraFieldEdit($app);
     $field->setTypeID($type_id);
     return $field->exec();
+});
+
+$app->match('/admin/event/edit', function() use($app) {
+    $event = new EventEdit($app);
+    return $event->exec();
 });
 
 $app->match('/admin/event/setup', function() use($app) {
