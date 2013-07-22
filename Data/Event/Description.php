@@ -39,6 +39,7 @@ class Description
     public function createTable()
     {
         $table = self::$table_name;
+        $table_event = FRAMEWORK_TABLE_PREFIX.'event_event';
         $SQL = <<<EOD
     CREATE TABLE IF NOT EXISTS `$table` (
         `description_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -48,7 +49,11 @@ class Description
         `description_long` TEXT NOT NULL DEFAULT '',
         `description_timestamp` TIMESTAMP,
         PRIMARY KEY (`description_id`),
-        UNIQUE (`event_id`)
+        UNIQUE (`event_id`),
+        CONSTRAINT
+            FOREIGN KEY (`event_id`)
+            REFERENCES $table_event (`event_id`)
+            ON DELETE CASCADE
         )
     COMMENT='The descriptions table for Events'
     ENGINE=InnoDB
