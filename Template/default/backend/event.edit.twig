@@ -1,0 +1,106 @@
+{#
+  Event
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+{% if usage == 'framework' %}
+  {% set template_namespace = '@framework' %}
+  {% set template_file = 'body.twig' %}
+{% else %}
+  {% set template_namespace = '@phpManufaktur/Event/Template' %}
+  {% set template_file = 'backend/body.twig' %}
+{% endif %}
+{% extends template_file(template_namespace, template_file) %}
+{% block title %}{{ 'Event - Create or edit an event'|trans }}{% endblock %}
+
+{% block jquery %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/i18n/jquery-ui-i18n.min.js"></script>
+  <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-addon.js"></script>
+  <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-de.js"></script>
+{% endblock jquery %}
+
+{% block stylesheet %}
+  {{ parent() }}
+  {% if usage == 'framework' %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
+  {% endif %}
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/jquery-ui-timepicker-addon.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/event.css" media="screen, projection" />
+{% endblock stylesheet %}
+
+
+{% block content %}
+  <div id="event_content">
+    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' %}
+
+    <div class="event_form">
+      <form action="{{ FRAMEWORK_URL }}/admin/event/edit?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
+        {{ form_errors(form) }}
+        {{ form_row(form._token) }}
+
+        {{ form_row(form.event_id) }}
+        <div>
+          <label>{{ 'ID'|trans }}</label>
+          <div class="value">
+            {% if form.event_id.vars.value > 0 %}
+              {{ '%05d'|format(form.event_id.vars.value) }}
+            {% else %}
+              {{ '- new group -'|trans }}
+            {% endif %}
+          </div>
+        </div>
+
+        {{ form_row(form.event_status) }}
+
+        {{ form_row(form.group_id) }}
+        {% if form.group_name.vars.value|length > 0 %}
+          <div>
+            <label>{{ 'Group'|trans }}</label>
+            <div class="value">{{ form.group_name.vars.value|capitalize|trans }}</div>
+          </div>
+        {% endif %}
+
+        {{ form_row(form.event_organizer) }}
+        {{ form_row(form.event_location) }}
+
+        {{ form_row(form.event_date_from) }}
+        {{ form_row(form.event_date_to) }}
+        <div>
+          <label for="submit">&nbsp;</label>
+          <input type="submit" name="submit" />
+        </div>
+        <div class="clear"></div>
+
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block footer %}
+  {{ parent() }}
+  <script type="text/javascript">
+    if (typeof 'jQuery' !== 'undefined') {
+      $(document).ready(function() {
+        $.datepicker.setDefaults($.datepicker.regional['{{ app.translator.locale }}']);
+        $.timepicker.setDefaults($.timepicker.regional['{{ app.translator.locale }}']);
+        $('.event_date_from').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_date_to').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+      });
+    }
+  </script>
+{% endblock footer %}
