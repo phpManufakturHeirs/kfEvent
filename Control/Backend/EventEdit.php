@@ -16,6 +16,8 @@ use phpManufaktur\Event\Control\Backend\Backend;
 use phpManufaktur\Event\Data\Event\Event as EventData;
 use phpManufaktur\Event\Data\Event\Group as EventGroup;
 use phpManufaktur\Contact\Control\Contact as ContactControl;
+use phpManufaktur\Event\Data\Event\OrganizerTag as EventOrganizerTag;
+use phpManufaktur\Event\Data\Event\LocationTag as EventLocationTag;
 
 class EventEdit extends Backend {
 
@@ -23,6 +25,8 @@ class EventEdit extends Backend {
     protected $EventData = null;
     protected $EventGroup = null;
     protected $ContactControl = null;
+    protected $EventOrganizerTag = null;
+    protected $EventLocationTag = null;
 
     public function __construct(Application $app)
     {
@@ -30,6 +34,8 @@ class EventEdit extends Backend {
         $this->EventData = new EventData($this->app);
         $this->EventGroup = new EventGroup($this->app);
         $this->ContactControl = new ContactControl($this->app);
+        $this->EventLocationTag = new EventLocationTag($this->app);
+        $this->EventOrganizerTag = new EventOrganizerTag($this->app);
     }
 
     public function setEventID($event_id)
@@ -84,6 +90,8 @@ class EventEdit extends Backend {
         if (false === ($group = $this->EventGroup->select($event['group_id']))) {
             throw new \Exception('The event group with the ID '.$event['group_id']." does not exists!");
         }
+        $organizer_tags = $this->EventOrganizerTag->selectTagNamesByGroupID($event['group_id']);
+        $location_tags = $this->EventLocationTag->selectTagNamesByGroupID($event['group_id']);
 
         $fields = $this->app['form.factory']->createBuilder('form')
         ->add('event_id', 'hidden', array(
@@ -103,36 +111,41 @@ class EventEdit extends Backend {
         ->add('group_name', 'hidden', array(
             'data' => $this->EventGroup->getGroupName($event['group_id'])
         ))
-
+        // Organizer
         ->add('event_organizer', 'choice', array(
-            'choices' => $this->ContactControl->getContactsByTagsForTwig(explode(',', $group['group_organizer_contact_tags'])),
+            'choices' => $this->ContactControl->getContactsByTagsForTwig($organizer_tags), //$group['group_organizer_contact_tags'])),
             'empty_value' => '- please select -',
             'expanded' => false,
             'required' => true,
             'label' => 'Organizer',
             'data' => $event['event_organizer']
         ))
-
+        // Location
         ->add('event_location', 'choice', array(
-            'choices' => $this->ContactControl->getContactsByTagsForTwig(explode(',', $group['group_location_contact_tags'])),
+            'choices' => $this->ContactControl->getContactsByTagsForTwig($location_tags), // explode(',', $group['group_location_contact_tags'])),
             'empty_value' => '- please select -',
             'expanded' => false,
             'required' => true,
-            'label' => 'Location',
+            'label' => 'Event location',
             'data' => $event['event_location']
         ))
-
-        ->add('event_date_from', 'date',array(
+        // Event date
+        ->add('event_date_from', 'date', array(
             'widget' => 'single_text',
             'format' => 'dd-MM-yyyy HH:mm',
             'attr' => array('class' => 'event_date_from'),
             'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_from']) : null
         ))
-        ->add('event_date_to', 'date',array(
+        ->add('event_date_to', 'date', array(
             'widget' => 'single_text',
             'format' => 'dd-MM-yyyy HH:mm',
             'attr' => array('class' => 'event_date_to'),
             'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_to']) : null
+        ))
+        // Participants
+        ->add('event_participants_max', 'integer', array(
+            'label' => 'Participants, maximum',
+            'data' => $event['event_participants_max']
         ))
         ;
 
@@ -147,7 +160,9 @@ class EventEdit extends Backend {
             self::$event_id = $form_request['event_id'];
         }
 
+        $is_start = false;
         if (self::$event_id < 1) {
+            $is_start = true;
             if (isset($form_request['create_by'])) {
                 if ($form_request['create_by'] == 'COPY') {
                     // show the dialog to copy an existing event into a new one
@@ -188,14 +203,49 @@ class EventEdit extends Backend {
                     ));
             }
         }
+        // select the event data
         elseif (false === ($event = $this->EventData->select(self::$event_id))) {
             $event = $this->EventData->getDefaultRecord();
             $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$event_id));
             self::$event_id = -1;
         }
 
+        // create the form fields
         $fields = $this->getFormFields($event);
+        // get the form
         $form = $fields->getForm();
+
+        if (!$is_start && ('POST' == $this->app['request']->getMethod())) {
+            // the form was submitted, bind the request
+            $form->bind($this->app['request']);
+echo "xxx";
+            if ($form->isValid()) {
+                $event = $form->getData();
+                self::$event_id = $event['event_id'];
+echo "id2: ".self::$event_id;
+                if (self::$event_id < 1) {
+                    // insert a new event
+
+                }
+                else {
+                    // update an existing event
+
+                }
+
+                if (self::$event_id > 0) {
+                    // get the actual event record
+                    $event = $this->EventData->select(self::$event_id);
+                    // get the form fields
+                    $fields = $this->getFormFields($event);
+                    // get the form
+                    $form = $fields->getForm();
+                }
+            }
+            else {
+                // general error (timeout, CSFR ...)
+                $this->setMessage('The form is not valid, please check your input and try again!');
+            }
+        }
 
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.edit.twig'),
             array(
