@@ -60,6 +60,8 @@ return array(
         => 'Beginn der Veranstaltung',
     'Event date to'
         => 'Ende der Veranstaltung',
+    'Event location'
+        => 'Veranstaltungsort',
     'Extra field'
         => 'Zusatzfeld',
     'Extra fields'
@@ -94,6 +96,8 @@ return array(
     'Name (translated)'
         => 'Bezeichner (übersetzt)',
 
+    'Organizer'
+        => 'Veranstalter',
     'Organizer Tags'
         => 'Veranstalter',
 
