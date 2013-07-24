@@ -40,11 +40,14 @@
   <div id="event_content">
     {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' %}
 
+    {% if message|length > 0 %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+      
     <div class="event_form">
       <form action="{{ FRAMEWORK_URL }}/admin/event/edit?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
         {{ form_errors(form) }}
-        {{ form_row(form._token) }}
-
+        
         {{ form_row(form.event_id) }}
         <div>
           <label>{{ 'ID'|trans }}</label>
@@ -72,6 +75,11 @@
 
         {{ form_row(form.event_date_from) }}
         {{ form_row(form.event_date_to) }}
+        
+        {{ form_row(form.event_participants_max) }}
+        
+        
+        {{ form_rest(form) }}
         <div>
           <label for="submit">&nbsp;</label>
           <input type="submit" name="submit" />
