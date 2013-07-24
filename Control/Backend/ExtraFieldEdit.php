@@ -129,6 +129,10 @@ class ExtraFieldEdit extends Backend {
                     $form = $fields->getForm();
                 }
             }
+            else {
+                // general error (timeout, CSFR ...)
+                $this->setMessage('The form is not valid, please check your input and try again!');
+            }
         }
 
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/extra.field.edit.twig'),
