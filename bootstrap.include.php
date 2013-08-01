@@ -9,10 +9,7 @@
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 use phpManufaktur\Event\Data\Setup\Setup;
 use phpManufaktur\Event\Control\Backend\About;
 use phpManufaktur\Event\Control\Backend\ContactList as EventContactList;
@@ -30,6 +27,7 @@ use phpManufaktur\Event\Control\Backend\GroupEdit as EventGroupEdit;
 use phpManufaktur\Event\Control\Backend\ExtraFieldList as EventExtraFieldList;
 use phpManufaktur\Event\Control\Backend\ExtraFieldEdit as EventExtraFieldEdit;
 use phpManufaktur\Event\Control\Backend\EventEdit;
+use phpManufaktur\Event\Control\Backend\EventList;
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
@@ -38,35 +36,13 @@ $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale/Custom');
 
 /**
- * Will be called by the iframe embedded within the CMS.
- * Get the base informations of the CMS, autologin the user into kitFramework
- * and execute the protected admin dialog for WinCalc
+ * Use the EmbeddedAdministration feature to connect the extension with the CMS
  *
- * @todo autologin does not check the user
- * @todo improve the checking and setting of roles
+ * @link https://github.com/phpManufaktur/kitFramework/wiki/Extensions-%23-Embedded-Administration
  */
-$app->get('/event/cms/{cms}', function ($cms) use ($app) {
-    // get the CMS info parameters
-    $cms = json_decode(base64_decode($cms), true);
-
-    // save them partial into session
-    $app['session']->set('CMS_TYPE', $cms['type']);
-    $app['session']->set('CMS_VERSION', $cms['version']);
-    $app['session']->set('CMS_LOCALE', $cms['locale']);
-    $app['session']->set('CMS_USER_NAME', $cms['username']);
-
-    // auto login into the admin area and then exec propangas24
-    $secureAreaName = 'admin';
-    $user = new User($cms['username'],'', array('ROLE_USER'), true, true, true, true);
-    $token = new UsernamePasswordToken($user, null, $secureAreaName, $user->getRoles());
-    $app['security']->setToken($token);
-    $app['session']->set('_security_'.$secureAreaName, serialize($token) );
-
-    $usage = ($cms['target'] == 'cms') ? $cms['type'] : 'framework';
-
-    // sub request to the starting point of Event
-    $subRequest = Request::create('/admin/event/about', 'GET', array('usage' => $usage));
-    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+$app->get('/event/cms/{cms_information}', function ($cms_information) use ($app) {
+    $administration = new EmbeddedAdministration($app);
+    return $administration->route('/admin/event/about', $cms_information);
 });
 
 // About dialog
@@ -185,6 +161,10 @@ $app->match('/admin/event/extra/field/edit/id/{type_id}', function($type_id) use
 $app->match('/admin/event/edit', function() use($app) {
     $event = new EventEdit($app);
     return $event->exec();
+});
+
+$app->match('/admin/event/list', function() use($app) {
+
 });
 
 $app->match('/admin/event/setup', function() use($app) {

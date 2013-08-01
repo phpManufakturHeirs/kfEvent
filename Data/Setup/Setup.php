@@ -21,6 +21,7 @@ use phpManufaktur\Event\Data\Event\ExtraGroup;
 use phpManufaktur\Event\Data\Event\OrganizerTag;
 use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\ParticipantTag;
+use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 
 class Setup
 {
@@ -66,6 +67,11 @@ class Setup
 
             $ParticipantTag = new ParticipantTag($this->app);
             $ParticipantTag->createTable();
+
+            // setup kit_framework_event as Add-on in the CMS
+            $admin_tool = new InstallAdminTool($this->app);
+            $admin_tool->exec(MANUFAKTUR_PATH.'/Event/extension.json', '/event/cms');
+
 
         } catch (\Exception $e) {
             throw new \Exception($e);

@@ -17,8 +17,14 @@
   "description": {
     "en": {
       "title":"Event management for kitFramework",
-      "short": "Event management for kitFramework",
+      "short": "A complete event management suite - former known as kitEvent",
       "long": "Complete event management for use with the kitFramework",
+      "url": "https:\/\/kit2.phpmanufaktur.de"
+    },
+    "de": {
+      "title":"Veranstaltungskalender für das kitFramework",
+      "short": "Verwalten Sie Termine und Veranstaltungen und veröffentlichen Sie diese auf Ihrer Website",
+      "long": "Event ist eine vollständige Verwaltungssoftware für alle Termine, Kurse und Veranstaltungen.",
       "url": "https:\/\/kit2.phpmanufaktur.de"
     }
   },
