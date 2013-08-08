@@ -31,9 +31,11 @@ use phpManufaktur\Event\Control\Backend\EventList;
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
-
 // scan the /Locale/Custom directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale/Custom');
+
+// setup routine for kfEvent
+$app->match('/admin/event/setup', 'phpManufaktur\Event\Data\Setup\Setup::exec');
 
 /**
  * Use the EmbeddedAdministration feature to connect the extension with the CMS
@@ -46,89 +48,62 @@ $app->get('/event/cms/{cms_information}', function ($cms_information) use ($app)
 });
 
 // About dialog
-$app->get('/admin/event/about', function () use ($app) {
-    $About = new About($app);
-    return $About->exec();
-});
+$app->get('/admin/event/about', 
+    'phpManufaktur\Event\Control\Backend\About::exec');
 
 // Contact List
-$app->match('/admin/event/contact/list', function() use($app) {
-    $ContactList = new EventContactList($app);
-    return $ContactList->exec();
-});
-$app->match('/admin/event/contact/list/page/{page}', function($page) use ($app) {
-    $ContactList = new EventContactList($app);
-    $ContactList->setCurrentPage($page);
-    return $ContactList->exec();
-});
+$app->match('/admin/event/contact/list', 
+    'phpManufaktur\Event\Control\Backend\ContactList::exec');
+$app->match('/admin/event/contact/list/page/{page}', 
+    'phpManufaktur\Event\Control\Backend\ContactList::exec');
 
 // Contact create and edit
-$app->match('/admin/event/contact/select', function() use($app) {
-    $select = new EventContactSelect($app);
-    return $select->exec();
-});
-$app->match('/admin/event/contact/edit/id/{contact_id}', function($contact_id) use($app) {
-    $select = new EventContactSelect($app);
-    $select->setContactID($contact_id);
-    return $select->exec();
-});
-$app->match('/admin/event/contact/person/edit', function() use($app) {
-    $contact =  new EventContactPerson($app);
-    return $contact->exec();
-});
-$app->match('/admin/event/contact/person/edit/id/{contact_id}', function($contact_id) use($app) {
-    $contact =  new EventContactPerson($app);
-    $contact->setContactID($contact_id);
-    return $contact->exec();
-});
-$app->match('/admin/event/contact/company/edit', function() use($app) {
-    $contact =  new EventContactCompany($app);
-    return $contact->exec();
-});
-$app->match('/admin/event/contact/company/edit/id/{contact_id}', function($contact_id) use($app) {
-    $contact =  new EventContactCompany($app);
-    $contact->setContactID($contact_id);
-    return $contact->exec();
-});
-$app->match('/admin/event/contact/category/list', function() use($app) {
-    $category = new EventCategoryList($app);
-    return $category->exec();
-});
-$app->match('/admin/event/contact/category/edit', function() use($app) {
-    $category = new EventCategoryEdit($app);
-    return $category->exec();
-});
-$app->match('/admin/event/contact/category/edit/id/{category_id}', function($category_id) use($app) {
-    $category = new EventCategoryEdit($app);
-    $category->setCategoryID($category_id);
-    return $category->exec();
-});
-$app->match('/admin/event/contact/title/list', function() use($app) {
-    $title = new EventTitleList($app);
-    return $title->exec();
-});
-$app->match('/admin/event/contact/title/edit', function() use($app) {
-    $title = new EventTitleEdit($app);
-    return $title->exec();
-});
-$app->match('/admin/event/contact/title/edit/id/{title_id}', function($title_id) use($app) {
-    $title = new EventTitleEdit($app);
-    $title->setTitleID($title_id);
-    return $title->exec();
-});
-$app->match('/admin/event/contact/tag/list', function() use($app) {
-    $tag = new EventTagList($app);
-    return $tag->exec();
-});
-$app->match('/admin/event/contact/tag/edit', function() use($app) {
-    $tag = new EventTagEdit($app);
-    return $tag->exec();
-});
-$app->match('/admin/event/contact/tag/edit/id/{tag_id}', function($tag_id) use($app) {
-    $tag = new EventTagEdit($app);
-    $tag->setTagID($tag_id);
-    return $tag->exec();
-});
+$app->match('/admin/event/contact/select', 
+    'phpManufaktur\Event\Control\Backend\ContactSelect::exec');
+$app->match('/admin/event/contact/edit/id/{contact_id}', 
+    'phpManufaktur\Event\Control\Backend\ContactSelect::exec');
+
+// Create and Edit Person contacts
+$app->match('/admin/event/contact/person/edit', 
+    'phpManufaktur\Event\Control\Backend\ContactPerson::exec');
+$app->match('/admin/event/contact/person/edit/id/{contact_id}', 
+    'phpManufaktur\Event\Control\Backend\ContactPerson::exec');
+
+// Create and Edit Company contacts
+$app->match('/admin/event/contact/company/edit', 
+    'phpManufaktur\Event\Control\Backend\ContactCompany::exec');
+$app->match('/admin/event/contact/company/edit/id/{contact_id}', 
+    'phpManufaktur\Event\Control\Backend\ContactCompany::exec');
+
+// Category List
+$app->match('/admin/event/contact/category/list', 
+    'phpManufaktur\Event\Control\Backend\Contact\CategoryList::exec');
+
+// Category Edit
+$app->match('/admin/event/contact/category/edit', 
+    'phpManufaktur\Event\Control\Backend\Contact\CategoryEdit::exec');
+$app->match('/admin/event/contact/category/edit/id/{category_id}', 
+    'phpManufaktur\Event\Control\Backend\Contact\CategoryEdit::exec');
+
+// Title List
+$app->match('/admin/event/contact/title/list', 
+    'phpManufaktur\Event\Control\Backend\Contact\TitleList::exec');
+
+// Title Edit
+$app->match('/admin/event/contact/title/edit', 
+    'phpManufaktur\Event\Control\Backend\Contact\TitleEdit::exec');
+$app->match('/admin/event/contact/title/edit/id/{title_id}', 
+    'phpManufaktur\Event\Control\Backend\Contact\TitleEdit::exec');
+
+// Tag List
+$app->match('/admin/event/contact/tag/list', 
+    'phpManufaktur\Event\Control\Backend\Contact\TagList::exec');
+
+// Tag Edit
+$app->match('/admin/event/contact/tag/edit', 
+    'phpManufaktur\Event\Control\Backend\Contact\TagEdit::exec');
+$app->match('/admin/event/contact/tag/edit/id/{tag_id}', 
+    'phpManufaktur\Event\Control\Backend\Contact\TagEdit::exec');
 
 $app->match('/admin/event/group/list', function() use($app) {
     $group = new EventGroupList($app);
@@ -167,8 +142,4 @@ $app->match('/admin/event/list', function() use($app) {
 
 });
 
-$app->match('/admin/event/setup', function() use($app) {
-    $Setup = new Setup($app);
-    $Setup->exec();
-    return "Setup succesfull.";
-});
+

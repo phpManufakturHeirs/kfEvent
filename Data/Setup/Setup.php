@@ -28,18 +28,10 @@ class Setup
 
     protected $app = null;
 
-    /**
-     * Constructor
-     *
-     * @param Application $app
-     */
-    public function __construct(Application $app)
+    public function exec(Application $app)
     {
         $this->app = $app;
-    }
-
-    public function exec()
-    {
+        
         try {
             $Group = new Group($this->app);
             $Group->createTable();
@@ -71,7 +63,8 @@ class Setup
             // setup kit_framework_event as Add-on in the CMS
             $admin_tool = new InstallAdminTool($this->app);
             $admin_tool->exec(MANUFAKTUR_PATH.'/Event/extension.json', '/event/cms');
-
+            
+            Return "The setup was successful";
 
         } catch (\Exception $e) {
             throw new \Exception($e);

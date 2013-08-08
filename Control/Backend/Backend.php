@@ -23,7 +23,19 @@ class Backend {
     /**
      * Constructor
      */
-    public function __construct(Application $app) {
+    public function __construct(Application $app=null) {
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
+    }
+    
+    /**
+     * Initialize the class with the needed parameters
+     * 
+     * @param Application $app
+     */
+    protected function initialize(Application $app) 
+    {
         $this->app = $app;
         $cms = $this->app['request']->get('usage');
         self::$usage = is_null($cms) ? 'framework' : $cms;

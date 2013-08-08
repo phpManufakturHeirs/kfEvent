@@ -12,6 +12,7 @@
 namespace phpManufaktur\Event\Control\Backend;
 
 use phpManufaktur\Event\Control\Backend\Backend;
+use Silex\Application;
 
 class About extends Backend {
 
@@ -20,8 +21,9 @@ class About extends Backend {
      *
      * @return string rendered dialog
      */
-    public function exec()
+    public function exec(Application $app)
     {
+        $this->initialize($app);
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/about.twig'),
             array(
                 'usage' => self::$usage,

@@ -19,10 +19,17 @@ class CategoryEdit extends Backend {
 
     protected $SimpleCategoryEdit = null;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
+    }
 
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $this->SimpleCategoryEdit = new SimpleCategoryEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
@@ -34,7 +41,7 @@ class CategoryEdit extends Backend {
             )
         ));
     }
-
+    
     /**
      * @param number $category_id
      */
@@ -43,8 +50,12 @@ class CategoryEdit extends Backend {
         $this->SimpleCategoryEdit->setCategoryID($category_id);
     }
 
-    public function exec()
+    public function exec(Application $app, $category_id)
     {
+        $this->initialize($app);
+        if (!is_null($category_id)) {
+            $this->setCategoryID($category_id);
+        }
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')

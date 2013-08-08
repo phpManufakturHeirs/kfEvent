@@ -19,9 +19,17 @@ class ContactList extends Backend {
 
     protected $SimpleContactList = null;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }
+    }
+
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $options = array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
@@ -39,14 +47,18 @@ class ContactList extends Backend {
         );
         $this->SimpleContactList = new SimpleContactList($this->app, $options);
     }
-
+    
     public function setCurrentPage($page)
     {
         $this->SimpleContactList->setCurrentPage($page);
     }
 
-    public function exec()
+    public function exec(Application $app, $page=null)
     {
+        $this->initialize($app);
+        if (!is_null($page)) {
+            $this->setCurrentPage($page);
+        }
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_list')

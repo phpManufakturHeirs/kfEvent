@@ -19,10 +19,17 @@ class TitleList extends Backend {
 
     protected $SimpleTitleList = null;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
+    }
 
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $this->SimpleTitleList = new SimpleTitleList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
@@ -34,9 +41,10 @@ class TitleList extends Backend {
             )
         ));
     }
-
-    public function exec()
+    
+    public function exec(Application $app)
     {
+        $this->initialize($app);
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')

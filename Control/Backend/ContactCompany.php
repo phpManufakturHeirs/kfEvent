@@ -19,10 +19,17 @@ class ContactCompany extends Backend {
 
     protected $SimpleContactCompany = null;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
+    }
 
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $this->SimpleContactCompany = new SimpleContactCompany($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
@@ -36,14 +43,18 @@ class ContactCompany extends Backend {
             )
         ));
     }
-
+    
     public function setContactID($contact_id)
     {
         $this->SimpleContactCompany->setContactID($contact_id);
     }
 
-    public function exec()
+    public function exec(Application $app, $contact_id=null)
     {
+        $this->initialize($app);
+        if (!is_null($contact_id)) {
+            $this->setContactID($contact_id);
+        }
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')

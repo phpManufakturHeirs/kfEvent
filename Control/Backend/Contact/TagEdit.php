@@ -19,10 +19,17 @@ class TagEdit extends Backend {
 
     protected $SimpleTagEdit = null;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
+    }
 
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $this->SimpleTagEdit = new SimpleTagEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
@@ -34,7 +41,7 @@ class TagEdit extends Backend {
             )
         ));
     }
-
+    
     /**
      * @param number $tag_id
      */
@@ -43,8 +50,12 @@ class TagEdit extends Backend {
         $this->SimpleTagEdit->setTagID($tag_id);
     }
 
-    public function exec()
+    public function exec(Application $app, $tag_id=null)
     {
+        $this->initialize($app);
+        if (!is_null($tag_id)) {
+            $this->setTagID($tag_id);
+        }
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')

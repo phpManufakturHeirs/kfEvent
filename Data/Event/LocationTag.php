@@ -38,16 +38,7 @@ class LocationTag
         `group_id` INT(11) DEFAULT NULL,
         `tag_name` VARCHAR(32) DEFAULT NULL,
         `timestamp` TIMESTAMP,
-        PRIMARY KEY (`id`),
-        CONSTRAINT
-            FOREIGN KEY (`tag_name`)
-            REFERENCES $table_tag_type (`tag_name`)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-        CONSTRAINT
-            FOREIGN KEY (`group_id`)
-            REFERENCES $table_group (`group_id`)
-            ON DELETE CASCADE
+        PRIMARY KEY (`id`)
         )
     COMMENT='The table to assign location tags to event groups'
     ENGINE=InnoDB
