@@ -10,24 +10,11 @@
  */
 
 use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
-use phpManufaktur\Event\Data\Setup\Setup;
-use phpManufaktur\Event\Control\Backend\About;
-use phpManufaktur\Event\Control\Backend\ContactList as EventContactList;
-use phpManufaktur\Event\Control\Backend\ContactSelect as EventContactSelect;
-use phpManufaktur\Event\Control\Backend\ContactPerson as EventContactPerson;
-use phpManufaktur\Event\Control\Backend\ContactCompany as EventContactCompany;
-use phpManufaktur\Event\Control\Backend\Contact\CategoryList as EventCategoryList;
-use phpManufaktur\Event\Control\Backend\Contact\CategoryEdit as EventCategoryEdit;
-use phpManufaktur\Event\Control\Backend\Contact\TitleList as EventTitleList;
-use phpManufaktur\Event\Control\Backend\Contact\TitleEdit as EventTitleEdit;
-use phpManufaktur\Event\Control\Backend\Contact\TagList as EventTagList;
-use phpManufaktur\Event\Control\Backend\Contact\TagEdit as EventTagEdit;
 use phpManufaktur\Event\Control\Backend\GroupList as EventGroupList;
 use phpManufaktur\Event\Control\Backend\GroupEdit as EventGroupEdit;
 use phpManufaktur\Event\Control\Backend\ExtraFieldList as EventExtraFieldList;
 use phpManufaktur\Event\Control\Backend\ExtraFieldEdit as EventExtraFieldEdit;
 use phpManufaktur\Event\Control\Backend\EventEdit;
-use phpManufaktur\Event\Control\Backend\EventList;
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
@@ -105,7 +92,9 @@ $app->match('/admin/event/contact/tag/edit',
 $app->match('/admin/event/contact/tag/edit/id/{tag_id}', 
     'phpManufaktur\Event\Control\Backend\Contact\TagEdit::exec');
 
-$app->match('/admin/event/group/list', function() use($app) {
+$app->match('/admin/event/group/list', 
+    
+    function() use($app) {
     $group = new EventGroupList($app);
     return $group->exec();
 });
