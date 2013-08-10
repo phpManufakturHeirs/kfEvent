@@ -1,0 +1,64 @@
+{# 
+  Event
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+{% if usage == 'framework' %}
+  {% set template_namespace = '@framework' %}
+  {% set template_file = 'body.twig' %}
+{% else %}
+  {% set template_namespace = '@phpManufaktur/Event/Template' %}
+  {% set template_file = 'backend/body.twig' %}
+{% endif %}
+{% extends template_file(template_namespace, template_file) %}
+{% block title %}{{ 'Event - event groups'|trans }}{% endblock %}
+{% block stylesheet %}
+  {{ parent() }}
+  {% if usage == 'framework' %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
+  {% endif %}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/event.css" media="screen, projection" />  
+{% endblock stylesheet %}
+
+{% block content %}
+  <div id="event_content">
+    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' %}
+      
+    {% if message|length > 0 %}
+      <div class="message">{{ message }}</div>
+    {% endif %}
+      
+    {% if events|length > 0 %}
+      <table>
+        <thead>
+          <tr>
+            <th class="event_id">{{ 'ID'|trans }}</th>
+            <th class="event_date_from">{{ 'Date, From'|trans }}</th>
+            <th class="event_participants_total">{{ 'Participants, maximum'|trans }}</th>
+            <th class="group_description">{{ 'Description'|trans }}</th>
+            <th class="event_status">{{ 'Status'|trans }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set i = 0 %}
+          {% for field in events %}
+            <tr class="{{ cycle(['flop','flip'], i) }}">
+              <td class="group_id"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ field.event_id ~ '?usage=' ~ usage }}">{{ '%03d'|format(field.event_id) }}</a></td>
+              <td class="group_name"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ field.event_id ~ '?usage=' ~ usage }}">{{ field.event_date_from }}</a></td>
+              <td class="group_name translated">{{ field.event_participants_total }}</td>
+              <td class="group_description">{{ field.description_short }}</td>
+              <td class="group_status">{{ field.event_status|trans }}</td>
+            </tr>
+            {% set i = i+1 %}
+          {% endfor %}  
+        </tbody>
+      </table>
+    {% else %}
+      <p>{{ 'The event list is empty, please create a event!'|trans }}</p>
+    {% endif %}  
+  </div>
+{% endblock content %}

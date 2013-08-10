@@ -22,6 +22,8 @@ return array(
     '- new group -'
         => '- neue Gruppe -',
 
+    'About'
+        => '?',
     'Add category'
         => 'Kategorie hinzufügen',
     'Add extra field'
@@ -32,41 +34,59 @@ return array(
         => 'Markierung hinzufügen',
     'Add title'
         => 'Titel hinzufügen',
+    
+    'by copying from a existing event'
+        => 'durch Kopieren einer existierenden Veranstaltung',
+    'by selecting a event group'
+        => 'durch Auswahl einer Veranstaltungsgruppe',
 
     'Contact list'
         => 'Kontakte, Übersicht',
+    'Create a new contact'
+        => 'Einen neuen Kontakt anlegen',
+    'Create a new event'
+        => 'Eine neue Veranstaltung erstellen',
     'Create a new extra field'
         => 'Ein neues Zusatzfeld anlegen',
     'Create a new group'
         => 'Eine neue Gruppe anlegen',
-
+    
     'Date'
         => 'Datum',
     'Date and Time'
         => 'Datum und Uhrzeit',
     'delete this extra field'
         => 'dieses Zusatzfeld löschen',
-
-    'Field name'
-        => 'Bezeichner',
-    'Field name (translated)'
-        => 'Bezeichner (übersetzt)',
     'Description'
         => 'Beschreibung',
     'Description (translated)'
         => 'Beschreibung (übersetzt)',
-
+    
+    'Event'
+        => 'Veranstaltung',
     'Event date from'
         => 'Beginn der Veranstaltung',
     'Event date to'
         => 'Ende der Veranstaltung',
-    'Event location'
-        => 'Veranstaltungsort',
+    'Event deadline'
+        => 'Anmeldeschluß',
     'Extra field'
         => 'Zusatzfeld',
     'Extra fields'
         => 'Zusatzfelder',
-
+    'Event list'
+        => 'Veranstaltungen, Übersicht',
+    'Event location'
+        => 'Veranstaltungsort',
+    'Event publish from'
+        => 'Veröffentlichen ab',
+    'Event publish to'
+        => 'Veröffentlichen bis',
+    
+    'Field name'
+        => 'Bezeichner',
+    'Field name (translated)'
+        => 'Bezeichner (übersetzt)',
     'Field type'
         => 'Feld Typ',
     'Float'
@@ -83,12 +103,26 @@ return array(
     'Groups'
         => 'Gruppen',
 
+    'Information about the Event extension'
+        => 'Informationen über die Event Extension',
     'Int'
         => 'Ganzzahl',
     'Integer'
         => 'Ganzzahl',
 
+    'List of all active events'
+        => 'Übersicht über alle aktiven Veranstaltungen',
+    'List of all available contacts (Organizer, Locations, Participants)'
+        => 'Übersicht über alle verfügbaren Kontakte (Veranstalter, Orte, Teilnehmer)',
+    'List of all available event groups'
+        => 'Übersicht über alle verfügbaren Veranstaltungsgruppen',
+    'List of all registrations for events'
+        => 'Übersicht über alle Anmeldungen zu Veranstaltungen',
+    'Location'
+        => 'Veranstaltungsort',
     'Location Tags'
+        => 'Veranstaltungsorte',
+    'Locations'
         => 'Veranstaltungsorte',
 
     'Name'
@@ -103,8 +137,19 @@ return array(
 
     'Please select at minimum one tag for the %type%.'
         => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
+    'Participant'
+        => 'Teilnehmer',
     'Participant Tags'
         => 'Teilnehmer',
+    'Participants'
+        => 'Teilnehmer',
+    'Participants, maximum'
+        => 'Teilnehmer, max. Anzahl',
+    'Participants total'
+        => 'Teilnehmer, angemeldet',
+    
+    'Registrations'
+        => 'Anmeldungen',
 
     'Text - 256 characters'
         => 'Text - max. 256 Zeichen',
