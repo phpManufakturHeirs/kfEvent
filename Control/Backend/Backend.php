@@ -56,37 +56,44 @@ class Backend {
         $toolbar_array = array(
             'event_list' => array(
                 'text' => 'Event list',
+                'hint' => 'List of all active events',
                 'link' => FRAMEWORK_URL.'/admin/event/list'.self::$usage_param,
                 'active' => ($active == 'event_list')
             ),
             'event_edit' => array(
                 'text' => 'Event',
+                'hint' => 'Create a new event',
                 'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
                 'active' => ($active == 'event_edit')
             ),
             'registrations' => array(
                 'text' => 'Registrations',
+                'hint' => 'List of all registrations for events',
                 'link' => FRAMEWORK_URL.'/admin/event/registrations'.self::$usage_param,
                 'active' => ($active == 'registrations')
             ),
             'contact_list' => array(
                 'text' => 'Contact list',
+                'hint' => 'List of all available contacts (Organizer, Locations, Participants)',
                 'link' => FRAMEWORK_URL.'/admin/event/contact/list'.self::$usage_param,
                 'active' => ($active == 'contact_list')
             ),
             'contact_edit' => array(
                 'text' => 'Contact',
+                'hint' => 'Create a new contact',
                 'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
                 'active' => ($active == 'contact_edit')
             ),
             'group' => array(
                 'text' => 'Groups',
+                'hint' => 'List of all available event groups',
                 'link' => FRAMEWORK_URL.'/admin/event/group/list'.self::$usage_param,
                 'active' => ($active == 'group')
             ),
 
             'about' => array(
                 'text' => 'About',
+                'hint' => 'Information about the Event extension',
                 'link' => FRAMEWORK_URL.'/admin/event/about'.self::$usage_param,
                 'active' => ($active == 'about')
                 ),
