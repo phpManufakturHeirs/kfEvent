@@ -18,6 +18,7 @@ use phpManufaktur\Event\Data\Event\Group as EventGroup;
 use phpManufaktur\Contact\Control\Contact as ContactControl;
 use phpManufaktur\Event\Data\Event\OrganizerTag as EventOrganizerTag;
 use phpManufaktur\Event\Data\Event\LocationTag as EventLocationTag;
+use phpManufaktur\Event\Data\Event\Description as EventDescription;
 
 class EventEdit extends Backend {
 
@@ -27,17 +28,27 @@ class EventEdit extends Backend {
     protected $ContactControl = null;
     protected $EventOrganizerTag = null;
     protected $EventLocationTag = null;
+    protected $EventDescription = null;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }
+    }
+
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $this->EventData = new EventData($this->app);
         $this->EventGroup = new EventGroup($this->app);
         $this->ContactControl = new ContactControl($this->app);
         $this->EventLocationTag = new EventLocationTag($this->app);
         $this->EventOrganizerTag = new EventOrganizerTag($this->app);
+        $this->EventDescription = new EventDescription($this->app);
     }
-
+    
     public function setEventID($event_id)
     {
         self::$event_id = $event_id;
@@ -87,7 +98,6 @@ class EventEdit extends Backend {
      */
     protected function getFormFields($event)
     {
-        print_r($event);
         if (false === ($group = $this->EventGroup->select($event['group_id']))) {
             throw new \Exception('The event group with the ID '.$event['group_id']." does not exists!");
         }
@@ -112,15 +122,17 @@ class EventEdit extends Backend {
         ->add('group_name', 'hidden', array(
             'data' => $this->EventGroup->getGroupName($event['group_id'])
         ))
+        
         // Organizer
         ->add('event_organizer', 'choice', array(
-            'choices' => $this->ContactControl->getContactsByTagsForTwig($organizer_tags), //$group['group_organizer_contact_tags'])),
+            'choices' => $this->ContactControl->getContactsByTagsForTwig($organizer_tags),
             'empty_value' => '- please select -',
             'expanded' => false,
             'required' => true,
             'label' => 'Organizer',
             'data' => $event['event_organizer']
         ))
+        
         // Location
         ->add('event_location', 'choice', array(
             'choices' => $this->ContactControl->getContactsByTagsForTwig($location_tags), // explode(',', $group['group_location_contact_tags'])),
@@ -130,31 +142,90 @@ class EventEdit extends Backend {
             'label' => 'Event location',
             'data' => $event['event_location']
         ))
-        // Event date
-        ->add('event_date_from', 'date', array(
-            'widget' => 'single_text',
-            'format' => 'dd-MM-yyyy HH:mm',
-            'attr' => array('class' => 'event_date_from'),
-            'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_from']) : null
-        ))
-        ->add('event_date_to', 'date', array(
-            'widget' => 'single_text',
-            'format' => 'dd-MM-yyyy HH:mm',
-            'attr' => array('class' => 'event_date_to'),
-            'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_to']) : null
-        ))
         // Participants
-        ->add('event_participants_max', 'integer', array(
+        ->add('event_participants_max', 'text', array(
             'label' => 'Participants, maximum',
             'data' => $event['event_participants_max']
         ))
+        ->add('event_participants_total', 'hidden', array(
+            'data' => $event['event_participants_total']
+        ))
         ;
+        
+        if (function_exists('intl_get_error_code')) {
+            // use the date field only if the intl extension is installed
+            // Event date
+            $fields->add('event_date_from', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => array('class' => 'event_date_from'),
+                'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_from']) : null
+            ));
+            $fields->add('event_date_to', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => array('class' => 'event_date_to'),
+                'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_to']) : null
+            ));
+            // Publish from - to
+            $fields->add('event_publish_from', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => array('class' => 'event_publish_from'),
+                'data' => (!empty($event['event_publish_from']) && ($event['event_publish_from'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_publish_from']) : null
+            ));
+            $fields->add('event_publish_to', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => array('class' => 'event_publish_to'),
+                'data' => (!empty($event['event_publish_to']) && ($event['event_publish_to'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_publish_to']) : null
+            ));
+            // Deadline
+            $fields->add('event_deadline', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy HH:mm',
+                'attr' => array('class' => 'event_deadline'),
+                'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_deadline']) : null
+            ));
+        }
+        else {
+            // alternate date handling
+            // Event date
+            $fields->add('event_date_from', 'text', array(
+                'attr' => array('class' => 'event_date_from'),
+                'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_from']) : null
+            ));
+            $fields->add('event_date_to', 'text', array(
+                'attr' => array('class' => 'event_date_to'),
+                'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_date_to']) : null
+            ));
+            // Publish from - to
+            $fields->add('event_publish_from', 'text', array(
+                'attr' => array('class' => 'event_publish_from'),
+                'data' => (!empty($event['event_publish_from']) && ($event['event_publish_from'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_publish_from']) : null
+            ));
+            $fields->add('event_publish_to', 'text', array(
+                'attr' => array('class' => 'event_publish_to'),
+                'data' => (!empty($event['event_publish_to']) && ($event['event_publish_to'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_publish_to']) : null
+            ));
+            // Deadline
+            $fields->add('event_deadline', 'text', array(
+                'attr' => array('class' => 'event_deadline'),
+                'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? new \DateTime($event['event_deadline']) : null
+            ));
+        }
+        
+        
 
         return $fields;
     }
 
-    public function exec()
+    public function exec(Application $app, $event_id=null)
     {
+        $this->initialize($app);
+        if (!is_null($event_id)) {
+            $this->setEventID($event_id);
+        }
         // check if a event ID isset
         $form_request = $this->app['request']->request->get('form', array());
         if (isset($form_request['event_id'])) {
@@ -188,8 +259,16 @@ class EventEdit extends Backend {
                     'group_id' => $form_request['select_group']
                 );
                 $this->EventData->insert($data, self::$event_id);
+                // create a description record for the event
+                $data = array(
+                    'event_id' => self::$event_id,
+                    'description_title' => '',
+                    'description_short' => '',
+                    'description_long' => ''
+                );
+                $this->EventDescription->insert($data);
                 // get the event data
-                $event = $this->EventData->select(self::$event_id);
+                $event = $this->EventData->selectEvent(self::$event_id);
             }
             else {
                 // first step - show the start dialog to create a new event
@@ -205,7 +284,7 @@ class EventEdit extends Backend {
             }
         }
         // select the event data
-        elseif (false === ($event = $this->EventData->select(self::$event_id))) {
+        elseif (false === ($event = $this->EventData->selectEvent(self::$event_id))) {
             $event = $this->EventData->getDefaultRecord();
             $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$event_id));
             self::$event_id = -1;
@@ -218,6 +297,8 @@ class EventEdit extends Backend {
 
         if (!$is_start && ('POST' == $this->app['request']->getMethod())) {
             // the form was submitted, bind the request
+$req = $this->app['request']->request->get('form');
+print_r($req);            
             $form->bind($this->app['request']);
 echo "xxx";
             if ($form->isValid()) {

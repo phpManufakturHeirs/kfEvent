@@ -50,7 +50,7 @@ class CategoryEdit extends Backend {
         $this->SimpleCategoryEdit->setCategoryID($category_id);
     }
 
-    public function exec(Application $app, $category_id)
+    public function exec(Application $app, $category_id=null)
     {
         $this->initialize($app);
         if (!is_null($category_id)) {

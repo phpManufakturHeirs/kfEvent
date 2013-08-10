@@ -45,8 +45,8 @@ class Description
         `description_id` INT(11) NOT NULL AUTO_INCREMENT,
         `event_id` INT(11) NOT NULL DEFAULT '-1',
         `description_title` VARCHAR(255) NOT NULL DEFAULT '',
-        `description_short` TEXT NOT NULL DEFAULT '',
-        `description_long` TEXT NOT NULL DEFAULT '',
+        `description_short` TEXT NOT NULL,
+        `description_long` TEXT NOT NULL,
         `description_timestamp` TIMESTAMP,
         PRIMARY KEY (`description_id`),
         UNIQUE (`event_id`),
@@ -69,5 +69,27 @@ EOD;
         }
     }
 
-
+    /**
+     * Insert a new description 
+     * 
+     * record
+     *
+     * @param array $data
+     * @param reference integer $event_id
+     * @throws \Exception
+     */
+    public function insert($data, &$event_id=null)
+    {
+        try {
+            $insert = array();
+            foreach ($data as $key => $value) {
+                if (($key == 'description_id') || ($key == 'description_timestamp')) continue;
+                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+            }
+            $this->app['db']->insert(self::$table_name, $insert);
+            $event_id = $this->app['db']->lastInsertId();
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }

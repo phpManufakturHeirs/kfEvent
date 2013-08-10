@@ -19,6 +19,7 @@ use phpManufaktur\Event\Data\Event\ExtraGroup;
 use phpManufaktur\Event\Data\Event\OrganizerTag;
 use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\ParticipantTag;
+use Silex\Application;
 
 class GroupEdit extends Backend {
 
@@ -32,10 +33,17 @@ class GroupEdit extends Backend {
 
     protected static $group_id = -1;
 
-    public function __construct($app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
-
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
+    }
+    
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
         $this->GroupData = new GroupData($this->app);
         $this->ContactControl = new ContactControl($this->app);
         $this->ExtraType = new ExtraType($this->app);
@@ -140,8 +148,12 @@ class GroupEdit extends Backend {
         return $form;
     }
 
-    public function exec()
+    public function exec(Application $app, $group_id=null)
     {
+        $this->initialize($app);
+        if (!is_null($group_id)) {
+            $this->setGroupID($group_id);
+        }
         // check if a group ID isset
         $form_request = $this->app['request']->request->get('form', array());
         if (isset($form_request['group_id'])) {
@@ -219,6 +231,16 @@ class GroupEdit extends Backend {
                     }
 
                     if ($check) {
+                        // first create the event group and set the new group_id
+                        $data = array(
+                            'group_name' => $group_name,
+                            'group_status' => 'ACTIVE',
+                            'group_description' => (!is_null($group['group_description'])) ? $group['group_description'] : '',
+                        );
+                        $this->GroupData->insert($data, self::$group_id);
+                        $this->setMessage('The record with the ID %id% was successfull inserted.',
+                            array('%id%' => self::$group_id));
+                        
                         // insert organizer tags
                         foreach ($group['group_organizer_contact_tags'] as $key => $value)
                             $this->OrganizerTag->insert(array(
@@ -240,14 +262,7 @@ class GroupEdit extends Backend {
                                 'tag_name' => $value
                             ));
 
-                        $data = array(
-                            'group_name' => $group_name,
-                            'group_status' => 'ACTIVE',
-                            'group_description' => $group['group_description'],
-                        );
-                        $this->GroupData->insert($data, self::$group_id);
-                        $this->setMessage('The record with the ID %id% was successfull inserted.',
-                            array('%id%' => self::$group_id));
+                        
                     }
                 }
                 else {

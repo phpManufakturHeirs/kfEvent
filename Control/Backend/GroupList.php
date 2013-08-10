@@ -13,20 +13,29 @@ namespace phpManufaktur\Event\Control\Backend;
 
 use phpManufaktur\Event\Control\Backend\Backend;
 use phpManufaktur\Event\Data\Event\Group as GroupData;
+use Silex\Application;
 
 class GroupList extends Backend {
 
     protected $GroupData = null;
 
-    public function __construct($app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
-
-        $this->GroupData = new GroupData($this->app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }        
     }
 
-    public function exec()
+    protected function initialize(Application $app)
     {
+        parent::initialize($app);
+        $this->GroupData = new GroupData($this->app);
+    }
+    
+    public function exec(Application $app)
+    {
+        $this->initialize($app);
         $groups = $this->GroupData->selectAll();
 
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/group.list.twig'),

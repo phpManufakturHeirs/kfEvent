@@ -127,6 +127,28 @@ EOD;
             throw new \Exception($e);
         }
     }
+    
+    public function selectEvent($event_id)
+    {
+        try {
+            $event = self::$table_name;
+            $desc = FRAMEWORK_TABLE_PREFIX.'event_description';
+            $SQL = "SELECT * FROM `$event`, `$desc` WHERE $event.event_id=$desc.event_id AND $event.event_id='$event_id'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            if (is_array($result) && isset($result['event_id'])) {
+                $event = array();
+                foreach ($result as $key => $value) {
+                    $event[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+                return $event;
+            }
+            else {
+                return false;
+            }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 
     /**
      * Insert a new event record
@@ -145,6 +167,29 @@ EOD;
             }
             $this->app['db']->insert(self::$table_name, $insert);
             $event_id = $this->app['db']->lastInsertId();
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+    
+    public function selectAll($status='DELETED', $status_operator='!=')
+    {
+        try {
+            $event = self::$table_name;
+            $desc = FRAMEWORK_TABLE_PREFIX.'event_description';
+            $SQL = "SELECT * FROM `$event`, `$desc` WHERE $event.event_id=$desc.event_id AND `event_status`{$status_operator}'{$status}' ORDER BY `event_date_from` DESC";
+            $results = $this->app['db']->fetchAll($SQL);
+            $groups = array();
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    $record = array();
+                    foreach ($result as $key => $value) {
+                        $record[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    }
+                    $groups[] = $record;
+                }
+            }
+            return $groups;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

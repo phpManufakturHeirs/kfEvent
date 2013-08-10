@@ -13,16 +13,25 @@ namespace phpManufaktur\Event\Control\Backend;
 
 use phpManufaktur\Event\Control\Backend\Backend;
 use phpManufaktur\Event\Data\Event\ExtraType;
+use Silex\Application;
 
 class ExtraFieldEdit extends Backend {
 
     protected $ExtraType = null;
     protected static $type_id = -1;
 
-    public function __construct($app)
+    public function __construct(Application $app=null)
     {
         parent::__construct($app);
-        $this->ExtraType = new ExtraType($this->app);
+        if (!is_null($app)) {
+            $this->initialize($app);
+        }
+    }
+    
+    protected function initialize(Application $app)
+    {
+        parent::initialize($app);
+        $this->ExtraType = new ExtraType($this->app);        
     }
 
     public function setTypeID($type_id)
@@ -60,8 +69,12 @@ class ExtraFieldEdit extends Backend {
         return $fields;
     }
 
-    public function exec()
+    public function exec(Application $app, $type_id=null)
     {
+        $this->initialize($app);
+        if (!is_null($type_id)) {
+            $this->setTypeID($type_id);
+        }
         if (self::$type_id < 1) {
             $type = $this->ExtraType->getDefaultRecord();
         }

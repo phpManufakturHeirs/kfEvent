@@ -13,19 +13,26 @@ namespace phpManufaktur\Event\Control\Backend;
 
 use phpManufaktur\Event\Control\Backend\Backend;
 use phpManufaktur\Event\Data\Event\ExtraType;
+use Silex\Application;
 
 class ExtraFieldList extends Backend {
 
     protected $ExtraType = null;
 
-    public function __construct($app)
+    public function __construct(Application $app=null)
     {
-        parent::__construct($app);
-        $this->ExtraType = new ExtraType($this->app);
+        parent::__construct($app);        
     }
 
-    public function exec()
+    protected function initialize(Application $app)
     {
+        parent::initialize($app);
+        $this->ExtraType = new ExtraType($this->app);
+    }
+    
+    public function exec(Application $app)
+    {
+        $this->initialize($app);
         $fields = $this->ExtraType->selectAll();
 
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/extra.field.list.twig'),
