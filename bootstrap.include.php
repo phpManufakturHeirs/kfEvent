@@ -92,43 +92,34 @@ $app->match('/admin/event/contact/tag/edit',
 $app->match('/admin/event/contact/tag/edit/id/{tag_id}', 
     'phpManufaktur\Event\Control\Backend\Contact\TagEdit::exec');
 
+// Event Group List
 $app->match('/admin/event/group/list', 
-    
-    function() use($app) {
-    $group = new EventGroupList($app);
-    return $group->exec();
-});
-$app->match('/admin/event/group/edit', function() use($app) {
-    $group = new EventGroupEdit($app);
-    return $group->exec();
-});
-$app->match('/admin/event/group/edit/id/{group_id}', function($group_id) use($app) {
-    $group = new EventGroupEdit($app);
-    $group->setGroupID($group_id);
-    return $group->exec();
-});
+    'phpManufaktur\Event\Control\Backend\GroupList::exec');
 
-$app->match('/admin/event/extra/field/list', function() use($app) {
-    $field = new EventExtraFieldList($app);
-    return $field->exec();
-});
-$app->match('/admin/event/extra/field/edit', function() use($app) {
-    $field = new EventExtraFieldEdit($app);
-    return $field->exec();
-});
-$app->match('/admin/event/extra/field/edit/id/{type_id}', function($type_id) use($app) {
-    $field = new EventExtraFieldEdit($app);
-    $field->setTypeID($type_id);
-    return $field->exec();
-});
+// Event Group Edit
+$app->match('/admin/event/group/edit', 
+    'phpManufaktur\Event\Control\Backend\GroupEdit::exec');
+$app->match('/admin/event/group/edit/id/{group_id}', 
+    'phpManufaktur\Event\Control\Backend\GroupEdit::exec');
 
-$app->match('/admin/event/edit', function() use($app) {
-    $event = new EventEdit($app);
-    return $event->exec();
-});
+// Extra Field List
+$app->match('/admin/event/extra/field/list', 
+    'phpManufaktur\Event\Control\Backend\ExtraFieldList::exec');
 
-$app->match('/admin/event/list', function() use($app) {
+// Extra Field Edit
+$app->match('/admin/event/extra/field/edit', 
+    'phpManufaktur\Event\Control\Backend\ExtraFieldEdit::exec');
+$app->match('/admin/event/extra/field/edit/id/{type_id}', 
+    'phpManufaktur\Event\Control\Backend\ExtraFieldEdit::exec');
 
-});
+// Create or Edit Event
+$app->match('/admin/event/edit', 
+    'phpManufaktur\Event\Control\Backend\EventEdit::exec');
+$app->match('/admin/event/edit/id/{event_id}',
+    'phpManufaktur\Event\Control\Backend\EventEdit::exec');
+
+// Show the Event List
+$app->match('/admin/event/list', 
+    'phpManufaktur\Event\Control\Backend\EventList::exec');
 
 

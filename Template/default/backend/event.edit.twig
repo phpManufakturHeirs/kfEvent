@@ -76,8 +76,15 @@
         {{ form_row(form.event_date_from) }}
         {{ form_row(form.event_date_to) }}
         
+        {{ form_row(form.event_publish_from) }}
+        {{ form_row(form.event_publish_to) }}
+        {{ form_row(form.event_deadline) }}
+          
         {{ form_row(form.event_participants_max) }}
-        
+        <div>
+          <label>{{ 'Participants total'|trans }}</label>
+          <div class="value">{{ form.event_participants_total.vars.value }}</div>    
+        </div>
         
         {{ form_rest(form) }}
         <div>
@@ -104,6 +111,21 @@
           stepMinute: 5
         });
         $('.event_date_to').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_publish_from').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_publish_to').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_deadline').datetimepicker({
           timeFormat: "HH:mm",
           stepHour: 1,
           stepMinute: 5
