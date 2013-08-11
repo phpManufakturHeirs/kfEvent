@@ -55,6 +55,8 @@ return array(
         => 'Datum',
     'Date and Time'
         => 'Datum und Uhrzeit',
+    'Deadline'
+        => 'Anmeldeschluß',
     'delete this extra field'
         => 'dieses Zusatzfeld löschen',
     'Description'
@@ -68,8 +70,6 @@ return array(
         => 'Beginn der Veranstaltung',
     'Event date to'
         => 'Ende der Veranstaltung',
-    'Event deadline'
-        => 'Anmeldeschluß',
     'Extra field'
         => 'Zusatzfeld',
     'Extra fields'
@@ -78,10 +78,6 @@ return array(
         => 'Veranstaltungen, Übersicht',
     'Event location'
         => 'Veranstaltungsort',
-    'Event publish from'
-        => 'Veröffentlichen ab',
-    'Event publish to'
-        => 'Veröffentlichen bis',
     
     'Field name'
         => 'Bezeichner',
@@ -124,6 +120,8 @@ return array(
         => 'Veranstaltungsorte',
     'Locations'
         => 'Veranstaltungsorte',
+    'Long description'
+        => 'Langbeschreibung',
 
     'Name'
         => 'Bezeichner',
@@ -143,13 +141,20 @@ return array(
         => 'Teilnehmer',
     'Participants'
         => 'Teilnehmer',
-    'Participants, maximum'
+    'Participants maximum'
         => 'Teilnehmer, max. Anzahl',
     'Participants total'
         => 'Teilnehmer, angemeldet',
+    'Publish from'
+        => 'Veröffentlichen ab',
+        'Publish to'
+            => 'Veröffentlichen bis',
     
     'Registrations'
         => 'Anmeldungen',
+    
+    'Short description'
+        => 'Kurzbeschreibung',
 
     'Text - 256 characters'
         => 'Text - max. 256 Zeichen',

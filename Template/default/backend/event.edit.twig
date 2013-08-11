@@ -23,6 +23,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/i18n/jquery-ui-i18n.min.js"></script>
   <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-addon.js"></script>
   <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-de.js"></script>
+  <script type="text/javascript" src="{{ MANUFAKTUR_URL }}/CKEditor/Source/ckeditor.js"></script>
 {% endblock jquery %}
 
 {% block stylesheet %}
@@ -47,49 +48,61 @@
     <div class="event_form">
       <form action="{{ FRAMEWORK_URL }}/admin/event/edit?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
         {{ form_errors(form) }}
+        {{ form_row(form._token) }}
         
-        {{ form_row(form.event_id) }}
-        <div>
-          <label>{{ 'ID'|trans }}</label>
-          <div class="value">
-            {% if form.event_id.vars.value > 0 %}
-              {{ '%05d'|format(form.event_id.vars.value) }}
-            {% else %}
-              {{ '- new group -'|trans }}
-            {% endif %}
-          </div>
-        </div>
-
-        {{ form_row(form.event_status) }}
-
-        {{ form_row(form.group_id) }}
-        {% if form.group_name.vars.value|length > 0 %}
+        <div class="left_column">
+          {{ form_row(form.event_id) }}
           <div>
-            <label>{{ 'Group'|trans }}</label>
-            <div class="value">{{ form.group_name.vars.value|capitalize|trans }}</div>
+            <label>{{ 'ID'|trans }}</label>
+            <div class="value">
+              {% if form.event_id.vars.value > 0 %}
+                {{ '%05d'|format(form.event_id.vars.value) }}
+              {% else %}
+                {{ '- new group -'|trans }}
+              {% endif %}
+            </div>
           </div>
-        {% endif %}
 
-        {{ form_row(form.event_organizer) }}
-        {{ form_row(form.event_location) }}
+          {{ form_row(form.event_status) }}
 
-        {{ form_row(form.event_date_from) }}
-        {{ form_row(form.event_date_to) }}
-        
-        {{ form_row(form.event_publish_from) }}
-        {{ form_row(form.event_publish_to) }}
-        {{ form_row(form.event_deadline) }}
-          
-        {{ form_row(form.event_participants_max) }}
-        <div>
-          <label>{{ 'Participants total'|trans }}</label>
-          <div class="value">{{ form.event_participants_total.vars.value }}</div>    
+          {{ form_row(form.group_id) }}
+          {% if form.group_name.vars.value|length > 0 %}
+            <div>
+              <label>{{ 'Group'|trans }}</label>
+              <div class="value">{{ form.group_name.vars.value|capitalize|trans }}</div>
+            </div>
+          {% endif %}
+
+          {{ form_row(form.event_organizer) }}
+          {{ form_row(form.event_location) }}
+
+          {{ form_row(form.event_date_from) }}
+          {{ form_row(form.event_date_to) }}
+
+          {{ form_row(form.event_publish_from) }}
+          {{ form_row(form.event_publish_to) }}
+          {{ form_row(form.event_deadline) }}
+
+          {{ form_row(form.event_participants_max) }}
+          <div>
+            <label>{{ 'Participants total'|trans }}</label>
+            <div class="value">{{ form.event_participants_total.vars.value }}</div>    
+          </div>
         </div>
-        
-        {{ form_rest(form) }}
-        <div>
-          <label for="submit">&nbsp;</label>
-          <input type="submit" name="submit" />
+          
+        <div class="right_column"> 
+          {{ form_row(form.description_title) }}
+          <div>
+            {{ form_label(form.description_short) }}
+            <div class="value">
+              {{ CKEditor(form.description_short.vars.id, form.description_short.vars.full_name, form.description_short.vars.value, '100%', '100px', MANUFAKTUR_URL ~ '/Event/ckeditor.config.simple.js') }}  
+            </div>
+          </div>
+          {#{ form_rest(form) }#}
+          <div>
+            <label for="submit">&nbsp;</label>
+            <input type="submit" name="submit" />
+          </div>
         </div>
         <div class="clear"></div>
 

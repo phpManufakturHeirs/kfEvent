@@ -12,12 +12,14 @@
 namespace phpManufaktur\Event\Data\Event;
 
 use Silex\Application;
+use phpManufaktur\Event\Data\Event\Description;
 
 class Event
 {
 
     protected $app = null;
     protected static $table_name = null;
+    protected $Description = null;
 
 
     /**
@@ -29,6 +31,7 @@ class Event
     {
         $this->app = $app;
         self::$table_name = FRAMEWORK_TABLE_PREFIX.'event_event';
+        $this->Description = new Description($app);
     }
 
     /**
@@ -172,6 +175,43 @@ EOD;
         }
     }
     
+    public function insertEvent($data, &$event_id=null)
+    {
+        try {
+            $insert_event = array();
+            $insert_description = array();
+            $keys_event = array_keys($this->getDefaultRecord());
+            $keys_description = array_keys($this->Description->getDefaultRecord());
+            
+            foreach ($data as $key => $value) {
+                if (($key == 'event_id') || ($key == 'event_timestamp') || ($key == 'description_timestamp')) continue;
+                if (in_array($key, $keys_event)) {
+                    $insert_event[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+                elseif (in_array($key, $keys_description)) {
+                    $insert_description[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+            }
+            // insert event record
+            $this->app['db']->insert(self::$table_name, $insert_event);
+           
+            $event_id = $this->app['db']->lastInsertId();
+            
+            if ($event_id > 0) {
+                $insert_description['event_id'] = $event_id;
+                if (!isset($insert_description['description_title']))
+                    $insert_description['description_title'] = '';
+                if (!isset($insert_description['description_short']))
+                    $insert_description['description_short'] = '';
+                if (!isset($insert_description['description_long']))
+                    $insert_description['description_long'] = '';
+                $this->app['db']->insert(FRAMEWORK_TABLE_PREFIX.'event_description', $insert_description);
+            }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+    
     public function selectAll($status='DELETED', $status_operator='!=')
     {
         try {
@@ -190,6 +230,35 @@ EOD;
                 }
             }
             return $groups;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+    
+    public function updateEvent($data, $event_id)
+    {
+        try {
+            $update_event = array();
+            $update_description = array();
+            $keys_event = array_keys($this->getDefaultRecord());
+            $keys_description = array_keys($this->Description->getDefaultRecord());
+            foreach ($data as $key => $value) {
+                if (($key == 'event_id') || ($key == 'event_timestamp') || ($key == 'description_timestamp')) continue;
+                if (in_array($key, $keys_event)) {
+                    $update_event[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
+                }
+                elseif (in_array($key, $keys_description)) {
+                    $update_description[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
+                }
+            }
+            if (!empty($update_event)) {
+                // update event
+                $this->app['db']->update(self::$table_name, $update_event, array('event_id' => $event_id));
+            }
+            if (!empty($update_description)) {
+                // update description
+                $this->app['db']->update(FRAMEWORK_TABLE_PREFIX.'event_description', $update_description, array('event_id' => $event_id));
+            }
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

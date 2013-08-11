@@ -68,6 +68,18 @@ EOD;
             throw new \Exception($e);
         }
     }
+    
+    public function getDefaultRecord($event_id=-1)
+    {
+        return array(
+            'description_id' => -1,
+            'event_id' => $event_id,
+            'description_title' => '',
+            'description_short' => '',
+            'description_long' => '',
+            'description_timestamp' => '0000-00-00 00:00:00' 
+        );
+    }
 
     /**
      * Insert a new description 

@@ -56,12 +56,6 @@ label[for=form_password_first] {
   width: 150px;
   margin: 0 0 10px 0;
 }
-.event_form textarea {
-  float: left;
-  width: 300px;
-  height: 100px;
-  margin: 0 0 10px 0;
-}
 
 .event_form input[type=submit] {
   width: 150px;
@@ -72,11 +66,41 @@ label[for=form_password_first] {
   padding: 0;
   margin: 0 10px 0 0;
 }
-
+.editor,
 .value {
   float: left;
-  width: 300px;
+  width: 150px;
   padding: 3px 0;
+}
+.editor {
+  width: 550px;
+}
+
+.left_column,
+.right_column  {
+  float: left;
+  margin: 0;
+  padding: 0;
+  width: 400px;
+}
+
+.right_column {
+  width: 500px;
+}
+.right_column label {
+  clear: both;
+  float: none;
+  display: block;
+  margin: 0;
+  text-align: left;
+}
+.right_column .value {
+  clear: both;
+  float: none;
+  width: 100%;
+  display: block;
+  margin: 0 0 10px 0;
+  padding: 2px 0 0 0;
 }
 
 .extra_space {
@@ -149,3 +173,4 @@ fieldset {
   padding: 10px;
   width: 80%;
 }
+
