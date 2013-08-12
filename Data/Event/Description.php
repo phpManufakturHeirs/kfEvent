@@ -90,7 +90,7 @@ EOD;
      * @param reference integer $event_id
      * @throws \Exception
      */
-    public function insert($data, &$event_id=null)
+    public function insert($data, &$description_id=null)
     {
         try {
             $insert = array();
@@ -99,7 +99,7 @@ EOD;
                 $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
             }
             $this->app['db']->insert(self::$table_name, $insert);
-            $event_id = $this->app['db']->lastInsertId();
+            $description_id = $this->app['db']->lastInsertId();
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

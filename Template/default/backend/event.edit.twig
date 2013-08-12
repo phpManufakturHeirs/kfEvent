@@ -88,6 +88,14 @@
             <label>{{ 'Participants total'|trans }}</label>
             <div class="value">{{ form.event_participants_total.vars.value }}</div>    
           </div>
+          
+          {% for extra in extra_info %}
+            {% if ((extra.type != 'HTML') and (extra.type != 'TEXT')) %}
+              <div>
+                {{ form_row(form[extra.name]) }}
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
           
         <div class="right_column"> 
@@ -95,10 +103,28 @@
           <div>
             {{ form_label(form.description_short) }}
             <div class="value">
-              {{ CKEditor(form.description_short.vars.id, form.description_short.vars.full_name, form.description_short.vars.value, '100%', '100px', MANUFAKTUR_URL ~ '/Event/ckeditor.config.simple.js') }}  
+              {{ CKEditor(
+                    form.description_short.vars.id, 
+                    form.description_short.vars.full_name, 
+                    form.description_short.vars.value, 
+                    '100%', '100px', 
+                    MANUFAKTUR_URL ~ '/Event/Template/default/backend/ckeditor.config.simple.js'
+              ) }}  
             </div>
           </div>
-          {#{ form_rest(form) }#}
+          <div>
+            {{ form_label(form.description_long) }}
+            <div class="value">
+              {{ CKEditor(
+                    form.description_long.vars.id, 
+                    form.description_long.vars.full_name, 
+                    form.description_long.vars.value, 
+                    '100%', '250px', 
+                    MANUFAKTUR_URL ~ '/Event/Template/default/backend/ckeditor.config.full.js'
+              ) }}  
+            </div>
+          </div>
+          {{ form_rest(form) }}
           <div>
             <label for="submit">&nbsp;</label>
             <input type="submit" name="submit" />
@@ -112,6 +138,8 @@
 {% endblock content %}
 
 {% block footer %}
+  {# add the height of CKE's to the iframe_add_height (default = 30) #}
+  {% set iframe_add_height = 380 %}
   {{ parent() }}
   <script type="text/javascript">
     if (typeof 'jQuery' !== 'undefined') {

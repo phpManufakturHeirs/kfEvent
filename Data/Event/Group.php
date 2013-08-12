@@ -70,10 +70,6 @@ EOD;
             'group_id' => -1,
             'group_name' => '',
             'group_description' => '',
-       //     'group_organizer_contact_tags' => '',
-            'group_location_contact_tags' => '',
-            'group_participant_contact_tags' => '',
-      //      'group_extra_fields' => '',
             'group_status' => 'ACTIVE',
             'group_timestamp' => '0000-00-00 00:00:00'
         );

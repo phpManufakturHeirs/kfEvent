@@ -20,7 +20,9 @@ class Event
     protected $app = null;
     protected static $table_name = null;
     protected $Description = null;
-
+    protected $ExtraGroup = null;
+    protected $ExtraType = null;
+    protected $Extra = null;
 
     /**
      * Constructor
@@ -32,6 +34,9 @@ class Event
         $this->app = $app;
         self::$table_name = FRAMEWORK_TABLE_PREFIX.'event_event';
         $this->Description = new Description($app);
+        $this->ExtraGroup = new ExtraGroup($app);
+        $this->ExtraType = new ExtraType($app);
+        $this->Extra = new Extra($app);
     }
 
     /**
@@ -111,7 +116,7 @@ EOD;
      * @throws \Exception
      * @return multitype:array|boolean
      */
-    public function select($event_id)
+    public function __select($event_id)
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `event_id`='$event_id'";
@@ -143,6 +148,8 @@ EOD;
                 foreach ($result as $key => $value) {
                     $event[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
                 }
+                // check for extra fields
+                
                 return $event;
             }
             else {
@@ -160,7 +167,7 @@ EOD;
      * @param reference integer $event_id
      * @throws \Exception
      */
-    public function insert($data, &$event_id=null)
+    public function __insert($data, &$event_id=null)
     {
         try {
             $insert = array();
@@ -197,7 +204,9 @@ EOD;
            
             $event_id = $this->app['db']->lastInsertId();
             
+            
             if ($event_id > 0) {
+                // check the description fields
                 $insert_description['event_id'] = $event_id;
                 if (!isset($insert_description['description_title']))
                     $insert_description['description_title'] = '';
@@ -205,7 +214,34 @@ EOD;
                     $insert_description['description_short'] = '';
                 if (!isset($insert_description['description_long']))
                     $insert_description['description_long'] = '';
-                $this->app['db']->insert(FRAMEWORK_TABLE_PREFIX.'event_description', $insert_description);
+                // insert a description record
+                $this->Description->insert($insert_description);
+            }
+            // insert additional fields
+            
+            // select all type IDs for this event group
+            $extra_fields = $this->ExtraGroup->selectTypeIDByGroupID($data['group_id']);
+            // loop through the extra fields
+            foreach ($extra_fields as $extra_field) {
+                // get the extra type information
+                $extra_type = $this->ExtraType->select($extra_field['extra_type_id']);
+                // create empty extra record for this event ID
+                $data = array(
+                    'extra_type_id' => $extra_field['extra_type_id'],
+                    'extra_type_name' => $extra_type['extra_type_name'],
+                    'group_id' => $data['group_id'],
+                    'event_id' => $event_id,
+                    'extra_type_type' => $extra_type['extra_type_type'],
+                    'extra_text' => '',
+                    'extra_html' => '',
+                    'extra_varchar' => '',
+                    'extra_int' => '0',
+                    'extra_float' => '0',
+                    'extra_date' => '0000-00-00',
+                    'extra_datetime' => '0000-00-00 00:00:00',
+                    'extra_time' => '00:00:00'
+                );
+                $this->Extra->insert($data);
             }
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);

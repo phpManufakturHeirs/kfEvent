@@ -191,11 +191,7 @@ class GroupEdit extends Backend {
                     if (false === ($type = $this->ExtraType->selectName($group['add_extra_field']))) {
                         throw new \Exception(sprintf('The extra type field %s does not exists!', $group['add_extra_field']));
                     }
-                    $data = array(
-                        'group_id' => self::$group_id,
-                        'extra_type_id' => $type['extra_type_id']
-                    );
-                    $this->ExtraGroup->insert($data);
+                    $this->ExtraGroup->insert($type['extra_type_id'], self::$group_id);
                 }
 
                 if (self::$group_id < 1) {

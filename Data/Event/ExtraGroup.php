@@ -78,11 +78,44 @@ EOD;
      * @param reference integer $id
      * @throws \Exception
      */
-    public function insert($data, &$id=null)
+    public function insert($extra_type_id, $group_id, &$id=null)
     {
         try {
+            $data = array(
+                'extra_type_id' => $extra_type_id,
+                'group_id' => $group_id
+            );
             $this->app['db']->insert(self::$table_name, $data);
             $id = $this->app['db']->lastInsertId();
+            // get the extra field description record
+            $SQL = "SELECT * FROM `".FRAMEWORK_TABLE_PREFIX."event_extra_type` WHERE `extra_type_id`='$extra_type_id'";
+            $extra_type = $this->app['db']->fetchAssoc($SQL);
+            if (!isset($extra_type['extra_type_id'])) {
+                throw new \Exception("Missing the type description ID $extra_type_id");
+            }
+            // now check if already exists records for events with the similiar group_id
+            $SQL = "SELECT `event_id` FROM `".FRAMEWORK_TABLE_PREFIX."event_event` WHERE `group_id`='$group_id'";
+            
+            $events = $this->app['db']->fetchAll($SQL);
+            foreach ($events as $event) {
+                // create empty extra record for this event ID
+                $data = array(
+                    'extra_type_id' => $extra_type_id,
+                    'extra_type_name' => $extra_type['extra_type_name'],
+                    'group_id' => $group_id,
+                    'event_id' => $event['event_id'],
+                    'extra_type_type' => $extra_type['extra_type_type'],
+                    'extra_text' => '',
+                    'extra_html' => '',
+                    'extra_varchar' => '',
+                    'extra_int' => '0',
+                    'extra_float' => '0',
+                    'extra_date' => '0000-00-00',
+                    'extra_datetime' => '0000-00-00 00:00:00',
+                    'extra_time' => '00:00:00'
+                );
+                $this->app['db']->insert(FRAMEWORK_TABLE_PREFIX.'event_extra', $data);
+            }
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

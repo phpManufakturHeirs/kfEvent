@@ -47,7 +47,7 @@ class Extra
         `extra_type_name` VARCHAR(64) NOT NULL DEFAULT '',
         `group_id` INT(11) NOT NULL DEFAULT '-1',
         `event_id` INT(11) NOT NULL DEFAULT '-1',
-        `extra_type` ENUM('TEXT','HTML','VARCHAR','INT','FLOAT','DATE','DATETIME') NOT NULL DEFAULT 'VARCHAR',
+        `extra_type_type` ENUM('TEXT','HTML','VARCHAR','INT','FLOAT','DATE','DATETIME') NOT NULL DEFAULT 'VARCHAR',
         `extra_text` TEXT NOT NULL,
         `extra_html` TEXT NOT NULL,
         `extra_varchar` VARCHAR(255) NOT NULL DEFAULT '',
@@ -79,6 +79,47 @@ EOD;
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `group_id`='$group_id'";
+            $results = $this->app['db']->fetchAll($SQL);
+            $extras = array();
+            foreach ($results as $extra) {
+                $record = array();
+                foreach ($extra as $key => $value) {
+                    $record[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+                $extras[] = $record;
+            }
+            return $extras;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+    
+    /**
+     * Insert a new extra record
+     *
+     * @param array $data
+     * @param reference integer $extra_id
+     * @throws \Exception
+     */
+    public function insert($data, &$extra_id=null)
+    {
+        try {
+            $insert = array();
+            foreach ($data as $key => $value) {
+                if (($key == 'extra_id') || ($key == 'extra_timestamp')) continue;
+                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+            }
+            $this->app['db']->insert(self::$table_name, $insert);
+            $extra_id = $this->app['db']->lastInsertId();
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+    
+    public function selectByEventID($event_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `event_id`='$event_id'";
             $results = $this->app['db']->fetchAll($SQL);
             $extras = array();
             foreach ($results as $extra) {
