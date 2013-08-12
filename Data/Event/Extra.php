@@ -134,5 +134,50 @@ EOD;
             throw new \Exception($e);
         }
     }
+    
+    public function updateByEventID($data, $event_id) 
+    {
+        try {
+            $extra_fields = $this->selectByEventID($event_id);
+            $data_keys = array_keys($data);
+            foreach ($extra_fields as $extra) {
+                if (in_array('extra_'.$extra['extra_type_name'], $data_keys)) {
+                    
+                    $extra_data = array();
+                    switch ($extra['extra_type_type']) {
+                        case 'TEXT':
+                            $extra_data['extra_text'] = $this->app['utils']->sanitizeText(strip_tags($data['extra_'.$extra['extra_type_name']]));
+                            break;
+                        case 'HTML':
+                            $extra_data['extra_html'] = $this->app['utils']->sanitizeText($data['extra_'.$extra['extra_type_name']]);
+                            break;
+                        case 'VARCHAR':
+                            $extra_data['extra_varchar'] = $this->app['utils']->sanitizeText(strip_tags($data['extra_'.$extra['extra_type_name']]));
+                            break;
+                        case 'INT':
+                            $extra_data['extra_int'] = $this->app['utils']->str2int($data['extra_'.$extra['extra_type_name']]);
+                            break;
+                        case 'FLOAT':
+                            $extra_data['extra_float'] = $this->app['utils']->str2float($data['extra_'.$extra['extra_type_name']]);
+                            break;
+                        case 'DATE':
+                            $extra_data['extra_date'] = date('Y-m-d', strtotime($data['extra_'.$extra['extra_type_name']]));
+                            break;
+                        case 'DATETIME':
+                            $extra_data['extra_datetime'] = date('Y-m-d H:i:s', strtotime($data['extra_'.$extra['extra_type_name']]));
+                            break;
+                        case 'TIME':
+                            $extra_data['extra_time'] = date('H:i:s', strtotime($data['extra_'.$extra['extra_type_name']]));
+                            break;
+                        default:
+                            throw new \Exception("The extra type {$extra['extra_type_type']} is unknown!");
+                    }
+                    $this->app['db']->update(self::$table_name, $extra_data, array('extra_id' => $extra['extra_id']));
+                }
+            }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 
 }

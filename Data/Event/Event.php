@@ -149,7 +149,8 @@ EOD;
                     $event[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
                 }
                 // check for extra fields
-                
+                $event['extra_fields'] = $this->Extra->selectByEventID($event_id);
+                // return complete event record
                 return $event;
             }
             else {
@@ -295,6 +296,9 @@ EOD;
                 // update description
                 $this->app['db']->update(FRAMEWORK_TABLE_PREFIX.'event_description', $update_description, array('event_id' => $event_id));
             }
+            // update extra fields
+            $this->Extra->updateByEventID($data, $event_id);
+                
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

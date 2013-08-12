@@ -101,7 +101,6 @@ class EventEdit extends Backend {
      */
     protected function getFormFields($event, &$extra_info=array())
     {
-        echo "<pre>"; print_r($event); echo "<pre>";
         if (false === ($group = $this->EventGroup->select($event['group_id']))) {
             throw new \Exception('The event group with the ID '.$event['group_id']." does not exists!");
         }
@@ -244,7 +243,8 @@ class EventEdit extends Backend {
             $fields->add($name, $form_type, array(
                 'attr' => array('class' => $name),
                 'data' => $value,
-                'label' => $field['extra_type_name']
+                'label' => ucfirst(strtolower($field['extra_type_name'])),
+                'required' => false
             ));
             
             $extra_info[] = array(
@@ -265,13 +265,14 @@ class EventEdit extends Backend {
             $this->setEventID($event_id);
         }
         $param = $this->app['request']->request->all();
-  //echo "<pre>";print_r($param); echo "</pre>";
         // check if a event ID isset
         $form_request = $this->app['request']->request->get('form', array());
         if (isset($form_request['event_id'])) {
             self::$event_id = $form_request['event_id'];
         }
-
+        // additional information for extra fields
+        $extra_info = array();
+        // help to detect if this is the first call of the function
         $is_start = false;
         if (self::$event_id < 1) {
             $is_start = true;
@@ -322,12 +323,9 @@ class EventEdit extends Backend {
                 $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$event_id));
                 self::$event_id = -1;
             }            
-            // continue collection the event data
-            $event['extra_fields'] = $this->Extra->selectByEventID(self::$event_id);
         }
 
         // create the form fields
-        $extra_info = array();
         $fields = $this->getFormFields($event, $extra_info);
         // get the form
         $form = $fields->getForm();
@@ -355,13 +353,14 @@ class EventEdit extends Backend {
                     'description_long' => isset($event['description_long']) ? $event['description_long'] : '',
                     
                 );
+                foreach ($extra_info as $extra) {
+                    $data[$extra['name']] = $event[$extra['name']];
+                }
                 // update all event data
                 $this->EventData->updateEvent($data, self::$event_id);
                 
                 // get the actual event record
                 $event = $this->EventData->selectEvent(self::$event_id);
-                // continue collection the event data
-                $event['extra_fields'] = $this->Extra->selectByEventID(self::$event_id);
                 // get the form fields
                 $extra_info = array();
                 $fields = $this->getFormFields($event, $extra_info);

@@ -91,9 +91,7 @@
           
           {% for extra in extra_info %}
             {% if ((extra.type != 'HTML') and (extra.type != 'TEXT')) %}
-              <div>
-                {{ form_row(form[extra.name]) }}
-              </div>
+              {{ form_row(form[extra.name]) }}
             {% endif %}
           {% endfor %}
         </div>
@@ -124,7 +122,26 @@
               ) }}  
             </div>
           </div>
-          {{ form_rest(form) }}
+          {% for extra in extra_info %}
+            {% if (extra.type == 'TEXT') %}
+              {{ form_row(form[extra.name]) }}
+            {% elseif (extra.type == 'HTML') %}
+              <div>
+                {{ form_label(form[extra.name]) }}
+                <div class="value">
+                  {{ CKEditor(
+                        form[extra.name].vars.id, 
+                        form[extra.name].vars.full_name, 
+                        form[extra.name].vars.value, 
+                        '100%', '250px', 
+                        MANUFAKTUR_URL ~ '/Event/Template/default/backend/ckeditor.config.full.js'
+                  ) }}  
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          
+          {#{ form_rest(form) }#}
           <div>
             <label for="submit">&nbsp;</label>
             <input type="submit" name="submit" />
