@@ -95,7 +95,7 @@ EOD;
             }
             // now check if already exists records for events with the similiar group_id
             $SQL = "SELECT `event_id` FROM `".FRAMEWORK_TABLE_PREFIX."event_event` WHERE `group_id`='$group_id'";
-            
+
             $events = $this->app['db']->fetchAll($SQL);
             foreach ($events as $event) {
                 // create empty extra record for this event ID
@@ -121,6 +121,13 @@ EOD;
         }
     }
 
+    /**
+     * Return all available Type IDs for the given $group_id
+     *
+     * @param integer $group_id
+     * @throws \Exception
+     * @return array with ExtraType IDs
+     */
     public function selectTypeIDByGroupID($group_id)
     {
         try {
@@ -136,6 +143,13 @@ EOD;
         }
     }
 
+    /**
+     * Delete a specified ExtraType ID for the given $group_id
+     *
+     * @param integer $extra_type_id
+     * @param integer $group_id
+     * @throws \Exception
+     */
     public function deleteTypeByGroup($extra_type_id, $group_id)
     {
         try {

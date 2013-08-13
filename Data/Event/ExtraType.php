@@ -63,6 +63,11 @@ EOD;
         }
     }
 
+    /**
+     * Get a ExtraType record with the default settings
+     *
+     * @return array ExtraType
+     */
     public function getDefaultRecord()
     {
         return array(
@@ -74,6 +79,11 @@ EOD;
         );
     }
 
+    /**
+     * Return a ExtraType array with the types for the usage in Twig
+     *
+     * @return array
+     */
     public function getTypeArrayForTwig()
     {
         return array(
@@ -176,6 +186,12 @@ EOD;
         }
     }
 
+    /**
+     * Select all available ExtraType records
+     *
+     * @throws \Exception
+     * @return array
+     */
     public function selectAll()
     {
         try {
@@ -252,6 +268,12 @@ EOD;
         }
     }
 
+    /**
+     * Delete the record with the given $extra_type_id
+     *
+     * @param integer $extra_type_id
+     * @throws \Exception
+     */
     public function delete($extra_type_id)
     {
         try {

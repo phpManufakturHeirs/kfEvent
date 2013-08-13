@@ -34,7 +34,7 @@ return array(
         => 'Markierung hinzufügen',
     'Add title'
         => 'Titel hinzufügen',
-    
+
     'by copying from a existing event'
         => 'durch Kopieren einer existierenden Veranstaltung',
     'by selecting a event group'
@@ -50,7 +50,7 @@ return array(
         => 'Ein neues Zusatzfeld anlegen',
     'Create a new group'
         => 'Eine neue Gruppe anlegen',
-    
+
     'Date'
         => 'Datum',
     'Date and Time'
@@ -63,7 +63,7 @@ return array(
         => 'Beschreibung',
     'Description (translated)'
         => 'Beschreibung (übersetzt)',
-    
+
     'Event'
         => 'Veranstaltung',
     'Event date from'
@@ -78,7 +78,7 @@ return array(
         => 'Veranstaltungen, Übersicht',
     'Event location'
         => 'Veranstaltungsort',
-    
+
     'Field name'
         => 'Bezeichner',
     'Field name (translated)'
@@ -149,10 +149,12 @@ return array(
         => 'Veröffentlichen ab',
         'Publish to'
             => 'Veröffentlichen bis',
-    
+
     'Registrations'
         => 'Anmeldungen',
-    
+
+    'Select event group'
+        => 'Veranstaltungsgruppe auswählen',
     'Short description'
         => 'Kurzbeschreibung',
 
@@ -162,6 +164,10 @@ return array(
         => 'Text - HTML formatiert',
     'Text - plain'
         => 'Text - unformatiert',
+    'The event list is empty, please create a event!'
+        => 'Es existieren keine aktiven Veranstaltungen, legen Sie eine neue Versanstaltung an.',
+    'The field list is empty, please define a extra field!'
+        => 'Es wurden noch keine Zusatzfelder definiert, bitte erstellen Sie ein neues Zusatzfeld!',
     'The group list is empty, please define a group!'
         => 'Es existieren keine Gruppen, bitte legen Sie eine Gruppe an!',
     'The identifier %identifier% already exists!'

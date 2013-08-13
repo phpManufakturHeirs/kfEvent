@@ -20,6 +20,7 @@ use phpManufaktur\Event\Data\Event\OrganizerTag as EventOrganizerTag;
 use phpManufaktur\Event\Data\Event\LocationTag as EventLocationTag;
 use phpManufaktur\Event\Data\Event\Description as EventDescription;
 use phpManufaktur\Event\Data\Event\Extra;
+use Symfony\Component\Form\FormFactory;
 
 class EventEdit extends Backend {
 
@@ -51,7 +52,7 @@ class EventEdit extends Backend {
         $this->EventDescription = new EventDescription($this->app);
         $this->Extra = new Extra($this->app);
     }
-    
+
     public function setEventID($event_id)
     {
         self::$event_id = $event_id;
@@ -77,6 +78,11 @@ class EventEdit extends Backend {
         return $fields;
     }
 
+    /**
+     * Return the form to choose a group for a new event
+     *
+     * @return $fields FormFactory
+     */
     protected function getCreateByGroupFormFields()
     {
         $fields = $this->app['form.factory']->createBuilder('form')
@@ -115,7 +121,7 @@ class EventEdit extends Backend {
             'choices' => array('ACTIVE' => 'active', 'LOCKED' => 'locked', 'DELETED' => 'deleted'),
             'empty_value' => false,
             'expanded' => false,
-            'required' => false,
+            'required' => true,
             'label' => 'Status',
             'data' => $event['event_status']
         ))
@@ -125,7 +131,7 @@ class EventEdit extends Backend {
         ->add('group_name', 'hidden', array(
             'data' => $this->EventGroup->getGroupName($event['group_id'])
         ))
-        
+
         // Organizer
         ->add('event_organizer', 'choice', array(
             'choices' => $this->ContactControl->getContactsByTagsForTwig($organizer_tags),
@@ -135,7 +141,7 @@ class EventEdit extends Backend {
             'label' => 'Organizer',
             'data' => $event['event_organizer']
         ))
-        
+
         // Location
         ->add('event_location', 'choice', array(
             'choices' => $this->ContactControl->getContactsByTagsForTwig($location_tags), // explode(',', $group['group_location_contact_tags'])),
@@ -149,7 +155,8 @@ class EventEdit extends Backend {
         ->add('event_participants_max', 'text', array(
             'label' => 'Participants, maximum',
             'data' => $event['event_participants_max'],
-            'label' => 'Participants maximum'
+            'label' => 'Participants maximum',
+            'required' => false
         ))
         ->add('event_participants_total', 'hidden', array(
             'data' => $event['event_participants_total'],
@@ -168,18 +175,21 @@ class EventEdit extends Backend {
         ->add('event_publish_from', 'text', array(
             'attr' => array('class' => 'event_publish_from'),
             'data' => (!empty($event['event_publish_from']) && ($event['event_publish_from'] != '0000-00-00 00:00:00')) ? $event['event_publish_from'] : null,
-            'label' => 'Publish from'
+            'label' => 'Publish from',
+            'required' => false
         ))
         ->add('event_publish_to', 'text', array(
             'attr' => array('class' => 'event_publish_to'),
             'data' => (!empty($event['event_publish_to']) && ($event['event_publish_to'] != '0000-00-00 00:00:00')) ? $event['event_publish_to'] : null,
-            'label' => 'Publish to'
+            'label' => 'Publish to',
+            'required' => false
         ))
         // Deadline
         ->add('event_deadline', 'text', array(
             'attr' => array('class' => 'event_deadline'),
             'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? $event['event_deadline'] : null,
-            'label' => 'Deadline'
+            'label' => 'Deadline',
+            'required' => false
         ))
         ->add('description_title', 'text', array(
             'data' => $event['description_title'],
@@ -187,81 +197,92 @@ class EventEdit extends Backend {
         ))
         ->add('description_short', 'textarea', array(
             'data' => $event['description_short'],
-            'label' => 'Short description'
+            'label' => 'Short description',
+            'required' => false
         ))
         ->add('description_long', 'textarea', array(
             'data' => $event['description_long'],
-            'label' => 'Long description'
+            'label' => 'Long description',
+            'required' => false
         ))
         ;
 
-        
+
         // adding the extra fields
         foreach ($event['extra_fields'] as $field) {
             $name= 'extra_'.$field['extra_type_name'];
             switch ($field['extra_type_type']) {
-                case 'TEXT': 
+                case 'TEXT':
                     $value = $field['extra_text'];
-                    $form_type = 'textarea'; 
-                    break;
-                case 'HTML': 
-                    $value = $field['extra_html']; 
                     $form_type = 'textarea';
                     break;
-                case 'VARCHAR': 
-                    $value = $field['extra_varchar']; 
+                case 'HTML':
+                    $value = $field['extra_html'];
+                    $form_type = 'textarea';
+                    break;
+                case 'VARCHAR':
+                    $value = $field['extra_varchar'];
                     $form_type = 'text';
                     break;
-                case 'INT': 
-                    $value = $field['extra_int']; 
+                case 'INT':
+                    $value = $field['extra_int'];
                     $form_type = 'text';
                     break;
-                case 'FLOAT': 
-                    $value = $field['extra_float']; 
+                case 'FLOAT':
+                    $value = $field['extra_float'];
                     $form_type = 'text';
                     break;
-                case 'DATE': 
-                    $value = $field['extra_date']; 
+                case 'DATE':
+                    $value = $field['extra_date'];
                     $form_type = 'text';
                     break;
-                case 'DATETIME': 
-                    $value = $field['extra_datetime']; 
+                case 'DATETIME':
+                    $value = $field['extra_datetime'];
                     $form_type = 'text';
                     break;
-                case 'TIME': 
-                    $value = $field['extra_time']; 
+                case 'TIME':
+                    $value = $field['extra_time'];
                     $form_type = 'text';
                     break;
                 default:
                     throw new \Exception("Undefined extra field type: {$field['extra_type_type']}");
             }
-            
+
             if (($field['extra_type_type'] == 'TEXT') || ($field['extra_type_type'] == 'HTML')) {
-                
+
             }
-            
+
             $fields->add($name, $form_type, array(
                 'attr' => array('class' => $name),
                 'data' => $value,
                 'label' => ucfirst(strtolower($field['extra_type_name'])),
                 'required' => false
             ));
-            
+
             $extra_info[] = array(
-                'name' => $name, 
+                'name' => $name,
                 'type' => $field['extra_type_type'],
                 'value' => $value,
                 'id' => $field['extra_id']
             );
         }
-        
+
         return $fields;
     }
 
+    /**
+     * The class controller for the EventEdit dialog
+     *
+     * @param Application $app
+     * @param integer $event_id
+     * @throws \Exception
+     */
     public function exec(Application $app, $event_id=null)
     {
+        // initialize the class
         $this->initialize($app);
         if (!is_null($event_id)) {
+            // set the given $event_id
             $this->setEventID($event_id);
         }
         $param = $this->app['request']->request->all();
@@ -297,7 +318,8 @@ class EventEdit extends Backend {
             elseif (isset($form_request['select_group'])) {
                 // create a new event using the specified event group
                 $data = array(
-                    'group_id' => $form_request['select_group']
+                    'group_id' => $form_request['select_group'],
+                    'event_status' => 'LOCKED'
                 );
                 $this->EventData->insertEvent($data, self::$event_id);
                 // get the event data
@@ -322,7 +344,7 @@ class EventEdit extends Backend {
                 $event = $this->EventData->getDefaultRecord();
                 $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$event_id));
                 self::$event_id = -1;
-            }            
+            }
         }
 
         // create the form fields
@@ -335,7 +357,7 @@ class EventEdit extends Backend {
             $form->bind($this->app['request']);
             if ($form->isValid()) {
                 $event = $form->getData();
-                self::$event_id = $event['event_id'];       
+                self::$event_id = $event['event_id'];
                 // update an existing event
                 $data = array(
                     'event_organizer' => $event['event_organizer'],
@@ -351,21 +373,21 @@ class EventEdit extends Backend {
                     'description_title' => isset($event['description_title']) ? $event['description_title'] : '',
                     'description_short' => isset($event['description_short']) ? $event['description_short'] : '',
                     'description_long' => isset($event['description_long']) ? $event['description_long'] : '',
-                    
+
                 );
                 foreach ($extra_info as $extra) {
                     $data[$extra['name']] = $event[$extra['name']];
                 }
                 // update all event data
                 $this->EventData->updateEvent($data, self::$event_id);
-                
+
                 // get the actual event record
                 $event = $this->EventData->selectEvent(self::$event_id);
                 // get the form fields
                 $extra_info = array();
                 $fields = $this->getFormFields($event, $extra_info);
                 // get the form
-                $form = $fields->getForm();                
+                $form = $fields->getForm();
             }
             else {
                 // general error (timeout, CSFR ...)

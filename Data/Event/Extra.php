@@ -75,6 +75,13 @@ EOD;
     }
 
 
+    /**
+     * Select all extra fields which are associated to the given group ID
+     *
+     * @param integer $group_id
+     * @throws \Exception
+     * @return array selected extra records
+     */
     public function selectByGroupID($group_id)
     {
         try {
@@ -93,7 +100,7 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
     /**
      * Insert a new extra record
      *
@@ -115,7 +122,14 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
+    /**
+     * Select all extra fields associated to the given $event_id
+     *
+     * @param integer $event_id
+     * @throws \Exception
+     * @return array selected extra records
+     */
     public function selectByEventID($event_id)
     {
         try {
@@ -134,15 +148,22 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
-    public function updateByEventID($data, $event_id) 
+
+    /**
+     * Update all submitted data for the extra records associated with $event_id
+     *
+     * @param array $data
+     * @param integer $event_id
+     * @throws \Exception
+     */
+    public function updateByEventID($data, $event_id)
     {
         try {
             $extra_fields = $this->selectByEventID($event_id);
             $data_keys = array_keys($data);
             foreach ($extra_fields as $extra) {
                 if (in_array('extra_'.$extra['extra_type_name'], $data_keys)) {
-                    
+
                     $extra_data = array();
                     switch ($extra['extra_type_type']) {
                         case 'TEXT':

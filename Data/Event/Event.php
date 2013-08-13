@@ -135,7 +135,14 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
+    /**
+     * Select the complete Event record for the given $event_id
+     *
+     * @param integer $event_id
+     * @throws \Exception
+     * @return array on success, boolean false if $event_id does not exists
+     */
     public function selectEvent($event_id)
     {
         try {
@@ -162,7 +169,7 @@ EOD;
     }
 
     /**
-     * Insert a new event record
+     * Insert ONLY a new event record
      *
      * @param array $data
      * @param reference integer $event_id
@@ -182,7 +189,13 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
+    /**
+     * Insert a complete Event record with all given  $data
+     * @param array $data
+     * @param integer reference $event_id the new ID
+     * @throws \Exception
+     */
     public function insertEvent($data, &$event_id=null)
     {
         try {
@@ -190,7 +203,7 @@ EOD;
             $insert_description = array();
             $keys_event = array_keys($this->getDefaultRecord());
             $keys_description = array_keys($this->Description->getDefaultRecord());
-            
+
             foreach ($data as $key => $value) {
                 if (($key == 'event_id') || ($key == 'event_timestamp') || ($key == 'description_timestamp')) continue;
                 if (in_array($key, $keys_event)) {
@@ -202,10 +215,10 @@ EOD;
             }
             // insert event record
             $this->app['db']->insert(self::$table_name, $insert_event);
-           
+
             $event_id = $this->app['db']->lastInsertId();
-            
-            
+
+
             if ($event_id > 0) {
                 // check the description fields
                 $insert_description['event_id'] = $event_id;
@@ -219,16 +232,15 @@ EOD;
                 $this->Description->insert($insert_description);
             }
             // insert additional fields
-            
             // select all type IDs for this event group
             $extra_fields = $this->ExtraGroup->selectTypeIDByGroupID($data['group_id']);
             // loop through the extra fields
-            foreach ($extra_fields as $extra_field) {
+            foreach ($extra_fields as $extra_field_id) {
                 // get the extra type information
-                $extra_type = $this->ExtraType->select($extra_field['extra_type_id']);
+                $extra_type = $this->ExtraType->select($extra_field_id);
                 // create empty extra record for this event ID
                 $data = array(
-                    'extra_type_id' => $extra_field['extra_type_id'],
+                    'extra_type_id' => $extra_field_id,
                     'extra_type_name' => $extra_type['extra_type_name'],
                     'group_id' => $data['group_id'],
                     'event_id' => $event_id,
@@ -248,7 +260,15 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
+    /**
+     * Select all available Event Records
+     *
+     * @param string $status can be 'DELETED', 'ACTIVE' or 'LOCKED'
+     * @param string $status_operator can be '!=' or '='
+     * @throws \Exception
+     * @return array Event records
+     */
     public function selectAll($status='DELETED', $status_operator='!=')
     {
         try {
@@ -271,7 +291,14 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
+    /**
+     * Update a complete Event record with all $data for the given $event_id
+     *
+     * @param array $data
+     * @param integer $event_id
+     * @throws \Exception
+     */
     public function updateEvent($data, $event_id)
     {
         try {
@@ -298,7 +325,23 @@ EOD;
             }
             // update extra fields
             $this->Extra->updateByEventID($data, $event_id);
-                
+
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Remove incomplete and invalid events physically
+     *
+     * @throws \Exception
+     */
+    public function cleanupEvents()
+    {
+        try {
+            // delete all events with invalid start and end date
+            $this->app['db']->delete(self::$table_name, array(
+                'event_date_from' => '0000-00-00 00:00:00', 'event_date_to' => '0000-00-00 00:00:00'));
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
