@@ -141,6 +141,40 @@ label[for=form_password_first] {
   content: none;
 }
 
+.image {
+	height: auto;
+	width: 150px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.image img {
+	max-height: 150px;
+	max-width: 150px;
+}
+.image .close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 20px;
+  text-align: right;
+}
+
+.image a {
+  text-decoration: none !important;
+}
+.image a:link,
+.image a:visited {
+  color: #afafaf !important;
+  background-color: transparent;
+  text-decoration: none;
+}
+.image a:hover,
+.image a:active {
+  color: #da251d !important;
+  background-color: transparent;
+  text-decoration: none !important;
+}
 table {
     width: 100%;
 }

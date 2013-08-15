@@ -11,6 +11,8 @@
 
 use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 
+global $app;
+
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
 // scan the /Locale/Custom directory and add all available languages
@@ -112,6 +114,13 @@ $app->match('/admin/event/edit',
     'phpManufaktur\Event\Control\Backend\EventEdit::exec');
 $app->match('/admin/event/edit/id/{event_id}',
     'phpManufaktur\Event\Control\Backend\EventEdit::exec');
+
+// add image to event
+$app->match('/admin/event/image/add/event/{event_id}',
+    'phpManufaktur\Event\Control\Backend\EventEdit::addImage');
+// delete image from event
+$app->match('/admin/event/image/delete/id/{image_id}/event/{event_id}',
+    'phpManufaktur\Event\Control\Backend\EventEdit::deleteImage');
 
 // Show the Event List
 $app->match('/admin/event/list',

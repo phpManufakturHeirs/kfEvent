@@ -20,7 +20,7 @@ use phpManufaktur\Event\Data\Event\OrganizerTag as EventOrganizerTag;
 use phpManufaktur\Event\Data\Event\LocationTag as EventLocationTag;
 use phpManufaktur\Event\Data\Event\Description as EventDescription;
 use phpManufaktur\Event\Data\Event\Extra;
-use Symfony\Component\Form\FormFactory;
+use phpManufaktur\Event\Data\Event\Images;
 
 class EventEdit extends Backend {
 
@@ -32,6 +32,7 @@ class EventEdit extends Backend {
     protected $EventLocationTag = null;
     protected $EventDescription = null;
     protected $Extra = null;
+    protected $Images = null;
 
     public function __construct(Application $app=null)
     {
@@ -51,6 +52,7 @@ class EventEdit extends Backend {
         $this->EventOrganizerTag = new EventOrganizerTag($this->app);
         $this->EventDescription = new EventDescription($this->app);
         $this->Extra = new Extra($this->app);
+        $this->Images = new Images($this->app);
     }
 
     public function setEventID($event_id)
@@ -212,6 +214,7 @@ class EventEdit extends Backend {
         foreach ($event['extra_fields'] as $field) {
             $name= 'extra_'.$field['extra_type_name'];
             switch ($field['extra_type_type']) {
+                // determine the form type for the extra field
                 case 'TEXT':
                     $value = $field['extra_text'];
                     $form_type = 'textarea';
@@ -248,17 +251,15 @@ class EventEdit extends Backend {
                     throw new \Exception("Undefined extra field type: {$field['extra_type_type']}");
             }
 
-            if (($field['extra_type_type'] == 'TEXT') || ($field['extra_type_type'] == 'HTML')) {
-
-            }
-
+            // add the form field for the extra field
             $fields->add($name, $form_type, array(
                 'attr' => array('class' => $name),
                 'data' => $value,
-                'label' => ucfirst(strtolower($field['extra_type_name'])),
+                'label' => ucfirst(str_replace('_', ' ', strtolower($field['extra_type_name']))),
                 'required' => false
             ));
 
+            // extra info for the Twig handling
             $extra_info[] = array(
                 'name' => $name,
                 'type' => $field['extra_type_type'],
@@ -268,6 +269,71 @@ class EventEdit extends Backend {
         }
 
         return $fields;
+    }
+
+    /**
+     * Create a URL to add a image to the event
+     *
+     * @return string
+     */
+    protected function createAddImageURL()
+    {
+        $image_link_param = base64_encode(json_encode(array(
+            'redirect' => '/admin/event/image/add/event/'.self::$event_id,
+            'start' => '/media/public',
+            'mode' => 'public',
+            'usage' => self::$usage
+        )));
+        return FRAMEWORK_URL.'/admin/mediabrowser/init/'.$image_link_param;
+    }
+
+    /**
+     * Add a image to the event
+     *
+     * @param Application $app
+     * @param integer $event_id
+     */
+    public function addImage(Application $app, $event_id)
+    {
+        // initialize the class
+        $this->initialize($app);
+        // set the event ID
+        $this->setEventID($event_id);
+
+        $image = $this->app['request']->get('file', null);
+
+        if (!is_null($image)) {
+            list($width, $height) = getimagesize(FRAMEWORK_PATH.$image);
+            $data = array(
+                'event_id' => $event_id,
+                'image_title' => basename($image),
+                'image_text' => '',
+                'image_path' => $image,
+                'image_height' => $height,
+                'image_width' => $width
+            );
+            $this->Images->insert($data);
+            $this->setMessage('The image <b>%image%</b> has been added to the event.',
+                array('%image%' => basename($image), '%event_id%' => $event_id));
+        }
+        else {
+            $this->setMessage('No image selected, nothing to do.');
+        }
+        return $this->exec($app, $event_id);
+    }
+
+    public function deleteImage(Application $app, $image_id, $event_id)
+    {
+        // initialize the class
+        $this->initialize($app);
+        // set the event ID
+        $this->setEventID($event_id);
+        // delete the image
+        $this->Images->delete($image_id);
+        $this->setMessage('The image with the ID %image_id% was successfull deleted.',
+            array('%image_id%' => $image_id));
+        // show event dialog
+        return $this->exec($app, $event_id);
     }
 
     /**
@@ -401,7 +467,9 @@ class EventEdit extends Backend {
                 'toolbar' => $this->getToolbar('event_edit'),
                 'message' => $this->getMessage(),
                 'form' => $form->createView(),
-                'extra_info' => $extra_info
+                'extra_info' => $extra_info,
+                'add_image_url' => $this->createAddImageURL(),
+                'images' => $this->Images->selectByEventID(self::$event_id)
             ));
     }
 

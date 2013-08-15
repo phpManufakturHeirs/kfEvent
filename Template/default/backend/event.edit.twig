@@ -18,9 +18,9 @@
 {% block title %}{{ 'Event - Create or edit an event'|trans }}{% endblock %}
 
 {% block jquery %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/i18n/jquery-ui-i18n.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/i18n/jquery-ui-i18n.min.js"></script>
   <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-addon.js"></script>
   <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-de.js"></script>
   <script type="text/javascript" src="{{ MANUFAKTUR_URL }}/CKEditor/Source/ckeditor.js"></script>
@@ -31,9 +31,10 @@
   {% if usage == 'framework' %}
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
   {% endif %}
-  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" media="screen, projection" />
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/jquery-ui-timepicker-addon.css" media="screen, projection" />
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/event.css" media="screen, projection" />
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
 {% endblock stylesheet %}
 
 
@@ -89,6 +90,27 @@
             <div class="value">{{ form.event_participants_total.vars.value }}</div>    
           </div>
           
+          {% if images|length > 0 %}
+          <div>
+            <label>{{ 'Pictures'|trans }}</label>
+            <div class="value">
+              {% for image in images %}
+                <div class="image">
+                  <div class="close">
+                    <a href="{{ FRAMEWORK_URL }}/admin/event/image/delete/id/{{ image.image_id }}/event/{{ form.event_id.vars.value }}?usage={{ usage }}" title="{{ 'Delete this image'|trans }}"><li class="icon-remove-sign icon-large"></li></a>
+                  </div>
+                  <img src="{{ FRAMEWORK_URL ~ image.image_path }}" title="{{ image.image_title }}" />
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          <div>
+            <label>{{ 'Add a image'|trans }}</label>
+            <div class="value image">
+              <a href="{{ add_image_url }}" title="{{ 'Add a image'|trans }}"><i class="icon-picture icon-3x"></i></a>
+            </div>
+          </div>
           {% for extra in extra_info %}
             {% if ((extra.type != 'HTML') and (extra.type != 'TEXT')) %}
               {{ form_row(form[extra.name]) }}

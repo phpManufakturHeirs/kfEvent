@@ -24,6 +24,8 @@ return array(
 
     'About'
         => '?',
+    'Add a image'
+        => 'Ein Bild hinzufügen',
     'Add category'
         => 'Kategorie hinzufügen',
     'Add extra field'
@@ -59,6 +61,8 @@ return array(
         => 'Anmeldeschluß',
     'delete this extra field'
         => 'dieses Zusatzfeld löschen',
+    'Delete this image'
+        => 'Dieses Bild löschen',
     'Description'
         => 'Beschreibung',
     'Description (translated)'
@@ -145,6 +149,8 @@ return array(
         => 'Teilnehmer, max. Anzahl',
     'Participants total'
         => 'Teilnehmer, angemeldet',
+    'Pictures'
+        => 'Bilder',
     'Publish from'
         => 'Veröffentlichen ab',
         'Publish to'
@@ -172,6 +178,10 @@ return array(
         => 'Es existieren keine Gruppen, bitte legen Sie eine Gruppe an!',
     'The identifier %identifier% already exists!'
         => 'Der Bezeichner %identifier% existiert bereits!',
+    'The image <b>%image%</b> has been added to the event.'
+        => 'Der Veranstaltung wurde das Bild <b>%image%</b> hinzugefügt.',
+    'The image with the ID %image_id% was successfull deleted.'
+        => 'Das Bild mit der ID %image_id% wurde erfolgreich gelöscht.',
     'The record with the ID %id% does not exists!'
         => 'Der Datensatz mit der ID %id% existiert nicht!',
     'The record with the ID %id% was successfull deleted.'

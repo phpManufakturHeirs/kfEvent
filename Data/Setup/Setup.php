@@ -22,6 +22,7 @@ use phpManufaktur\Event\Data\Event\OrganizerTag;
 use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\ParticipantTag;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
+use phpManufaktur\Event\Data\Event\Images;
 
 class Setup
 {
@@ -31,7 +32,7 @@ class Setup
     public function exec(Application $app)
     {
         $this->app = $app;
-        
+
         try {
             $Group = new Group($this->app);
             $Group->createTable();
@@ -60,10 +61,13 @@ class Setup
             $ParticipantTag = new ParticipantTag($this->app);
             $ParticipantTag->createTable();
 
+            $Images = new Images($this->app);
+            $Images->createTable();
+
             // setup kit_framework_event as Add-on in the CMS
             $admin_tool = new InstallAdminTool($this->app);
             $admin_tool->exec(MANUFAKTUR_PATH.'/Event/extension.json', '/event/cms');
-            
+
             Return "The setup was successful";
 
         } catch (\Exception $e) {
