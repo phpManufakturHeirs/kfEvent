@@ -11,6 +11,7 @@
 
 use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 
+// not really needed but make error control more easy ...
 global $app;
 
 // scan the /Locale directory and add all available languages
