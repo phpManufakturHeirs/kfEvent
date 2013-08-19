@@ -207,10 +207,10 @@ EOD;
             foreach ($data as $key => $value) {
                 if (($key == 'event_id') || ($key == 'event_timestamp') || ($key == 'description_timestamp')) continue;
                 if (in_array($key, $keys_event)) {
-                    $insert_event[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    $insert_event[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
                 }
                 elseif (in_array($key, $keys_description)) {
-                    $insert_description[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                    $insert_description[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
                 }
             }
             // insert event record

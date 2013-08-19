@@ -237,20 +237,13 @@ class kitEvent extends Dialog {
                 'event_participants_max' => $event['evt_participants_max'],
                 'event_participants_total' => $event['evt_participants_total'],
                 'event_deadline' => $event['evt_deadline'],
+                'description_title' => $item['item_title'],
+                'description_short' => $item['item_desc_short'],
+                'description_long' => $item['item_desc_long'],
                 'event_status' => ($event['evt_status'] == '1') ? 'ACTIVE' : 'LOCKED'
             );
 
-            $new_event_id = -1;
-            $this->Event->insertEvent($data, $new_event_id);
-
-            $data = array(
-                'event_id' => $new_event_id,
-                'description_title' => $item['item_title'],
-                'description_short' => $item['item_desc_short'],
-                'description_long' => $item['item_desc_long']
-            );
-
-            $this->Description->insert($data);
+            $this->Event->insertEvent($data);
 
             // commit the transaction
             $this->app['db']->commit();

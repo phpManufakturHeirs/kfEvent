@@ -58,6 +58,7 @@ class EventList extends Backend {
         $this->EventData->cleanupEvents();
         // select all events
         $events = $this->EventData->selectAll();
+
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.list.twig'),
             array(
                 'usage' => self::$usage,
