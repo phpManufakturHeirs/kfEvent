@@ -70,6 +70,17 @@ $app->match('/admin/event/contact/category/edit',
 $app->match('/admin/event/contact/category/edit/id/{category_id}',
     'phpManufaktur\Event\Control\Backend\Contact\CategoryEdit::exec');
 
+// Extra fields List
+$app->match('/admin/event/contact/extra/list',
+    'phpManufaktur\Event\Control\Backend\Contact\ExtraList::exec');
+
+// Create and edit extra fields
+$app->match('/admin/event/contact/extra/edit',
+    'phpManufaktur\Event\Control\Backend\Contact\ExtraEdit::exec');
+$app->match('/admin/event/contact/extra/edit/id/{type_id}',
+    'phpManufaktur\Event\Control\Backend\Contact\ExtraEdit::exec');
+
+
 // Title List
 $app->match('/admin/event/contact/title/list',
     'phpManufaktur\Event\Control\Backend\Contact\TitleList::exec');

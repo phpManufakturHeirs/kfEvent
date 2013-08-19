@@ -13,11 +13,11 @@ namespace phpManufaktur\Event\Control\Backend\Contact;
 
 use Silex\Application;
 use phpManufaktur\Event\Control\Backend\Backend;
-use phpManufaktur\Contact\Control\Dialog\Simple\CategoryEdit as SimpleCategoryEdit;
+use phpManufaktur\Contact\Control\Dialog\Simple\ExtraFieldEdit as SimpleExtraFieldEdit;
 
-class CategoryEdit extends Backend {
+class ExtraEdit extends Backend {
 
-    protected $SimpleCategoryEdit = null;
+    protected $SimpleExtraFieldEdit = null;
 
     public function __construct(Application $app=null)
     {
@@ -30,38 +30,37 @@ class CategoryEdit extends Backend {
     protected function initialize(Application $app)
     {
         parent::initialize($app);
-        $this->SimpleCategoryEdit = new SimpleCategoryEdit($this->app, array(
+        $this->SimpleExtraFieldEdit = new SimpleExtraFieldEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
                 'message' => 'backend/message.twig',
-                'edit' => 'backend/contact.category.edit.twig'
+                'edit' => 'backend/contact.extra.edit.twig'
             ),
             'route' => array(
-                'action' => '/admin/event/contact/category/edit?usage='.self::$usage,
-                'extra' => '/admin/event/contact/extra/list?usage='.self::$usage
+                'action' => '/admin/event/contact/extra/edit?usage='.self::$usage
             )
         ));
     }
 
     /**
-     * @param number $category_id
+     * @param number $type_id
      */
-    public function setCategoryID($category_id)
+    public function setTypeID($type_id)
     {
-        $this->SimpleCategoryEdit->setCategoryID($category_id);
+        $this->SimpleExtraFieldEdit->setTypeID($type_id);
     }
 
-    public function exec(Application $app, $category_id=null)
+    public function exec(Application $app, $type_id=null)
     {
         $this->initialize($app);
-        if (!is_null($category_id)) {
-            $this->setCategoryID($category_id);
+        if (!is_null($type_id)) {
+            $this->setTypeID($type_id);
         }
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_edit')
         );
-        return $this->SimpleCategoryEdit->exec($extra);
+        return $this->SimpleExtraFieldEdit->exec($extra);
     }
 
 }

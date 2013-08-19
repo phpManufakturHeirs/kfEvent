@@ -38,9 +38,9 @@ class GroupEdit extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
-    
+
     protected function initialize(Application $app)
     {
         parent::initialize($app);
@@ -236,7 +236,7 @@ class GroupEdit extends Backend {
                         $this->GroupData->insert($data, self::$group_id);
                         $this->setMessage('The record with the ID %id% was successfull inserted.',
                             array('%id%' => self::$group_id));
-                        
+
                         // insert organizer tags
                         foreach ($group['group_organizer_contact_tags'] as $key => $value)
                             $this->OrganizerTag->insert(array(
@@ -258,7 +258,7 @@ class GroupEdit extends Backend {
                                 'tag_name' => $value
                             ));
 
-                        
+
                     }
                 }
                 else {
