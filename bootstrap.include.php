@@ -80,7 +80,6 @@ $app->match('/admin/event/contact/extra/edit',
 $app->match('/admin/event/contact/extra/edit/id/{type_id}',
     'phpManufaktur\Event\Control\Backend\Contact\ExtraEdit::exec');
 
-
 // Title List
 $app->match('/admin/event/contact/title/list',
     'phpManufaktur\Event\Control\Backend\Contact\TitleList::exec');
@@ -138,4 +137,11 @@ $app->match('/admin/event/image/delete/id/{image_id}/event/{event_id}',
 $app->match('/admin/event/list',
     'phpManufaktur\Event\Control\Backend\EventList::exec');
 
+// Import events from kitEvent
+$app->match('/admin/event/import/kitevent',
+    'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
+$app->match('/admin/event/import/kitevent/start',
+    'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
+$app->match('/admin/event/import/kitevent/execute',
+    'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::execute');
 

@@ -1,0 +1,33 @@
+{#
+  Contact
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de/FacebookGallery
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+{% extends template_file('@framework', 'body.twig') %}
+{% block stylesheet %}
+	{{ parent() }}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/import/css/kitevent.css" media="screen, projection" />
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <h1>{{ 'Import events from kitEvent'|trans }}</h1>
+  {% if message|length > 0 %}
+    <div class="message">{{ message }}</div>
+  {% endif %}
+  {% if app.translator.locale == 'dee' %}
+    {# german translation #}    
+    
+  {% else %}
+    {# english translation #}
+    <p>ll</p>
+  {% endif %}
+    
+  {% if import_is_possible %}
+    <p><i class="icon-puzzle-piece icon-3x pull-left"></i>&nbsp;<a href="{{ FRAMEWORK_URL }}/admin/event/import/kitevent/execute">{{ 'Start import from kitEvent'|trans }}</a></p>
+  {% endif %}
+    
+{% endblock content %}

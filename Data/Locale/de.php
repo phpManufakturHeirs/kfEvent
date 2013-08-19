@@ -103,6 +103,8 @@ return array(
     'Groups'
         => 'Gruppen',
 
+    'Import events from kitEvent'
+        => 'Veranstaltungen aus kitEvent importieren',
     'Information about the Event extension'
         => 'Informationen über die Event Extension',
     'Int'
