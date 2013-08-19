@@ -67,6 +67,8 @@ return array(
         => 'Beschreibung',
     'Description (translated)'
         => 'Beschreibung (übersetzt)',
+    'Detected a kitEvent installation (Release: %release%) with %count% active or locked events.'
+        => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
 
     'Event'
         => 'Veranstaltung',
@@ -165,6 +167,10 @@ return array(
         => 'Veranstaltungsgruppe auswählen',
     'Short description'
         => 'Kurzbeschreibung',
+    'Skipped kitEvent ID %event_id%: No valid value in %field%'
+        => 'kitEvent ID <b>%event_id%</b> übersprungen: Ungültiger Wert in Feld %field%',
+    'Start import from kitEvent'
+        => 'Import aus kitEvent starten',
 
     'Text - 256 characters'
         => 'Text - max. 256 Zeichen',
@@ -192,6 +198,8 @@ return array(
         => 'Der Datensatz mit der ID %id% wurde erfolgreich eingefügt.',
     'The record with the ID %id% was successfull updated.'
         => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
+    'There exists no kitEvent installation at the parent CMS!'
+        => 'Es wurde keine kitEvent Installation auf dem übergeordeneten Content Management System gefunden!',
     'Type'
         => 'Typ'
 

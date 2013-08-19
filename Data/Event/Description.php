@@ -49,7 +49,7 @@ class Description
         `description_long` TEXT NOT NULL,
         `description_timestamp` TIMESTAMP,
         PRIMARY KEY (`description_id`),
-        UNIQUE (`event_id`),
+        INDEX (`event_id`),
         CONSTRAINT
             FOREIGN KEY (`event_id`)
             REFERENCES $table_event (`event_id`)
@@ -68,7 +68,7 @@ EOD;
             throw new \Exception($e);
         }
     }
-    
+
     public function getDefaultRecord($event_id=-1)
     {
         return array(
@@ -77,13 +77,13 @@ EOD;
             'description_title' => '',
             'description_short' => '',
             'description_long' => '',
-            'description_timestamp' => '0000-00-00 00:00:00' 
+            'description_timestamp' => '0000-00-00 00:00:00'
         );
     }
 
     /**
-     * Insert a new description 
-     * 
+     * Insert a new description
+     *
      * record
      *
      * @param array $data

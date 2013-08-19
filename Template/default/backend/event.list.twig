@@ -50,7 +50,7 @@
               <td class="group_id"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ field.event_id ~ '?usage=' ~ usage }}">{{ '%03d'|format(field.event_id) }}</a></td>
               <td class="group_name"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ field.event_id ~ '?usage=' ~ usage }}">{{ field.event_date_from }}</a></td>
               <td class="group_name translated">{{ field.event_participants_total }}</td>
-              <td class="group_description">{{ field.description_short }}</td>
+              <td class="group_description">{{ field.description_short|striptags }}</td>
               <td class="group_status">{{ field.event_status|trans }}</td>
             </tr>
             {% set i = i+1 %}

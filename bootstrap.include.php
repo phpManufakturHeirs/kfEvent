@@ -142,6 +142,6 @@ $app->match('/admin/event/import/kitevent',
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
 $app->match('/admin/event/import/kitevent/start',
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
-$app->match('/admin/event/import/kitevent/execute',
-    'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::execute');
+$app->match('/admin/event/import/kitevent/import',
+    'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::import');
 
