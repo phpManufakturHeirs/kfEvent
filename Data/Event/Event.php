@@ -109,6 +109,123 @@ EOD;
     }
 
     /**
+     * Return the column names of the event table
+     *
+     * @throws \Exception
+     * @return multitype:unknown
+     */
+    public function getColumns()
+    {
+        try {
+            $result = $this->app['db']->fetchAll("SHOW COLUMNS FROM `".self::$table_name."`");
+            $columns = array();
+            foreach ($result as $column) {
+                $columns[] = $column['Field'];
+            }
+            return $columns;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Count the records in the table
+     *
+     * @param array $status flags, i.e. array('ACTIVE','LOCKED')
+     * @throws \Exception
+     * @return integer number of records
+     */
+    public function count($status=null)
+    {
+        try {
+            $SQL = "SELECT COUNT(*) FROM `".self::$table_name."`";
+            if (is_array($status) && !empty($status)) {
+                $SQL .= " WHERE ";
+                $use_status = false;
+                if (is_array($status) && !empty($status)) {
+                    $use_status = true;
+                    $SQL .= '(';
+                    $start = true;
+                    foreach ($status as $stat) {
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        else {
+                            $start = false;
+                        }
+                        $SQL .= "`event_status`='$stat'";
+                    }
+                    $SQL .= ')';
+                }
+            }
+            return $this->app['db']->fetchColumn($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a list from the event table in paging view
+     *
+     * @param integer $limit_from start selection at position
+     * @param integer $rows_per_page select max. rows per page
+     * @param array $select_status tags, i.e. array('ACTIVE','LOCKED')
+     * @param array $order_by fields to order by
+     * @param string $order_direction 'ASC' (default) or 'DESC'
+     * @throws \Exception
+     * @return array selected records
+     */
+    public function selectList($limit_from, $rows_per_page, $select_status=null, $order_by=null, $order_direction='ASC')
+    {
+        try {
+            $event = self::$table_name;
+            $desc = FRAMEWORK_TABLE_PREFIX.'event_description';
+            $SQL = "SELECT * FROM `$event`, `$desc` WHERE $event.event_id=$desc.event_id";
+            if (is_array($select_status) && !empty($select_status)) {
+                $SQL .= " AND ";
+                $use_status = false;
+                if (is_array($select_status) && !empty($select_status)) {
+                    $use_status = true;
+                    $SQL .= '(';
+                    $start = true;
+                    foreach ($select_status as $stat) {
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        else {
+                            $start = false;
+                        }
+                        $SQL .= "`event_status`='$stat'";
+                    }
+                    $SQL .= ')';
+                }
+            }
+            if (is_array($order_by) && !empty($order_by)) {
+                $SQL .= " ORDER BY ";
+                $start = true;
+                foreach ($order_by as $by) {
+                    if (!$start) {
+                        $SQL .= ", ";
+                    }
+                    else {
+                        $start = false;
+                    }
+                    if ($by == 'event_id') {
+                        $by = "$event.event_id";
+                    }
+                    $SQL .= "$by";
+                }
+                $SQL .= " $order_direction";
+            }
+            $SQL .= " LIMIT $limit_from, $rows_per_page";
+            return $this->app['db']->fetchAll($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+
+    /**
      * Select a evetn record by the given event_id
      * Return FALSE if the record does not exists
      *

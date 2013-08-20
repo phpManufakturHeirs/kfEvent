@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
   {% endif %}
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/event.css" media="screen, projection" />  
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% endblock stylesheet %}
 
 {% block content %}
@@ -33,30 +34,100 @@
     {% endif %}
       
     {% if events|length > 0 %}
+      {#  
+        The pagination serve a automatic 1 2 3 ... 17 18 19 pagination and 
+        navigation for the table if it contain more rows than specified in: 
+        /Contact/Template/default/backend/simple/list.contact.json 
+        Changes here must be also done at the footer of the table !!!
+       #}  
+      {% include '@phpManufaktur/Event/Template/default/backend/pagination.twig' with {
+         currentPage: current_page,
+         paginationPath: FRAMEWORK_URL ~ route.pagination|replace({'{order}':order_by|join(','), '{direction}':order_direction}),
+         lastPage: last_page,
+         showAlwaysFirstAndLast: true
+      } only %}
+      
       <table>
         <thead>
           <tr>
-            <th class="event_id">{{ 'ID'|trans }}</th>
-            <th class="event_date_from">{{ 'Date, From'|trans }}</th>
-            <th class="event_participants_total">{{ 'Participants, maximum'|trans }}</th>
-            <th class="group_description">{{ 'Description'|trans }}</th>
-            <th class="event_status">{{ 'Status'|trans }}</th>
+            {# 
+                Enable an automatic ordering of the table by the columns, just
+                clicking at the head of the column. Default order is specified in:
+                /Contact/Template/default/backend/simple/list.contact.json 
+             #}
+            {% set order_by_str = order_by|join(',') %}
+            {% for head in events.0|keys %}
+              {% if head in columns %}
+                {% set head_order = order_direction %}
+                {% set head_class = head %}
+                {% if (head == order_by_str) %}
+                  {% if (head_order == 'asc') %}
+                    {% set head_order = 'desc' %}                
+                    {% set head_class = head_class ~ ' active asc' %}
+                  {% else %}
+                    {% set head_order = 'asc' %}
+                    {% set head_class = head_class ~ ' active desc' %}
+                  {% endif %}
+                {% endif %}  
+                <th class="{{ head_class }}">
+                  {% if 'active asc' in head_class %}
+                    <i class="icon-caret-down icon-padding"></i>
+                  {% elseif 'active desc' in head_class %}
+                    <i class="icon-caret-up icon-padding"></i>
+                  {% endif %}
+                  <a href="{{ FRAMEWORK_URL ~ route.pagination|replace({'{page}':current_page, '{order}':head, '{direction}':head_order}) }}" title="{% if head_order == 'asc' %}{{ 'Click to sort column ascending'|trans }}{% else %}{{ 'Click to sort column descending'|trans }}{% endif %}">{{ head|trans }}</a>
+                </th>  
+              {% endif %}
+            {% endfor %}
           </tr>
         </thead>
         <tbody>
           {% set i = 0 %}
-          {% for field in events %}
+          {% for event in events %}
             <tr class="{{ cycle(['flop','flip'], i) }}">
-              <td class="group_id"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ field.event_id ~ '?usage=' ~ usage }}">{{ '%03d'|format(field.event_id) }}</a></td>
-              <td class="group_name"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ field.event_id ~ '?usage=' ~ usage }}">{{ field.event_date_from }}</a></td>
-              <td class="group_name translated">{{ field.event_participants_total }}</td>
-              <td class="group_description">{{ field.description_short|striptags }}</td>
-              <td class="group_status">{{ field.event_status|trans }}</td>
+              {% for column, value in event %} 
+                {% if column in columns %}
+                  {% if column == 'event_id' %}
+                    <td class="{{ column }}">
+                      <a href="{{ FRAMEWORK_URL ~ route.edit|replace({'{event_id}':value}) }}">{{ '%05d'|format(value) }}</a>
+                    </td>
+                  {% elseif column == 'description_title' %}
+                    <td class="{{ column }}">
+                      <a href="{{ FRAMEWORK_URL ~ route.edit|replace({'{event_id}':value}) }}">{{ value }}</a>
+                    </td>
+                  {% elseif ((column == 'description_short') or (column == 'description_short')) %}
+                    <td class="{{ column }}">{{ value|striptags }}</td>
+                  {% elseif ((column == 'event_date_from') or (column == 'event_date_to') or (column == 'event_publish_from') or (column == 'event_publish_to') or (column == 'event_deadline')) %}
+                    {% if app.translator.locale == 'de' %}
+                      {# german date formatting #}
+                      <td class="{{ column }}">{{ value|date('d.m.Y') }}</td>
+                    {% else %}
+                      {# u.s. date formatting #}
+                      <td class="{{ column }}">{{ value|date('m/d/Y') }}</td>
+                    {% endif %}
+                  {% elseif (column == 'event_status') %}
+                    {# translate this column value #}  
+                    <td class="{{ column }}">{{ value|trans }}</td>  
+                  {% else %}
+                    <td class="{{ column }}">{{ value }}</td>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
             </tr>
             {% set i = i+1 %}
-          {% endfor %}  
+          {% endfor %}
         </tbody>
       </table>
+      
+      {#
+        See top of the table for more information!
+       #}
+      {% include '@phpManufaktur/Event/Template/default/backend/pagination.twig' with {
+        currentPage: current_page,
+        paginationPath: FRAMEWORK_URL ~ route.pagination|replace({'{order}':order_by|join(','), '{direction}':order_direction}),
+        lastPage: last_page,
+        showAlwaysFirstAndLast: true
+      } only %}
     {% else %}
       <p>{{ 'The event list is empty, please create a event!'|trans }}</p>
     {% endif %}  

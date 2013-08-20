@@ -19,6 +19,14 @@ class EventList extends Backend {
 
     protected static $event_id = -1;
     protected $EventData = null;
+    protected static $route = null;
+    protected static $columns = null;
+    protected static $rows_per_page = null;
+    protected static $select_status = null;
+    protected static $order_by = null;
+    protected static $order_direction = null;
+    protected static $current_page = null;
+    protected static $max_pages = null;
 
     /**
      * Constructor
@@ -43,6 +51,62 @@ class EventList extends Backend {
     {
         parent::initialize($app);
         $this->EventData = new EventData($this->app);
+
+        try {
+            // search for the config file in the template directory
+            $cfg_file = $this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.list.json', '', true);
+            // get the columns to show in the list
+            $cfg = $this->app['utils']->readJSON($cfg_file);
+            self::$columns = isset($cfg['columns']) ? $cfg['columns'] : $this->EventData->getColumns();
+            self::$rows_per_page = isset($cfg['list']['rows_per_page']) ? $cfg['list']['rows_per_page'] : 100;
+            self::$select_status = isset($cfg['list']['select_status']) ? $cfg['list']['select_status'] : array('ACTIVE', 'LOCKED');
+            self::$order_by = isset($cfg['list']['order']['by']) ? $cfg['list']['order']['by'] : array('event_id');
+            self::$order_direction = isset($cfg['list']['order']['direction']) ? $cfg['list']['order']['direction'] : 'ASC';
+        } catch (\Exception $e) {
+            // the config file does not exists - use all available columns
+            self::$columns = $this->EventData->getColumns();
+            self::$rows_per_page = 100;
+            self::$select_status = array('ACTIVE', 'LOCKED');
+            self::$order_by = array('event_id');
+            self::$order_direction = 'ASC';
+        }
+        self::$current_page = 1;
+        self::$route =  array(
+            'pagination' => '/admin/event/list/page/{page}?order={order}&direction={direction}&usage='.self::$usage,
+            'edit' => '/admin/event/edit/id/{event_id}?usage='.self::$usage
+        );
+    }
+
+    /**
+     * Set the current page for the table
+     *
+     * @param integer $page
+     */
+    public function setCurrentPage($page)
+    {
+        self::$current_page = $page;
+    }
+
+    protected function getList(&$list_page, $rows_per_page, $select_status=null, &$max_pages=null, $order_by=null, $order_direction='ASC')
+    {
+        // count rows
+        $count_rows = $this->EventData->count($select_status);
+
+        if ($count_rows < 1) {
+            // nothing to do ...
+            return null;
+        }
+
+        $max_pages = ceil($count_rows/$rows_per_page);
+        if ($list_page < 1) {
+            $list_page = 1;
+        }
+        if ($list_page > $max_pages) {
+            $list_page = $max_pages;
+        }
+        $limit_from = ($list_page * $rows_per_page) - $rows_per_page;
+
+        return $this->EventData->selectList($limit_from, $rows_per_page, $select_status, $order_by, $order_direction);
     }
 
     /**
@@ -51,20 +115,37 @@ class EventList extends Backend {
      * @param Application $app
      * @return string rendered Event List
      */
-    public function exec(Application $app)
+    public function exec(Application $app, $page=null)
     {
         $this->initialize($app);
+        if (!is_null($page)) {
+            $this->setCurrentPage($page);
+        }
+
         // cleanup events
         $this->EventData->cleanupEvents();
+
+        $order_by = explode(',', $this->app['request']->get('order', implode(',', self::$order_by)));
+        $order_direction = $this->app['request']->get('direction', self::$order_direction);
+
+        $events = $this->getList(self::$current_page, self::$rows_per_page, self::$select_status, self::$max_pages, $order_by, $order_direction);
+
+
         // select all events
-        $events = $this->EventData->selectAll();
+        //$events = $this->EventData->selectAll();
 
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.list.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_list'),
                 'message' => $this->getMessage(),
-                'events' => $events
+                'events' => $events,
+                'columns' => self::$columns,
+                'current_page' => self::$current_page,
+                'route' => self::$route,
+                'order_by' => $order_by,
+                'order_direction' => strtolower($order_direction),
+                'last_page' => self::$max_pages
             ));
     }
 

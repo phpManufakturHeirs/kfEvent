@@ -208,3 +208,33 @@ fieldset {
   width: 80%;
 }
 
+.pagination-container {
+  width: 100%;
+  text-align: right;
+}
+.pagination {
+  width: auto;
+  font-size: 11px;
+}
+.pagination ul {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  width: auto;
+}
+.pagination li {
+  display: inline-block;
+  text-align: center;
+  float: left;
+  list-style : none;
+  margin: 0;
+  padding: 0 3px 0 3px;
+  font-weight: normal;
+}
+.pagination li.active {
+  font-weight: bold;
+}
+.icon-padding {
+  padding: 0 3px 0 3px;
+}
+

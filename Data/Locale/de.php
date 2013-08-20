@@ -53,6 +53,14 @@ return array(
     'Create a new group'
         => 'Eine neue Gruppe anlegen',
 
+    // event data columns
+    'description_long'
+        => 'Beschreibung',
+    'description_short'
+        => 'Zusammenfassung',
+    'description_title'
+        => 'Titel',
+
     'Date'
         => 'Datum',
     'Date and Time'
@@ -69,6 +77,30 @@ return array(
         => 'Beschreibung (übersetzt)',
     'Detected a kitEvent installation (Release: %release%) with %count% active or locked events.'
         => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
+
+    // event data columns
+    'event_costs'
+        => 'Kosten',
+    'event_date_from'
+        => 'Datum von',
+    'event_date_to'
+        => 'Datum bis',
+    'event_deadline'
+        => 'Anmeldeschluß',
+    'event_id'
+        => 'ID',
+    'event_participants_max'
+        => 'max. Tln.',
+    'event_participants_total'
+        => 'Anmeldungen',
+    'event_publish_from'
+        => 'Veröffentlichen ab',
+    'event_publish_to'
+        => 'Veröffentlichen bis',
+    'event_status'
+        => 'Status',
+    'event_timestamp'
+        => 'Zeitstempel',
 
     'Event'
         => 'Veranstaltung',

@@ -136,6 +136,8 @@ $app->match('/admin/event/image/delete/id/{image_id}/event/{event_id}',
 // Show the Event List
 $app->match('/admin/event/list',
     'phpManufaktur\Event\Control\Backend\EventList::exec');
+$app->match('/admin/event/list/page/{page}',
+    'phpManufaktur\Event\Control\Backend\EventList::exec');
 
 // Import events from kitEvent
 $app->match('/admin/event/import/kitevent',
