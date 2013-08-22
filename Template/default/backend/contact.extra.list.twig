@@ -35,5 +35,8 @@
       
     {% include '@phpManufaktur/Contact/Template/default/backend/form/list.extra.twig' %}
 
+    <div>
+      <p><a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/extra/edit?usage=' ~ extra.usage }}">{{ 'Add a new extra field'|trans }}</a></p>
+    </div>  
   </div>
 {% endblock content %}

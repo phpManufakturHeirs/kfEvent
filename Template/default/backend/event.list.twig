@@ -98,6 +98,7 @@
                   {% elseif ((column == 'description_short') or (column == 'description_short')) %}
                     <td class="{{ column }}">{{ value|striptags }}</td>
                   {% elseif ((column == 'event_date_from') or (column == 'event_date_to') or (column == 'event_publish_from') or (column == 'event_publish_to') or (column == 'event_deadline')) %}
+                    {# formatting date and time #}
                     {% if app.translator.locale == 'de' %}
                       {# german date formatting #}
                       <td class="{{ column }}">{{ value|date('d.m.Y') }}</td>
@@ -105,6 +106,8 @@
                       {# u.s. date formatting #}
                       <td class="{{ column }}">{{ value|date('m/d/Y') }}</td>
                     {% endif %}
+                  {% elseif (column == 'event_participants_max') %}
+                    <td class="{{ column }}">{% if value < 1 %}{{ 'unlimited'|trans }}{% else %}{{ value }}{% endif %}</td>  
                   {% elseif (column == 'event_status') %}
                     {# translate this column value #}  
                     <td class="{{ column }}">{{ value|trans }}</td>  

@@ -233,6 +233,9 @@ return array(
     'There exists no kitEvent installation at the parent CMS!'
         => 'Es wurde keine kitEvent Installation auf dem übergeordeneten Content Management System gefunden!',
     'Type'
-        => 'Typ'
+        => 'Typ',
+
+    'unlimited'
+        => 'unbegrenzt',
 
 );

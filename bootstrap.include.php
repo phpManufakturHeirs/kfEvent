@@ -147,3 +147,10 @@ $app->match('/admin/event/import/kitevent/start',
 $app->match('/admin/event/import/kitevent/import',
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::import');
 
+// kitCommand: event
+$app->post('/command/event',
+    'phpManufaktur\Event\Control\Command\EventFrame::exec')
+->setOption('info', MANUFAKTUR_PATH.'/Event/command.event.json');
+
+$app->get('/event/action',
+    'phpManufaktur\Event\Control\Command\Action::exec');
