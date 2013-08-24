@@ -16,32 +16,14 @@ use phpManufaktur\Basic\Control\kitCommand\Basic;
 
 class Action extends Basic
 {
-    protected $app = null;
+    protected $Message = null;
+    protected $Event = null;
 
-    /**
-     * Return a rendered message dialog for kitEvent
-     *
-     * @param string $message
-     * @param array $message_params
-     * @param string $title
-     * @param array $title_params
-     * @param boolean $log_message
-     */
-    protected function promptMessage($message, $message_params=array(), $title='', $title_params=array(), $log_message=false)
+    protected function initParameters(Application $app, $parameter_id=-1)
     {
-        if ($log_message) {
-            // log this message
-            $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $message_params, 'messages', 'en')));
-        }
-        return $this->app['twig']->render($this->app['utils']->templateFile(
-            '@phpManufaktur/Event/Template',
-            'command/message.twig',
-            $this->getPreferredTemplateStyle()),
-            array(
-                'basic' => $this->getBasicSettings(),
-                'message' => $this->app['translator']->trans($message, $message_params),
-                'title' => $this->app['translator']->trans($title, $title_params)
-            ));
+        parent::initParameters($app, $parameter_id);
+        $this->Message = new Message($app);
+        $this->Event = new Event($app);
     }
 
     /**
@@ -65,10 +47,11 @@ class Action extends Basic
             }
 
             switch ($parameters['mode']) {
-
+                case 'event':
+                    return $this->Event->exec();
                 default:
-                    return $this->promptMessage('The mode %mode% is unknown, please check the parameters for the kitCommand!',
-                        array('%mode%' => $parameters['mode']), 'kitCommand ~~ event ~~');
+                    return $this->Message->render('The mode <b>%mode%</b> is unknown, please check the parameters for the kitCommand!',
+                        array('%mode%' => $parameters['mode']));
             }
         } catch (\Exception $e) {
             throw new \Exception($e);

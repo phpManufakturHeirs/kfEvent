@@ -13,6 +13,7 @@ namespace phpManufaktur\Event\Data\Event;
 
 use Silex\Application;
 use phpManufaktur\Event\Data\Event\Description;
+use phpManufaktur\Contact\Data\Contact\Contact;
 
 class Event
 {
@@ -23,6 +24,7 @@ class Event
     protected $ExtraGroup = null;
     protected $ExtraType = null;
     protected $Extra = null;
+    protected $Contact = null;
 
     /**
      * Constructor
@@ -37,6 +39,7 @@ class Event
         $this->ExtraGroup = new ExtraGroup($app);
         $this->ExtraType = new ExtraType($app);
         $this->Extra = new Extra($app);
+        $this->Contact = new Contact($app);
     }
 
     /**
@@ -274,6 +277,24 @@ EOD;
                 }
                 // check for extra fields
                 $event['extra_fields'] = $this->Extra->selectByEventID($event_id);
+                // check for contacts
+                $event['contact']['organizer'] = array();
+                if ($event['event_organizer'] > 0) {
+                    if (false === $event['contact']['organizer'] = $this->Contact->selectContact($event['event_organizer'])) {
+                        // contact does not exists!
+                        $event['contact']['organizer'] = array();
+                        $this->app['monolog']->addInfo(str_replace('The record with the ID %id% does not exists!', '%id%', $event['event_organizer']));
+                    }
+                }
+                $event['contact']['location'] = array();
+                if ($event['event_location'] > 0) {
+                    if (false === $event['contact']['location'] = $this->Contact->selectContact($event['event_location'])) {
+                        // contact does not exists!
+                        $event['contact']['location'] = array();
+                        $this->app['monolog']->addInfo(str_replace('The record with the ID %id% does not exists!', '%id%', $event['event_location']));
+                    }
+                }
+
                 // return complete event record
                 return $event;
             }
