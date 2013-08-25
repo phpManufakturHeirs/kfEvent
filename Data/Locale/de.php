@@ -233,7 +233,7 @@ return array(
     'The view <b>%view%</b> does not exists!'
         => 'Die <i>view</i> <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
-        => 'Es wurde keine kitEvent Installation auf dem übergeordeneten Content Management System gefunden!',
+        => 'Es wurde keine kitEvent Installation in dem übergeordeneten Content Management System gefunden!',
     'Type'
         => 'Typ',
 
