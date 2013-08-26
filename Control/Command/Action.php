@@ -41,14 +41,27 @@ class Action extends Basic
             // get the kitCommand parameters
             $parameters = $this->getCommandParameters();
 
-            if (!isset($parameters['mode'])) {
+            // check the CMS GET parameters
+            $GET = $this->getCMSgetParameters();
+            if (isset($GET['command']) && ($GET['command'] == 'event')) {
+                foreach ($GET as $key => $value) {
+                    if ($key == 'command') continue;
+                    $parameters[$key] = $value;
+                }
+                $this->setCommandParameters($parameters);
+
+            }
+            if (!isset($parameters['action'])) {
                 // there is no 'mode' parameter set, so we show the "Welcome" page
                 return $this->createIFrame('/basic/help/event/welcome');
             }
 
-            switch ($parameters['mode']) {
+            switch ($parameters['action']) {
+                case 'actual':
+                    return 'not implemented';
                 case 'event':
-                    return $this->Event->exec();
+                    //$this->Event->setCommandParameters($parameters);
+                    return $this->Event->exec($parameters);
                 default:
                     return $this->Message->render('The mode <b>%mode%</b> is unknown, please check the parameters for the kitCommand!',
                         array('%mode%' => $parameters['mode']));

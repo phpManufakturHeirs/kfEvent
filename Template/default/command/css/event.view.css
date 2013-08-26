@@ -15,3 +15,33 @@
   border: 1px solid #dcdcdc;
   font-size: 11px;
 }
+.event.view.date {
+  font-size: 12px;
+  font-weight: bold;
+}
+.event.view.description.short {
+  font-style: italic;
+}
+
+.event.view {
+  clear: both;
+  width: 100%;
+}
+.table {
+  display: table;
+  width: auto;
+}
+.row {
+  display: table-row;
+  width: auto;
+}
+.cell {
+  display: table-cell;
+  width: 100px;
+}
+.width-100 {
+  width: 100px;
+}
+.width-150 {
+  width: 150px;
+}

@@ -14,6 +14,7 @@ namespace phpManufaktur\Event\Control\Command;
 use Silex\Application;
 use phpManufaktur\Basic\Control\kitCommand\Basic;
 use phpManufaktur\Event\Data\Event\Event as EventData;
+use phpManufaktur\Basic\Data\CMS\Page;
 
 class Event extends Basic
 {
@@ -35,6 +36,7 @@ class Event extends Basic
             return $this->Message->render('The record with the ID %id% does not exists!', array('%id%' => $event_id));
         }
 
+        // set the default view
         $view = 'small';
         if (isset(self::$parameter['view'])) {
             if (in_array(strtolower(self::$parameter['view']), array('small', 'detail', 'custom'))) {
@@ -46,6 +48,30 @@ class Event extends Basic
                     array('%view%' => strtolower(self::$parameter['view'])));
             }
         }
+
+        if (isset(self::$parameter['redirect'])) {
+            if (is_numeric(self::$parameter['redirect'])) {
+                // get the URL from the CMS PAGE ID
+                $Page = new Page($this->app);
+                $url = $Page->getURL(self::$parameter['redirect']);
+            }
+            else {
+                // use the submitted URL
+                $url = self::$parameter['redirect'];
+            }
+        }
+        else {
+            $url = $this->getCMSpageURL();
+        }
+
+        $detail_url = sprintf('%s%s%s', $url, (strpos($url, '?') === false) ? '?' : '&',
+                http_build_query(array(
+                    'command' => 'event',
+                    'action' => 'event',
+                    'view' => 'detail',
+                    'id' => $event_id
+                )));
+
         // return the event dialog
         return $this->app['twig']->render($this->app['utils']->templateFile(
             '@phpManufaktur/Event/Template',
@@ -53,13 +79,19 @@ class Event extends Basic
             $this->getPreferredTemplateStyle()),
             array(
                 'basic' => $this->getBasicSettings(),
-                'event' => $event
+                'event' => $event,
+                'url' => array(
+                    'detail' => $detail_url
+                )
             ));
     }
 
-    public function exec()
+    public function exec($parameter)
     {
         try {
+            $this->setCommandParameters($parameter);
+            self::$parameter = $this->getCommandParameters();
+//print_r(self::$parameter);
             if (isset(self::$parameter['id'])) {
                 return $this->getEventByID(self::$parameter['id']);
             }
