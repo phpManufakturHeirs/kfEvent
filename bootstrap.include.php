@@ -154,3 +154,7 @@ $app->post('/command/event',
 
 $app->get('/event/action',
     'phpManufaktur\Event\Control\Command\Action::exec');
+
+// the target route for permalinks
+$app->match('/event/id/{id}',
+    'phpManufaktur\Event\Control\Command\Permalink::exec');
