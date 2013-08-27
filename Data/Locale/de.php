@@ -45,7 +45,7 @@ return array(
     'Contact list'
         => 'Kontakte, Übersicht',
     'Costs'
-        => 'Kosten',
+        => 'Teilnahmegebühr',
     'Create a new contact'
         => 'Einen neuen Kontakt anlegen',
     'Create a new event'

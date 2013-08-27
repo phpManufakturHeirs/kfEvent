@@ -96,6 +96,9 @@ class Event extends Basic
                     'id' => $event_id
                 )));
 
+        $iCal = new iCal();
+        $iCal->CreateICalFile($this->app, $event_id);
+
         // return the event dialog
         return $this->app['twig']->render($this->app['utils']->templateFile(
             '@phpManufaktur/Event/Template',
@@ -149,6 +152,10 @@ class Event extends Basic
         }
     }
 
+    /**
+     * Check if the parameter map[] isset and set the assigned values for Twig
+     *
+     */
     protected function checkParameterMap()
     {
         if (isset(self::$parameter['map'])) {
@@ -182,6 +189,11 @@ class Event extends Basic
                 'link' => false
             );
         }
+    }
+
+    protected function createICalFile($event_id)
+    {
+
     }
 
     public function exec($parameter)
