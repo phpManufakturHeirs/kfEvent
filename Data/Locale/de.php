@@ -44,6 +44,8 @@ return array(
 
     'Contact list'
         => 'Kontakte, Übersicht',
+    'Costs'
+        => 'Kosten',
     'Create a new contact'
         => 'Einen neuen Kontakt anlegen',
     'Create a new event'
@@ -125,6 +127,8 @@ return array(
         => 'Feld Typ',
     'Float'
         => 'Dezimalzahl',
+    'free of charge'
+        => 'kostenlos',
 
     'go back'
         => 'Zurück',

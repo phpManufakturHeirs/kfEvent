@@ -22,7 +22,7 @@
     
     <div class="table">
       <div class="row">
-        <div class="cell width-150">{{ 'Participants, maximum'|trans }}</div>
+        <div class="cell width-150">{{ 'Participants maximum'|trans }}</div>
         <div class="cell width-100">
           {% if event.event_participants_max < 0 %}
             {{ 'unlimited'|trans }}
@@ -32,7 +32,7 @@
             {{ event.event_participants_max }}
           {% endif %}
         </div>
-        <div class="cell width-150">{{ 'Participants, total'|trans }}</div>
+        <div class="cell width-150">{{ 'Participants total'|trans }}</div>
         <div class="cell width-100">{{ event.event_participants_total }}</div>
       </div>
       <div class="row">
