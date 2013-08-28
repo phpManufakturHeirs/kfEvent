@@ -31,6 +31,10 @@ class Message extends Basic
             // log this message
             $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $message_params, 'messages', 'en')));
         }
+
+        // very important - no redirection to avoid a possible recursion!
+        $this->setRedirectActive(false);
+
         return $this->app['twig']->render($this->app['utils']->templateFile(
             '@phpManufaktur/Event/Template',
             'command/message.twig',

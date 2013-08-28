@@ -12,41 +12,70 @@
 namespace phpManufaktur\Event\Control\Command;
 
 use Silex\Application;
-use phpManufaktur\Event\Data\Event\Event as EventData;
 use Carbon\Carbon;
+use phpManufaktur\Event\Data\Event\Event as EventData;
 
 require_once MANUFAKTUR_PATH.'/Event/Control/Include/iCalcreator/iCalcreator.class.php';
 
 class iCal
 {
     protected $app = null;
+    protected static $config = null;
+    protected $EventData = null;
 
-    public function CreateICalFile(Application $app, $event_id)
+    /**
+     * Constructor
+     *
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+        // get the configuration
+        self::$config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+    }
+
+    /**
+     * Create a iCal file from the given event.
+     * Uses the settings in /Event/config.event.json
+     *
+     * @param array $event
+     * @throws \Exception
+     * @return boolean
+     */
+    public function CreateICalFile(EventData $EventData, $event_id)
     {
         try {
-            // get the data for the given event ID
-            $EventData = new EventData($app);
-            if (false === ($event = $EventData->selectEvent($event_id))) {
-                throw new \Exception("The event ID $event_id does not exists!");
+            if (!self::$config['ical']['active']) {
+                // iCal is not active
+                $this->app['monolog']->addDebug("Skipped iCal creation for event ID $event_id");
+                return true;
             }
+            // get the event
+            $event = $EventData->selectEvent($event_id);
+
             // init iCalcreator
             $vCal = new \vcalendar(array(
                 'unique_id' => 'kit2.phpmanufaktur.de',
-                'language' => $app['translator']->getLocale()
+                'language' => $this->app['translator']->getLocale()
             ));
             $evt = &$vCal->newComponent('vevent');
             $evt->setProperty('class', 'PUBLIC');
             $evt->setProperty('priority', 0);
             $evt->setProperty('status', 'CONFIRMED');
             $evt->setProperty('summary', $event['description_title']);
-            $evt->setProperty('description', $event['description_short']);
+
+            // no html tags, convert all entities
+            $description = html_entity_decode(strip_tags($event['description_short']));
+            $evt->setProperty('description', $description);
 
             // init Carbon
-            $Carbon = new Carbon($event['event_date_from']);
-            $evt->setProperty('dtstart',$Carbon->year,$Carbon->month,$Carbon->day, $Carbon->hour, $Carbon->minute, $Carbon->second);
-            $Carbon->setTimestamp(strtotime($event['event_date_to']));
-            $evt->setProperty('dtend',$Carbon->year,$Carbon->month,$Carbon->day, $Carbon->hour, $Carbon->minute, $Carbon->second);
+            $Date = new Carbon($event['event_date_from']);
+            $evt->setProperty('dtstart',$Date->year,$Date->month,$Date->day, $Date->hour, $Date->minute, $Date->second);
+            $Date->setTimestamp(strtotime($event['event_date_to']));
+            $evt->setProperty('dtend',$Date->year,$Date->month,$Date->day, $Date->hour, $Date->minute, $Date->second);
 
+            // set location
             if ($event['contact']['location']['contact']['contact_type'] == 'COMPANY') {
                 $location = $event['contact']['location']['company'][0]['company_name'];
             }
@@ -54,16 +83,25 @@ class iCal
                 $location = $event['contact']['location']['person'][0]['person_last_name'];
             }
             $evt->setProperty('location', $location);
-            $ical = $vCal->createCalendar();
-echo $ical;
-            //list($year, $month, $day, $hour, $minute, $second) = explode('-', date('Y-m-d-H-i-s', strtotime($event['event_date_from'])));
-            //$evt->setProperty('dtstart', $year, $month, $day, $hour, $minute, $second);
-            //list($year, $month, $day, $hour, $minute, $second) = explode('-', date('Y-m-d-H-i-s', strtotime($event['evt_event_date_to'])));
-            //$evt->setProperty('dtend', $year, $month, $day, $hour, $minute, $second);
-            //$evt->setProperty('location', $event['item_location']);
-            //$ical = $vCal->createCalendar();
 
+            // create the calender
+            $ical_data = $vCal->createCalendar();
 
+            // check directory
+            $path = FRAMEWORK_PATH.self::$config['ical']['framework']['path'];
+            if (!$this->app['filesystem']->exists($path)) {
+                $this->app['filesystem']->mkdir($path);
+            }
+            // create ical file
+            $ical_file = sprintf('%s/%d.ics', $path, $event['event_id']);
+            if (!file_put_contents($ical_file, $ical_data)) {
+                throw new \Exception("Can't create the file $ical_file.");
+            }
+
+            // add a log entry
+            $this->app['monolog']->addInfo("Created $ical_file");
+
+            return true;
         } catch (\Exception $e) {
             throw new \Exception($e);
         }

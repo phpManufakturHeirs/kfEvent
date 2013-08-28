@@ -10,6 +10,8 @@
  */
 
 use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 // not really needed but make error control more easy ...
 global $app;
@@ -160,4 +162,25 @@ $app->match('/event/id/{event_id}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
 $app->match('/event/id/{event_id}/view/{view}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
+
+// download of ical files from the protected area
+$app->get('/event/ical/{event_id}', function($event_id) use($app) {
+    $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+    if (isset($config['ical']['active']) && $config['ical']['active'] && isset($config['ical']['framework']['path'])) {
+        $file = FRAMEWORK_PATH.$config['ical']['framework']['path'].'/'.$event_id.'.ics';
+        if ($app['filesystem']->exists($file)) {
+            $stream = function () use ($file) {
+                readfile($file);
+            };
+
+            return $app->stream($stream, 200, array(
+                'Content-Type' => 'text/calendar',
+                'Content-length' => filesize($file),
+                'Content-Disposition' => sprintf('inline; filename="event_%05d.ics"', $event_id)
+            ));
+        }
+        throw new FileNotFoundException(basename($file));
+    }
+    throw new \Exception("Sorry, but this iCal file is not available!");
+});
 

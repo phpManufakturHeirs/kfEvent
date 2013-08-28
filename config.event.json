@@ -1,3 +1,22 @@
 {
-    "permalink_parent_url":""
+    "permalink": {
+        "cms": {
+            "url":""
+        }
+    },
+    "ical": {
+        "active": true,
+        "framework": {
+            "path": "\/media\/protected\/event\/ical"
+        }
+    },
+    "qrcode": {
+        "active": false,
+        "framework": {
+            "path": {
+                "link":"\/media\/public\/event\/qrcode\/link",
+                "ical":"\/media\/public\/event\/qrcode\/ical"
+            }
+        }
+    }
 }

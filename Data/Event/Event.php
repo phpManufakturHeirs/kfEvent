@@ -14,6 +14,7 @@ namespace phpManufaktur\Event\Data\Event;
 use Silex\Application;
 use phpManufaktur\Event\Data\Event\Description;
 use phpManufaktur\Contact\Data\Contact\Contact;
+use phpManufaktur\Event\Control\Command\iCal;
 
 class Event
 {
@@ -25,6 +26,7 @@ class Event
     protected $ExtraType = null;
     protected $Extra = null;
     protected $Contact = null;
+    protected $iCal = null;
 
     /**
      * Constructor
@@ -40,6 +42,7 @@ class Event
         $this->ExtraType = new ExtraType($app);
         $this->Extra = new Extra($app);
         $this->Contact = new Contact($app);
+        $this->iCal = new iCal($app);
     }
 
     /**
@@ -394,6 +397,10 @@ EOD;
                 );
                 $this->Extra->insert($data);
             }
+
+            // create iCal file
+            $this->iCal->CreateICalFile($this, $event_id);
+
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
@@ -463,6 +470,9 @@ EOD;
             }
             // update extra fields
             $this->Extra->updateByEventID($data, $event_id);
+
+            // create/update iCal file
+            $this->iCal->CreateICalFile($this, $event_id);
 
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);

@@ -83,14 +83,19 @@
           {% endfor %}
               
           {# link to Google Map #}    
-          {% if parameter.map.link and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
+          {% if parameter.link.map and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
               {% set location = address.address_street ~ ',' ~ address.address_zip ~ ',' ~ address.address_city %}
-              <i class="icon-map-marker"></i> <a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a>  
+              <i class="icon-map-marker"></i> <a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a><br />  
+          {% endif %}
+              
+          {# link to iCal file #}
+          {% if parameter.link.ical %}
+              <i class="icon-calendar"></i> <a href="{{ FRAMEWORK_URL }}/event/ical/11">{{ 'Add to calendar' }}</a><br />
           {% endif %}
         </div>
         
         {# show Google Map #}
-        {% if parameter.map.map and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
+        {% if parameter.map and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
           {% set location = address.address_street ~ ',' ~ address.address_zip ~ ',' ~ address.address_city %}
           <div class="cell width-300">
             <iframe width="300" height="180" src="https://maps.google.de/maps?hl=de&q={{ location }}&ie=UTF8&t=&z=14&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" ></iframe>
@@ -132,9 +137,11 @@
       </div>
       
     </div>
-<pre>{{ dump(parameter) }}</pre>
+<pre>{#{ dump(parameter) }#}</pre>
     <div class="navigation">
-      <a href="{{ url.detail }}" target="_top">{{ 'Show detailed information'|trans }}</a>
+      {% if parameter.link.detail %}
+        <a href="{{ url.detail }}" target="_top">{{ 'Show detailed information'|trans }}</a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
