@@ -95,6 +95,23 @@ class Event extends Basic
                     'id' => $event_id
                 )));
 
+        $qrcode_url = '';
+        $qrcode_width = 0;
+        $qrcode_height = 0;
+        if (isset(self::$parameter['qrcode']) && self::$config['qrcode']['active']) {
+            if (self::$config['qrcode']['settings']['content'] == 'ical') {
+                if (file_exists(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['ical']."/$event_id.png")) {
+                    list($qrcode_width, $qrcode_height) = getimagesize(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['ical']."/$event_id.png");
+                    $qrcode_url = FRAMEWORK_URL.'/event/qrcode/'.$event_id;
+                }
+            }
+            else {
+                if (file_exists(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['link']."/$event_id.png")) {
+                    list($qrcode_width, $qrcode_height) = getimagesize(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['link']."/$event_id.png");
+                    $qrcode_url = FRAMEWORK_URL.'/event/qrcode/'.$event_id;
+                }
+            }
+        }
 
         // return the event dialog
         return $this->app['twig']->render($this->app['utils']->templateFile(
@@ -107,7 +124,12 @@ class Event extends Basic
                 'url' => array(
                     'detail' => $detail_url,
                     'permanent' => FRAMEWORK_URL.str_replace('{event_id}', $event_id, self::$redirect_route_event_id),
-                    'ical' => FRAMEWORK_URL.self::$config['ical']['framework']['path'].'/'.$event_id.'.ics'
+                    'ical' => FRAMEWORK_URL.self::$config['ical']['framework']['path'].'/'.$event_id.'.ics',
+                ),
+                'qrcode' => array(
+                    'url' => $qrcode_url,
+                    'width' => $qrcode_width,
+                    'height' => $qrcode_height
                 ),
                 'parameter' => self::$parameter
             ));
@@ -131,15 +153,6 @@ class Event extends Basic
         else {
             throw new \Exception("Please specifiy a permalink URL for the CMS in config.event.json.");
         }
-    }
-
-    /**
-     * Check if the parameter map[] isset and set the assigned values for Twig
-     *
-     */
-    protected function checkParameterMap()
-    {
-        self::$parameter['map'] = (isset(self::$parameter['map'])) ? true : false;
     }
 
     protected function checkParameterLink()
@@ -171,8 +184,9 @@ class Event extends Basic
             self::$parameter = $this->getCommandParameters();
 
             // general check for parameters
-            $this->checkParameterMap();
+            self::$parameter['map'] = (isset(self::$parameter['map'])) ? true : false;
             $this->checkParameterLink();
+            self::$parameter['qrcode'] = (isset(self::$parameter['qrcode'])) ? true : false;
 
             if (isset(self::$parameter['id'])) {
                 return $this->selectID(self::$parameter['id']);

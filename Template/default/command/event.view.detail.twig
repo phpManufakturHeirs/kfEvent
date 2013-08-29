@@ -35,6 +35,11 @@
             {{ person.last_name }}
           {% endif %}
         </div>
+        {% if parameter.qrcode and qrcode.url|length > 0 %}
+          <div class="cell width-300">
+            <img src="{{ qrcode.url }}" width="{{ qrcode.width }}" height="{{ qrcode.height }}" />
+          </div>
+        {% endif %}
       </div>
       
       <div class="row">

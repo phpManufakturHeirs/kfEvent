@@ -172,7 +172,6 @@ $app->get('/event/ical/{event_id}', function($event_id) use($app) {
             $stream = function () use ($file) {
                 readfile($file);
             };
-
             return $app->stream($stream, 200, array(
                 'Content-Type' => 'text/calendar',
                 'Content-length' => filesize($file),
@@ -184,3 +183,27 @@ $app->get('/event/ical/{event_id}', function($event_id) use($app) {
     throw new \Exception("Sorry, but this iCal file is not available!");
 });
 
+// qr-codes from the protected area
+$app->get('/event/qrcode/{event_id}', function($event_id) use($app) {
+    $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+    if (isset($config['qrcode']['active']) && $config['qrcode']['active'] && isset($config['qrcode']['settings']['content'])) {
+        if ($config['qrcode']['settings']['content'] == 'ical') {
+            $file = FRAMEWORK_PATH.$config['qrcode']['framework']['path']['ical']."/$event_id.png";
+        }
+        else {
+            $file = FRAMEWORK_PATH.$config['qrcode']['framework']['path']['link']."/$event_id.png";
+        }
+        if ($app['filesystem']->exists($file)) {
+            $stream = function () use ($file) {
+                readfile($file);
+            };
+            return $app->stream($stream, 200, array(
+                'Content-Type' => 'image/png',
+                'Content-length' => filesize($file),
+                'Content-Disposition' => sprintf('inline; filename="event_%05d.png"', $event_id)
+            ));
+        }
+        throw new FileNotFoundException(basename($file));
+    }
+    throw new \Exception("Sorry, but this QR-Code is not available!");
+});

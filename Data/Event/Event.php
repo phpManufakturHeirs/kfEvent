@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\Event\Data\Event\Description;
 use phpManufaktur\Contact\Data\Contact\Contact;
 use phpManufaktur\Event\Control\Command\iCal;
+use phpManufaktur\Event\Control\Command\EventQRCode;
 
 class Event
 {
@@ -27,6 +28,7 @@ class Event
     protected $Extra = null;
     protected $Contact = null;
     protected $iCal = null;
+    protected $QRCode = null;
 
     /**
      * Constructor
@@ -43,6 +45,7 @@ class Event
         $this->Extra = new Extra($app);
         $this->Contact = new Contact($app);
         $this->iCal = new iCal($app);
+        $this->QRCode = new EventQRCode($app);
     }
 
     /**
@@ -401,6 +404,9 @@ EOD;
             // create iCal file
             $this->iCal->CreateICalFile($this, $event_id);
 
+            // create QRCode
+            $this->QRCode->create($event_id);
+
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
@@ -473,6 +479,9 @@ EOD;
 
             // create/update iCal file
             $this->iCal->CreateICalFile($this, $event_id);
+
+            // create/update QR-Code file
+            $this->QRCode->create($event_id);
 
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);

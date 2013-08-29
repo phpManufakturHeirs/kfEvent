@@ -14,9 +14,15 @@
         "active": false,
         "framework": {
             "path": {
-                "link":"\/media\/public\/event\/qrcode\/link",
-                "ical":"\/media\/public\/event\/qrcode\/ical"
+                "link":"\/media\/protected\/event\/qrcode\/link",
+                "ical":"\/media\/protected\/event\/qrcode\/ical"
             }
+        },
+        "settings": {
+            "content": "link",
+            "size": 3,
+            "error_correction": 2,
+            "margin": 2
         }
     }
 }
