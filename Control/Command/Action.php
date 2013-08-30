@@ -23,7 +23,7 @@ class Action extends Basic
     {
         parent::initParameters($app, $parameter_id);
         $this->Message = new Message($app);
-        $this->Event = new Event($app);
+        $this->Event = new Event(null);
     }
 
     /**
@@ -49,7 +49,6 @@ class Action extends Basic
                     $parameters[$key] = $value;
                 }
                 $this->setCommandParameters($parameters);
-
             }
             if (!isset($parameters['action'])) {
                 // there is no 'mode' parameter set, so we show the "Welcome" page
@@ -60,8 +59,8 @@ class Action extends Basic
                 case 'actual':
                     return 'not implemented';
                 case 'event':
-                    //$this->Event->setCommandParameters($parameters);
-                    return $this->Event->exec($parameters);
+                    //return $this->Event->exec($parameters);
+                    return $this->Event->exec($app);
                 default:
                     return $this->Message->render('The mode <b>%mode%</b> is unknown, please check the parameters for the kitCommand!',
                         array('%mode%' => $parameters['mode']));

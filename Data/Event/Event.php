@@ -14,7 +14,7 @@ namespace phpManufaktur\Event\Data\Event;
 use Silex\Application;
 use phpManufaktur\Event\Data\Event\Description;
 use phpManufaktur\Contact\Data\Contact\Contact;
-use phpManufaktur\Event\Control\Command\iCal;
+use phpManufaktur\Event\Control\Command\EventICal;
 use phpManufaktur\Event\Control\Command\EventQRCode;
 
 class Event
@@ -44,7 +44,7 @@ class Event
         $this->ExtraType = new ExtraType($app);
         $this->Extra = new Extra($app);
         $this->Contact = new Contact($app);
-        $this->iCal = new iCal($app);
+        $this->iCal = new EventICal($app);
         $this->QRCode = new EventQRCode($app);
     }
 
@@ -438,6 +438,16 @@ EOD;
                 }
             }
             return $groups;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function selectAllIDs($start_id=0, $status='DELETED', $status_operator='!=')
+    {
+        try {
+            $SQL = "SELECT `event_id` FROM `".self::$table_name."` WHERE `event_id` >= '$start_id' AND `event_status`{$status_operator}'{$status}' ORDER BY `event_id` ASC";
+            return $this->app['db']->fetchAll($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

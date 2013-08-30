@@ -1,4 +1,12 @@
 {
+    "general": {
+        "max_execution_time": 60
+    },
+    "event": {
+        "microdata": {
+            "offer_count_unlimited": 20
+        }
+    },
     "permalink": {
         "cms": {
             "url":""
@@ -21,7 +29,7 @@
         "settings": {
             "content": "link",
             "size": 3,
-            "error_correction": 2,
+            "error_correction": 1,
             "margin": 2
         }
     }

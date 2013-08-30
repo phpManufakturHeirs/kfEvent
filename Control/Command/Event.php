@@ -35,7 +35,23 @@ class Event extends Basic
         parent::initParameters($app, $parameter_id);
 
         // init Event
+
+        // check the CMS GET parameters
+        $GET = $this->getCMSgetParameters();
+        if (isset($GET['command']) && ($GET['command'] == 'event')) {
+            foreach ($GET as $key => $value) {
+                if ($key == 'command') continue;
+                $parameters[$key] = $value;
+            }
+            $this->setCommandParameters($parameters);
+        }
         self::$parameter = $this->getCommandParameters();
+
+        // general check for parameters
+        self::$parameter['map'] = (isset(self::$parameter['map'])) ? true : false;
+        $this->checkParameterLink();
+        self::$parameter['qrcode'] = (isset(self::$parameter['qrcode'])) ? true : false;
+
         $this->EventData = new EventData($app);
         $this->Message = new Message($app);
 
@@ -112,6 +128,10 @@ class Event extends Basic
                 }
             }
         }
+        // set redirect route
+        $this->setRedirectRoute("/event/id/$event_id");
+
+        $this->setRedirectActive(true);
 
         // return the event dialog
         return $this->app['twig']->render($this->app['utils']->templateFile(
@@ -131,7 +151,8 @@ class Event extends Basic
                     'width' => $qrcode_width,
                     'height' => $qrcode_height
                 ),
-                'parameter' => self::$parameter
+                'parameter' => self::$parameter,
+                'config' => self::$config
             ));
     }
 
@@ -143,11 +164,13 @@ class Event extends Basic
      * @param integer $event_id
      * @return string event dialog
      */
-    public function ControllerSelectID(Application $app, $event_id, $view='small')
+    public function ControllerSelectID(Application $app, $event_id, $view='detail')
     {
         $this->initParameters($app);
         if (isset(self::$config['permalink']['cms']['url']) && !empty(self::$config['permalink']['cms']['url'])) {
             $this->setCMSpageURL(self::$config['permalink']['cms']['url']);
+            //$this->setRedirectActive(true);
+
             return $this->selectID($event_id, $view);
         }
         else {
@@ -177,28 +200,17 @@ class Event extends Basic
         }
     }
 
-    public function exec($parameter)
+    public function exec(Application $app)
     {
-        try {
-            $this->setCommandParameters($parameter);
-            self::$parameter = $this->getCommandParameters();
+        $this->initParameters($app);
 
-            // general check for parameters
-            self::$parameter['map'] = (isset(self::$parameter['map'])) ? true : false;
-            $this->checkParameterLink();
-            self::$parameter['qrcode'] = (isset(self::$parameter['qrcode'])) ? true : false;
-
-            if (isset(self::$parameter['id'])) {
-                return $this->selectID(self::$parameter['id']);
-            }
-            else {
-                // no parameter which can be processed
-                $Message = new Message($this->app);
-                return $Message->render('Missing a second parameter corresponding to the mode <i>item</i>');
-            }
-
-        } catch (\Exception $e) {
-            throw new \Exception($e);
+        if (isset(self::$parameter['id'])) {
+            return $this->selectID(self::$parameter['id']);
+        }
+        else {
+            // no parameter which can be processed
+            $Message = new Message($this->app);
+            return $Message->render('Missing a second parameter corresponding to the mode <i>item</i>');
         }
     }
 

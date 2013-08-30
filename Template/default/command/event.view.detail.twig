@@ -16,8 +16,14 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% endblock stylesheet %}
 {% block content %}
-  <div class="event view container">
-    <h2>DETAIL {{ event.description_title }}</h2>
+  <div class="event view container" itemscope itemtype="http://schema.org/Event">
+    
+    <meta itemprop="startDate" content="{{ event.event_date_from|date('c') }}">
+    <meta itemprop="endDate" content="{{ event.event_date_to|date('c') }}">
+    <meta itemprop="description" content="{{ event.description_short|striptags }}">
+    
+    <h2 itemprop="name">DETAIL {{ event.description_title }}</h2>
+    
     <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
     <div class="event view description long">{{ parse_command(app, event.description_long) }}</div>
     
@@ -25,7 +31,7 @@
       
       <div class="row">
         <div class="cell width-150 right">{{ 'Organizer'|trans }}</div>
-        <div class="cell width-150">
+        <div class="cell width-150" itemprop="performer">
           {% if event.contact.organizer.contact.contact_type == 'COMPANY' %}
             {{ event.contact.organizer.company.0.company_name }}
           {% else %}
@@ -41,10 +47,9 @@
           </div>
         {% endif %}
       </div>
-      
       <div class="row">
         <div class="cell width-150 right">{{ 'Location'|trans }}</div>
-        <div class="cell width-150">
+        <div class="cell width-150" itemprop="location">
           {% if event.contact.location.contact.contact_type == 'COMPANY' %}
             {% set phone_id = event.contact.location.company.0.company_primary_phone_id %}
             {% set email_id = event.contact.location.company.0.company_primary_email_id %}
@@ -95,7 +100,12 @@
               
           {# link to iCal file #}
           {% if parameter.link.ical %}
-              <i class="icon-calendar"></i> <a href="{{ FRAMEWORK_URL }}/event/ical/11">{{ 'Add to calendar' }}</a><br />
+              <i class="icon-calendar"></i> <a href="{{ FRAMEWORK_URL ~ '/event/ical/' ~ event.event_id }}">{{ 'Add to calendar' }}</a><br />
+          {% endif %}
+              
+          {# permalink #}
+          {% if parameter.link.permanent %}
+              <i class="icon-link"></i> <a href="{{ FRAMEWORK_URL ~ '/event/id/' ~ event.event_id }}">{{ 'Permanent link to this event' }}</a><br />
           {% endif %}
         </div>
         
@@ -137,8 +147,9 @@
       <div class="row">
         <div class="cell width-150 right">{{ 'Deadline'|trans }}</div>
         <div class="cell width-150">{{ event.event_deadline|date('d.m.Y') }}</div>
-        <div class="cell width-150 right">{{ 'Costs'|trans }}</div>
-        <div class="cell width-150">{%if event.event_costs > 0 %}{{ event.event_costs|number_format(2,',','.') }} &euro;{% else %}{{ 'free of charge'|trans }}{% endif %}</div>
+        <div class="cell width-150 right" >{{ 'Costs'|trans }}</div>
+        <div class="cell width-150" itemprop="offers" itemscope itemtype="http://schema.org/AggregateOffer">{%if event.event_costs > 0 %}{{ event.event_costs|number_format(2,',','.') }} &euro;{% else %}{{ 'free of charge'|trans }}{% endif %}</div>
+        <meta itemprop="offerCount" content="{% if event.event_participants_max < 0 %}{{ config.event.microdata.offer_count_unlimited }}{% else %}{{ event.event_participants_max - event.event_participants_total }}{% endif %}">
       </div>
       
     </div>
