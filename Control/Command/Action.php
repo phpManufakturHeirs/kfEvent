@@ -37,7 +37,6 @@ class Action extends Basic
     {
         try {
             $this->initParameters($app);
-
             // get the kitCommand parameters
             $parameters = $this->getCommandParameters();
 

@@ -39,9 +39,10 @@
         <div class="cell"></div>
       </div>
     </div>
-
     <div class="navigation">
-      <a href="{{ url.detail }}" target="_top">{{ 'Show detailed information'|trans }}</a>
+      {% if parameter.link.detail.active and parameter.view != 'detail' %}
+        <a href="{{ parameter.link.detail.url }}" target="{{ parameter.link.detail.target }}">{{ 'Show detailed information'|trans }}</a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

@@ -162,17 +162,20 @@ $app->post('/command/event',
 $app->get('/event/action',
     'phpManufaktur\Event\Control\Command\Action::exec');
 
-// select the given event id
-$app->match('/event/id/{event_id}',
+// select the given event id - this is also the route for permanent links!
+$app->get('/event/id/{event_id}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
-$app->match('/event/id/{event_id}/view/{view}',
+// select the given event id and determine the view mode
+$app->get('/event/id/{event_id}/view/{view}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
 
 // download of a ical file, also from the protected area
 $app->get('/event/ical/{event_id}',
     'phpManufaktur\Event\Control\Command\EventICal::ControllerGetICalFile');
 
-// qr-codes from the protected area
+// download a qr-code, also from the protected area
 $app->get('/event/qrcode/{event_id}',
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerGetQRCodeFile');
 
+$app->get('/event/subscribe/{event_id}',
+    'phpManufaktur\Event\Control\Command\Subscribe::exec');

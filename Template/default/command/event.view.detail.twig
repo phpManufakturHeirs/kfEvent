@@ -16,13 +16,11 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% endblock stylesheet %}
 {% block content %}
-  <div class="event view container" itemscope itemtype="http://schema.org/Event">
+  <div class="event view container" >
     
-    <meta itemprop="startDate" content="{{ event.event_date_from|date('c') }}">
-    <meta itemprop="endDate" content="{{ event.event_date_to|date('c') }}">
-    <meta itemprop="description" content="{{ event.description_short|striptags }}">
+    {% include '@phpManufaktur/Event/Template/default/command/event.schema.org.twig' %}
     
-    <h2 itemprop="name">DETAIL {{ event.description_title }}</h2>
+    <h2>DETAIL {{ event.description_title }}</h2>
     
     <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
     <div class="event view description long">{{ parse_command(app, event.description_long) }}</div>
@@ -31,7 +29,7 @@
       
       <div class="row">
         <div class="cell width-150 right">{{ 'Organizer'|trans }}</div>
-        <div class="cell width-150" itemprop="performer">
+        <div class="cell width-150">
           {% if event.contact.organizer.contact.contact_type == 'COMPANY' %}
             {{ event.contact.organizer.company.0.company_name }}
           {% else %}
@@ -93,19 +91,19 @@
           {% endfor %}
               
           {# link to Google Map #}    
-          {% if parameter.link.map and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
+          {% if parameter.link.map.active and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
               {% set location = address.address_street ~ ',' ~ address.address_zip ~ ',' ~ address.address_city %}
               <i class="icon-map-marker"></i> <a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a><br />  
           {% endif %}
               
           {# link to iCal file #}
-          {% if parameter.link.ical %}
-              <i class="icon-calendar"></i> <a href="{{ FRAMEWORK_URL ~ '/event/ical/' ~ event.event_id }}">{{ 'Add to calendar' }}</a><br />
+          {% if parameter.link.ical.active %}
+              <i class="icon-calendar"></i> <a href="{{ parameter.link.ical.url }}">{{ 'Add to calendar' }}</a><br />
           {% endif %}
               
           {# permalink #}
-          {% if parameter.link.permanent %}
-              <i class="icon-link"></i> <a href="{{ FRAMEWORK_URL ~ '/event/id/' ~ event.event_id }}">{{ 'Permanent link to this event' }}</a><br />
+          {% if parameter.link.permanent.active %}
+              <i class="icon-link"></i> <a href="{{ parameter.link.permanent.url }}">{{ 'Permanent link' }}</a><br />
           {% endif %}
         </div>
         
@@ -149,14 +147,16 @@
         <div class="cell width-150">{{ event.event_deadline|date('d.m.Y') }}</div>
         <div class="cell width-150 right" >{{ 'Costs'|trans }}</div>
         <div class="cell width-150" itemprop="offers" itemscope itemtype="http://schema.org/AggregateOffer">{%if event.event_costs > 0 %}{{ event.event_costs|number_format(2,',','.') }} &euro;{% else %}{{ 'free of charge'|trans }}{% endif %}</div>
-        <meta itemprop="offerCount" content="{% if event.event_participants_max < 0 %}{{ config.event.microdata.offer_count_unlimited }}{% else %}{{ event.event_participants_max - event.event_participants_total }}{% endif %}">
       </div>
       
     </div>
 <pre>{#{ dump(parameter) }#}</pre>
     <div class="navigation">
-      {% if parameter.link.detail %}
-        <a href="{{ url.detail }}" target="_top">{{ 'Show detailed information'|trans }}</a>
+      {% if parameter.link.detail.active and parameter.view != 'detail' %}
+        <a href="{{ parameter.link.detail.url }}" target="{{ parameter.link.detail.target }}">{{ 'Show detailed information'|trans }}</a>
+      {% endif %}
+      {% if parameter.link.subscribe.active %}
+        <a href="{{ parameter.link.subscribe.url }}">{{ 'Subscribe to event'|trans }}</a>
       {% endif %}
     </div>
   </div>
