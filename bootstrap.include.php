@@ -154,20 +154,26 @@ $app->get('/admin/event/ical/rebuild',
 $app->get('/admin/event/qrcode/rebuild',
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerRebuildAllQRCodeFiles');
 
-// kitCommand: event
+// kitCommand: event - create the iFrame and execute route /event/action
 $app->post('/command/event',
     'phpManufaktur\Event\Control\Command\EventFrame::exec')
 ->setOption('info', MANUFAKTUR_PATH.'/Event/command.event.json');
 
+// the default action handler for kitCommand: event
 $app->get('/event/action',
     'phpManufaktur\Event\Control\Command\Action::exec');
 
-// select the given event id - this is also the route for permanent links!
+// select the given event id
 $app->get('/event/id/{event_id}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
 // select the given event id and determine the view mode
 $app->get('/event/id/{event_id}/view/{view}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
+
+// process permanent link for the given event ID
+$app->get('/event/perma/id/{event_id}',
+    'phpManufaktur\Event\Control\Command\Event::ControllerSelectPermaLinkID');
+
 
 // download of a ical file, also from the protected area
 $app->get('/event/ical/{event_id}',

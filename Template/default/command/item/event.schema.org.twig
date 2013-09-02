@@ -32,6 +32,7 @@
     {% set email_id = event.contact.location.person.0.person_primary_email_id %}
     {% set location = event.contact.location.person.0.person_gender|trans ~ ' ' ~ event.contact.location.person.0.last_name %}
   {% endif %}
+  
   <div itemprop="location" >
     <meta itemprop="name" content="{{ location }}"> 
     <div itemscope itemtype="http://schema.org/PostalAddress">

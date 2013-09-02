@@ -28,7 +28,7 @@ class Event extends Basic
      * (non-PHPdoc)
      * @see \phpManufaktur\Basic\Control\kitCommand\Basic::initParameters()
      */
-    protected function initParameters(Application $app, $parameter_id=-1)
+    protected function initParameters(Application $app, $parameter_id=-1, $event_id=null)
     {
         // init parent
         parent::initParameters($app, $parameter_id);
@@ -36,26 +36,31 @@ class Event extends Basic
         // init Event
         $parameters = $this->getCommandParameters();
 
-        // check the CMS GET parameters
-        $GET = $this->app['request']->query->get('GET', array());
-        foreach ($GET as $key => $value) {
-            if (($key == 'pid') || ($key == 'parameter_id')) continue;
-            $parameters[$key] = $value;
+        if (!is_null($event_id)) {
+            $parameters['id'] = $event_id;
+        }
+
+        $GET = $this->getCMSgetParameters();
+        if (isset($GET['cmd']) && ($GET['cmd'] == 'event')) {
+            // check the CMS GET parameters only if cmd=event isset!
+            foreach ($GET as $key => $value) {
+                if (($key == 'pid') || ($key == 'parameter_id')) continue;
+                $parameters[$key] = $value;
+            }
         }
         $this->setCommandParameters($parameters);
-
         self::$parameter = $this->getCommandParameters();
+
+        // get the configuration
+        self::$config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
 
         // general check for parameters
         self::$parameter['map'] = (isset(self::$parameter['map'])) ? true : false;
         $this->checkParameterLink();
-        self::$parameter['qrcode'] = (isset(self::$parameter['qrcode'])) ? true : false;
+        $this->checkParameterQRCode();
 
         $this->EventData = new EventData($app);
         $this->Message = new Message($app);
-
-        // get the configuration
-        self::$config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
     }
 
     /**
@@ -71,6 +76,12 @@ class Event extends Basic
         $this->Message->setRedirectRoute($this->getRedirectRoute());
     }
 
+    /**
+     * Return a dialog for the given Event ID and the view to use
+     *
+     * @param integer $event_id
+     * @param string $view - possible: small, detail, custom
+     */
     protected function selectID($event_id, $view='small')
     {
         if (false === ($event = $this->EventData->selectEvent($event_id))) {
@@ -83,23 +94,10 @@ class Event extends Basic
         }
         if (!in_array($view, array('small', 'detail', 'custom'))) {
             // undefined view!
-            return $this->Message->render('The view <b>%view%</b> does not exists!',
+            return $this->Message->render('The view <b>%view%</b> does not exists for the action event!',
                 array('%view%' => $view));
         }
-        $qrcode_width = 0;
-        $qrcode_height = 0;
-        if (isset(self::$parameter['qrcode']) && self::$config['qrcode']['active']) {
-            if (self::$config['qrcode']['settings']['content'] == 'ical') {
-                if (file_exists(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['ical']."/$event_id.png")) {
-                    list($qrcode_width, $qrcode_height) = getimagesize(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['ical']."/$event_id.png");
-                }
-            }
-            else {
-                if (file_exists(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['link']."/$event_id.png")) {
-                    list($qrcode_width, $qrcode_height) = getimagesize(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path']['link']."/$event_id.png");
-                }
-            }
-        }
+
         // set redirect route
         $this->setRedirectRoute("/event/id/$event_id");
         $this->setRedirectActive(true);
@@ -112,43 +110,17 @@ class Event extends Basic
             array(
                 'basic' => $this->getBasicSettings(),
                 'event' => $event,
-                'qrcode' => array(
-                    'active' => (($qrcode_width > 0) && ($qrcode_height > 0)),
-                    'url' => FRAMEWORK_URL.'/event/qrcode/'.$event_id,
-                    'width' => $qrcode_width,
-                    'height' => $qrcode_height
-                ),
                 'parameter' => self::$parameter,
                 'config' => self::$config
             ));
     }
 
     /**
-     * Will be called from outside as permanent link for the event '/event/id/{event_id}'.
-     * Generate extra parameter and grant a redirection into a parent CMS page
+     * Check the given link parameter, step through, mark active status, set the URL
+     * and set the target of the link
      *
-     * @param Application $app
-     * @param integer $event_id
-     * @return string event dialog
+     * @throws \Exception
      */
-    public function ControllerSelectID(Application $app, $event_id, $view='detail')
-    {
-        $this->initParameters($app);
-        self::$parameter['view'] = $view;
-        self::$parameter['id'] = $event_id;
-
-        return $this->selectID($event_id, $view);
-
-        if (isset(self::$config['permalink']['cms']['url']) && !empty(self::$config['permalink']['cms']['url'])) {
-            $this->setCMSpageURL(self::$config['permalink']['cms']['url']);
-            $this->setRedirectActive(true);
-            return $this->selectID($event_id, $view);
-        }
-        else {
-            throw new \Exception("Please specifiy a permalink URL for the CMS in config.event.json.");
-        }
-    }
-
     protected function checkParameterLink()
     {
         if (!isset(self::$parameter['link'])) {
@@ -164,11 +136,17 @@ class Event extends Basic
             $links = array(strtolower(trim(self::$parameter['link'])));
         }
 
-        $event_id = isset(self::$parameter['id']) ? self::$parameter['id'] : null;
+        if (in_array('perma', $links)) {
+            // rewrite the shorthand 'perma' to 'permalink'
+            $links[] = 'permanent';
+            unset($links['perma']);
+        }
 
         self::$parameter['link'] = array();
 
-        $available_links = array('detail', 'ical', 'map', 'perma', 'permanent', 'subscribe');
+        $event_id = (isset(self::$parameter['id'])) ? self::$parameter['id'] : null;
+
+        $available_links = array('detail', 'ical', 'map', 'permanent', 'subscribe');
         foreach ($available_links as $link) {
             self::$parameter['link'][$link]['target'] = '_self';
             switch ($link) {
@@ -185,16 +163,20 @@ class Event extends Basic
                             // use the submitted URL
                             $url = self::$parameter['redirect'];
                         }
+                        // submit no PID but the CMD identifier and the ID of the event
+                        self::$parameter['link'][$link]['url'] = sprintf('%s%s%s', $url, strpos($url, '?') ? '&' : '?',
+                            http_build_query(array(
+                                'cmd' => 'event',
+                                'id' => self::$parameter['id']
+                            )));
                     }
                     else {
                         // use the route to event ID
-                        $url = FRAMEWORK_URL."/event/id/".self::$parameter['id']."/view/detail";
+                        self::$parameter['link'][$link]['url'] = FRAMEWORK_URL."/event/id/".self::$parameter['id']."/view/detail?pid=".$this->getParameterID();
                     }
-                    self::$parameter['link'][$link]['url'] = sprintf('%s%s%s', $url, strpos($url, '?') ? '&' : '?',
-                        http_build_query(array('pid' => $this->getParameterID())));
                     break;
                 case 'ical':
-                    self::$parameter['link'][$link]['active'] = in_array($link, $links);
+                    self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
                     self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/ical/$event_id" : null;
                     break;
                 case 'map':
@@ -202,13 +184,13 @@ class Event extends Basic
                     // the url for the map will be set within the template
                     self::$parameter['link'][$link]['url'] = null;
                     break;
-                case 'perma':
                 case 'permanent':
-                    self::$parameter['link']['permanent']['active'] = in_array($link, $links);
-                    self::$parameter['link']['permanent']['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/id/$event_id" : null;
+                    self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
+                    self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/perma/id/$event_id" : null;
+                    self::$parameter['link'][$link]['target'] = '_top';
                     break;
                 case 'subscribe':
-                    self::$parameter['link'][$link]['active'] = in_array($link, $links);
+                    self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
                     self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/subscribe/$event_id?pid=".$this->getParameterID() : null;
                     break;
                 default:
@@ -217,6 +199,52 @@ class Event extends Basic
         }
     }
 
+    /**
+     * Check the parameter for the QR-Code, get the URL and the size of the PNG
+     *
+     * @return boolean
+     */
+    protected function checkParameterQRCode()
+    {
+        $use_qrcode = (isset(self::$parameter['qrcode']));
+
+        unset(self::$parameter['qrcode']);
+
+        self::$parameter['qrcode'] = array(
+            'active' => false,
+            'url' => null,
+            'width' => 0,
+            'height' => 0
+        );
+
+        if ($use_qrcode) {
+            if (!self::$config['qrcode']['active']) {
+                $this->setMessage('Using qrcode[] is not enabled in config.event.json!');
+                return false;
+            }
+            $subdir = (self::$config['qrcode']['settings']['content'] == 'ical') ? 'ical' : 'link';
+            if (file_exists(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path'][$subdir]."/".self::$parameter['id'].".png")) {
+                list($width, $height) = getimagesize(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path'][$subdir]."/".self::$parameter['id'].".png");
+            }
+            else {
+                $this->setMessage('The QR-Code file does not exists, please rebuild all QR-Code files.');
+                return false;
+            }
+            self::$parameter['qrcode'] = array(
+                'active' => true,
+                'url' => FRAMEWORK_URL.'/event/qrcode/'.self::$parameter['id'],
+                'width' => $width,
+                'height' => $height
+            );
+        }
+        return true;
+    }
+
+    /**
+     * Will be called from the action handler in class \Action
+     *
+     * @param Application $app
+     */
     public function exec(Application $app)
     {
         $this->initParameters($app);
@@ -229,5 +257,49 @@ class Event extends Basic
             return $Message->render('Missing a second parameter corresponding to the mode <i>item</i>');
         }
     }
+
+    /**
+     * Controller to process the Event with the given ID
+     * Route: /event/id/{event_id}
+     * Route: /event/id/{event_id}/view/{view}
+     *
+     * @param Application $app
+     * @param integer $event_id
+     * @return string event dialog
+     */
+    public function ControllerSelectID(Application $app, $event_id, $view='detail')
+    {
+        $this->initParameters($app);
+        self::$parameter['view'] = $view;
+        self::$parameter['id'] = $event_id;
+        return $this->selectID($event_id, $view);
+    }
+
+    /**
+     * Controller to process the permanent link for the given Event ID
+     * Route: /event/perma/id/{event_id}
+     *
+     * @param Application $app
+     * @param integer $event_id
+     * @throws \Exception
+     */
+    public function ControllerSelectPermaLinkID(Application $app, $event_id)
+    {
+        // init parent and class
+        $this->initParameters($app, -1, $event_id);
+        if (isset(self::$config['permalink']['cms']['url']) && !empty(self::$config['permalink']['cms']['url'])) {
+            $redirect = sprintf('%s%s%s', self::$config['permalink']['cms']['url'], strpos(self::$config['permalink']['cms']['url'], '?') ? '&' : '?',
+                http_build_query(array(
+                    'cmd' => 'event',
+                    'id' => $event_id
+                )));
+            // redirect - no direct call
+            return $this->app->redirect($redirect);
+        }
+        else {
+            throw new \Exception("Please specifiy a permalink URL for the CMS in config.event.json.");
+        }
+    }
+
 
 }

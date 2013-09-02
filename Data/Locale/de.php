@@ -235,7 +235,7 @@ return array(
     'The record with the ID %id% was successfull updated.'
         => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
     'The view <b>%view%</b> does not exists!'
-        => 'Die <i>view</i> <b>%view%</b> existiert nicht!',
+        => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
         => 'Es wurde keine kitEvent Installation in dem übergeordeneten Content Management System gefunden!',
     'Type'
@@ -243,5 +243,7 @@ return array(
 
     'unlimited'
         => 'unbegrenzt',
+    'Using qrcode[] is not enabled in config.event.json!'
+        => 'qrcode[] ist nicht in der config.event.json freigegeben!',
 
 );
