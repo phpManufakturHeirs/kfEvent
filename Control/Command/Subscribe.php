@@ -86,10 +86,32 @@ class Subscribe extends Basic
             'required' => true,
             'label' => 'Last name',
             'data' => isset($subscribe['person_last_name']) ? $subscribe['person_last_name'] : ''
+        ))
+        ->add('email', 'email', array(
+            'required' => true,
+            'label' => 'E-Mail',
+            'data' => isset($subscribe['email']) ? $subscribe['email'] : ''
         ));
 
         return $form;
 
+    }
+
+    public function check(Application $app)
+    {
+        $this->initParameters($app);
+
+        $subscribe_fields = $this->getFormFields();
+        // get the form
+        $form = $subscribe_fields->getForm();
+
+        $form->bind($this->app['request']);
+        if ($form->isValid()) {
+            $event = $form->getData();
+            print_r($event);
+        }
+
+        return 'ok';
     }
 
     /**

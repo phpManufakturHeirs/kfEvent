@@ -203,10 +203,14 @@ return array(
         => 'Veranstaltungsgruppe auswählen',
     'Short description'
         => 'Kurzbeschreibung',
+    'Show detailed information'
+        => 'Detailierte Informationen anzeigen',
     'Skipped kitEvent ID %event_id%: No valid value in %field%'
         => 'kitEvent ID <b>%event_id%</b> übersprungen: Ungültiger Wert in Feld %field%',
     'Start import from kitEvent'
         => 'Import aus kitEvent starten',
+    'Subscribe to event'
+        => 'Zu der Veranstaltung anmelden',
 
     'Text - 256 characters'
         => 'Text - max. 256 Zeichen',

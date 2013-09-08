@@ -15,9 +15,15 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% endblock stylesheet %}
 {% block content %}
+<div class="contact_form">
+  <form action="{{ FRAMEWORK_URL }}/event/subscribe/check" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
 
-<form action="{{ FRAMEWORK_URL }}/admin/event/edit" method="post" {{ form_enctype(form) }}>
-  {{ form_widget(form) }}
-  {{ 'MALE'|trans }}
-</form>
+    <div>
+      <label for="submit">&nbsp;</label>
+      <input type="submit" name="submit" />
+    </div>
+    <div class="clear"></div>  
+  </form>
+</div>  
 {% endblock %}

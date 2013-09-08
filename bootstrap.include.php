@@ -20,7 +20,11 @@ $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale/Custom');
 
 // setup routine for kfEvent
-$app->match('/admin/event/setup', 'phpManufaktur\Event\Data\Setup\Setup::exec');
+$app->get('/admin/event/setup',
+    'phpManufaktur\Event\Data\Setup\Setup::exec');
+// uninstall routine for kfEvent
+$app->get('/admin/event/uninstall',
+    'phpManufaktur\Event\Data\Setup\Uninstall::exec');
 
 /**
  * Use the EmbeddedAdministration feature to connect the extension with the CMS
@@ -183,5 +187,8 @@ $app->get('/event/ical/{event_id}',
 $app->get('/event/qrcode/{event_id}',
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerGetQRCodeFile');
 
+// subscribe to a event
 $app->get('/event/subscribe/{event_id}',
     'phpManufaktur\Event\Control\Command\Subscribe::exec');
+$app->post('/event/subscribe/check',
+    'phpManufaktur\Event\Control\Command\Subscribe::check');
