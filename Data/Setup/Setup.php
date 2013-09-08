@@ -23,49 +23,49 @@ use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\ParticipantTag;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Event\Data\Event\Images;
+use phpManufaktur\Event\Data\Event\Subscription;
 
 class Setup
 {
 
-    protected $app = null;
-
     public function exec(Application $app)
     {
-        $this->app = $app;
-
         try {
-            $Group = new Group($this->app);
+            $Group = new Group($app);
             $Group->createTable();
 
-            $Event = new Event($this->app);
+            $Event = new Event($app);
             $Event->createTable();
 
-            $Description = new Description($this->app);
+            $Description = new Description($app);
             $Description->createTable();
 
-            $ExtraType = new ExtraType($this->app);
+            $ExtraType = new ExtraType($app);
             $ExtraType->createTable();
 
-            $ExtraGroup = new ExtraGroup($this->app);
+            $ExtraGroup = new ExtraGroup($app);
             $ExtraGroup->createTable();
 
-            $Extra = new Extra($this->app);
+            $Extra = new Extra($app);
             $Extra->createTable();
 
-            $OrganizerTag = new OrganizerTag($this->app);
+            $OrganizerTag = new OrganizerTag($app);
             $OrganizerTag->createTable();
 
-            $LocationTag = new LocationTag($this->app);
+            $LocationTag = new LocationTag($app);
             $LocationTag->createTable();
 
-            $ParticipantTag = new ParticipantTag($this->app);
+            $ParticipantTag = new ParticipantTag($app);
             $ParticipantTag->createTable();
 
-            $Images = new Images($this->app);
+            $Images = new Images($app);
             $Images->createTable();
 
+            $Subscription = new Subscription($app);
+            $Subscription->createTable();
+
             // setup kit_framework_event as Add-on in the CMS
-            $admin_tool = new InstallAdminTool($this->app);
+            $admin_tool = new InstallAdminTool($app);
             $admin_tool->exec(MANUFAKTUR_PATH.'/Event/extension.json', '/event/cms');
 
             Return "The setup was successful";
