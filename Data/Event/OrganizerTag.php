@@ -40,7 +40,7 @@ class OrganizerTag
         `timestamp` TIMESTAMP,
         PRIMARY KEY (`id`),
         INDEX (`tag_name`, `group_id`)
-        
+
         )
     COMMENT='The table to assign extra fields to event groups'
     ENGINE=InnoDB
@@ -56,6 +56,26 @@ EOD;
         }
     }
 
+    /**
+     * Delete table - switching check for foreign keys off before executing
+     *
+     * @throws \Exception
+     */
+    public function dropTable()
+    {
+        try {
+            $table = self::$table_name;
+            $SQL = <<<EOD
+    SET foreign_key_checks = 0;
+    DROP TABLE IF EXISTS `$table`;
+    SET foreign_key_checks = 1;
+EOD;
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo("Drop table 'event_organizer_tag'", array(__METHOD__, __LINE__));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
     /**
      * Insert a new record
      *
