@@ -13,6 +13,8 @@ namespace phpManufaktur\Event\Control\Command;
 
 use Silex\Application;
 use phpManufaktur\Basic\Control\kitCommand\Basic;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class Action extends Basic
 {
@@ -51,7 +53,8 @@ class Action extends Basic
             }
             if (!isset($parameters['action'])) {
                 // there is no 'mode' parameter set, so we show the "Welcome" page
-                return $this->createIFrame('/basic/help/event/welcome');
+                $subRequest = Request::create('/basic/help/event/welcome', 'GET');
+                return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
 
             switch ($parameters['action']) {
