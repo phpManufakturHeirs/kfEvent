@@ -218,6 +218,10 @@ return array(
         => 'Text - HTML formatiert',
     'Text - plain'
         => 'Text - unformatiert',
+    'The contact record was successfull updated.'
+        => 'Der Adressdatensatz wurde aktualisiert.',
+    'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
+        => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
     'The event list is empty, please create a event!'
         => 'Es existieren keine aktiven Veranstaltungen, legen Sie eine neue Versanstaltung an.',
     'The field list is empty, please define a extra field!'
@@ -238,6 +242,8 @@ return array(
         => 'Der Datensatz mit der ID %id% wurde erfolgreich eingefügt.',
     'The record with the ID %id% was successfull updated.'
         => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
+    'The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.'
+        => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
     'The view <b>%view%</b> does not exists!'
         => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
@@ -249,5 +255,8 @@ return array(
         => 'unbegrenzt',
     'Using qrcode[] is not enabled in config.event.json!'
         => 'qrcode[] ist nicht in der config.event.json freigegeben!',
+
+    'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
+        => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
 
 );

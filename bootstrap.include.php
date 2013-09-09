@@ -188,7 +188,7 @@ $app->get('/event/qrcode/{event_id}',
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerGetQRCodeFile');
 
 // subscribe to a event
-$app->get('/event/subscribe/{event_id}',
+$app->get('/event/subscribe/id/{event_id}/redirect/{redirect}',
     'phpManufaktur\Event\Control\Command\Subscribe::exec');
 $app->post('/event/subscribe/check',
     'phpManufaktur\Event\Control\Command\Subscribe::check');

@@ -15,15 +15,16 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% endblock stylesheet %}
 {% block content %}
-<div class="contact_form">
-  <form action="{{ FRAMEWORK_URL }}/event/subscribe/check" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+  {{ parent() }}
+  <div class="contact_form">
+    <form action="{{ FRAMEWORK_URL }}/event/subscribe/check?pid={{ basic.pid }}" method="post" {{ form_enctype(form) }}>
+      {{ form_widget(form) }}
 
-    <div>
-      <label for="submit">&nbsp;</label>
-      <input type="submit" name="submit" />
-    </div>
-    <div class="clear"></div>  
-  </form>
-</div>  
+      <div>
+        <label for="submit">&nbsp;</label>
+        <input type="submit" name="submit" />
+      </div>
+      <div class="clear"></div>  
+    </form>
+  </div>  
 {% endblock %}

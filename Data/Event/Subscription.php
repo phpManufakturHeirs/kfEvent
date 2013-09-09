@@ -54,6 +54,7 @@ class Subscription
         `subscription_timestamp` TIMESTAMP,
         PRIMARY KEY (`subscription_id`),
         INDEX (`event_id`, `contact_id`, `message_id`),
+        UNIQUE (`subscription_guid`),
         CONSTRAINT
             FOREIGN KEY (`event_id`)
             REFERENCES $table_event (`event_id`)
@@ -161,6 +162,36 @@ EOD;
                 $subscription[] = $record;
             }
             return $subscription;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Check if the contact ID is already subscribed for the given event ID.
+     * Return the subscription ID or FALSE if not subscribed.
+     *
+     * @param integer $event_id
+     * @param integer $contact_id
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
+    public function isAlreadySubscribedForEvent($event_id, $contact_id)
+    {
+        try {
+            $SQL = "SELECT `subscription_id` FROM `".self::$table_name."` WHERE `event_id`='$event_id' AND `contact_id`='$contact_id'";
+            $subscription_id = $this->app['db']->fetchColumn($SQL);
+            return ($subscription_id > 0) ? $subscription_id : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function select($subscription_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `subscription_id`='$subscription_id'";
+            return $this->app['db']->fetchAssoc($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

@@ -191,7 +191,9 @@ class Event extends Basic
                     break;
                 case 'subscribe':
                     self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
-                    self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/subscribe/$event_id?pid=".$this->getParameterID() : null;
+                    $view = isset(self::$parameter['view']) ? strtolower(self::$parameter['view']) : 'small';
+                    $route = base64_encode('/event/id/'.self::$parameter['id'].'/view/'.$view);
+                    self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/subscribe/id/$event_id/redirect/$route?pid=".$this->getParameterID() : null;
                     break;
                 default:
                     throw new \Exception("The link $link is not defined!");
@@ -269,7 +271,7 @@ class Event extends Basic
      */
     public function ControllerSelectID(Application $app, $event_id, $view='detail')
     {
-        $this->initParameters($app);
+        $this->initParameters($app, -1, $event_id);
         self::$parameter['view'] = $view;
         self::$parameter['id'] = $event_id;
         return $this->selectID($event_id, $view);

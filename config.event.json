@@ -5,6 +5,24 @@
     "event": {
         "microdata": {
             "offer_count_unlimited": 20
+        },
+        "subscription": {
+            "confirm": {
+                "double_opt_in": false,
+                "mail_to": [
+                    "contact",
+                    "provider",
+                    "organizer"
+                ]
+            }
+        }
+    },
+    "contact": {
+        "confirm": {
+            "double_opt_in": true,
+            "mail_to": [
+                "contact"
+            ]
         }
     },
     "permalink": {
