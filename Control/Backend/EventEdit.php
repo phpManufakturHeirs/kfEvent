@@ -160,9 +160,14 @@ class EventEdit extends Backend {
             'label' => 'Participants maximum',
             'required' => false
         ))
-        ->add('event_participants_total', 'hidden', array(
-            'data' => $event['event_participants_total'],
-            'label' => 'Participants total'
+        ->add('event_participants_confirmed', 'hidden', array(
+            'data' => $event['participants']['confirmed'],
+        ))
+        ->add('event_participants_pending', 'hidden', array(
+            'data' => $event['participants']['pending'],
+        ))
+        ->add('event_participants_canceled', 'hidden', array(
+            'data' => $event['participants']['canceled'],
         ))
         // Event date
         ->add('event_date_from', 'text', array(
