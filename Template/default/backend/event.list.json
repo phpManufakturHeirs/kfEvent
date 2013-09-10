@@ -5,7 +5,7 @@
     "event_date_to",
     "description_title",
     "event_participants_max",
-    "event_participants_total",
+    "event_participants_confirmed",
     "event_status"
   ],
   "list":{

@@ -86,8 +86,16 @@
 
           {{ form_row(form.event_participants_max) }}
           <div>
-            <label>{{ 'Participants total'|trans }}</label>
-            <div class="value">{{ form.event_participants_total.vars.value }}</div>    
+            <label>{{ 'Participants confirmed'|trans }}</label>
+            <div class="value">{{ form.event_participants_confirmed.vars.value }}</div>    
+          </div>
+          <div>
+            <label>{{ 'Participants pending'|trans }}</label>
+            <div class="value">{{ form.event_participants_pending.vars.value }}</div>    
+          </div>
+          <div>
+            <label>{{ 'Participants canceled'|trans }}</label>
+            <div class="value">{{ form.event_participants_canceled.vars.value }}</div>    
           </div>
           
           {% if images|length > 0 %}

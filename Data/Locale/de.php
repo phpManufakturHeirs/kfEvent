@@ -218,6 +218,10 @@ return array(
         => 'Text - HTML formatiert',
     'Text - plain'
         => 'Text - unformatiert',
+    'Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!'
+        => 'Vielen Dank für Ihre Anmeldung. Wir haben Ihnen eine E-Mail geschickt, bitte benutzen Sie den enthaltenen Bestätigungslink um Ihre E-Mail Adresse zu bestätigen und die Anmeldung zu aktivieren.',
+    'Thank you for your subscription, we have send you a receipt at your email address.'
+        => 'Vielen Dank für Ihre Anmeldung, wir haben Ihnen eine Bestätigung an Ihre E-Mail Adresse gesendet.',
     'The contact record was successfull updated.'
         => 'Der Adressdatensatz wurde aktualisiert.',
     'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'

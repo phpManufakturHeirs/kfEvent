@@ -19,6 +19,7 @@ use phpManufaktur\Event\Data\Event\Event;
 use phpManufaktur\Contact\Data\Contact\Message as MessageData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Contact\Data\Contact\Communication;
 
 class Subscribe extends Basic
 {
@@ -32,6 +33,7 @@ class Subscribe extends Basic
     protected $SubscriptionData = null;
     protected $EventData = null;
     protected static $config = null;
+    protected $CommunicationData = null;
 
     protected function initParameters(Application $app, $parameter_id=-1)
     {
@@ -52,6 +54,7 @@ class Subscribe extends Basic
         $this->MessageData = new MessageData($app);
         $this->ContactControl = new ContactControl($app);
         $this->SubscriptionData = new Subscription($app);
+        $this->CommunicationData = new Communication($app);
         $this->EventData = new Event($app);
 
         self::$config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
@@ -121,6 +124,40 @@ class Subscribe extends Basic
 
         return $form;
 
+    }
+
+    protected function getEMailArrayFromTypeArray($event, $contact, $type_array)
+    {
+        $to_array = array();
+        foreach ($type_array as $target) {
+            switch ($target) {
+                case 'provider':
+                    $to_array[] = SERVER_EMAIL_ADDRESS; break;
+                case 'organizer':
+                    if ($event['contact']['organizer']['contact']['contact_type'] == 'COMPANY') {
+                        $communication = $this->CommunicationData->select($event['contact']['organizer']['company'][0]['company_primary_email_id']);
+                        $to_array[] = $communication['communication_value'];
+                    }
+                    else {
+                        $communication = $this->CommunicationData->select($event['contact']['organizer']['person'][0]['person_primary_email_id']);
+                        $to_array[] = $communication['communication_value'];
+                    }
+                    break;
+                case 'location':
+                    if ($event['contact']['location']['contact']['contact_type'] == 'COMPANY') {
+                        $communication = $this->CommunicationData->select($event['contact']['location']['company'][0]['company_primary_email_id']);
+                        $to_array[] = $communication['communication_value'];
+                    }
+                    else {
+                        $communication = $this->CommunicationData->select($event['contact']['location']['person'][0]['person_primary_email_id']);
+                        $to_array[] = $communication['communication_value'];
+                    }
+                    break;
+                case 'contact':
+                    $to_array[] = $contact['contact']['contact_login']; break;
+            }
+        }
+        return $to_array;
     }
 
     public function check(Application $app)
@@ -252,11 +289,12 @@ class Subscribe extends Basic
                     ));
             }
 
+            // get the event data
+            $event = $this->EventData->selectEvent(self::$event_id);
+
             // check message
             $message_id = -1;
             if (!empty($subscribe['message'])) {
-                // get the event data
-                $event = $this->EventData->selectEvent(self::$event_id);
                 // insert the message
                 $data = array(
                     'contact_id' => self::$contact_id,
@@ -271,14 +309,15 @@ class Subscribe extends Basic
             }
 
             // insert subscription
+            $guid = $this->app['utils']->createGUID();
             $data = array(
                 'event_id' => self::$event_id,
                 'contact_id' => self::$contact_id,
                 'message_id' => $message_id,
                 'subscription_participants' => 1, // only one person at the moment!
                 'subscription_date' => date('Y-m-d H:i:s'),
-                'subscription_guid' => $this->app['utils']->createGUID(),
-                'subscription_status' => self::$config['event']['subscription']['confirm']['double_opt_in'] ? 'PENDING' : 'ACTIVE'
+                'subscription_guid' => $guid,
+                'subscription_status' => self::$config['event']['subscription']['confirm']['double_opt_in'] ? 'PENDING' : 'CONFIRMED'
             );
 
             $subscription_id = -1;
@@ -288,7 +327,39 @@ class Subscribe extends Basic
             if (($new_contact && in_array('contact', self::$config['contact']['confirm']['mail_to'])) ||
                 (in_array('contact', self::$config['event']['subscription']['confirm']['mail_to']))) {
                 // send a mail to the contact
-echo "send mail to contact<br>";
+                // get the email body
+                $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                    '@phpManufaktur/Event/Template', 'command/mail/contact/subscribe.confirm.twig', $this->getPreferredTemplateStyle()),
+                    array(
+                        'basic' => $this->getBasicSettings(),
+                        'contact' => $contact,
+                        'event' => $event,
+                        'confirm' => array(
+                            'email' => ($new_contact && self::$config['contact']['confirm']['double_opt_in']),
+                            'subscription' => self::$config['event']['subscription']['confirm']['double_opt_in']
+                        ),
+                        'link' => array(
+                            'confirm' => FRAMEWORK_URL.'/event/confirm/'.$guid,
+                            'event' => FRAMEWORK_URL.'/event/perma/id/'.self::$event_id
+                        )
+                    ));
+                // create the message
+                $message = \Swift_Message::newInstance()
+                ->setSubject($event['description_title'])
+                ->setFrom(array(SERVER_EMAIL_ADDRESS))
+                ->setTo(array($contact['contact']['contact_login']))
+                ->setBody($body)
+                ->setContentType('text/html');
+                // send the message
+                $this->app['mailer']->send($message);
+                if (($new_contact && self::$config['contact']['confirm']['double_opt_in']) ||
+                    self::$config['event']['subscription']['confirm']['double_opt_in']) {
+                    $this->setMessage('Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!');
+                }
+                else {
+                    // no confirmation needed
+                    $this->setMessage('Thank you for your subscription, we have send you a receipt at your email address.');
+                }
             }
 
             if ($new_contact && ($contact['contact']['contact_status'] == 'ACTIVE')) {
@@ -296,7 +367,25 @@ echo "send mail to contact<br>";
                 unset($check_array['contact']);
                 if (!empty($check_array)) {
                     // send a information about the new contact to the members in $check_array
-echo "send info about new contact to ".implode(',', $check_array)."<br>";
+                    $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                        '@phpManufaktur/Event/Template', 'command/mail/distribution/new.contact.twig', $this->getPreferredTemplateStyle()),
+                        array(
+                            'basic' => $this->getBasicSettings(),
+                            'contact' => $contact,
+                            'event' => $event
+                        ));
+                    // create the message
+                    $to_array = $this->getEMailArrayFromTypeArray($event, $contact, $check_array);
+                    if (!empty($to_array)) {
+                        $message = \Swift_Message::newInstance()
+                        ->setSubject($contact['contact']['contact_login'])
+                        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+                        ->setTo($to_array)
+                        ->setBody($body)
+                        ->setContentType('text/html');
+                        // send the message
+                        $this->app['mailer']->send($message);
+                    }
                 }
             }
 
@@ -306,8 +395,26 @@ echo "send info about new contact to ".implode(',', $check_array)."<br>";
                 unset($check_array['contact']);
                 if (!empty($check_array)) {
                     // send a information about the new event subscription to the members in $check_array
-echo "send info about event subscription to ".implode(',', $check_array)."<br>";
-
+                    $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                        '@phpManufaktur/Event/Template', 'command/mail/distribution/subscribe.event.twig',
+                        $this->getPreferredTemplateStyle()),
+                        array(
+                            'basic' => $this->getBasicSettings(),
+                            'contact' => $contact,
+                            'event' => $event
+                        ));
+                    // create the message
+                    $to_array = $this->getEMailArrayFromTypeArray($event, $contact, $check_array);
+                    if (!empty($to_array)) {
+                        $message = \Swift_Message::newInstance()
+                        ->setSubject($contact['contact']['contact_login'])
+                        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+                        ->setTo($to_array)
+                        ->setBody($body)
+                        ->setContentType('text/html');
+                        // send the message
+                        $this->app['mailer']->send($message);
+                    }
                 }
             }
 

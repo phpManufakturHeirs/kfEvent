@@ -19,8 +19,11 @@
     },
     "contact": {
         "confirm": {
-            "double_opt_in": true,
+            "double_opt_in": false,
             "mail_to": [
+                "provider",
+                "organizer",
+                "location",
                 "contact"
             ]
         }

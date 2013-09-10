@@ -148,20 +148,21 @@ EOD;
      * @throws \Exception
      * @return multitype:multitype:unknown
      */
-    public function selectByEventID($event_id)
+    public function selectByEventID($event_id, $status='CONFIRMED', $status_operator='=')
     {
         try {
-            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `event_id`='$event_id'";
-            $results = $this->app['db']->fetchAll($SQL);
-            $subscription = array();
-            foreach ($results as $image) {
-                $record = array();
-                foreach ($image as $key => $value) {
-                    $record[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
-                }
-                $subscription[] = $record;
-            }
-            return $subscription;
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `event_id`='$event_id' AND `subscription_status`$status_operator'$status'";
+            return $this->app['db']->fetchAll($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function countParticipants($event_id, $status='CONFIRMED', $status_operator='=')
+    {
+        try {
+            $SQL = "SELECT COUNT(`subscription_id`) AS `participants` FROM `".self::$table_name."` WHERE `event_id`='$event_id' AND `subscription_status`$status_operator'$status'";
+            return $this->app['db']->fetchColumn($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
