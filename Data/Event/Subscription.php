@@ -188,11 +188,35 @@ EOD;
         }
     }
 
+    /**
+     * Select a record by the subscription ID
+     *
+     * @param integer $subscription_id
+     * @throws \Exception
+     */
     public function select($subscription_id)
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `subscription_id`='$subscription_id'";
             return $this->app['db']->fetchAssoc($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a subscription record by the given GUID
+     *
+     * @param string $guid
+     * @throws \Exception
+     * @return Ambigous <boolean, array> the record on success otherwise false
+     */
+    public function selectGUID($guid)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `subscription_guid`='$subscription_guid'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            return (isset($result['subscription_id'])) ? $result : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

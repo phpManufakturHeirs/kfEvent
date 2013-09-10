@@ -191,6 +191,8 @@ return array(
         => 'Teilnehmer, angemeldet',
     'Pictures'
         => 'Bilder',
+    'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.'
+        => 'Bitte definieren Sie einen permanenten Link in der config.event.json. Ohne diesen Link kann Event keine Verweise auf Veranstaltungen erzeugen oder auf Anfragen von Veranstaltungsteilnehmern reagieren.',
     'Publish from'
         => 'Veröffentlichen ab',
         'Publish to'

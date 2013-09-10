@@ -57,6 +57,16 @@ class Action extends Basic
                 return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
 
+            // get the config file
+            $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+
+            if (!isset($config['permalink']['cms']['url']) || empty($config['permalink']['cms']['url'])) {
+                // missing the URL for permanent links and responses
+                $message = 'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.';
+                $this->setMessage($message);
+                $app['monolog']->addError("kfEvent: $message");
+            }
+
             switch ($parameters['action']) {
                 case 'actual':
                     return 'not implemented';

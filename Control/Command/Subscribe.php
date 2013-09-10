@@ -126,6 +126,15 @@ class Subscribe extends Basic
 
     }
 
+    /**
+     * Rewrite the symbolic tags 'contact', 'provider', 'organizer' and 'location'
+     * to the real email addresses in context to the given event and contact data
+     *
+     * @param array $event event record
+     * @param array $contact contact record
+     * @param array $type_array symbolic tags
+     * @return multitype:string NULL unknown Ambigous <unknown>
+     */
     protected function getEMailArrayFromTypeArray($event, $contact, $type_array)
     {
         $to_array = array();
@@ -160,6 +169,12 @@ class Subscribe extends Basic
         return $to_array;
     }
 
+    /**
+     * Check the form and handle the subscription with all needed steps
+     *
+     * @param Application $app
+     * @throws \Exception
+     */
     public function check(Application $app)
     {
         $this->initParameters($app);
@@ -233,7 +248,7 @@ class Subscribe extends Basic
                 $new_contact = false;
             }
             else {
-                // insert a new contact record
+                // insert a new contact record for the PERSON
                 $contact = array(
                     'contact' => array(
                         'contact_id' => self::$contact_id,
@@ -271,6 +286,7 @@ class Subscribe extends Basic
             // check if the subscriber is already registered
             if (false !== ($subscription_id = $this->SubscriptionData->isAlreadySubscribedForEvent(self::$event_id, self::$contact_id))) {
                 $subscription_data = $this->SubscriptionData->select($subscription_id);
+
                 $this->setMessage('You have already subscribed to this Event at %datetime%, you can not subscribe again.',
                     array('%datetime%' => date($this->app['translator']->trans('DATETIME_FORMAT'))));
                 // return to the calling dialog
@@ -327,7 +343,6 @@ class Subscribe extends Basic
             if (($new_contact && in_array('contact', self::$config['contact']['confirm']['mail_to'])) ||
                 (in_array('contact', self::$config['event']['subscription']['confirm']['mail_to']))) {
                 // send a mail to the contact
-                // get the email body
                 $body = $this->app['twig']->render($this->app['utils']->templateFile(
                     '@phpManufaktur/Event/Template', 'command/mail/contact/subscribe.confirm.twig', $this->getPreferredTemplateStyle()),
                     array(
@@ -339,7 +354,7 @@ class Subscribe extends Basic
                             'subscription' => self::$config['event']['subscription']['confirm']['double_opt_in']
                         ),
                         'link' => array(
-                            'confirm' => FRAMEWORK_URL.'/event/confirm/'.$guid,
+                            'confirm' => FRAMEWORK_URL.'/event/subscribe/guid/'.$guid,
                             'event' => FRAMEWORK_URL.'/event/perma/id/'.self::$event_id
                         )
                     ));

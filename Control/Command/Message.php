@@ -12,6 +12,7 @@
 namespace phpManufaktur\Event\Control\Command;
 
 use phpManufaktur\Basic\Control\kitCommand\Basic;
+use Silex\Application;
 
 class Message extends Basic
 {
@@ -44,6 +45,13 @@ class Message extends Basic
                 'message' => $this->app['translator']->trans($message, $message_params),
                 'title' => $this->app['translator']->trans($title, $title_params)
             ));
+    }
+
+    public function promptMessage(Application $app)
+    {
+        $this->initParameters($app);
+
+        return $this->render($this->getMessage());
     }
 
 }
