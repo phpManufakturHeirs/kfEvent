@@ -29,6 +29,7 @@ class Event
     protected $Contact = null;
     protected $iCal = null;
     protected $QRCode = null;
+    protected $Subscription = null;
 
     /**
      * Constructor
@@ -46,6 +47,7 @@ class Event
         $this->Contact = new Contact($app);
         $this->iCal = new EventICal($app);
         $this->QRCode = new EventQRCode($app);
+        $this->Subscription = new Subscription($app);
     }
 
     /**
@@ -70,7 +72,6 @@ class Event
         `event_publish_to` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
         `event_costs` FLOAT NOT NULL DEFAULT '0',
         `event_participants_max` INT(11) NOT NULL DEFAULT '-1',
-        `event_participants_total` INT(11) NOT NULL DEFAULT '0',
         `event_deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
         `event_status` ENUM('ACTIVE', 'LOCKED', 'DELETED') NOT NULL DEFAULT 'ACTIVE',
         `event_timestamp` TIMESTAMP,
@@ -130,7 +131,6 @@ EOD;
             'event_publish_to' => '0000-00-00 00:00:00',
             'event_costs' => 0,
             'event_participants_max' => -1,
-            'event_participants_total' => 0,
             'event_deadline' => '0000-00-00 00:00:00',
             'event_status' => 'ACTIVE',
             'event_timestamp' => '0000-00-00 00:00:00'
@@ -204,7 +204,7 @@ EOD;
      * @throws \Exception
      * @return array selected records
      */
-    public function selectList($limit_from, $rows_per_page, $select_status=null, $order_by=null, $order_direction='ASC')
+    public function selectList($limit_from, $rows_per_page, $select_status=null, $order_by=null, $order_direction='ASC', $columns)
     {
         try {
             $event = self::$table_name;
@@ -247,7 +247,32 @@ EOD;
                 $SQL .= " $order_direction";
             }
             $SQL .= " LIMIT $limit_from, $rows_per_page";
-            return $this->app['db']->fetchAll($SQL);
+            $result = $this->app['db']->fetchAll($SQL);
+            $events = array();
+            $participants_array = array('event_participants_confirmed', 'event_participants_pending', 'event_participants_canceled');
+            foreach ($result as $evt) {
+                $event = array();
+                foreach ($columns as $column) {
+                    if (in_array($column, $participants_array)) {
+                        switch ($column) {
+                            case 'event_participants_confirmed':
+                                $event[$column] = $this->Subscription->countParticipants($evt['event_id']);
+                                break;
+                            case 'event_participants_pending':
+                                $evt[$column] = $this->Subscription->countParticipants($evt['event_id'], 'PENDING');
+                                break;
+                            case 'event_participants_canceled':
+                                $evt[$column] = $this->Subscription->countParticipants($evt['event_id'], 'CANCELED');
+                                break;
+                        }
+                    }
+                    else {
+                        $event[$column] = $evt[$column];
+                    }
+                }
+                $events[] = $event;
+            }
+            return $events;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
@@ -320,6 +345,12 @@ EOD;
                         $this->app['monolog']->addInfo(str_replace('The record with the ID %id% does not exists!', '%id%', $event['event_location']));
                     }
                 }
+                // check the subscriptions
+                $event['participants'] = array(
+                    'confirmed' => $this->Subscription->countParticipants($event_id),
+                    'pending' => $this->Subscription->countParticipants($event_id, 'PENDING'),
+                    'canceled' => $this->Subscription->countParticipants($event_id, 'CANCELED')
+                );
 
                 // return complete event record
                 return $event;
