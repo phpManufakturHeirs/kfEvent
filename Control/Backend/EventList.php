@@ -106,7 +106,7 @@ class EventList extends Backend {
         }
         $limit_from = ($list_page * $rows_per_page) - $rows_per_page;
 
-        return $this->EventData->selectList($limit_from, $rows_per_page, $select_status, $order_by, $order_direction);
+        return $this->EventData->selectList($limit_from, $rows_per_page, $select_status, $order_by, $order_direction, self::$columns);
     }
 
     /**
@@ -129,10 +129,6 @@ class EventList extends Backend {
         $order_direction = $this->app['request']->get('direction', self::$order_direction);
 
         $events = $this->getList(self::$current_page, self::$rows_per_page, self::$select_status, self::$max_pages, $order_by, $order_direction);
-
-
-        // select all events
-        //$events = $this->EventData->selectAll();
 
         return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.list.twig'),
             array(
