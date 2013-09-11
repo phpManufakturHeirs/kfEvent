@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contact
+ * Event
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
  * @link https://kit2.phpmanufaktur.de/FacebookGallery
@@ -19,13 +19,6 @@ $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
 // scan the /Locale/Custom directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale/Custom');
 
-// setup routine for kfEvent
-$app->get('/admin/event/setup',
-    'phpManufaktur\Event\Data\Setup\Setup::exec');
-// uninstall routine for kfEvent
-$app->get('/admin/event/uninstall',
-    'phpManufaktur\Event\Data\Setup\Uninstall::exec');
-
 /**
  * Use the EmbeddedAdministration feature to connect the extension with the CMS
  *
@@ -36,163 +29,180 @@ $app->get('/event/cms/{cms_information}', function ($cms_information) use ($app)
     return $administration->route('/admin/event/about', $cms_information);
 });
 
-// About dialog
+/**
+ * ADMIN routes
+ */
+
+$app->get('/admin/event/setup',
+    // setup routine for kfEvent
+    'phpManufaktur\Event\Data\Setup\Setup::exec');
+
+$app->get('/admin/event/uninstall',
+    // uninstall routine for kfEvent
+    'phpManufaktur\Event\Data\Setup\Uninstall::exec');
+
 $app->get('/admin/event/about',
+    // About dialog
     'phpManufaktur\Event\Control\Backend\About::exec');
 
-// Contact List
 $app->match('/admin/event/contact/list',
+    // Contact List
     'phpManufaktur\Event\Control\Backend\ContactList::exec');
 $app->match('/admin/event/contact/list/page/{page}',
     'phpManufaktur\Event\Control\Backend\ContactList::exec');
 
-// Contact create and edit
 $app->match('/admin/event/contact/select',
+    // Contact create and edit
     'phpManufaktur\Event\Control\Backend\ContactSelect::exec');
 $app->match('/admin/event/contact/edit/id/{contact_id}',
     'phpManufaktur\Event\Control\Backend\ContactSelect::exec');
 
-// Create and Edit Person contacts
 $app->match('/admin/event/contact/person/edit',
+    // Create and Edit Person contacts
     'phpManufaktur\Event\Control\Backend\ContactPerson::exec');
 $app->match('/admin/event/contact/person/edit/id/{contact_id}',
     'phpManufaktur\Event\Control\Backend\ContactPerson::exec');
 
-// Create and Edit Company contacts
 $app->match('/admin/event/contact/company/edit',
+    // Create and Edit Company contacts
     'phpManufaktur\Event\Control\Backend\ContactCompany::exec');
 $app->match('/admin/event/contact/company/edit/id/{contact_id}',
     'phpManufaktur\Event\Control\Backend\ContactCompany::exec');
 
-// Category List
 $app->match('/admin/event/contact/category/list',
+    // Category List
     'phpManufaktur\Event\Control\Backend\Contact\CategoryList::exec');
 
-// Category Edit
 $app->match('/admin/event/contact/category/edit',
+    // Category Edit
     'phpManufaktur\Event\Control\Backend\Contact\CategoryEdit::exec');
 $app->match('/admin/event/contact/category/edit/id/{category_id}',
     'phpManufaktur\Event\Control\Backend\Contact\CategoryEdit::exec');
 
-// Extra fields List
 $app->match('/admin/event/contact/extra/list',
+    // Extra fields List
     'phpManufaktur\Event\Control\Backend\Contact\ExtraList::exec');
 
-// Create and edit extra fields
 $app->match('/admin/event/contact/extra/edit',
+    // Create and edit extra fields
     'phpManufaktur\Event\Control\Backend\Contact\ExtraEdit::exec');
 $app->match('/admin/event/contact/extra/edit/id/{type_id}',
     'phpManufaktur\Event\Control\Backend\Contact\ExtraEdit::exec');
 
-// Title List
 $app->match('/admin/event/contact/title/list',
+    // Title List
     'phpManufaktur\Event\Control\Backend\Contact\TitleList::exec');
 
-// Title Edit
 $app->match('/admin/event/contact/title/edit',
+    // Title Edit
     'phpManufaktur\Event\Control\Backend\Contact\TitleEdit::exec');
 $app->match('/admin/event/contact/title/edit/id/{title_id}',
     'phpManufaktur\Event\Control\Backend\Contact\TitleEdit::exec');
 
-// Tag List
 $app->match('/admin/event/contact/tag/list',
+    // Tag List
     'phpManufaktur\Event\Control\Backend\Contact\TagList::exec');
 
-// Tag Edit
 $app->match('/admin/event/contact/tag/edit',
+    // Tag Edit
     'phpManufaktur\Event\Control\Backend\Contact\TagEdit::exec');
 $app->match('/admin/event/contact/tag/edit/id/{tag_id}',
     'phpManufaktur\Event\Control\Backend\Contact\TagEdit::exec');
 
-// Event Group List
 $app->match('/admin/event/group/list',
+    // Event Group List
     'phpManufaktur\Event\Control\Backend\GroupList::exec');
 
-// Event Group Edit
 $app->match('/admin/event/group/edit',
+    // Event Group Edit
     'phpManufaktur\Event\Control\Backend\GroupEdit::exec');
 $app->match('/admin/event/group/edit/id/{group_id}',
     'phpManufaktur\Event\Control\Backend\GroupEdit::exec');
 
-// Extra Field List
 $app->match('/admin/event/extra/field/list',
+    // Extra Field List
     'phpManufaktur\Event\Control\Backend\ExtraFieldList::exec');
 
-// Extra Field Edit
 $app->match('/admin/event/extra/field/edit',
+    // Extra Field Edit
     'phpManufaktur\Event\Control\Backend\ExtraFieldEdit::exec');
 $app->match('/admin/event/extra/field/edit/id/{type_id}',
     'phpManufaktur\Event\Control\Backend\ExtraFieldEdit::exec');
 
-// Create or Edit Event
 $app->match('/admin/event/edit',
+    // Create or Edit Event
     'phpManufaktur\Event\Control\Backend\EventEdit::exec');
 $app->match('/admin/event/edit/id/{event_id}',
     'phpManufaktur\Event\Control\Backend\EventEdit::exec');
 
-// add image to event
 $app->match('/admin/event/image/add/event/{event_id}',
+    // add image to event
     'phpManufaktur\Event\Control\Backend\EventEdit::addImage');
-// delete image from event
 $app->match('/admin/event/image/delete/id/{image_id}/event/{event_id}',
+    // delete image from event
     'phpManufaktur\Event\Control\Backend\EventEdit::deleteImage');
 
-// Show the Event List
 $app->match('/admin/event/list',
+    // Show the Event List
     'phpManufaktur\Event\Control\Backend\EventList::exec');
 $app->match('/admin/event/list/page/{page}',
     'phpManufaktur\Event\Control\Backend\EventList::exec');
 
-// Import events from kitEvent
 $app->match('/admin/event/import/kitevent',
+    // Import events from kitEvent
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
 $app->match('/admin/event/import/kitevent/start',
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
 $app->match('/admin/event/import/kitevent/import',
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::import');
 
-// rebuild all iCal files
 $app->get('/admin/event/ical/rebuild',
+    // rebuild all iCal files
     'phpManufaktur\Event\Control\Command\EventICal::ControllerRebuildAllICalFiles');
-// rebuild all QR-Code files
 $app->get('/admin/event/qrcode/rebuild',
+    // rebuild all QR-Code files
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerRebuildAllQRCodeFiles');
 
-// kitCommand: event - create the iFrame and execute route /event/action
+/**
+ * kitCOMMAND routes
+ */
 $app->post('/command/event',
+    // create the iFrame and execute route /event/action
     'phpManufaktur\Event\Control\Command\EventFrame::exec')
-->setOption('info', MANUFAKTUR_PATH.'/Event/command.event.json');
+    ->setOption('info', MANUFAKTUR_PATH.'/Event/command.event.json');
 
-// the default action handler for kitCommand: event
+/**
+ * EVENT routes for the kitCommand
+ */
 $app->get('/event/action',
+    // the default action handler for kitCommand: event
     'phpManufaktur\Event\Control\Command\Action::exec');
 
-// select the given event id
 $app->get('/event/id/{event_id}',
+    // select the given event id
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
-// select the given event id and determine the view mode
 $app->get('/event/id/{event_id}/view/{view}',
+    // select the given event id and determine the view mode
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');
 
-// process permanent link for the given event ID
 $app->get('/event/perma/id/{event_id}',
+    // process permanent link for the given event ID
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectPermaLinkID');
 
-
-// download of a ical file, also from the protected area
 $app->get('/event/ical/{event_id}',
+    // download of a ical file, also from the protected area
     'phpManufaktur\Event\Control\Command\EventICal::ControllerGetICalFile');
 
-// download a qr-code, also from the protected area
 $app->get('/event/qrcode/{event_id}',
+    // download a qr-code, also from the protected area
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerGetQRCodeFile');
 
-// subscribe to a event
 $app->get('/event/subscribe/id/{event_id}/redirect/{redirect}',
+    // subscribe to a event
     'phpManufaktur\Event\Control\Command\Subscribe::exec');
 $app->post('/event/subscribe/check',
     'phpManufaktur\Event\Control\Command\Subscribe::check');
 
-// confirm a subscription
 $app->get('/event/subscribe/guid/{guid}',
+    // confirm a subscription
     'phpManufaktur\Event\Control\Command\ConfirmSubscription::exec');
