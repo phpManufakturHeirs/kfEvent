@@ -220,7 +220,7 @@ class Subscribe extends Basic
                     $subRequest = Request::create($subscribe['redirect'], 'GET', array('pid' => $this->getParameterID()));
                     return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
                 }
-                // check if the contact date are changed
+                // check if the contact data are changed
                 if (($contact['person'][0]['person_gender'] != $subscribe['person_gender']) ||
                     ($contact['person'][0]['person_first_name'] != $subscribe['person_first_name']) ||
                     ($contact['person'][0]['person_last_name'] != $subscribe['person_last_name'])) {
@@ -255,7 +255,7 @@ class Subscribe extends Basic
                         'contact_type' => 'PERSON',
                         'contact_status' => self::$config['contact']['confirm']['double_opt_in'] ? 'PENDING' : 'ACTIVE',
                         'contact_login' => strtolower($subscribe['email']),
-                        'contact_name' => $subscribe['person_last_name'].(!empty($subscribe['person_first_name'])) ? ', '.$subscribe['person_first_name'] : ''
+                        'contact_name' => (!empty($subscribe['person_first_name'])) ? $subscribe['person_first_name'].' '.$subscribe['person_last_name'] : $subscribe['person_last_name'],
                     ),
                     'person' => array(
                         array(

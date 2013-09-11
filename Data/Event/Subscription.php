@@ -214,7 +214,7 @@ EOD;
     public function selectGUID($guid)
     {
         try {
-            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `subscription_guid`='$subscription_guid'";
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `subscription_guid`='$guid'";
             $result = $this->app['db']->fetchAssoc($SQL);
             return (isset($result['subscription_id'])) ? $result : false;
         } catch (\Doctrine\DBAL\DBALException $e) {

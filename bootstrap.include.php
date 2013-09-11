@@ -167,10 +167,6 @@ $app->post('/command/event',
 $app->get('/event/action',
     'phpManufaktur\Event\Control\Command\Action::exec');
 
-// prompt a message set in class BASIC
-$app->get('/event/message',
-    'phpManufaktur\Event\Control\Command\Message::promptMessage');
-
 // select the given event id
 $app->get('/event/id/{event_id}',
     'phpManufaktur\Event\Control\Command\Event::ControllerSelectID');

@@ -42,6 +42,8 @@ return array(
     'by selecting a event group'
         => 'durch Auswahl einer Veranstaltungsgruppe',
 
+    'Checking the GUID identifier'
+        => 'Überprüfung der GUID Kennung',
     'Contact list'
         => 'Kontakte, Übersicht',
     'Costs'
@@ -250,6 +252,8 @@ return array(
         => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
     'The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.'
         => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
+    'The submitted GUID %guid% does not exists.'
+        => 'Die übermittelte GUID %guid% existiert nicht!',
     'The view <b>%view%</b> does not exists!'
         => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
