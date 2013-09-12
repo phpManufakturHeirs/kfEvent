@@ -33,7 +33,8 @@ class Subscribe extends Basic
     protected $SubscriptionData = null;
     protected $EventData = null;
     protected static $config = null;
-    protected $CommunicationData = null;
+    //protected $CommunicationData = null;
+    protected $EventTools = null;
 
     protected function initParameters(Application $app, $parameter_id=-1)
     {
@@ -54,8 +55,9 @@ class Subscribe extends Basic
         $this->MessageData = new MessageData($app);
         $this->ContactControl = new ContactControl($app);
         $this->SubscriptionData = new Subscription($app);
-        $this->CommunicationData = new Communication($app);
+        //$this->CommunicationData = new Communication($app);
         $this->EventData = new Event($app);
+        $this->EventTools = new Tools($app);
 
         self::$config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
     }
@@ -124,49 +126,6 @@ class Subscribe extends Basic
 
         return $form;
 
-    }
-
-    /**
-     * Rewrite the symbolic tags 'contact', 'provider', 'organizer' and 'location'
-     * to the real email addresses in context to the given event and contact data
-     *
-     * @param array $event event record
-     * @param array $contact contact record
-     * @param array $type_array symbolic tags
-     * @return multitype:string NULL unknown Ambigous <unknown>
-     */
-    protected function getEMailArrayFromTypeArray($event, $contact, $type_array)
-    {
-        $to_array = array();
-        foreach ($type_array as $target) {
-            switch ($target) {
-                case 'provider':
-                    $to_array[] = SERVER_EMAIL_ADDRESS; break;
-                case 'organizer':
-                    if ($event['contact']['organizer']['contact']['contact_type'] == 'COMPANY') {
-                        $communication = $this->CommunicationData->select($event['contact']['organizer']['company'][0]['company_primary_email_id']);
-                        $to_array[] = $communication['communication_value'];
-                    }
-                    else {
-                        $communication = $this->CommunicationData->select($event['contact']['organizer']['person'][0]['person_primary_email_id']);
-                        $to_array[] = $communication['communication_value'];
-                    }
-                    break;
-                case 'location':
-                    if ($event['contact']['location']['contact']['contact_type'] == 'COMPANY') {
-                        $communication = $this->CommunicationData->select($event['contact']['location']['company'][0]['company_primary_email_id']);
-                        $to_array[] = $communication['communication_value'];
-                    }
-                    else {
-                        $communication = $this->CommunicationData->select($event['contact']['location']['person'][0]['person_primary_email_id']);
-                        $to_array[] = $communication['communication_value'];
-                    }
-                    break;
-                case 'contact':
-                    $to_array[] = $contact['contact']['contact_login']; break;
-            }
-        }
-        return $to_array;
     }
 
     /**
@@ -333,7 +292,9 @@ class Subscribe extends Basic
                 'subscription_participants' => 1, // only one person at the moment!
                 'subscription_date' => date('Y-m-d H:i:s'),
                 'subscription_guid' => $guid,
-                'subscription_status' => self::$config['event']['subscription']['confirm']['double_opt_in'] ? 'PENDING' : 'CONFIRMED'
+                // if any double_opt_in confirmation is needed the status must be PENDING
+                'subscription_status' => (self::$config['event']['subscription']['confirm']['double_opt_in'] ||
+                    self::$config['contact']['confirm']['double_opt_in']) ? 'PENDING' : 'CONFIRMED',
             );
 
             $subscription_id = -1;
@@ -390,7 +351,7 @@ class Subscribe extends Basic
                             'event' => $event
                         ));
                     // create the message
-                    $to_array = $this->getEMailArrayFromTypeArray($event, $contact, $check_array);
+                    $to_array = $this->EventTools->getEMailArrayFromTypeArray($event, $contact, $check_array);
                     if (!empty($to_array)) {
                         $message = \Swift_Message::newInstance()
                         ->setSubject($contact['contact']['contact_login'])
@@ -419,7 +380,7 @@ class Subscribe extends Basic
                             'event' => $event
                         ));
                     // create the message
-                    $to_array = $this->getEMailArrayFromTypeArray($event, $contact, $check_array);
+                    $to_array = $this->EventTools->getEMailArrayFromTypeArray($event, $contact, $check_array);
                     if (!empty($to_array)) {
                         $message = \Swift_Message::newInstance()
                         ->setSubject($contact['contact']['contact_login'])

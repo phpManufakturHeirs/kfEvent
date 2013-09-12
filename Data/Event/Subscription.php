@@ -222,4 +222,13 @@ EOD;
         }
     }
 
+    public function update($subscription_id, $data)
+    {
+        try {
+            $this->app['db']->update(self::$table_name, $data, array('subscription_id' => $subscription_id));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
 }

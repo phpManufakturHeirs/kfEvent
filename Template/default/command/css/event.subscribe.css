@@ -110,3 +110,7 @@ input#form_city {
   content: none;
 }
 
+.subscribe {
+  margin: 0;
+  padding: 20px 0 20px 0;
+}

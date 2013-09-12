@@ -268,5 +268,6 @@ return array(
 
     'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
         => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
-
+    'Your subscription for the event %event% is already confirmed.'
+        => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
 );
