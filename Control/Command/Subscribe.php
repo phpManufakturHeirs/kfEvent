@@ -143,7 +143,8 @@ class Subscribe extends Basic
         $form = $subscribe_fields->getForm();
 
         $form->bind($this->app['request']);
-        if ($form->isValid()) {
+
+        if ($form->isValid() && (false !== ($recaptcha_check = $app['recaptcha']->isValid()))) {
             $subscribe = $form->getData();
             self::$event_id = $subscribe['event_id'];
             self::$contact_id = $subscribe['contact_id'];
@@ -399,8 +400,15 @@ class Subscribe extends Basic
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
         else {
-            // invalid form submission
-            $this->setMessage('The form is not valid, please check your input and try again!');
+            if (!$recaptcha_check) {
+                // ReCaptcha error
+                $this->setMessage($app['recaptcha']->getLastError());
+            }
+            else {
+                // invalid form submission
+                $this->setMessage('The form is not valid, please check your input and try again!');
+            }
+
             return $this->app['twig']->render($this->app['utils']->templateFile(
                 '@phpManufaktur/Event/Template', 'command/subscribe.twig', $this->getPreferredTemplateStyle()),
                 array(

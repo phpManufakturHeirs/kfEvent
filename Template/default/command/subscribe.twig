@@ -19,7 +19,15 @@
   <div class="contact_form">
     <form action="{{ FRAMEWORK_URL }}/event/subscribe/check?pid={{ basic.pid }}" method="post" {{ form_enctype(form) }}>
       {{ form_widget(form) }}
-
+      
+      {% if recaptcha_is_active(app) %}
+        <div>
+          <label>&nbsp;</label>
+          <div id="recaptcha">
+            {{ recaptcha(app) }}             
+          </div>
+        </div>      
+      {% endif %}
       <div>
         <label for="submit">&nbsp;</label>
         <input type="submit" name="submit" />

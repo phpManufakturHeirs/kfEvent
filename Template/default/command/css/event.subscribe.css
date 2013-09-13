@@ -23,6 +23,7 @@
   background-color: transparent;
   font-weight: bold;
 }
+#recaptcha,
 .event_form input {
   float: left;
   width: 60%;
