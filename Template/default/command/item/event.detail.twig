@@ -56,7 +56,7 @@
         {% if email_id > 0 %}
           {% for email in event.contact.location.communication %}
             {% if email.communication_id == email_id %}
-              <i class="icon-envelope"></i> <a href="mailto:{{ email.communication_value }}">{{ email.communication_value }}</a><br />
+              <i class="icon-envelope"></i>&nbsp;{{ mailhide(app, email.communication_value) }}<br />
             {% endif %}
           {% endfor %}
         {% endif %}

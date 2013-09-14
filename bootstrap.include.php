@@ -166,7 +166,7 @@ $app->get('/admin/event/qrcode/rebuild',
 /**
  * kitCOMMAND routes
  */
-$app->post('/command/event',
+$command->post('/event',
     // create the iFrame and execute route /event/action
     'phpManufaktur\Event\Control\Command\EventFrame::exec')
     ->setOption('info', MANUFAKTUR_PATH.'/Event/command.event.json');
