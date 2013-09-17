@@ -1,15 +1,15 @@
-{# 
+{#
   Event
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if extra.usage == 'framework' %}
-  {% set template_namespace = '@framework' %}
-  {% set template_file = 'body.twig' %}
+  {% set template_namespace = '@phpManufaktur/Basic/Template' %}
+  {% set template_file = 'framework/body.twig' %}
 {% else %}
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
   {% set template_file = 'backend/body.twig' %}
@@ -30,7 +30,7 @@
     {% if message|length > 0 %}
       <div class="message">{{ message }}</div>
     {% endif %}
-          
+
     {% include '@phpManufaktur/Event/Template/default/backend/go.back.twig' with {
       links: {
         0: {
@@ -38,10 +38,10 @@
           text: 'Add category'
         }
       }
-    } only %}  
-      
+    } only %}
+
     {% include '@phpManufaktur/Contact/Template/default/backend/form/list.category.twig' %}
-      
-    
+
+
   </div>
 {% endblock content %}

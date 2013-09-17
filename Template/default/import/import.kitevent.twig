@@ -6,9 +6,9 @@
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
-{% extends getTemplateFile('@framework', 'body.twig') %}
+{% extends getTemplateFile('@phpManufaktur/Basic/Template', 'framework/body.twig') %}
 {% block stylesheet %}
-	{{ parent() }}
+    {{ parent() }}
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/import/css/kitevent.css" media="screen, projection" />
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% endblock %}
@@ -20,9 +20,9 @@
   {% endif %}
 success!
   {% if app.translator.locale == 'de' %}
-    {# german translation #}    
+    {# german translation #}
   {% else %}
     {# english translation #}
   {% endif %}
-    
+
 {% endblock content %}

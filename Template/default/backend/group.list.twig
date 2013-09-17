@@ -1,15 +1,15 @@
-{# 
+{#
   Event
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if usage == 'framework' %}
-  {% set template_namespace = '@framework' %}
-  {% set template_file = 'body.twig' %}
+  {% set template_namespace = '@phpManufaktur/Basic/Template' %}
+  {% set template_file = 'framework/body.twig' %}
 {% else %}
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
   {% set template_file = 'backend/body.twig' %}
@@ -21,22 +21,22 @@
   {% if usage == 'framework' %}
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
   {% endif %}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/group.css" media="screen, projection" />  
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/go.back.css" media="screen, projection" /> 
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/group.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/go.back.css" media="screen, projection" />
 {% endblock stylesheet %}
 
 {% block content %}
   <div id="event_content">
     {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' %}
-      
+
     {% if message|length > 0 %}
       <div class="message">{{ message }}</div>
     {% endif %}
-      
+
     <div id="go_back">
       <span class="go_back_item"><a href="{{ FRAMEWORK_URL }}/admin/event/group/edit?usage={{ usage }}">{{ 'Add group'|trans }}</a></span>
-    </div>  
-      
+    </div>
+
     {% if groups|length > 0 %}
       <table>
         <thead>
@@ -59,11 +59,11 @@
               <td class="group_status">{{ field.group_status }}</td>
             </tr>
             {% set i = i+1 %}
-          {% endfor %}  
+          {% endfor %}
         </tbody>
       </table>
     {% else %}
       <p>{{ 'The group list is empty, please define a group!'|trans }}</p>
-    {% endif %}  
+    {% endif %}
   </div>
 {% endblock content %}

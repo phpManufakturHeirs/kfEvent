@@ -8,8 +8,8 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% if usage == 'framework' %}
-  {% set template_namespace = '@framework' %}
-  {% set template_file = 'body.twig' %}
+  {% set template_namespace = '@phpManufaktur/Basic/Template' %}
+  {% set template_file = 'framework/body.twig' %}
 {% else %}
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
   {% set template_file = 'backend/body.twig' %}
@@ -45,12 +45,12 @@
     {% if message|length > 0 %}
       <div class="message">{{ message }}</div>
     {% endif %}
-      
+
     <div class="event_form">
       <form action="{{ FRAMEWORK_URL }}/admin/event/edit?usage={{ usage }}" method="post" {{ form_enctype(form) }}>
         {{ form_errors(form) }}
         {{ form_row(form._token) }}
-        
+
         <div class="left_column">
           {{ form_row(form.event_id) }}
           <div>
@@ -87,17 +87,17 @@
           {{ form_row(form.event_participants_max) }}
           <div>
             <label>{{ 'Participants confirmed'|trans }}</label>
-            <div class="value">{{ form.event_participants_confirmed.vars.value }}</div>    
+            <div class="value">{{ form.event_participants_confirmed.vars.value }}</div>
           </div>
           <div>
             <label>{{ 'Participants pending'|trans }}</label>
-            <div class="value">{{ form.event_participants_pending.vars.value }}</div>    
+            <div class="value">{{ form.event_participants_pending.vars.value }}</div>
           </div>
           <div>
             <label>{{ 'Participants canceled'|trans }}</label>
-            <div class="value">{{ form.event_participants_canceled.vars.value }}</div>    
+            <div class="value">{{ form.event_participants_canceled.vars.value }}</div>
           </div>
-          
+
           {% if images|length > 0 %}
           <div>
             <label>{{ 'Pictures'|trans }}</label>
@@ -125,31 +125,31 @@
             {% endif %}
           {% endfor %}
         </div>
-          
-        <div class="right_column"> 
+
+        <div class="right_column">
           {{ form_row(form.description_title) }}
           <div>
             {{ form_label(form.description_short) }}
             <div class="value">
               {{ CKEditor(
-                    form.description_short.vars.id, 
-                    form.description_short.vars.full_name, 
-                    form.description_short.vars.value, 
-                    '100%', '100px', 
+                    form.description_short.vars.id,
+                    form.description_short.vars.full_name,
+                    form.description_short.vars.value,
+                    '100%', '100px',
                     MANUFAKTUR_URL ~ '/Event/Template/default/backend/ckeditor.config.simple.js'
-              ) }}  
+              ) }}
             </div>
           </div>
           <div>
             {{ form_label(form.description_long) }}
             <div class="value">
               {{ CKEditor(
-                    form.description_long.vars.id, 
-                    form.description_long.vars.full_name, 
-                    form.description_long.vars.value, 
-                    '100%', '250px', 
+                    form.description_long.vars.id,
+                    form.description_long.vars.full_name,
+                    form.description_long.vars.value,
+                    '100%', '250px',
                     MANUFAKTUR_URL ~ '/Event/Template/default/backend/ckeditor.config.full.js'
-              ) }}  
+              ) }}
             </div>
           </div>
           {% for extra in extra_info %}
@@ -160,17 +160,17 @@
                 {{ form_label(form[extra.name]) }}
                 <div class="value">
                   {{ CKEditor(
-                        form[extra.name].vars.id, 
-                        form[extra.name].vars.full_name, 
-                        form[extra.name].vars.value, 
-                        '100%', '250px', 
+                        form[extra.name].vars.id,
+                        form[extra.name].vars.full_name,
+                        form[extra.name].vars.value,
+                        '100%', '250px',
                         MANUFAKTUR_URL ~ '/Event/Template/default/backend/ckeditor.config.full.js'
-                  ) }}  
+                  ) }}
                 </div>
               </div>
             {% endif %}
           {% endfor %}
-          
+
           {#{ form_rest(form) }#}
           <div>
             <label for="submit">&nbsp;</label>
