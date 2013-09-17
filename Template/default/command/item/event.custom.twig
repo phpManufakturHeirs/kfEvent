@@ -2,7 +2,7 @@
   {% include '@phpManufaktur/Event/Template/default/command/item/event.schema.org.twig' %}
   <h2>CUSTOM {{ event.description_title }}</h2>
   <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
-  <div class="event view description short">{{ parse_command(app, event.description_short) }}</div>
+  <div class="event view description short">{{ kitCommandParser(event.description_short) }}</div>
 
   <div class="table">
     <div class="row">

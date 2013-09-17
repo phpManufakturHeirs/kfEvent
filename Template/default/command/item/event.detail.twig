@@ -1,9 +1,9 @@
 <div class="event item container">
   {% include '@phpManufaktur/Event/Template/default/command/item/event.schema.org.twig' %}
 
-  <h2>DETAIL {{ event.description_title }}</h2>    
+  <h2>DETAIL {{ event.description_title }}</h2>
   <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
-  <div class="event view description long">{{ parse_command(app, event.description_long) }}</div>
+  <div class="event view description long">{{ kitCommandParser(event.description_long) }}</div>
 
   <div class="table">
 
@@ -41,7 +41,7 @@
         {% set address = event.contact.location.address.0 %}
         {% if address.address_street|length > 0 %}{{ address.address_street }}<br />{% endif %}
         {% if address.address_zip|length > 0 %}{{ address.address_zip }} {% endif %}
-        {% if address.address_city|length > 0 %}{{ address.address_city }}<br />{% endif %} 
+        {% if address.address_city|length > 0 %}{{ address.address_city }}<br />{% endif %}
 
         {# get the primary phone #}
         {% if phone_id > 0 %}
@@ -56,7 +56,7 @@
         {% if email_id > 0 %}
           {% for email in event.contact.location.communication %}
             {% if email.communication_id == email_id %}
-              <i class="icon-envelope"></i>&nbsp;{{ mailhide(app, email.communication_value) }}<br />
+              <i class="icon-envelope"></i>&nbsp;{{ mailHide(email.communication_value) }}<br />
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -67,13 +67,13 @@
           {% if ((url.communication_type == 'URL') and (isset_url == 0)) %}
             {% set isset_url = 1 %}
             <i class="icon-globe"></i> <a href="{{ url.communication_value }}" target="_blank">{{ url.communication_value }}</a><br />
-          {% endif %}    
+          {% endif %}
         {% endfor %}
 
-        {# link to Google Map #}    
+        {# link to Google Map #}
         {% if parameter.link.map.active and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
             {% set location = address.address_street ~ ',' ~ address.address_zip ~ ',' ~ address.address_city %}
-            <i class="icon-map-marker"></i> <a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a><br />  
+            <i class="icon-map-marker"></i> <a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a><br />
         {% endif %}
 
         {# link to iCal file #}
@@ -97,7 +97,7 @@
 
     </div>
     {# close table here, because colspan is not possible for table-cell! (the map need two cells) #}
-  </div>  
+  </div>
 
   <div class="table">
     <div class="row">

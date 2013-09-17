@@ -15,7 +15,7 @@
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
   {% set template_file = 'backend/body.twig' %}
 {% endif %}
-{% extends template_file(template_namespace, template_file) %}
+{% extends getTemplateFile(template_namespace, template_file) %}
 {% block title %}{{ 'Contact list'|trans }}{% endblock %}
 {% block stylesheet %}
   {{ parent() }}

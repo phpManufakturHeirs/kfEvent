@@ -14,7 +14,7 @@
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
   {% set template_file = 'backend/body.twig' %}
 {% endif %}
-{% extends template_file(template_namespace, template_file) %}
+{% extends getTemplateFile(template_namespace, template_file) %}
 {% block title %}{{ 'Event - Create or edit an event'|trans }}{% endblock %}
   
 {% block stylesheet %}
