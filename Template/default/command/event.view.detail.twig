@@ -8,8 +8,8 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.body.twig') %}
-{% block title %}{{ event.description_title }}{% endblock %}
-{% block description %}{{ event.description_short }}{% endblock %}
+{% block title %}{{ event.description_title|striptags|escape }}{% endblock %}
+{% block description %}{{ event.description_short|striptags|escape }}{% endblock %}
 {% block stylesheet %}
   {{ parent() }}
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.view.css" media="screen, projection" />
