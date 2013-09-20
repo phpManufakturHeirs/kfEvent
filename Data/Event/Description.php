@@ -122,7 +122,7 @@ EOD;
             $insert = array();
             foreach ($data as $key => $value) {
                 if (($key == 'description_id') || ($key == 'description_timestamp')) continue;
-                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
             }
             $this->app['db']->insert(self::$table_name, $insert);
             $description_id = $this->app['db']->lastInsertId();
