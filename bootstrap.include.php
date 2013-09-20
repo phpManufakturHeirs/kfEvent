@@ -41,6 +41,7 @@ $app->get('/admin/event/uninstall',
     // uninstall routine for kfEvent
     'phpManufaktur\Event\Data\Setup\Uninstall::exec');
 
+
 $app->get('/admin/event/about',
     // About dialog
     'phpManufaktur\Event\Control\Backend\About::exec');
