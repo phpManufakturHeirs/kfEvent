@@ -38,7 +38,7 @@ class GroupList extends Backend {
         $this->initialize($app);
         $groups = $this->GroupData->selectAll();
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/group.list.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/group.list.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('group'),

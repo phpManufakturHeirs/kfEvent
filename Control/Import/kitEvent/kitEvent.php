@@ -106,7 +106,7 @@ class kitEvent extends Dialog {
         $this->app['session']->set('EVENT_IMPORT_EVENTS_DETECTED', $records);
         $this->app['session']->set('EVENT_IMPORT_EVENTS_IMPORTED', 0);
 
-        return $this->app['twig']->render($this->app['utils']->templateFile(
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'import/start.kitevent.twig'),
             array(
                 'message' => $this->getMessage(),
@@ -319,7 +319,7 @@ class kitEvent extends Dialog {
         else {
             $this->setMessage('There exists no kitEvent installation at the parent CMS!');
         }
-        return $this->app['twig']->render($this->app['utils']->templateFile(
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'import/import.kitevent.twig'),
             array(
                 'message' => $this->getMessage(),

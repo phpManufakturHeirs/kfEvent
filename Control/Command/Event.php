@@ -102,7 +102,7 @@ class Event extends Basic
         $this->setRedirectRoute("/event/id/$event_id");
         $this->setRedirectActive(true);
         // return the event dialog
-        return $this->app['twig']->render($this->app['utils']->templateFile(
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template',
             "command/event.view.$view.twig",
             $this->getPreferredTemplateStyle()),

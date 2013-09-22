@@ -24,7 +24,7 @@ class About extends Backend {
     public function exec(Application $app)
     {
         $this->initialize($app);
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/about.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/about.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('about')

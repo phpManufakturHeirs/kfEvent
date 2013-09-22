@@ -35,7 +35,7 @@ class ExtraFieldList extends Backend {
         $this->initialize($app);
         $fields = $this->ExtraType->selectAll();
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/extra.field.list.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/extra.field.list.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('group'),

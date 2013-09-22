@@ -48,7 +48,7 @@ class Dialog {
      */
     public function setMessage($message, $params=array(), $log_message=false)
     {
-        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', '/backend/message.twig'),
+        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', '/backend/message.twig'),
             array('message' => $this->app['translator']->trans($message, $params)));
         if ($log_message) {
             $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $params, 'messages', 'en')));

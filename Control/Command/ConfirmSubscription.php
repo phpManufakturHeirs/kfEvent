@@ -83,7 +83,7 @@ class ConfirmSubscription extends Basic
             // reload this page to fold the iframe into the CMS before performing anything
             $app['monolog']->addInfo(sprintf("Reload route %s into CMS URL %s before performing anything",
                 '/event/subscribe/guid/'.self::$guid, $this->getCMSpageURL()));
-            return $app['twig']->render($app['utils']->templateFile('@phpManufaktur/Basic/Template', 'kitcommand/reload.twig'),
+            return $app['twig']->render($app['utils']->getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/reload.twig'),
                 array('basic' => $this->getBasicSettings()));
         }
 
@@ -91,7 +91,7 @@ class ConfirmSubscription extends Basic
         if (false === ($subscription = $SubscriptionData->selectGUID($guid))) {
             $message = $app['translator']->trans('The submitted GUID %guid% does not exists.', array('%guid%' => self::$guid));
             $this->app['monolog']->addInfo('[ConfirmSubscription] '.$message);
-            return $app['twig']->render($app['utils']->templateFile(
+            return $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Event/Template',
                 'command/message.twig',
                 $this->getPreferredTemplateStyle()),
@@ -105,7 +105,7 @@ class ConfirmSubscription extends Basic
         if ($subscription['subscription_status'] == 'CONFIRMED') {
             // the subscription was already confirmed
             $event = $this->EventData->selectEvent($subscription['event_id']);
-            return $app['twig']->render($app['utils']->templateFile(
+            return $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Event/Template',
                 'command/message.twig',
                 $this->getPreferredTemplateStyle()),
@@ -123,7 +123,7 @@ class ConfirmSubscription extends Basic
                     '%email%' => SERVER_EMAIL_ADDRESS,
                     '%subscription_status%' => $subscription['subscription_status']));
             $app['monolog']->addInfo('[ConfirmSubscription] '.$message);
-            return $app['twig']->render($app['utils']->templateFile(
+            return $app['twig']->render($app['utils']->getTemplateFile(
                 '@phpManufaktur/Event/Template',
                 'command/message.twig',
                 $this->getPreferredTemplateStyle()),
@@ -197,7 +197,7 @@ class ConfirmSubscription extends Basic
                 unset($check_array['contact']);
                 if (!empty($check_array)) {
                     // send a information about the new contact to the members in $check_array
-                    $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                    $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
                         '@phpManufaktur/Event/Template', 'command/mail/distribution/new.contact.twig', $this->getPreferredTemplateStyle()),
                         array(
                             'basic' => $this->getBasicSettings(),
@@ -224,7 +224,7 @@ class ConfirmSubscription extends Basic
                     'The status for the contact with the ID %contact_id% is ambiguous, the program can not activate the account. Please contact the <a href="%email%">webmaster</a>.',
                     array('%contact_id%' => $contact['contact_id'], '%email%' => SERVER_EMAIL_ADDRESS));
                 $app['monolog']->addInfo('[ConfirmSubscription] '.$message);
-                return $app['twig']->render($app['utils']->templateFile(
+                return $app['twig']->render($app['utils']->getTemplateFile(
                     '@phpManufaktur/Event/Template',
                     'command/message.twig',
                     $this->getPreferredTemplateStyle()),
@@ -249,7 +249,7 @@ class ConfirmSubscription extends Basic
             unset($check_array['contact']);
             if (!empty($check_array)) {
                 // send a information about the new event subscription to the members in $check_array
-                $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
                     '@phpManufaktur/Event/Template', 'command/mail/distribution/subscribe.event.twig',
                     $this->getPreferredTemplateStyle()),
                     array(
@@ -279,7 +279,7 @@ class ConfirmSubscription extends Basic
                     'The status for the contact with the ID %contact_id% is ambiguous, the program can not activate the account. Please contact the <a href="%email%">webmaster</a>.',
                     array('%contact_id%' => $contact['contact_id'], '%email%' => SERVER_EMAIL_ADDRESS));
                 $app['monolog']->addInfo('[ConfirmSubscription] '.$message);
-                return $app['twig']->render($app['utils']->templateFile(
+                return $app['twig']->render($app['utils']->getTemplateFile(
                     '@phpManufaktur/Event/Template',
                     'command/message.twig',
                     $this->getPreferredTemplateStyle()),
@@ -300,7 +300,7 @@ class ConfirmSubscription extends Basic
             unset($check_array['contact']);
             if (!empty($check_array)) {
                 // send a information about the new event subscription to the members in $check_array
-                $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
                     '@phpManufaktur/Event/Template', 'command/mail/distribution/subscribe.event.twig',
                     $this->getPreferredTemplateStyle()),
                     array(
@@ -324,7 +324,7 @@ class ConfirmSubscription extends Basic
         }
 
         // return the subscription dialog
-        return $app['twig']->render($app['utils']->templateFile(
+        return $app['twig']->render($app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template',
             'command/subscribe.guid.twig',
             $this->getPreferredTemplateStyle()),

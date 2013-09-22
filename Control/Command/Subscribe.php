@@ -164,7 +164,7 @@ class Subscribe extends Basic
                     // return the form and the message
                     $subscribe_fields = $this->getFormFields($subscribe);
                     $form = $subscribe_fields->getForm();
-                    return $this->app['twig']->render($this->app['utils']->templateFile(
+                    return $this->app['twig']->render($this->app['utils']->getTemplateFile(
                         '@phpManufaktur/Event/Template', 'command/subscribe.twig', $this->getPreferredTemplateStyle()),
                         array(
                             'basic' => $this->getBasicSettings(),
@@ -256,7 +256,7 @@ class Subscribe extends Basic
                 // return the form and the message
                 $subscribe_fields = $this->getFormFields($subscribe);
                 $form = $subscribe_fields->getForm();
-                return $this->app['twig']->render($this->app['utils']->templateFile(
+                return $this->app['twig']->render($this->app['utils']->getTemplateFile(
                     '@phpManufaktur/Event/Template', 'command/subscribe.twig', $this->getPreferredTemplateStyle()),
                     array(
                         'basic' => $this->getBasicSettings(),
@@ -305,7 +305,7 @@ class Subscribe extends Basic
             if (($new_contact && in_array('contact', self::$config['contact']['confirm']['mail_to'])) ||
                 (in_array('contact', self::$config['event']['subscription']['confirm']['mail_to']))) {
                 // send a mail to the contact
-                $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
                     '@phpManufaktur/Event/Template', 'command/mail/contact/subscribe.confirm.twig', $this->getPreferredTemplateStyle()),
                     array(
                         'basic' => $this->getBasicSettings(),
@@ -344,7 +344,7 @@ class Subscribe extends Basic
                 unset($check_array['contact']);
                 if (!empty($check_array)) {
                     // send a information about the new contact to the members in $check_array
-                    $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                    $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
                         '@phpManufaktur/Event/Template', 'command/mail/distribution/new.contact.twig', $this->getPreferredTemplateStyle()),
                         array(
                             'basic' => $this->getBasicSettings(),
@@ -372,7 +372,7 @@ class Subscribe extends Basic
                 unset($check_array['contact']);
                 if (!empty($check_array)) {
                     // send a information about the new event subscription to the members in $check_array
-                    $body = $this->app['twig']->render($this->app['utils']->templateFile(
+                    $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
                         '@phpManufaktur/Event/Template', 'command/mail/distribution/subscribe.event.twig',
                         $this->getPreferredTemplateStyle()),
                         array(
@@ -409,7 +409,7 @@ class Subscribe extends Basic
                 $this->setMessage('The form is not valid, please check your input and try again!');
             }
 
-            return $this->app['twig']->render($this->app['utils']->templateFile(
+            return $this->app['twig']->render($this->app['utils']->getTemplateFile(
                 '@phpManufaktur/Event/Template', 'command/subscribe.twig', $this->getPreferredTemplateStyle()),
                 array(
                     'basic' => $this->getBasicSettings(),
@@ -436,7 +436,7 @@ class Subscribe extends Basic
         // get the form
         $form = $subscribe_fields->getForm();
 
-        return $this->app['twig']->render($this->app['utils']->templateFile(
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'command/subscribe.twig', $this->getPreferredTemplateStyle()),
             array(
                 'basic' => $this->getBasicSettings(),

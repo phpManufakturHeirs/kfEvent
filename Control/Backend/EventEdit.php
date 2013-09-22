@@ -377,7 +377,7 @@ class EventEdit extends Backend {
                     // show the dialog to select a event group
                     $fields = $this->getCreateByGroupFormFields();
                     $form = $fields->getForm();
-                    return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.create.by.group.twig'),
+                    return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.create.by.group.twig'),
                         array(
                             'usage' => self::$usage,
                             'toolbar' => $this->getToolbar('event_edit'),
@@ -400,7 +400,7 @@ class EventEdit extends Backend {
                 // first step - show the start dialog to create a new event
                 $fields = $this->getCreateStartFormFields();
                 $form = $fields->getForm();
-                return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.create.start.twig'),
+                return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.create.start.twig'),
                     array(
                         'usage' => self::$usage,
                         'toolbar' => $this->getToolbar('event_edit'),
@@ -466,7 +466,7 @@ class EventEdit extends Backend {
             }
         }
 
-        return $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/event.edit.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.edit.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_edit'),

@@ -114,7 +114,7 @@ class Backend {
      */
     public function setMessage($message, $params=array())
     {
-        self::$message .= $this->app['twig']->render($this->app['utils']->templateFile('@phpManufaktur/Event/Template', 'backend/message.twig'),
+        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/message.twig'),
             array('message' => $this->app['translator']->trans($message, $params)));
     }
 

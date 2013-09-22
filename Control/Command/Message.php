@@ -35,7 +35,7 @@ class Message extends Basic
         // very important - no redirection to avoid a possible recursion!
         $this->setRedirectActive(false);
 
-        return $this->app['twig']->render($this->app['utils']->templateFile(
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template',
             'command/message.twig',
             $this->getPreferredTemplateStyle()),
