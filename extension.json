@@ -6,32 +6,57 @@
   "vendor":"phpManufaktur",
   "type":"application",
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Event",
-  "namespace": "phpManufaktur\\Event",
+  "namespace":"phpManufaktur\\Event",
   "link":{
     "about":"\/event\/about"
   },
-  "release": {
-    "number" : "2.0.12",
-    "date" : "2013-09-06"
+  "release":{
+    "number":"2.0.13",
+    "date":"2013-09-23",
+    "status":"alpha"
   },
-  "description": {
-    "en": {
+  "description":{
+    "en":{
       "title":"Event management for kitFramework",
-      "short": "A complete event management suite - former known as kitEvent",
-      "long": "Complete event management for use with the kitFramework",
-      "url": "https:\/\/kit2.phpmanufaktur.de"
+      "short":"A complete event management suite - former known as kitEvent",
+      "long":"Complete event management for use with the kitFramework",
+      "url":"https:\/\/kit2.phpmanufaktur.de"
     },
     "de": {
       "title":"Veranstaltungskalender für das kitFramework",
-      "short": "Verwalten Sie Termine und Veranstaltungen und veröffentlichen Sie diese auf Ihrer Website",
-      "long": "Event ist eine vollständige Verwaltungssoftware für alle Termine, Kurse und Veranstaltungen.",
-      "url": "https:\/\/kit2.phpmanufaktur.de"
+      "short":"Verwalten Sie Termine und Veranstaltungen und veröffentlichen Sie diese auf Ihrer Website",
+      "long":"Event ist eine vollständige Verwaltungssoftware für alle Termine, Kurse und Veranstaltungen.",
+      "url":"https:\/\/kit2.phpmanufaktur.de"
     }
   },
-  "require": {
-    "framework": {
-      "release": "0.19"
+  "require":{
+    "framework":{
+      "release":"0.26"
+    },
+    "extension":{
+        "phpmanufaktur":{
+            "Basic":{
+                "release":"0.35"
+            },
+            "Contact":{
+                "release":"2.0.13"
+            },
+            "CKEditor":{
+                "release":"0.15"
+            },
+            "MediaBrowser":{
+                "release":"0.19"
+            },
+            "CommandCollection":{
+                "release":"0.12"
+            }
+        }
     }
+  },
+  "setup": {
+      "install":"\/admin\/event\/setup",
+      "update":"\/admin\/event\/update",
+      "uninstall":"\/admin\/event\/uninstall"
   },
   "license":"MIT License",
   "download": {

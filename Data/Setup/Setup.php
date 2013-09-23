@@ -146,7 +146,8 @@ class Setup
             $admin_tool = new InstallAdminTool($app);
             $admin_tool->exec(MANUFAKTUR_PATH.'/Event/extension.json', '/event/cms');
 
-            return "The setup was successful";
+            return $app['translator']->trans('Successfull installed the extension %extension%.',
+                array('%extension%' => 'Event'));
 
         } catch (\Exception $e) {
             throw new \Exception($e);

@@ -71,7 +71,8 @@ class Uninstall
             $admin_tool->exec(MANUFAKTUR_PATH.'/Event/extension.json');
 
             $app['monolog']->addInfo('[Event Uninstall] Dropped all tables successfull');
-            return "The uninstall process was successfull!";
+            return $app['translator']->trans('Successfull uninstalled the extension %extension%.',
+                array('%extension%' => 'Event'));
         } catch (\Exception $e) {
             throw new \Exception($e);
         }

@@ -33,11 +33,13 @@ $app->get('/event/cms/{cms_information}', function ($cms_information) use ($app)
  * ADMIN routes
  */
 
-$app->get('/admin/event/setup',
+$admin->get('/event/setup',
     // setup routine for kfEvent
     'phpManufaktur\Event\Data\Setup\Setup::exec');
-
-$app->get('/admin/event/uninstall',
+$admin->get('/event/update',
+    // update Event
+    'phpManufaktur\Event\Data\Setup\Update::exec');
+$admin->get('/event/uninstall',
     // uninstall routine for kfEvent
     'phpManufaktur\Event\Data\Setup\Uninstall::exec');
 
