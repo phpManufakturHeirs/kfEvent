@@ -392,7 +392,8 @@ class EventEdit extends Backend {
                     'group_id' => $form_request['select_group'],
                     'event_status' => 'LOCKED'
                 );
-                $this->EventData->insertEvent($data, self::$event_id);
+                // create a new record without iCal and QRCode
+                $this->EventData->insertEvent($data, self::$event_id, true);
                 // get the event data
                 $event = $this->EventData->selectEvent(self::$event_id);
             }
