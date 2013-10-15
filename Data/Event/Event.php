@@ -280,7 +280,7 @@ EOD;
 
 
     /**
-     * Select a evetn record by the given event_id
+     * Select a event record by the given event_id
      * Return FALSE if the record does not exists
      *
      * @param integer $event_id
@@ -391,7 +391,7 @@ EOD;
      * @param integer reference $event_id the new ID
      * @throws \Exception
      */
-    public function insertEvent($data, &$event_id=null)
+    public function insertEvent($data, &$event_id=null, $skip_ical_qrcode=false)
     {
         try {
             $insert_event = array();
@@ -452,11 +452,12 @@ EOD;
                 $this->Extra->insert($data);
             }
 
-            // create iCal file
-            $this->iCal->CreateICalFile($this, $event_id);
-
-            // create QRCode
-            $this->QRCode->create($event_id);
+            if (!$skip_ical_qrcode) {
+                // create iCal file
+                $this->iCal->CreateICalFile($this, $event_id);
+                // create QRCode
+                $this->QRCode->create($event_id);
+            }
 
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
