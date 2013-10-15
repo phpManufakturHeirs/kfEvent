@@ -110,7 +110,7 @@ class Event extends Basic
                 'basic' => $this->getBasicSettings(),
                 'event' => $event,
                 'parameter' => self::$parameter,
-                'config' => self::$config
+                'config' => self::$config,
             ));
     }
 
@@ -250,6 +250,9 @@ class Event extends Basic
     {
         $this->initParameters($app);
         if (isset(self::$parameter['id'])) {
+            // set the event ID as SESSION parameter for usage by other extensions
+            $this->app['session']->set('EVENT_ID', self::$parameter['id']);
+
             return $this->selectID(self::$parameter['id']);
         }
         else {
