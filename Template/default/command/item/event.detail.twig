@@ -35,7 +35,7 @@
         {% else %}
           {% set phone_id = event.contact.location.person.0.person_primary_phone_id %}
           {% set email_id = event.contact.location.person.0.person_primary_email_id %}
-          {{ event.contact.location.person.0.last_name }}<br />
+          {{ event.contact.location.person.0.person_last_name }}<br />
         {% endif %}
 
         {% set address = event.contact.location.address.0 %}
