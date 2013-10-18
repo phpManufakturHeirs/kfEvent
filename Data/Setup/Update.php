@@ -30,6 +30,8 @@ class Update
                     'active' => true,
                     'type' => 'small',
                     'length' => 5,
+                    'step' => true,
+                    'rate_max' => 5,
                     'show_rate_info' => false
                     );
                 // write the formatted config file to the path
