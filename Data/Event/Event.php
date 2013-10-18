@@ -16,6 +16,9 @@ use phpManufaktur\Event\Data\Event\Description;
 use phpManufaktur\Contact\Data\Contact\Contact;
 use phpManufaktur\Event\Control\Command\EventICal;
 use phpManufaktur\Event\Control\Command\EventQRCode;
+use phpManufaktur\CommandCollection\Data\Rating\Rating as RatingData;
+use phpManufaktur\CommandCollection\Data\Rating\RatingIdentifier;
+use Carbon\Carbon;
 
 class Event
 {
@@ -30,6 +33,8 @@ class Event
     protected $iCal = null;
     protected $QRCode = null;
     protected $Subscription = null;
+    protected $RatingIdentifier = null;
+    protected $RatingData = null;
 
     /**
      * Constructor
@@ -48,6 +53,8 @@ class Event
         $this->iCal = new EventICal($app);
         $this->QRCode = new EventQRCode($app);
         $this->Subscription = new Subscription($app);
+        $this->RatingData = new RatingData($app);
+        $this->RatingIdentifier = new RatingIdentifier($app);
     }
 
     /**
@@ -307,6 +314,41 @@ EOD;
         }
     }
 
+    protected function getRatingData($event_id)
+    {
+        if (null === ($identifier = $this->RatingIdentifier->selectByTypeID('EVENT', $event_id))) {
+            // create new record
+            $data = array(
+                'identifier_type_name' => 'EVENT',
+                'identifier_type_id' => $event_id,
+                'identifier_mode' => 'IP'
+            );
+            $identifier_id = -1;
+            $this->RatingIdentifier->insert($data, $identifier_id);
+            $identifier = $this->RatingIdentifier->select($identifier_id);
+        }
+
+        $average = $this->RatingData->getAverage($identifier['identifier_id']);
+
+        $is_disabled = false;
+
+        $checksum = md5($_SERVER['REMOTE_ADDR']);
+        if (false !== ($check = $this->RatingData->selectByChecksum($identifier['identifier_id'], $checksum))) {
+            $Carbon = new Carbon($check[0]['rating_confirmation']);
+            if ($Carbon->diffInHours() <= 24) {
+                // this IP has rated within the last 24 hours, so we lock it.
+                $is_disabled = true;
+            }
+        }
+
+        return array(
+            'identifier_id' => $identifier['identifier_id'],
+            'is_disabled' => $is_disabled,
+            'average' => isset($average['average']) ? $average['average'] : 0,
+            'count' => isset($average['count']) ? $average['count'] : 0
+        );
+    }
+
     /**
      * Select the complete Event record for the given $event_id
      *
@@ -314,7 +356,7 @@ EOD;
      * @throws \Exception
      * @return array on success, boolean false if $event_id does not exists
      */
-    public function selectEvent($event_id)
+    public function selectEvent($event_id, $rating=true)
     {
         try {
             $event = self::$table_name;
@@ -351,6 +393,8 @@ EOD;
                     'pending' => $this->Subscription->countParticipants($event_id, 'PENDING'),
                     'canceled' => $this->Subscription->countParticipants($event_id, 'CANCELED')
                 );
+
+                $event['rating'] = ($rating) ? $this->getRatingData($event_id) : null;
 
                 // return complete event record
                 return $event;

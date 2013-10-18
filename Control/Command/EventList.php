@@ -25,6 +25,9 @@ class EventList extends Basic
         // get the parameters
         $parameter = $this->getCommandParameters();
 
+        // get the configuration
+        $config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+
         $EventFilter = new EventFilterData($app);
 
         // the EventList does not support the EVENT_ID session
@@ -50,6 +53,11 @@ class EventList extends Basic
             }
         }
 
+        $parameter['rating'] = (isset($parameter['rating']) &&
+            ((strtolower($parameter['rating']) == 'false') || ($parameter['rating'] == 0))) ? false : true;
+
+
+
         $messages = array();
         $SQL = '';
         if (false === ($events = $EventFilter->filter($filter, $messages, $SQL))) {
@@ -58,7 +66,12 @@ class EventList extends Basic
             }
             $this->setMessage('No results for this filter!');
         }
-//echo "count: ".count($events);
+
+        $this->app['monolog']->addDebug("[EventFilter] SQL: $SQL",
+            array(__METHOD__, __LINE__));
+        $this->app['monolog']->addDebug("[EventFilter] Hits: ".count($events),
+            array(__METHOD__, __LINE__));
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template',
             "command/event.list.default.twig",
@@ -66,16 +79,8 @@ class EventList extends Basic
             array(
                 'basic' => $this->getBasicSettings(),
                 'events' => $events,
+                'parameter' => $parameter,
+                'config' => $config
             ));
-
-        echo "$SQL<br>";
-        echo "Messages:<br>".print_r($messages)."<br>";
-        echo "Treffer: ".count($events)."<br>";
-
-        echo "<pre>";
-        print_r($events);
-        echo "</pre>";
-
-        return "ok";
     }
 }

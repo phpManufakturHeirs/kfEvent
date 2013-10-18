@@ -58,6 +58,9 @@ class Event extends Basic
         self::$parameter['map'] = (isset(self::$parameter['map'])) ? true : false;
         $this->checkParameterLink();
         $this->checkParameterQRCode();
+        // use rating?
+        self::$parameter['rating'] = (isset(self::$parameter['rating']) &&
+            ((strtolower(self::$parameter['rating']) == 'false') || (self::$parameter['rating'] == 0))) ? false : true;
 
         $this->EventData = new EventData($app);
         $this->Message = new Message($app);
@@ -292,6 +295,10 @@ class Event extends Basic
         // init parent and class
         $this->initParameters($app, -1, $event_id);
         if (isset(self::$config['permalink']['cms']['url']) && !empty(self::$config['permalink']['cms']['url'])) {
+
+            // set the event ID as SESSION parameter for usage by other extensions
+            $this->app['session']->set('EVENT_ID', $event_id);
+
             $redirect = sprintf('%s%s%s', self::$config['permalink']['cms']['url'], strpos(self::$config['permalink']['cms']['url'], '?') ? '&' : '?',
                 http_build_query(array(
                     'cmd' => 'event',

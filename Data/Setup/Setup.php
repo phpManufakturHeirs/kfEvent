@@ -89,6 +89,12 @@ class Setup
                         "error_correction" => 1,
                         "margin" => 2
                     )
+                ),
+                'rating' => array(
+                    'active' => true,
+                    'type' => 'small',
+                    'length' => 5,
+                    'show_rate_info' => false
                 )
             );
             // write the formatted config file to the path

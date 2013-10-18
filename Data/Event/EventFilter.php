@@ -40,7 +40,9 @@ class EventFilter
         try {
             // SQL body
             $SQL = "SELECT `event_id` FROM `".FRAMEWORK_TABLE_PREFIX."event_event`, `".
-                FRAMEWORK_TABLE_PREFIX."contact_overview` WHERE `event_location`=`contact_id` ";
+                FRAMEWORK_TABLE_PREFIX."contact_overview`, `".FRAMEWORK_TABLE_PREFIX."event_group` ".
+                "WHERE `event_location`=`contact_id` AND `".FRAMEWORK_TABLE_PREFIX."event_event`.`group_id`=".
+                "`".FRAMEWORK_TABLE_PREFIX."event_group`.`group_id` ";
 
             if (empty($filter)) {
                 // no filter defined - select all active events one week back and four weeks ahead
@@ -294,15 +296,124 @@ class EventFilter
             }
 
             if (isset($filter['country'])) {
+                // add filter for the country code
                 $SQL .= "AND `address_country_code`='".strtoupper($filter['country'])."' ";
             }
 
+            if (isset($filter['area'])) {
+                // add filter for the area
+                if (strpos($filter['area'], ',')) {
+                    // multiple areas
+                    $areas = explode(',', $filter['area']);
+                    $SQL .= "AND (";
+                    $start = true;
+                    foreach ($areas as $area) {
+                        if (trim($area) == '') continue;
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        $SQL .= "`address_area`='".$this->app['utils']->utf8_entities(trim($area))."'";
+                        $start = false;
+                    }
+                    $SQL .= ") ";
+                }
+                else {
+                    $SQL .= "AND `address_area`='".$this->app['utils']->utf8_entities($filter['area'])."' ";
+                }
+            }
+
+            if (isset($filter['state'])) {
+                // add filter for the state
+                if (strpos($filter['state'], ',')) {
+                    // multiple states
+                    $states = explode(',', $filter['state']);
+                    $SQL .= "AND (";
+                    $start = true;
+                    foreach ($states as $state) {
+                        if (trim($state) == '') continue;
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        $SQL .= "`address_state`='".$this->app['utils']->utf8_entities(trim($state))."'";
+                        $start = false;
+                    }
+                    $SQL .= ") ";
+                }
+                else {
+                    $SQL .= "AND `address_state`='".$this->app['utils']->utf8_entities($filter['state'])."' ";
+                }
+            }
+
             if (isset($filter['zip'])) {
-                $SQL .= "AND `address_zip` LIKE '".$filter['zip']."%' ";
+                // add filter for the ZIP code
+                if (strpos($filter['zip'], ',')) {
+                    // multiple zips
+                    $zips = explode(',', $filter['zip']);
+                    $SQL .= "AND (";
+                    $start = true;
+                    foreach ($zips as $zip) {
+                        if (trim($zip) == '') continue;
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        else {
+                            $start = false;
+                        }
+                        $SQL .= "`address_zip` LIKE '".trim($zip)."%'";
+                    }
+                    $SQL .= ") ";
+                }
+                else {
+                    $SQL .= "AND `address_zip` LIKE '".$filter['zip']."%' ";
+                }
             }
 
             if (isset($filter['city'])) {
-                $SQL .= "AND `address_city` LIKE '".$this->app['utils']->utf8_entities($filter['city'])."%' ";
+                // add filter for the city
+                if (strpos($filter['city'], ',')) {
+                    // multiple cities
+                    $cities = explode(',', $filter['city']);
+                    $SQL .= "AND (";
+                    $start = true;
+                    foreach ($cities as $city) {
+                        if (trim($city) == '') continue;
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        else {
+                            $start = false;
+                        }
+                        $SQL .= "`address_city` LIKE '".$this->app['utils']->utf8_entities($city)."%'";
+                    }
+                    $SQL .= ") ";
+                }
+                else {
+                    $SQL .= "AND `address_city` LIKE '".$this->app['utils']->utf8_entities($filter['city'])."%' ";
+                }
+            }
+
+            if (isset($filter['group'])) {
+                // add filter for the group
+                if (strpos($filter['group'], ',')) {
+                    // multiple groups
+                    $groups = explode(',', $filter['group']);
+                    $SQL .= "AND (";
+                    $start = true;
+                    foreach ($groups as $group) {
+                        if (trim($group) == '') continue;
+                        if (!$start) {
+                            $SQL .= " OR ";
+                        }
+                        else {
+                            $start = false;
+                        }
+                        $SQL .= "`group_name` = '".trim($group)."'";
+                    }
+                    $SQL .= ") ";
+                }
+                else {
+                    $SQL .= "AND `group_name` = '".$filter['group']."' ";
+                }
             }
 
             if (isset($filter['status'])) {
@@ -322,6 +433,7 @@ class EventFilter
                     $SQL .= "ORDER BY ";
                     $start = true;
                     foreach ($order_bys as $order_by) {
+                        if (trim($order_by) == '') continue;
                         if (!$start) $SQL .= ", ";
                         $SQL .= "`".trim($order_by)."`";
                         $start = false;

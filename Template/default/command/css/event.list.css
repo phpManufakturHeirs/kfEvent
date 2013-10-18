@@ -7,3 +7,33 @@
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 */
+
+.rating-container {
+   float: left;
+   width: 20%;
+   height: 20px;
+   margin: 0;
+   padding: 0;
+   text-align: right;
+}  
+ .jRatingAverage {
+	background-color: #cd853f;
+	position:relative;
+	top:0;
+	left:0;
+	z-index:2;
+	height:100%;
+}
+.jRatingColor {
+	background-color: #f4c239;
+	position:relative;
+	top:0;
+	left:0;
+	z-index:2;
+	height:100%;
+}
+.jStar {
+	position:relative;
+	left:0;
+	z-index:3;
+}
