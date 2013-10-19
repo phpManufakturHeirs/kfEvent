@@ -161,6 +161,26 @@ EOD;
                 foreach ($extra as $key => $value) {
                     $record[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
                 }
+                switch ($record['extra_type_type']) {
+                    case 'TEXT':
+                        $record['extra_value'] = $record['extra_text']; break;
+                    case 'HTML':
+                        $record['extra_value'] = $record['extra_html']; break;
+                    case 'VARCHAR';
+                        $record['extra_value'] = $record['extra_varchar']; break;
+                    case 'INT':
+                        $record['extra_value'] = $record['extra_int']; break;
+                    case 'FLOAT':
+                        $record['extra_value'] = $record['extra_float']; break;
+                    case 'DATE':
+                        $record['extra_value'] = $record['extra_date']; break;
+                    case 'DATETIME':
+                        $record['extra_value'] = $record['extra_datetime']; break;
+                    case 'TIME':
+                        $record['extra_value'] = $record['extra_time']; break;
+                    default:
+                        throw new \Exception("Unknown extra field type: {$record['extra_type_type']}");
+                }
                 $extras[] = $record;
             }
             return $extras;
