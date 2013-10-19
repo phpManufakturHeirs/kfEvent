@@ -25,6 +25,29 @@
         </div>
       {% endif %}
     </div>
+    
+    {# sample: loop through the extra fields of the organizer contact #}
+    {#% for extra in event.contact.organizer.extra_fields %}
+      <div class="row">
+        <div class="cell width-150 right">{{ extra.extra_type_type|trans }}</div>
+        <div class="cell width-300">
+          {% if (extra.extra_type_type == 'TEXT') or (extra.extra_type_type == 'HTML') or (extra.extra_type_type == 'VARCHAR') %}
+            {{ extra.extra_value }}
+          {% elseif extra.extra_type_type == 'DATE' %}
+            {{ extra.extra_value|date('DATE_FORMAT'|trans) }}
+          {% elseif extra.extra_type_type == 'DATETIME' %}
+            {{ extra.extra_value|date('DATETIME_FORMAT'|trans) }}
+          {% elseif extra.extra_type_type == 'TIME' %}
+            {{ extra.extra_value|date('TIME_FORMAT'|trans) }}
+          {% elseif extra.extra_type_type == 'INT' %}
+            {{ extra.extra_value|number_format(0, 'DECIMAL_SEPARATOR'|trans, 'THOUSAND_SEPARATOR'|trans) }}
+          {% elseif extra.extra_type_type == 'FLOAT' %}
+            {{ extra.extra_value|number_format(2, 'DECIMAL_SEPARATOR'|trans, 'THOUSAND_SEPARATOR'|trans) }}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %#}
+    
     <div class="row">
       <div class="cell width-150 right">{{ 'Location'|trans }}</div>
       <div class="cell width-150">
@@ -100,6 +123,32 @@
   </div>
 
   <div class="table">
+    
+    {# loop through user defined event fields #}
+    {% for extra in event.extra_fields %}
+      {# if you want to show only a specific extra field place a condition here: #}
+      {#% if extra.extra_type_name == 'VERANSTALTER_URL' %#}
+      <div class="row">
+        <div class="cell width-150 right">{{ extra.extra_type_name|trans }}</div>
+        <div class="cell width-150">
+          {% if (extra.extra_type_type == 'TEXT') or (extra.extra_type_type == 'HTML') or (extra.extra_type_type == 'VARCHAR') %}
+            {{ extra.extra_value }}
+          {% elseif extra.extra_type_type == 'DATE' %}
+            {{ extra.extra_value|date('DATE_FORMAT'|trans) }}
+          {% elseif extra.extra_type_type == 'DATETIME' %}
+            {{ extra.extra_value|date('DATETIME_FORMAT'|trans) }}
+          {% elseif extra.extra_type_type == 'TIME' %}
+            {{ extra.extra_value|date('TIME_FORMAT'|trans) }}
+          {% elseif extra.extra_type_type == 'INT' %}
+            {{ extra.extra_value|number_format(0, 'DECIMAL_SEPARATOR'|trans, 'THOUSAND_SEPARATOR'|trans) }}
+          {% elseif extra.extra_type_type == 'FLOAT' %}
+            {{ extra.extra_value|number_format(2, 'DECIMAL_SEPARATOR'|trans, 'THOUSAND_SEPARATOR'|trans) }}
+          {% endif %}
+        </div>
+      </div>
+      {#% endif %#}
+    {% endfor %}
+    
     <div class="row">
       <div class="cell width-150 right">{{ 'Event date from'|trans }}</div>
       <div class="cell width-150">{{ event.event_date_from|date('d.m.Y H:i') }}</div>
@@ -152,6 +201,5 @@
            title="{{ 'Votes: %count% - Average: %average%'|trans({'%count%':event.rating.count,'%average%':event.rating.average|number_format(2,'DECIMAL_SEPARATOR'|trans,'THOUSAND_SEPARATOR'|trans)}) }}"></div>
     </div>
   {% endif %}
-  
   
 </div>
