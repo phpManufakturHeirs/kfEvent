@@ -19,15 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
 class Action extends Basic
 {
     protected $Message = null;
-    protected $Event = null;
-    protected $EventList = null;
 
     protected function initParameters(Application $app, $parameter_id=-1)
     {
         parent::initParameters($app, $parameter_id);
         $this->Message = new Message($app);
-        $this->Event = new Event();
-        $this->EventList = new EventList();
     }
 
     /**
@@ -70,15 +66,21 @@ class Action extends Basic
             }
 
             switch ($parameters['action']) {
-                case 'actual':
-                    return 'not implemented';
                 case 'event':
-                    return $this->Event->exec($app);
+                    $Event = new Event();
+                    return $Event->exec($app);
                 case 'list':
-                    return $this->EventList->exec($app);
+                    $List = new EventList();
+                    return $List->exec($app);
+                case 'propose':
+                    $Propose = new Propose();
+                    return $Propose->exec($app);
+                case 'search':
+                    $Search = new EventSearch();
+                    return $Search->controllerDialog($app);
                 default:
-                    return $this->Message->render('The mode <b>%mode%</b> is unknown, please check the parameters for the kitCommand!',
-                        array('%mode%' => $parameters['mode']));
+                    return $this->Message->render('The action <b>%action%</b> is unknown, please check the parameters for the kitCommand!',
+                        array('%action%' => $parameters['action']));
             }
         } catch (\Exception $e) {
             throw new \Exception($e);

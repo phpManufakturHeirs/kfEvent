@@ -230,6 +230,8 @@ return array(
         => 'Der Adressdatensatz wurde aktualisiert.',
     'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
         => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
+    'The event group with the name %group% does not exists!'
+        => 'Die Veranstaltungs-Gruppe %group% existiert nicht!',
     'The event list is empty, please create a event!'
         => 'Es existieren keine aktiven Veranstaltungen, legen Sie eine neue Versanstaltung an.',
     'The field list is empty, please define a extra field!'

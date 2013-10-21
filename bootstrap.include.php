@@ -54,6 +54,10 @@ $app->match('/admin/event/contact/list',
 $app->match('/admin/event/contact/list/page/{page}',
     'phpManufaktur\Event\Control\Backend\ContactList::exec');
 
+$app->match('/admin/event/contact/search',
+    // search contacts
+    'phpManufaktur\Event\Control\Backend\ContactSearch::exec');
+
 $app->match('/admin/event/contact/select',
     // Contact create and edit
     'phpManufaktur\Event\Control\Backend\ContactSelect::exec');
@@ -151,6 +155,9 @@ $app->match('/admin/event/list',
 $app->match('/admin/event/list/page/{page}',
     'phpManufaktur\Event\Control\Backend\EventList::exec');
 
+$app->match('/admin/event/search',
+    'phpManufaktur\Event\Control\Backend\EventSearch::exec');
+
 $app->match('/admin/event/import/kitevent',
     // Import events from kitEvent
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
@@ -209,3 +216,9 @@ $app->post('/event/subscribe/check',
 $app->get('/event/subscribe/guid/{guid}',
     // confirm a subscription
     'phpManufaktur\Event\Control\Command\ConfirmSubscription::exec');
+
+$app->post('/event/search',
+    'phpManufaktur\Event\Control\Command\EventSearch::controllerSearch');
+
+$app->post('/event/propose/organizer',
+    'phpManufaktur\Event\Control\Command\Propose::ControllerSelectOrganizer');

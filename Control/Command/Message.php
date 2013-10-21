@@ -23,13 +23,13 @@ class Message extends Basic
      * @param array $message_params
      * @param string $title
      * @param array $title_params
-     * @param boolean $log_message
+     * @param boolean $log_message if true add a DEBUG message to the logfile
      */
     public function render($message, $message_params=array(), $title='kitCommand ~~ event ~~', $title_params=array(), $log_message=false)
     {
         if ($log_message) {
             // log this message
-            $this->app['monolog']->addInfo(strip_tags($this->app['translator']->trans($message, $message_params, 'messages', 'en')));
+            $this->app['monolog']->addDebug(strip_tags($this->app['translator']->trans($message, $message_params, 'messages', 'en')));
         }
 
         // very important - no redirection to avoid a possible recursion!

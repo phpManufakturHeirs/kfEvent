@@ -167,6 +167,24 @@ EOD;
     }
 
     /**
+     * Get the group ID for the given group name
+     *
+     * @param string $group_name
+     * @throws \Exception
+     * @return Ambigous <integer, boolean> group ID or false if not match
+     */
+    public function getGroupID($group_name)
+    {
+        try {
+            $SQL = "SELECT `group_id` FROM `".self::$table_name."` WHERE `group_name`='$group_name'";
+            $group_id = $this->app['db']->fetchColumn($SQL);
+            return (is_numeric($group_id) && ($group_id > 0)) ? $group_id : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
      * Check if the desired Group name already existst. Optionally exclude the
      * given group id from the check
      *

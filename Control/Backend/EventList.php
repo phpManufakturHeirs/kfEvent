@@ -73,7 +73,8 @@ class EventList extends Backend {
         self::$current_page = 1;
         self::$route =  array(
             'pagination' => '/admin/event/list/page/{page}?order={order}&direction={direction}&usage='.self::$usage,
-            'edit' => '/admin/event/edit/id/{event_id}?usage='.self::$usage
+            'edit' => '/admin/event/edit/id/{event_id}?usage='.self::$usage,
+            'search' => '/admin/event/search?usage='.self::$usage
         );
     }
 

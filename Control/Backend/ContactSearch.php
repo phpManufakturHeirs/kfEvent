@@ -13,11 +13,11 @@ namespace phpManufaktur\Event\Control\Backend;
 
 use Silex\Application;
 use phpManufaktur\Event\Control\Backend\Backend;
-use phpManufaktur\Contact\Control\Dialog\Simple\ContactList as SimpleContactList;
+use phpManufaktur\Contact\Control\Dialog\Simple\Search as SimpleSearch;
 
-class ContactList extends Backend {
+class ContactSearch extends Backend {
 
-    protected $SimpleContactList = null;
+    protected $SimpleSearch = null;
 
     public function __construct(Application $app=null)
     {
@@ -35,10 +35,9 @@ class ContactList extends Backend {
                 'namespace' => '@phpManufaktur/Event/Template',
                 'settings' => 'backend/contact.list.json',
                 'message' => 'backend/message.twig',
-                'list' => 'backend/contact.list.twig'
+                'search' => 'backend/contact.search.twig'
             ),
             'route' => array(
-                'pagination' => '/admin/event/contact/list/page/{page}?order={order}&direction={direction}&usage='.self::$usage,
                 'contact' => array(
                     'person' => '/admin/event/contact/person/edit/id/{contact_id}?usage='.self::$usage,
                     'company' => '/admin/event/contact/company/edit/id/{contact_id}?usage='.self::$usage,
@@ -46,25 +45,17 @@ class ContactList extends Backend {
                 )
             )
         );
-        $this->SimpleContactList = new SimpleContactList($this->app, $options);
+        $this->SimpleSearch = new SimpleSearch($this->app, $options);
     }
 
-    public function setCurrentPage($page)
-    {
-        $this->SimpleContactList->setCurrentPage($page);
-    }
-
-    public function exec(Application $app, $page=null)
+    public function exec(Application $app)
     {
         $this->initialize($app);
-        if (!is_null($page)) {
-            $this->setCurrentPage($page);
-        }
         $extra = array(
             'usage' => self::$usage,
             'toolbar' => $this->getToolbar('contact_list')
         );
-        return $this->SimpleContactList->exec($extra);
+        return $this->SimpleSearch->exec($extra);
     }
 
 }

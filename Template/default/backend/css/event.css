@@ -238,3 +238,7 @@ fieldset {
   padding: 0 3px 0 3px;
 }
 
+.search-container {
+  width: 100%;
+  text-align: right;
+}

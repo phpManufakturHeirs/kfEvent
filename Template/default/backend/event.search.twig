@@ -33,55 +33,19 @@
       <div class="message">{{ message }}</div>
     {% endif %}
 
-    {% if events|length > 0 %}
-      <div class="search-container">
-        <form action="{{ FRAMEWORK_URL ~ route.search }}" method="post" >
-          <input type="text" name="search" /><input type="submit" value="{{ 'Search'|trans }}" />
-        </form>
-      </div>
-      {#
-        The pagination serve a automatic 1 2 3 ... 17 18 19 pagination and
-        navigation for the table if it contain more rows than specified in:
-        /Contact/Template/default/backend/simple/list.contact.json
-        Changes here must be also done at the footer of the table !!!
-       #}
-      {% include '@phpManufaktur/Event/Template/default/backend/pagination.twig' with {
-         currentPage: current_page,
-         paginationPath: FRAMEWORK_URL ~ route.pagination|replace({'{order}':order_by|join(','), '{direction}':order_direction}),
-         lastPage: last_page,
-         showAlwaysFirstAndLast: true
-      } only %}
+    <div class="search-container">
+      <form action="{{ FRAMEWORK_URL ~ route.search }}" method="post" >
+        <input type="text" name="search" /><input type="submit" value="{{ 'Search'|trans }}" />
+      </form>
+    </div>
 
+    {% if events|length > 0 %}
       <table>
         <thead>
           <tr>
-            {#
-                Enable an automatic ordering of the table by the columns, just
-                clicking at the head of the column. Default order is specified in:
-                /Contact/Template/default/backend/simple/list.contact.json
-             #}
-            {% set order_by_str = order_by|join(',') %}
             {% for head in events.0|keys %}
               {% if head in columns %}
-                {% set head_order = order_direction %}
-                {% set head_class = head %}
-                {% if (head == order_by_str) %}
-                  {% if (head_order == 'asc') %}
-                    {% set head_order = 'desc' %}
-                    {% set head_class = head_class ~ ' active asc' %}
-                  {% else %}
-                    {% set head_order = 'asc' %}
-                    {% set head_class = head_class ~ ' active desc' %}
-                  {% endif %}
-                {% endif %}
-                <th class="{{ head_class }}">
-                  {% if 'active asc' in head_class %}
-                    <i class="icon-caret-down icon-padding"></i>
-                  {% elseif 'active desc' in head_class %}
-                    <i class="icon-caret-up icon-padding"></i>
-                  {% endif %}
-                  <a href="{{ FRAMEWORK_URL ~ route.pagination|replace({'{page}':current_page, '{order}':head, '{direction}':head_order}) }}" title="{% if head_order == 'asc' %}{{ 'Click to sort column ascending'|trans }}{% else %}{{ 'Click to sort column descending'|trans }}{% endif %}">{{ head|trans }}</a>
-                </th>
+                <th class="head">{{ head|trans }}</th>
               {% endif %}
             {% endfor %}
           </tr>
@@ -126,18 +90,6 @@
           {% endfor %}
         </tbody>
       </table>
-
-      {#
-        See top of the table for more information!
-       #}
-      {% include '@phpManufaktur/Event/Template/default/backend/pagination.twig' with {
-        currentPage: current_page,
-        paginationPath: FRAMEWORK_URL ~ route.pagination|replace({'{order}':order_by|join(','), '{direction}':order_direction}),
-        lastPage: last_page,
-        showAlwaysFirstAndLast: true
-      } only %}
-    {% else %}
-      <p>{{ 'The event list is empty, please create a event!'|trans }}</p>
     {% endif %}
   </div>
 {% endblock content %}
