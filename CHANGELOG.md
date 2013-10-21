@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.15** - 2013-10-21
+
+* implemented the *Contacts* full search function (backend)
+* added a full search function for the events (backend and kitCommand)
+* improved handling for extra fields, added examples in templates
+
 **2.0.14** - 2013-10-18
 
 * suppress the creation of an iCal file if a empty (new) event is created
