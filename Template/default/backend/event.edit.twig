@@ -83,7 +83,14 @@
           {{ form_row(form.event_publish_from) }}
           {{ form_row(form.event_publish_to) }}
           {{ form_row(form.event_deadline) }}
+          
+          {{ form_row(form.event_url) }}
 
+          <div>
+            {{ form_label(form.event_costs) }}
+            <input type="text" name="{{ form.event_costs.vars.full_name }}" id="{{ form.event_costs.vars.id }}" value="{{ form.event_costs.vars.value }}" />
+          </div>
+          
           {{ form_row(form.event_participants_max) }}
           <div>
             <label>{{ 'Participants confirmed'|trans }}</label>

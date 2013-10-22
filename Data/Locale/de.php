@@ -36,6 +36,8 @@ return array(
         => 'Markierung hinzufügen',
     'Add title'
         => 'Titel hinzufügen',
+    'At least we need one communication channel, so please tell us a email address, phone or a URL'
+        => 'Wir benötigen mindestens einen Kommunikationsweg, bitte nennen Sie uns eine E-Mail Adresse, Telefonummer oder die URL der Homepage.',
 
     'by copying from a existing event'
         => 'durch Kopieren einer existierenden Veranstaltung',
@@ -44,8 +46,12 @@ return array(
 
     'Checking the GUID identifier'
         => 'Überprüfung der GUID Kennung',
+    'company, institution or association'
+        => 'Firma, Institution oder Verein',
     'Contact list'
         => 'Kontakte, Übersicht',
+    'Contact type'
+        => 'Kontakt Typ',
     'Costs'
         => 'Teilnahmegebühr',
     'Create a new contact'
@@ -56,6 +62,10 @@ return array(
         => 'Ein neues Zusatzfeld anlegen',
     'Create a new group'
         => 'Eine neue Gruppe anlegen',
+    'Create a new Location record'
+        => 'Einen neuen Veranstaltungsort anlegen',
+    'Create a new Organizer record'
+        => 'Eine neue Veranstalter Adresse anlegen',
 
     // event data columns
     'description_long'
@@ -108,6 +118,8 @@ return array(
 
     'Event'
         => 'Veranstaltung',
+    'Event costs'
+        => 'Eintrittspreis',
     'Event date from'
         => 'Beginn der Veranstaltung',
     'Event date to'
@@ -120,6 +132,8 @@ return array(
         => 'Veranstaltungen, Übersicht',
     'Event location'
         => 'Veranstaltungsort',
+    'Event url'
+        => 'Veranstaltungs URL',
 
     'Field name'
         => 'Bezeichner',
@@ -169,6 +183,8 @@ return array(
     'Long description'
         => 'Langbeschreibung',
 
+    'natural person'
+        => 'Natürliche Person',
     'Name'
         => 'Bezeichner',
     'Name (translated)'
@@ -179,6 +195,10 @@ return array(
     'Organizer Tags'
         => 'Veranstalter',
 
+    'Please search for for a organizer or select the checkbox to create a new one.'
+        => 'Bitte suchen Sie nach einem Veranstalter oder haken Sie die Checkbox an um einen neuen Veranstalter anzulegen.',
+    'Please search for for a location or select the checkbox to create a new one.'
+        => 'Bitte suchen Sie nach einem Veranstaltungsort oder haken Sie die Checkbox an um einen neuen Veranstaltungsort anzulegen.',
     'Please select at minimum one tag for the %type%.'
         => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
     'Participant'
@@ -203,6 +223,10 @@ return array(
     'Registrations'
         => 'Anmeldungen',
 
+    'Search Location'
+        => 'Veranstaltungsort suchen',
+    'Search Organizer'
+        => 'Veranstalter suchen',
     'Select event group'
         => 'Veranstaltungsgruppe auswählen',
     'Short description'
@@ -260,6 +284,10 @@ return array(
         => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
         => 'Es wurde keine kitEvent Installation in dem übergeordeneten Content Management System gefunden!',
+    'There exists no locations who fits to the search term %search%'
+        => 'Es wurde kein Veranstaltungsort gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
+    'There exists no organizer who fits to the search term %search%'
+        => 'Es wurde kein Veranstalter gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
     'Type'
         => 'Typ',
 
@@ -270,6 +298,10 @@ return array(
 
     'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
         => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
+    'You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name'
+        => 'Sie haben <i>Firma, Institution oder Verein</i> als Kontakt Typ angegeben, bitte nennen Sie uns den Namen der Einrichtung.',
+    'You have selected <i>natural person</i> as contact type, so please give us the last name of the person.'
+        => 'Sie haben <i>natürliche Person</i> als Kontakt Typ gewählt, bitte nennen Sie uns den Nachnamen der Person.',
     'Your subscription for the event %event% is already confirmed.'
         => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
 );

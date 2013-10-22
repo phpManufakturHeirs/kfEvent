@@ -15,8 +15,40 @@ use Silex\Application;
 
 class Update
 {
-
     protected $app = null;
+
+    /**
+     * Check if the give column exists in the table
+     *
+     * @param string $table
+     * @param string $column_name
+     * @return boolean
+     */
+    protected function columnExists($table, $column_name)
+    {
+        try {
+            $query = $this->app['db']->query("DESCRIBE `$table`");
+            while (false !== ($row = $query->fetch())) {
+                if ($row['Field'] == $column_name) return true;
+            }
+            return false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Release 2.0.16
+     */
+    protected function release_2016()
+    {
+        if (!$this->columnExists(FRAMEWORK_TABLE_PREFIX.'event_event', 'event_url')) {
+            // add field event_url in table event_event
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."event_event` ADD `event_url` TEXT NOT NULL AFTER `event_deadline`";
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo('[Event Update] Add field `event_url` to table `event_event`');
+        }
+    }
 
     /**
      * Release 2.0.14
@@ -52,6 +84,9 @@ class Update
 
         // Release 2.0.14
         $this->release_2014();
+
+        // Release 2.0.16
+        $this->release_2016();
 
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Event'));

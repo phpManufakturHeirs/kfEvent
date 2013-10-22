@@ -109,6 +109,7 @@ class EventEdit extends Backend {
      */
     protected function getFormFields($event, &$extra_info=array())
     {
+
         if (false === ($group = $this->EventGroup->select($event['group_id']))) {
             throw new \Exception('The event group with the ID '.$event['group_id']." does not exists!");
         }
@@ -197,6 +198,16 @@ class EventEdit extends Backend {
             'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? $event['event_deadline'] : null,
             'label' => 'Deadline',
             'required' => false
+        ))
+        // Costs
+        ->add('event_costs', 'text', array(
+            'required' => false,
+            'data' => number_format($event['event_costs'], 2, $this->app['translator']->trans('DECIMAL_SEPARATOR'), $this->app['translator']->trans('THOUSAND_SEPARATOR'))
+        ))
+        // Event URL
+        ->add('event_url', 'url', array(
+            'required' => false,
+            'data' => $event['event_url']
         ))
         ->add('description_title', 'text', array(
             'data' => $event['description_title'],
@@ -445,12 +456,13 @@ class EventEdit extends Backend {
                     'description_title' => isset($event['description_title']) ? $event['description_title'] : '',
                     'description_short' => isset($event['description_short']) ? $event['description_short'] : '',
                     'description_long' => isset($event['description_long']) ? $event['description_long'] : '',
-
+                    'event_url' => isset($event['event_url']) ? $event['event_url'] : ''
                 );
                 foreach ($extra_info as $extra) {
                     $data[$extra['name']] = $event[$extra['name']];
                 }
                 // update all event data
+
                 $this->EventData->updateEvent($data, self::$event_id);
 
                 // get the actual event record
