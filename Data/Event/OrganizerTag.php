@@ -93,6 +93,13 @@ EOD;
         }
     }
 
+    /**
+     * Select the TAG names for the given group ID
+     *
+     * @param integer $group_id
+     * @throws \Exception
+     * @return Ambigous <boolean, array> false if ID not exists or array with tags
+     */
     public function selectTagNamesByGroupID($group_id)
     {
         try {
@@ -102,12 +109,19 @@ EOD;
             foreach ($results as $tag) {
                 $tag_names[] = $tag['tag_name'];
             }
-            return $tag_names;
+            return empty($tag_names) ? false : $tag_names;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }
     }
 
+    /**
+     * Delete a TAG name in the given group ID
+     *
+     * @param string $tag_name
+     * @param integer $group_id
+     * @throws \Exception
+     */
     public function deleteTagByGroup($tag_name, $group_id)
     {
         try {
