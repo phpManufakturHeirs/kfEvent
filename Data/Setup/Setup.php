@@ -24,6 +24,7 @@ use phpManufaktur\Event\Data\Event\ParticipantTag;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Event\Data\Event\Images;
 use phpManufaktur\Event\Data\Event\Subscription;
+use phpManufaktur\Event\Data\Event\Propose;
 
 class Setup
 {
@@ -149,6 +150,9 @@ class Setup
 
             $Subscription = new Subscription($app);
             $Subscription->createTable();
+
+            $Propose = new Propose($app);
+            $Propose->createTable();
 
             // setup kit_framework_event as Add-on in the CMS
             $admin_tool = new InstallAdminTool($app);

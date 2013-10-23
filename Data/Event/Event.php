@@ -120,6 +120,7 @@ EOD;
             throw new \Exception($e);
         }
     }
+
     /**
      * Get a default (empty) record for a event
      *

@@ -220,5 +220,21 @@ $app->get('/event/subscribe/guid/{guid}',
 $app->post('/event/search',
     'phpManufaktur\Event\Control\Command\EventSearch::controllerSearch');
 
-$app->post('/event/propose/organizer',
-    'phpManufaktur\Event\Control\Command\Propose::ControllerSelectOrganizer');
+$app->match('/event/propose/organizer/search',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSearchOrganizer');
+$app->post('/event/propose/organizer/select',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSelectOrganizer');
+$app->get('/event/propose/organizer/create/group/{group_id}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerCreateOrganizer');
+$app->get('/event/propose/organizer/id/{contact_id}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerOrganizerID');
+$app->post('/event/propose/contact/check',
+    'phpManufaktur\Event\Control\Command\Propose::controllerContactCheck');
+$app->match('/event/propose/location/search',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSearchLocation');
+$app->post('/event/propose/location/select',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSelectLocation');
+$app->get('/event/propose/location/id/{contact_id}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerLocationID');
+$app->post('/event/propose/event/check',
+    'phpManufaktur\Event\Control\Command\Propose::controllerEventCheck');

@@ -12,6 +12,7 @@
 namespace phpManufaktur\Event\Data\Setup;
 
 use Silex\Application;
+use phpManufaktur\Event\Data\Event\Propose;
 
 class Update
 {
@@ -38,6 +39,23 @@ class Update
     }
 
     /**
+     * Check if the given $table exists
+     *
+     * @param string $table
+     * @throws \Exception
+     * @return boolean
+     */
+    protected function tableExists($table)
+    {
+        try {
+            $query = $this->app['db']->query("SHOW TABLES LIKE '$table'");
+            return (false !== ($row = $query->fetch())) ? true : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
      * Release 2.0.16
      */
     protected function release_2016()
@@ -47,6 +65,12 @@ class Update
             $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."event_event` ADD `event_url` TEXT NOT NULL AFTER `event_deadline`";
             $this->app['db']->query($SQL);
             $this->app['monolog']->addInfo('[Event Update] Add field `event_url` to table `event_event`');
+        }
+
+        if (!$this->tableExists(FRAMEWORK_TABLE_PREFIX.'event_propose')) {
+            // create propose table
+            $Propose = new Propose($this->app);
+            $Propose->createTable();
         }
     }
 

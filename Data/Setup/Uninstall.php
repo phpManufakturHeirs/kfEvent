@@ -24,6 +24,7 @@ use phpManufaktur\Event\Data\Event\ParticipantTag;
 use phpManufaktur\Basic\Control\CMS\UninstallAdminTool;
 use phpManufaktur\Event\Data\Event\Images;
 use phpManufaktur\Event\Data\Event\Subscription;
+use phpManufaktur\Event\Data\Event\Propose;
 
 class Uninstall
 {
@@ -65,6 +66,9 @@ class Uninstall
 
             $Subscription = new Subscription($app);
             $Subscription->dropTable();
+
+            $Propose = new Propose($app);
+            $Propose->dropTable();
 
             // uninstall kit_framework_event from the CMS
             $admin_tool = new UninstallAdminTool($app);

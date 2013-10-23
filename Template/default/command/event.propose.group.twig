@@ -17,9 +17,8 @@
 {% block content %}
   {{ parent() }}
   <div class="contact_form">
-    <form action="{{ FRAMEWORK_URL }}/event/propose/organizer?pid={{ basic.pid }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ FRAMEWORK_URL ~ route.organizer.search ~ '?pid=' ~ basic.pid }}" method="post">
       {{ form_widget(form) }}
-
       <div>
         <label for="submit">&nbsp;</label>
         <input type="submit" name="submit" />

@@ -1,0 +1,180 @@
+{#
+  Event
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
+
+{% extends getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.body.twig') %}
+{% block jquery %}
+  {{ parent() }}
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/i18n/jquery-ui-i18n.min.js"></script>
+  <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-addon.js"></script>
+  <script src="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/jquery/jquery-ui-timepicker-de.js"></script>
+  <script type="text/javascript" src="{{ MANUFAKTUR_URL }}/CKEditor/Source/ckeditor.js"></script>
+{% endblock jquery %}
+{% block stylesheet %}
+  {{ parent() }}
+  <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/jquery-ui-timepicker-addon.css" media="screen, projection" />
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.propose.css" media="screen, projection" />
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+{% endblock stylesheet %}
+{% block content %}
+  
+  {% if app.translator.locale == 'de' %}
+    {# german translation #}
+    <h2>Veranstaltung anlegen</h2>
+    {{ parent() }}
+    {% if basic.message|length < 1 %}
+      <div class="iframe_content message">
+        <p>Bitte geben Sie uns zu der Veranstaltung so viele Informationen wie möglich.</p>
+        <p>Eintrittspreis: Falls Sie den Eintrittspreis nicht kennen tragen Sie 0 ein. Ist der Eintritt frei tragen Sie bitte -1 ein.</p>
+        <p>Teilnehmeranzahl: Tragen Sie -1 für eine Veranstaltung ohne festgelegte Anzahl ein.</p>
+      </div>
+    {% endif %}    
+  {% else %}
+    {# english language #}
+    <h2>Create a event</h2>
+    {{ parent() }}
+    {% if basic.message|length < 1 %}
+      <div class="iframe_content message">
+        <p>Please give us as much as possible information about the event</p>
+      </div>
+    {% endif %}
+  {% endif %}
+    
+  <div class="contact_form">
+    <form action="{{ FRAMEWORK_URL ~ route.event.check ~ '?pid=' ~ basic.pid }}" method="post">
+      {#{ form_widget(form) }#}
+      
+      <div>
+        <label>{{ 'Organizer'|trans }}</label>
+        <div class="address_info">
+          {% if organizer.contact_type == 'COMPANY' %}
+            {{ organizer.company_name }}<br />
+          {% else %}
+            {{ organizer.person_gender|trans }}
+            {% if organizer.person_first_name|length > 0 %}{{ organizer.person_first_name }} {% endif %}
+            {{ organizer.person_last_name }}<br />
+          {% endif %}
+          {% if organizer.address_street|length > 0 %}{{ organizer.address_street }}<br />{% endif %}  
+          {{ organizer.address_country_code }} {{ organizer.address_zip }} {{ organizer.address_city }}<br />
+          {% if organizer.communication_phone|length > 0 %}<i class="icon-phone"></i> {{ organizer.communication_phone }}<br />{% endif %}
+          {% if organizer.communication_email|length > 0 %}<i class="icon-envelope"></i> <a href="mailto:{{ organizer.communication_email }}">{{ organizer.communication_email }}</a>{% endif %}
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div>&nbsp;</div>
+      <div>
+        <label>{{ 'Event location'|trans }}</label>
+        <div class="address_info">
+          {% if location.contact_type == 'COMPANY' %}
+            {{ location.company_name }}<br />
+          {% else %}
+            {{ location.person_gender|trans }}
+            {% if location.person_first_name|length > 0 %}{{ location.person_first_name }} {% endif %}
+            {{ location.person_last_name }}<br />
+          {% endif %}
+          {% if location.address_street|length > 0 %}{{ location.address_street }}<br />{% endif %}  
+          {{ location.address_country_code }} {{ location.address_zip }} {{ location.address_city }}<br />
+          {% if location.communication_phone|length > 0 %}<i class="icon-phone"></i> {{ location.communication_phone }}<br />{% endif %}
+          {% if location.communication_email|length > 0 %}<i class="icon-envelope"></i> <a href="mailto:{{ location.communication_email }}">{{ location.communication_email }}</a>{% endif %}
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div>&nbsp;</div>
+      {{ form_row(form._token) }}
+      
+      {{ form_row(form.event_date_from) }}
+      {{ form_row(form.event_date_to) }}
+      
+      {{ form_row(form.event_publish_from) }}
+      {{ form_row(form.event_publish_to) }}
+      {{ form_row(form.event_deadline) }}
+
+      {{ form_row(form.event_url) }}
+      {{ form_row(form.event_costs) }}
+
+      {{ form_row(form.event_participants_max) }}
+      
+      {{ form_row(form.description_title) }}
+      
+      <div class="clear"></div>
+      <div>
+        <div class="label">{{ form.description_short.vars.label|trans }}</div>
+        <div class="value">
+          {{ CKEditor(
+                form.description_short.vars.id,
+                form.description_short.vars.full_name,
+                form.description_short.vars.value,
+                '98%', '100px',
+                MANUFAKTUR_URL ~ '/Event/Template/default/command/ckeditor.config.simple.js'
+          ) }}
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div>
+        <div class="label">{{ form.description_long.vars.label|trans }}</div>
+        <div class="value">
+          {{ CKEditor(
+                form.description_long.vars.id,
+                form.description_long.vars.full_name,
+                form.description_long.vars.value,
+                '98%', '250px',
+                MANUFAKTUR_URL ~ '/Event/Template/default/command/ckeditor.config.simple.js'
+          ) }}
+        </div>
+      </div>
+      <div>&nbsp;</div>
+      <div>
+        <label for="submit">&nbsp;</label>
+        <input type="submit" name="submit" />
+      </div>
+      <div class="clear"></div>
+      {#{ form_rest(form) }#}
+    </form>
+  </div>
+{% endblock %}
+{% block footer %}
+  {# add the height of CKE's to the iframe_add_height (default = 30) #}
+  {% set iframe_add_height = 250 %}
+  {{ parent() }}
+  <script type="text/javascript">
+    if (typeof 'jQuery' !== 'undefined') {
+      $(document).ready(function() {
+        $.datepicker.setDefaults($.datepicker.regional['{{ app.translator.locale }}']);
+        $.timepicker.setDefaults($.timepicker.regional['{{ app.translator.locale }}']);
+        $('.event_date_from').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_date_to').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_publish_from').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_publish_to').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+        $('.event_deadline').datetimepicker({
+          timeFormat: "HH:mm",
+          stepHour: 1,
+          stepMinute: 5
+        });
+      });
+    }
+  </script>
+{% endblock footer %}

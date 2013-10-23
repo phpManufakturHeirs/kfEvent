@@ -215,6 +215,10 @@ return array(
         => 'Bilder',
     'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.'
         => 'Bitte definieren Sie einen permanenten Link in der config.event.json. Ohne diesen Link kann Event keine Verweise auf Veranstaltungen erzeugen oder auf Anfragen von Veranstaltungsteilnehmern reagieren.',
+    'Please type in a long description with %minimum% characters.'
+        => 'Bitte geben Sie eine Langbeschreibung mit mindestens %minimum% Zeichen ein.',
+    'Please type in a short description with %minimum% characters.'
+        => 'Bitte geben Sie eine Kurzbeschreibung mit mindestens %minimum% Zeichen ein.',
     'Publish from'
         => 'Veröffentlichen ab',
         'Publish to'
@@ -252,12 +256,18 @@ return array(
         => 'Vielen Dank für Ihre Anmeldung, wir haben Ihnen eine Bestätigung an Ihre E-Mail Adresse gesendet.',
     'The contact record was successfull updated.'
         => 'Der Adressdatensatz wurde aktualisiert.',
+    'The deadline ends after the event start date!'
+        => 'Der Anmeldeschluß liegt nach dem Beginn der Veranstaltung!',
     'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
         => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
+    'The event date can not be in the past!'
+        => 'Das Veranstaltungsdatum darf nicht in der Vergangenheit liegen!',
     'The event group with the name %group% does not exists!'
         => 'Die Veranstaltungs-Gruppe %group% existiert nicht!',
     'The event list is empty, please create a event!'
         => 'Es existieren keine aktiven Veranstaltungen, legen Sie eine neue Versanstaltung an.',
+    'The event start date is behind the event end date!'
+        => 'Das Anfangsdatum der Veranstaltung liegt nach dem Enddatum der Veranstaltung!',
     'The field list is empty, please define a extra field!'
         => 'Es wurden noch keine Zusatzfelder definiert, bitte erstellen Sie ein neues Zusatzfeld!',
     'The group list is empty, please define a group!'
@@ -268,6 +278,10 @@ return array(
         => 'Der Veranstaltung wurde das Bild <b>%image%</b> hinzugefügt.',
     'The image with the ID %image_id% was successfull deleted.'
         => 'Das Bild mit der ID %image_id% wurde erfolgreich gelöscht.',
+    'The publishing date ends before the event starts, this is not allowed!'
+        => 'Der Veröffentlichungszeitraum endet vor dem Beginn der Veranstaltung, dies ist nicht gewünscht!',
+    'The publishing date is behind the event start date!'
+        => 'Das Veröffentlichungsdatum liegt nach dem Veranstaltungsdatum!',
     'The record with the ID %id% does not exists!'
         => 'Der Datensatz mit der ID %id% existiert nicht!',
     'The record with the ID %id% was successfull deleted.'
