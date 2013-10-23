@@ -19,13 +19,158 @@ use phpManufaktur\Event\Data\Event\OrganizerTag;
 use phpManufaktur\Contact\Control\Contact;
 use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\Event;
+use phpManufaktur\Event\Data\Event\Propose as ProposeData;
+use Carbon\Carbon;
 
 class Propose extends Basic
 {
 
+    protected function sendSubmitterConfirmation($submitter_id)
+    {
+        $Contact = new Contact($this->app);
+        if (false === ($contact = $Contact->selectOverview($submitter_id))) {
+            throw new \Exception('Missing contact recorde for the submitter ID '.$submitter_id);
+        }
+
+        $ProposeData = new ProposeData($this->app);
+        if (false === ($propose = $ProposeData->select($this->app['session']->get('propose_id')))) {
+            throw new \Exception('Missing the propose data record (Session invalid?)');
+        }
+
+        $EventData = new Event($this->app);
+        if (false === ($event = $EventData->selectEvent($this->app['session']->get('event_id'), false))) {
+            throw new \Exception('Missing the event data (Session invalid?)');
+        }
+
+        $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            'command/mail/propose/submitter.twig',
+            $this->getPreferredTemplateStyle()),
+            array(
+                'contact' => $contact,
+                'propose' => $propose,
+                'event' => $event,
+                'action' => array(
+                    'link' => array(
+                        'publish' => FRAMEWORK_URL.'/event/propose/confirm/'.$propose['submitter_guid'],
+                        'cancel' => FRAMEWORK_URL.'/event/propose/cancel/'.$propose['submitter_guid']
+                    )
+                )
+            ));
+
+        // send a email to the contact
+        $message = \Swift_Message::newInstance()
+        ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+        ->setTo(array($contact['communication_email']))
+        ->setBody($body)
+        ->setContentType('text/html');
+        // send the message
+        $this->app['mailer']->send($message);
+
+        return 'ok';
+    }
+
+    public function controllerSubmitterConfirm(Application $app)
+    {
+        $this->initParameters($app);
+
+        // get the form fields
+        $request = $this->app['request']->request->get('form', array());
+        if (!isset($request['email'])) {
+            throw new \Exception("Missing the email address!");
+        }
+        if (!isset($request['email_type'])) {
+            throw new \Exception('Missing the email_type!');
+        }
+
+        $Contact = new Contact($app);
+        if (false === ($contact_id = $Contact->existsLogin($request['email']))) {
+            // create a new contact
+            $data = array(
+                'contact' => array(
+                    'contact_id' => -1,
+                    'contact_type' => $request['email_type']
+                ),
+                'person' => array(
+                    array(
+                        'person_id' => -1,
+                        'contact_id' => -1
+                    )
+                ),
+                'company' => array(
+                    array(
+                        'company_id' => -1,
+                        'contact_id' => -1
+                    )
+                ),
+                'communication' => array(
+                    array(
+                        'communication_id' => -1,
+                        'contact_id' => -1,
+                        'communication_type' => 'EMAIL',
+                        'communication_usage' => 'PRIMARY',
+                        'communication_value' => strtolower($request['email'])
+                    )
+                )
+            );
+            if (!$Contact->insert($data, $contact_id)) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+
+        // update the propose record
+        $ProposeData = new ProposeData($app);
+        $data = array(
+            'submitter_id' => $contact_id
+        );
+        $ProposeData->update($app['session']->get('propose_id'), $data);
+
+        // send confirmation mail to the submitter
+        $this->sendSubmitterConfirmation($contact_id);
+
+        return 'confirm';
+    }
+
     public function controllerSubmitter(Application $app)
     {
-        return 'submitter';
+        $this->initParameters($app);
+
+        // get the form fields
+        $contact = $this->app['request']->request->get('form', array());
+
+        $fields = $this->app['form.factory']->createBuilder('form')
+        ->add('email', 'email', array(
+            'data' => isset($contact['email']) ? $contact['email'] : ''
+        ))
+        ->add('email_type', 'choice', array(
+            'expanded' => true,
+            'multiple' => false,
+            'required' => true,
+            'choices' => array(
+                'PERSON' => 'personal email address',
+                'COMPANY' => 'regular email address of a company, institution or association'
+            ),
+            'label' => 'email usage',
+            'data' => isset($contact['email_type']) ? $contact['email_type'] : 'PERSON'
+        ))
+        ;
+
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            "command/event.propose.submitter.twig",
+            $this->getPreferredTemplateStyle()),
+            array(
+                'basic' => $this->getBasicSettings(),
+                'form' => $form->createView(),
+                'route' => array(
+                    'submitter' => array(
+                        'confirm' => '/event/propose/submitter/confirm'
+                    )
+                )
+            ));
     }
 
     /**
@@ -40,20 +185,74 @@ class Propose extends Basic
         $this->initParameters($app);
 
         // get the form fields
-        $event = $this->app['request']->request->get('form', array());
+        $event = $app['request']->request->get('form', array());
+
+        // get the configuration
+        $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
 
         // check the event data
-        if (strtotime($event['event_date_from']) < time()) {
-            // event date is in the past
-            $this->setMessage('The event date can not be in the past!');
+        if (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < $config['event']['description']['title']['min_length'])) {
+            $this->setMessage('Please type in a title with %minimum% characters at minimum.',
+                array('%minimum%' => $config['event']['description']['title']['min_length']));
             return $this->controllerEvent($app);
         }
+        if (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < $config['event']['description']['short']['min_length'])) {
+            $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
+                array('%minimum%' => $config['event']['description']['short']['min_length']));
+            return $this->controllerEvent($app);
+        }
+        if (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < $config['event']['description']['long']['min_length'])) {
+            $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
+                array('%minimum%' => $config['event']['description']['long']['min_length']));
+            return $this->controllerEvent($app);
+        }
+
+        if (!$config['event']['date']['event_date_from']['allow_date_in_past'] &&
+            (strtotime($event['event_date_from']) < time())) {
+            $this->setMessage('It is not allowed that the event start in the past!');
+            return $this->controllerEvent($app);
+        }
+
+        // create date time in the correct format
+        $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_date_from']);
+        $event['event_date_from'] = $dt->toDateTimeString();
+
+        $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_date_to']);
+        $event['event_date_to'] = $dt->toDateTimeString();
+
+        if (empty($event['event_publish_from'])) {
+            $dt = Carbon::createFromTimestamp(strtotime($event['event_date_from']));
+            $dt->subDays($config['event']['date']['event_publish_from']['subtract_days']);
+            $dt->startOfDay();
+            $event['event_publish_from'] = $dt->toDateTimeString();
+        }
+        else {
+            $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_from']);
+            $event['event_publish_from'] = $dt->toDateTimeString();
+        }
+
+        if (empty($event['event_publish_to'])) {
+            $dt = Carbon::createFromTimestamp(strtotime($event['event_date_to']));
+            $dt->addDays($config['event']['date']['event_publish_to']['add_days']);
+            $dt->endOfDay();
+            $event['event_publish_to'] = $dt->toDateTimeString();
+        }
+        else {
+            $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_to']);
+            $event['event_publish_to'] = $dt->toDateTimeString();
+        }
+
+        if (empty($event['event_deadline'])) {
+            $event['event_deadline'] = '0000-00-00 00:00:00';
+        }
+        else {
+            $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_deadline']);
+            $event['event_deadline'] = $dt->toDateTimeString();
+        }
+
+
         if (strtotime($event['event_date_from']) > strtotime($event['event_date_to'])) {
             $this->setMessage('The event start date is behind the event end date!');
-            return $this->controllerEvent($app);
-        }
-        if (strtotime($event['event_publish_from']) > strtotime($event['event_date_from'])) {
-            $this->setMessage('The publishing date is behind the event start date!');
             return $this->controllerEvent($app);
         }
         if (strtotime($event['event_publish_to']) < strtotime($event['event_date_from'])) {
@@ -62,14 +261,6 @@ class Propose extends Basic
         }
         if (strtotime($event['event_deadline']) > strtotime($event['event_date_from'])) {
             $this->setMessage('The deadline ends after the event start date!');
-            return $this->controllerEvent($app);
-        }
-        if (strlen($event['description_short']) < 30) {
-            $this->setMessage('Please type in a short description with %minimum% characters.', array('%minimum%' => 30));
-            return $this->controllerEvent($app);
-        }
-        if (strlen($event['description_long']) < 50) {
-            $this->setMessage('Please type in a long description with %minimum% characters.', array('%minimum%' => 50));
             return $this->controllerEvent($app);
         }
 
@@ -82,22 +273,41 @@ class Propose extends Basic
             'event_costs' => isset($event['event_costs']) ? $this->app['utils']->str2float($event['event_costs']) : 0,
             'event_participants_max' => isset($event['event_participants_max']) ? $this->app['utils']->str2int($event['event_participants_max']) : -1,
             'event_status' => 'LOCKED',
-            'event_date_from' => date('Y-m-d H:i:s', strtotime($event['event_date_from'])),
-            'event_date_to' => date('Y-m-d H:i:s', strtotime($event['event_date_to'])),
-            'event_publish_from' => date('Y-m-d H:i:s', strtotime($event['event_publish_from'])),
-            'event_publish_to' => date('Y-m-d H:i:s', strtotime($event['event_publish_to'])),
-            'event_deadline' => date('Y-m-d H:i:s', strtotime($event['event_deadline'])),
-            'description_title' => isset($event['description_title']) ? $event['description_title'] : '',
-            'description_short' => isset($event['description_short']) ? $event['description_short'] : '',
-            'description_long' => isset($event['description_long']) ? $event['description_long'] : '',
+            'event_date_from' => $event['event_date_from'],
+            'event_date_to' => $event['event_date_to'],
+            'event_publish_from' => $event['event_publish_from'],
+            'event_publish_to' => $event['event_publish_to'],
+            'event_deadline' => $event['event_deadline'],
+            'description_title' => isset($event['description_title']) ? trim($event['description_title']) : '',
+            'description_short' => isset($event['description_short']) ? trim($event['description_short']) : '',
+            'description_long' => isset($event['description_long']) ? trim($event['description_long']) : '',
             'event_url' => isset($event['event_url']) ? $event['event_url'] : ''
         );
 
+        // create a new event
         $EventData = new Event($app);
         $event_id = -1;
+
         $EventData->insertEvent($data, $event_id);
 
+        // save event ID to session
         $this->app['session']->set('event_id', $event_id);
+
+        // save the data to the propose record
+        $ProposeData = new ProposeData($app);
+        $data = array(
+            'new_event_id' => $event_id
+        );
+        if (null == ($propose_id = $app['session']->get('propose_id'))) {
+            // create a new propose record
+            $ProposeData->insert($data, $propose_id);
+            // set the session for further usage
+            $app['session']->set('propose_id', $propose_id);
+        }
+        else {
+            // update existing propose record
+            $ProposeData->update($propose_id, $data);
+        }
 
         return $this->controllerSubmitter($app);
     }
@@ -129,29 +339,29 @@ class Propose extends Basic
         // Event date
         ->add('event_date_from', 'text', array(
             'attr' => array('class' => 'event_date_from'),
-            'data' => isset($event['event_date_from']) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_date_from'])) : null,
+            'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_date_from'])) : null,
         ))
         ->add('event_date_to', 'text', array(
             'attr' => array('class' => 'event_date_to'),
-            'data' => isset($event['event_date_to']) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_date_to'])) : null
+            'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_date_to'])) : null
         ))
         // Publish from - to
         ->add('event_publish_from', 'text', array(
             'attr' => array('class' => 'event_publish_from'),
-            'data' => isset($event['event_publish_from']) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_publish_from'])) : null,
+            'data' => (!empty($event['event_publish_from']) && ($event['event_publish_from'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_publish_from'])) : '',
             'label' => 'Publish from',
             'required' => false
         ))
         ->add('event_publish_to', 'text', array(
             'attr' => array('class' => 'event_publish_to'),
-            'data' => isset($event['event_publish_to']) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_publish_to'])) : null,
+            'data' => (!empty($event['event_publish_to']) && ($event['event_publish_to'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_publish_to'])) : null,
             'label' => 'Publish to',
             'required' => false
         ))
         // Deadline
         ->add('event_deadline', 'text', array(
             'attr' => array('class' => 'event_deadline'),
-            'data' => isset($event['event_deadline']) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_deadline'])) : null,
+            'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_deadline'])) : null,
             'label' => 'Deadline',
             'required' => false
         ))
@@ -336,7 +546,7 @@ class Propose extends Basic
     {
         $this->initParameters($app);
 
-        $request = $this->app['request']->request->get('form');
+        $request = $app['request']->request->get('form');
 
         // some checks before creating the contact
         if ($request['contact_type'] == 'PERSON') {
@@ -425,7 +635,7 @@ class Propose extends Basic
                     'contact_id' => -1,
                     'communication_type' => 'EMAIL',
                     'communication_usage' => 'PRIMARY',
-                    'communication_value' => $request['email']
+                    'communication_value' => strtolower($request['email'])
                 ),
                 array(
                     'communication_id' => -1,
@@ -473,14 +683,42 @@ class Propose extends Basic
             throw new \Exception(strip_tags($ContactControl->getMessage()));
         }
 
+        $ProposeData = new ProposeData($app);
+
         if ($request['create_type'] == 'organizer') {
             // set session for 'organizer_id'
-            $this->app['session']->set('organizer_id', $contact_id);
+            $app['session']->set('organizer_id', $contact_id);
+            $data = array(
+                'new_organizer_id' => $contact_id
+            );
+            if (null == ($propose_id = $app['session']->get('propose_id'))) {
+                // create a new propose record
+                $ProposeData->insert($data, $propose_id);
+                // set the session for further usage
+                $app['session']->set('propose_id', $propose_id);
+            }
+            else {
+                // update existing propose record
+                $ProposeData->update($propose_id, $data);
+            }
             return $this->controllerSearchLocation($app);
         }
         else {
             // set session for 'location_id'
-            $this->app['session']->set('location_id', $contact_id);
+            $app['session']->set('location_id', $contact_id);
+            $data = array(
+                'new_location_id' => $contact_id
+            );
+            if (null == ($propose_id = $app['session']->get('propose_id'))) {
+                // create a new propose record
+                $ProposeData->insert($data, $propose_id);
+                // set the session for further usage
+                $app['session']->set('propose_id', $propose_id);
+            }
+            else {
+                // update existing propose record
+                $ProposeData->update($propose_id, $data);
+            }
             return $this->controllerEvent($app);
         }
     }
@@ -718,6 +956,8 @@ class Propose extends Basic
             }
         }
 
+        $app['session']->set('group_id', $group_id);
+
         $fields = $this->app['form.factory']->createBuilder('form')
         ->add('event_group', 'hidden', array(
             'data' => $group_id
@@ -803,6 +1043,7 @@ class Propose extends Basic
         $app['session']->remove('location_id');
         $app['session']->remove('organizer_id');
         $app['session']->remove('event_id');
+        $app['session']->remove('propose_id');
 
         if (!isset($parameter['group'])) {
             // must first select a group

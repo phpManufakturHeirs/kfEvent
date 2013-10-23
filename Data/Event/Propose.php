@@ -42,15 +42,19 @@ class Propose
         `id` INT(11) NOT NULL AUTO_INCREMENT,
         `submitter_id` INT(11) NOT NULL DEFAULT '-1',
         `submitted_when` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `submitter_status` ENUM('PENDING', 'CONFIRMED') NOT NULL DEFAULT 'PENDING',
+        `submitter_status` ENUM('PENDING', 'CONFIRMED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
         `submitter_status_when` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `submitter_guid` VARCHAR(128) NOT NULL DEFAULT '',
         `new_event_id` INT(11) NOT NULL DEFAULT '-1',
         `new_organizer_id` INT(11) NOT NULL DEFAULT '-1',
         `new_location_id` INT(11) NOT NULL DEFAULT '-1',
         `admin_status` ENUM('PENDING','REJECTED','CONFIRMED') NOT NULL DEFAULT 'PENDING',
         `admin_status_when` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+        `admin_guid` VARCHAR(128) NOT NULL DEFAULT '',
         `timestamp` TIMESTAMP,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`id`),
+        INDEX (`new_event_id`, `new_organizer_id`, `new_location_id`),
+        UNIQUE (`submitter_guid`, `admin_guid`)
         )
     COMMENT='Propose events'
     ENGINE=InnoDB
@@ -87,5 +91,79 @@ EOD;
         }
     }
 
+    /**
+     * Insert a new propose record.
+     * Create a unique GUID for the submitter and the administrator
+     *
+     * @param array $data
+     * @param integer reference $propose_id
+     * @throws \Exception
+     */
+    public function insert($data, &$propose_id)
+    {
+        try {
+            $insert = array();
+            foreach ($data as $key => $value) {
+                if (($key == 'id') || ($key == 'timestamp') ||
+                    ($key == 'submitter_guid') || ($key == 'admin_guid')) {
+                    continue;
+                }
+                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
+            }
+            $insert['submitter_guid'] = $this->app['utils']->createGUID();
+            $insert['admin_guid'] = $this->app['utils']->createGUID();
+            $this->app['db']->insert(self::$table_name, $insert);
+            $propose_id = $this->app['db']->lastInsertId();
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 
+    /**
+     * Update a existing propose record
+     *
+     * @param integer $propose_id
+     * @param array $data
+     * @throws \Exception
+     */
+    public function update($propose_id, $data)
+    {
+        try {
+            $update = array();
+            foreach ($data as $key => $value) {
+                if (($key == 'id') || ($key == 'timestamp')) continue;
+                $update[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
+            }
+            if (!empty($update)) {
+                $this->app['db']->update(self::$table_name, $update, array('id' => $propose_id));
+            }
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a propose record by the given ID
+     *
+     * @param integer $propose_id
+     * @throws \Exception
+     * @return boolean|array
+     */
+    public function select($propose_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `id`='$propose_id'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            if (!isset($result['id'])) {
+                return false;
+            }
+            $propose = array();
+            foreach ($result as $key => $value) {
+                $propose[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+            }
+            return $propose;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }

@@ -21,6 +21,7 @@ use phpManufaktur\Event\Data\Event\LocationTag as EventLocationTag;
 use phpManufaktur\Event\Data\Event\Description as EventDescription;
 use phpManufaktur\Event\Data\Event\Extra;
 use phpManufaktur\Event\Data\Event\Images;
+use Carbon\Carbon;
 
 class EventEdit extends Backend {
 
@@ -33,6 +34,7 @@ class EventEdit extends Backend {
     protected $EventDescription = null;
     protected $Extra = null;
     protected $Images = null;
+    protected static $config = null;
 
     public function __construct(Application $app=null)
     {
@@ -53,6 +55,7 @@ class EventEdit extends Backend {
         $this->EventDescription = new EventDescription($this->app);
         $this->Extra = new Extra($this->app);
         $this->Images = new Images($this->app);
+        self::$config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
     }
 
     public function setEventID($event_id)
@@ -173,29 +176,29 @@ class EventEdit extends Backend {
         // Event date
         ->add('event_date_from', 'text', array(
             'attr' => array('class' => 'event_date_from'),
-            'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? $event['event_date_from'] : null,
+            'data' => (!empty($event['event_date_from']) && ($event['event_date_from'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_date_from'])) : null,
         ))
         ->add('event_date_to', 'text', array(
             'attr' => array('class' => 'event_date_to'),
-            'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? $event['event_date_to'] : null
+            'data' => (!empty($event['event_date_to']) && ($event['event_date_to'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_date_to'])) : null
         ))
         // Publish from - to
         ->add('event_publish_from', 'text', array(
             'attr' => array('class' => 'event_publish_from'),
-            'data' => (!empty($event['event_publish_from']) && ($event['event_publish_from'] != '0000-00-00 00:00:00')) ? $event['event_publish_from'] : null,
+            'data' => (!empty($event['event_publish_from']) && ($event['event_publish_from'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_publish_from'])) : null,
             'label' => 'Publish from',
             'required' => false
         ))
         ->add('event_publish_to', 'text', array(
             'attr' => array('class' => 'event_publish_to'),
-            'data' => (!empty($event['event_publish_to']) && ($event['event_publish_to'] != '0000-00-00 00:00:00')) ? $event['event_publish_to'] : null,
+            'data' => (!empty($event['event_publish_to']) && ($event['event_publish_to'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_publish_to'])) : null,
             'label' => 'Publish to',
             'required' => false
         ))
         // Deadline
         ->add('event_deadline', 'text', array(
             'attr' => array('class' => 'event_deadline'),
-            'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? $event['event_deadline'] : null,
+            'data' => (!empty($event['event_deadline']) && ($event['event_deadline'] != '0000-00-00 00:00:00')) ? date($this->app['translator']->trans('DATETIME_FORMAT'), strtotime($event['event_deadline'])) : null,
             'label' => 'Deadline',
             'required' => false
         ))
@@ -379,6 +382,7 @@ class EventEdit extends Backend {
         $is_start = false;
         if (self::$event_id < 1) {
             $is_start = true;
+            $this->app['session']->set('create_new_event', true);
             if (isset($form_request['create_by'])) {
                 if ($form_request['create_by'] == 'COPY') {
                     // show the dialog to copy an existing event into a new one
@@ -412,7 +416,8 @@ class EventEdit extends Backend {
                 // first step - show the start dialog to create a new event
                 $fields = $this->getCreateStartFormFields();
                 $form = $fields->getForm();
-                return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.create.start.twig'),
+                return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+                    '@phpManufaktur/Event/Template', 'backend/event.create.start.twig'),
                     array(
                         'usage' => self::$usage,
                         'toolbar' => $this->getToolbar('event_edit'),
@@ -441,37 +446,118 @@ class EventEdit extends Backend {
             if ($form->isValid()) {
                 $event = $form->getData();
                 self::$event_id = $event['event_id'];
-                // update an existing event
-                $data = array(
-                    'event_organizer' => $event['event_organizer'],
-                    'event_location' => $event['event_location'],
-                    'event_costs' => isset($event['event_costs']) ? $this->app['utils']->str2float($event['event_costs']) : 0,
-                    'event_participants_max' => isset($event['event_participants_max']) ? $this->app['utils']->str2int($event['event_participants_max']) : -1,
-                    'event_status' => $event['event_status'],
-                    'event_date_from' => date('Y-m-d H:i:s', strtotime($event['event_date_from'])),
-                    'event_date_to' => date('Y-m-d H:i:s', strtotime($event['event_date_to'])),
-                    'event_publish_from' => date('Y-m-d H:i:s', strtotime($event['event_publish_from'])),
-                    'event_publish_to' => date('Y-m-d H:i:s', strtotime($event['event_publish_to'])),
-                    'event_deadline' => date('Y-m-d H:i:s', strtotime($event['event_deadline'])),
-                    'description_title' => isset($event['description_title']) ? $event['description_title'] : '',
-                    'description_short' => isset($event['description_short']) ? $event['description_short'] : '',
-                    'description_long' => isset($event['description_long']) ? $event['description_long'] : '',
-                    'event_url' => isset($event['event_url']) ? $event['event_url'] : ''
-                );
-                foreach ($extra_info as $extra) {
-                    $data[$extra['name']] = $event[$extra['name']];
+                $checked = true;
+
+
+                // check the event data
+                if (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < self::$config['event']['description']['title']['min_length'])) {
+                    $this->setMessage('Please type in a title with %minimum% characters at minimum.',
+                        array('%minimum%' => self::$config['event']['description']['title']['min_length']));
+                    $checked = false;
                 }
-                // update all event data
+                if (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < self::$config['event']['description']['short']['min_length'])) {
+                    $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
+                        array('%minimum%' => self::$config['event']['description']['short']['min_length']));
+                    $checked = false;
+                }
+                if (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < self::$config['event']['description']['long']['min_length'])) {
+                    $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
+                        array('%minimum%' => self::$config['event']['description']['long']['min_length']));
+                    $checked = false;
+                }
 
-                $this->EventData->updateEvent($data, self::$event_id);
+                if ($this->app['session']->get('create_new_event', false) &&
+                    !self::$config['event']['date']['event_date_from']['allow_date_in_past'] &&
+                    (strtotime($event['event_date_from']) < time())) {
+                    $this->setMessage('It is not allowed that the event start in the past!');
+                    $checked = false;
+                }
 
-                // get the actual event record
-                $event = $this->EventData->selectEvent(self::$event_id);
-                // get the form fields
-                $extra_info = array();
-                $fields = $this->getFormFields($event, $extra_info);
-                // get the form
-                $form = $fields->getForm();
+                // create date time in the correct format
+                $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_date_from']);
+                $event['event_date_from'] = $dt->toDateTimeString();
+
+                $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_date_to']);
+                $event['event_date_to'] = $dt->toDateTimeString();
+
+                if (empty($event['event_publish_from'])) {
+                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_date_from']);
+                    $dt->subDays(self::$config['event']['date']['event_publish_from']['subtract_days']);
+                    $dt->startOfDay();
+                    $event['event_publish_from'] = $dt->toDateTimeString();
+                }
+                else {
+                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_from']);
+                    $event['event_publish_from'] = $dt->toDateTimeString();
+                }
+
+                if (empty($event['event_publish_to'])) {
+                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_date_to']);
+                    $dt->addDays(self::$config['event']['date']['event_publish_to']['add_days']);
+                    $dt->endOfDay();
+                    $event['event_publish_to'] = $dt->toDateTimeString();
+                }
+                else {
+                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_to']);
+                    $event['event_publish_to'] = $dt->toDateTimeString();
+                }
+
+                if (empty($event['event_deadline'])) {
+                    $event['event_deadline'] = '0000-00-00 00:00:00';
+                }
+                else {
+                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_deadline']);
+                    $event['event_deadline'] = $dt->toDateTimeString();
+                }
+
+
+                if (strtotime($event['event_date_from']) > strtotime($event['event_date_to'])) {
+                    $this->setMessage('The event start date is behind the event end date!');
+                    $checked = false;
+                }
+                if (strtotime($event['event_publish_to']) < strtotime($event['event_date_from'])) {
+                    $this->setMessage('The publishing date ends before the event starts, this is not allowed!');
+                    $checked = false;
+                }
+                if (strtotime($event['event_deadline']) > strtotime($event['event_date_from'])) {
+                    $this->setMessage('The deadline ends after the event start date!');
+                    $checked = false;
+                }
+
+
+                if ($checked) {
+                    // update an existing event
+                    $this->app['session']->remove('create_new_event');
+                    $data = array(
+                        'event_organizer' => $event['event_organizer'],
+                        'event_location' => $event['event_location'],
+                        'event_costs' => isset($event['event_costs']) ? $this->app['utils']->str2float($event['event_costs']) : 0,
+                        'event_participants_max' => isset($event['event_participants_max']) ? $this->app['utils']->str2int($event['event_participants_max']) : -1,
+                        'event_status' => $event['event_status'],
+                        'event_date_from' => $event['event_date_from'],
+                        'event_date_to' => $event['event_date_to'],
+                        'event_publish_from' => $event['event_publish_from'],
+                        'event_publish_to' => $event['event_publish_to'],
+                        'event_deadline' => $event['event_deadline'],
+                        'description_title' => isset($event['description_title']) ? trim($event['description_title']) : '',
+                        'description_short' => isset($event['description_short']) ? trim($event['description_short']) : '',
+                        'description_long' => isset($event['description_long']) ? trim($event['description_long']) : '',
+                        'event_url' => isset($event['event_url']) ? trim($event['event_url']) : ''
+                    );
+                    foreach ($extra_info as $extra) {
+                        $data[$extra['name']] = $event[$extra['name']];
+                    }
+                    // update all event data
+                    $this->EventData->updateEvent($data, self::$event_id);
+
+                    // get the actual event record
+                    $event = $this->EventData->selectEvent(self::$event_id);
+                    // get the form fields
+                    $extra_info = array();
+                    $fields = $this->getFormFields($event, $extra_info);
+                    // get the form
+                    $form = $fields->getForm();
+                }
             }
             else {
                 // general error (timeout, CSFR ...)

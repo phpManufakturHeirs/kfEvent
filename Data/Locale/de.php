@@ -92,6 +92,9 @@ return array(
     'Detected a kitEvent installation (Release: %release%) with %count% active or locked events.'
         => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
 
+    'email usage'
+        => 'Verwendung',
+
     // event data columns
     'event_costs'
         => 'Kosten',
@@ -165,6 +168,8 @@ return array(
         => 'Ganzzahl',
     'Integer'
         => 'Ganzzahl',
+    'It is not allowed that the event start in the past!'
+        => 'Der Veranstaltungsbeginn darf nicht in der Vergangenheit liegen!',
 
     'List of all active events'
         => 'Übersicht über alle aktiven Veranstaltungen',
@@ -195,6 +200,8 @@ return array(
     'Organizer Tags'
         => 'Veranstalter',
 
+    'personal email address'
+        => 'persönliche E-Mail Adresse',
     'Please search for for a organizer or select the checkbox to create a new one.'
         => 'Bitte suchen Sie nach einem Veranstalter oder haken Sie die Checkbox an um einen neuen Veranstalter anzulegen.',
     'Please search for for a location or select the checkbox to create a new one.'
@@ -215,10 +222,12 @@ return array(
         => 'Bilder',
     'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.'
         => 'Bitte definieren Sie einen permanenten Link in der config.event.json. Ohne diesen Link kann Event keine Verweise auf Veranstaltungen erzeugen oder auf Anfragen von Veranstaltungsteilnehmern reagieren.',
-    'Please type in a long description with %minimum% characters.'
-        => 'Bitte geben Sie eine Langbeschreibung mit mindestens %minimum% Zeichen ein.',
-    'Please type in a short description with %minimum% characters.'
-        => 'Bitte geben Sie eine Kurzbeschreibung mit mindestens %minimum% Zeichen ein.',
+    'Please type in a long description with %minimum% characters at minimum.'
+        => 'Bitte geben Sie eine Langbeschreibung mit einer Länge von mindestens %minimum% Zeichen ein.',
+    'Please type in a short description with %minimum% characters at minimum.'
+        => 'Bitte geben Sie eine Kurzbeschreibung mit einer Länge von mindestens %minimum% Zeichen ein.',
+    'Please type in a title with %minimum% characters at minimum.'
+        => 'Bitte geben Sie einen Titel mit einer Länge von mindestens %minimum% Zeichen ein.',
     'Publish from'
         => 'Veröffentlichen ab',
         'Publish to'
@@ -226,6 +235,8 @@ return array(
 
     'Registrations'
         => 'Anmeldungen',
+    'regular email address of a company, institution or association'
+        => 'offizielle E-Mail Adresse einer Firma, Einrichtung oder eines Verein',
 
     'Search Location'
         => 'Veranstaltungsort suchen',
@@ -260,8 +271,6 @@ return array(
         => 'Der Anmeldeschluß liegt nach dem Beginn der Veranstaltung!',
     'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
         => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
-    'The event date can not be in the past!'
-        => 'Das Veranstaltungsdatum darf nicht in der Vergangenheit liegen!',
     'The event group with the name %group% does not exists!'
         => 'Die Veranstaltungs-Gruppe %group% existiert nicht!',
     'The event list is empty, please create a event!'

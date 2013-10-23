@@ -3,7 +3,7 @@
 
   <h2>DETAIL {{ event.description_title }}</h2>
   <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
-  <div class="event view description long">{{ kitCommandParser(event.description_long) }}</div>
+  <div class="event view description long">{{ event.description_long }}</div>
 
   <div class="table">
 

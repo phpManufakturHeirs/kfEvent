@@ -73,12 +73,14 @@ input#form_city {
   margin: 0 10px 0 0;
 }
 
+#form_email_type,
 #form_contact_type,
 #form_subscribe,
 #form_person_gender {
   float: left;
   width: 300px;
 }
+#form_email_type input,
 #form_contact_type input,
 #form_subscribe input,
 #form_person_gender input {
@@ -88,6 +90,7 @@ input#form_city {
   margin: 5px 10px 0 0;
   padding: 0;
 }
+#form_email_type label,
 #form_contact_type label,
 #form_subscribe label,
 #form_person_gender label {
@@ -96,6 +99,7 @@ input#form_city {
   width: 250px;
   text-align: left;
 }
+#form_email_type label.required:after,
 #form_contact_type label.required:after,
 #form_subscribe label.required:after,
 #form_person_gender label.required:after {

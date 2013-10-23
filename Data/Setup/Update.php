@@ -72,6 +72,40 @@ class Update
             $Propose = new Propose($this->app);
             $Propose->createTable();
         }
+
+        if (file_exists(MANUFAKTUR_PATH.'/Event/config.event.json')) {
+            $config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+            if (!isset($config['event']['description'])) {
+                $config['event']['description'] = array(
+                    'title' => array(
+                        'min_length' => 5
+                        ),
+                    'short' => array(
+                        'min_length' => 30
+                        ),
+                    'long' => array(
+                        'min_length' => 50
+                        )
+                    );
+                $config['event']['date'] = array(
+                    'event_date_from' => array(
+                        'allow_date_in_past' => false
+                    ),
+                    'event_date_to' => array(
+
+                    ),
+                    'event_publish_from' => array(
+                        'subtract_days' => 21
+                    ),
+                    'event_publish_to' => array(
+                        'add_days' => 7
+                    )
+                );
+                // write the formatted config file to the path
+                file_put_contents(MANUFAKTUR_PATH.'/Event/config.event.json', $this->app['utils']->JSONFormat($config));
+                $this->app['monolog']->addDebug('Added event value checking to /Event/config.event.json');
+            }
+        }
     }
 
     /**

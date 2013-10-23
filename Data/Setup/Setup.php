@@ -54,6 +54,31 @@ class Setup
                                 'organizer'
                             )
                         )
+                    ),
+                    'description' => array(
+                        'title' => array(
+                            'min_length' => 5
+                        ),
+                        'short' => array(
+                            'min_length' => 30
+                        ),
+                        'long' => array(
+                            'min_length' => 50
+                        )
+                    ),
+                    'date' => array(
+                        'event_date_from' => array(
+                            'allow_date_in_past' => false
+                        ),
+                        'event_date_to' => array(
+
+                        ),
+                        'event_publish_from' => array(
+                            'subtract_days' => 21
+                        ),
+                        'event_publish_to' => array(
+                            'add_days' => 7
+                        )
                     )
                 ),
                 'contact' => array(

@@ -238,3 +238,5 @@ $app->get('/event/propose/location/id/{contact_id}',
     'phpManufaktur\Event\Control\Command\Propose::controllerLocationID');
 $app->post('/event/propose/event/check',
     'phpManufaktur\Event\Control\Command\Propose::controllerEventCheck');
+$app->post('/event/propose/submitter/confirm',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSubmitterConfirm');
