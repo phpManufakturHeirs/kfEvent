@@ -173,6 +173,14 @@ $app->get('/admin/event/qrcode/rebuild',
     // rebuild all QR-Code files
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerRebuildAllQRCodeFiles');
 
+// handling of registrations
+$app->get('/admin/event/registration',
+    'phpManufaktur\Event\Control\Backend\Registration::controllerList');
+
+// handling of proposes
+$app->get('/admin/event/propose',
+    'phpManufaktur\Event\Control\Backend\Propose::controllerList');
+
 /**
  * kitCOMMAND routes
  */

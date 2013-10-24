@@ -26,15 +26,15 @@ class Backend {
     public function __construct(Application $app=null) {
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
-    
+
     /**
      * Initialize the class with the needed parameters
-     * 
+     *
      * @param Application $app
      */
-    protected function initialize(Application $app) 
+    protected function initialize(Application $app)
     {
         $this->app = $app;
         $cms = $this->app['request']->get('usage');
@@ -66,11 +66,17 @@ class Backend {
                 'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
                 'active' => ($active == 'event_edit')
             ),
-            'registrations' => array(
+            'registration' => array(
                 'text' => 'Registrations',
                 'hint' => 'List of all registrations for events',
-                'link' => FRAMEWORK_URL.'/admin/event/registrations'.self::$usage_param,
-                'active' => ($active == 'registrations')
+                'link' => FRAMEWORK_URL.'/admin/event/registration'.self::$usage_param,
+                'active' => ($active == 'registration')
+            ),
+            'propose' => array(
+                'text' => 'Proposes',
+                'hint' => 'List of actual submitted proposes for events',
+                'link' => FRAMEWORK_URL.'/admin/event/propose'.self::$usage_param,
+                'active' => ($active == 'propose')
             ),
             'contact_list' => array(
                 'text' => 'Contact list',
@@ -109,7 +115,7 @@ class Backend {
         return self::$message;
     }
 
-	  /**
+      /**
      * @param string $message
      */
     public function setMessage($message, $params=array())

@@ -611,7 +611,8 @@ class Propose extends Basic
         $data = array(
             'submitter_id' => $contact_id,
             'command_url' => $this->getCMSpageURL(),
-            'submitter_status_when' => date('Y-m-d H:i:s')
+            'submitter_status_when' => date('Y-m-d H:i:s'),
+            'submitted_when' => date('Y-m-d H:i:s')
         );
         $ProposeData->update($app['session']->get('propose_id'), $data);
 

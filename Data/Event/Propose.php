@@ -12,6 +12,7 @@
 namespace phpManufaktur\Event\Data\Event;
 
 use Silex\Application;
+use phpManufaktur\Contact\Data\Contact\Overview;
 
 class Propose
 {
@@ -213,6 +214,55 @@ EOD;
                 $propose[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
             }
             return $propose;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select the list of the last limited proposes for events with all additional
+     * information about submitter, event, organizer and location
+     *
+     * @param integer $limit the list
+     * @throws \Exception
+     * @return multitype:multitype:unknown Ambigous <\phpManufaktur\Contact\Data\Contact\Ambigous, boolean, multitype:unknown > Ambigous <multitype:, boolean, multitype:unknown multitype:NULL  Ambigous <NULL, multitype:boolean Ambigous <number, unknown> unknown > Ambigous <multitype:, multitype:multitype:Ambigous <> Ambigous <Ambigous <>> Ambigous <Ambigous <>, Ambigous <Ambigous <>>> Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>> Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>> Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>> Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>>> Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>, Ambigous <Ambigous <>, Ambigous <Ambigous <>>>>>>>> unknown  > >
+     */
+    public function selectList($limit=150)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` ORDER BY `submitted_when` DESC LIMIT $limit";
+            $results = $this->app['db']->fetchAll($SQL);
+            $proposes = array();
+            $EventData = new Event($this->app);
+            $ContactOverview = new Overview($this->app);
+            foreach ($results as $propose) {
+                if (false === ($event = $EventData->selectEvent($propose['new_event_id']))) {
+                    throw new \Exception('Missing the event ID '.$propose['event_id']);
+                }
+                if (false === ($submitter = $ContactOverview->select($propose['submitter_id']))) {
+                    throw new \Exception('Missing the submitter ID '.$propose['submitter_id']);
+                }
+                $organizer = null;
+                if ($propose['new_organizer_id'] > 0) {
+                    if (false === ($organizer = $ContactOverview->select($propose['new_organizer_id']))) {
+                        throw new \Exception('Missing the organizer ID '.$propose['new_organizer_id']);
+                    }
+                }
+                $location = null;
+                if ($propose['new_location_id'] > 0) {
+                    if (false === ($location = $ContactOverview->select($propose['new_location_id']))) {
+                        throw new \Exception('Missing the location ID '.$propose['new_location_id']);
+                    }
+                }
+                $proposes[] = array(
+                    'propose' => $propose,
+                    'event' => $event,
+                    'submitter' => $submitter,
+                    'organizer' => $organizer,
+                    'location' => $location
+                );
+            }
+            return $proposes;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

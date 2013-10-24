@@ -171,6 +171,8 @@ return array(
     'It is not allowed that the event start in the past!'
         => 'Der Veranstaltungsbeginn darf nicht in der Vergangenheit liegen!',
 
+    'List of actual submitted proposes for events'
+        => 'Übersicht über die aktuellen Vorschläge zu Veranstaltungen',
     'List of all active events'
         => 'Übersicht über alle aktiven Veranstaltungen',
     'List of all available contacts (Organizer, Locations, Participants)'
@@ -228,6 +230,8 @@ return array(
         => 'Bitte geben Sie eine Kurzbeschreibung mit einer Länge von mindestens %minimum% Zeichen ein.',
     'Please type in a title with %minimum% characters at minimum.'
         => 'Bitte geben Sie einen Titel mit einer Länge von mindestens %minimum% Zeichen ein.',
+    'Proposes'
+        => 'Vorschläge',
     'Proposed event: %event%'
         => 'Vorgeschlagene Veranstaltung: %event%',
     'Publish from'
