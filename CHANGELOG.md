@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.16** - 2013-10-24
+
+* added class *Propose* to enable a dialog guided proposing of new events for the visitors and supporters. Double-opt-in, activation for submitter and admin with different activation links
+
 **2.0.15** - 2013-10-21
 
 * implemented the *Contacts* full search function (backend)
