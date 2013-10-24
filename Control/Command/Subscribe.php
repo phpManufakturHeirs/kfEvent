@@ -19,7 +19,6 @@ use phpManufaktur\Event\Data\Event\Event;
 use phpManufaktur\Contact\Data\Contact\Message as MessageData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use phpManufaktur\Contact\Data\Contact\Communication;
 
 class Subscribe extends Basic
 {
@@ -33,7 +32,6 @@ class Subscribe extends Basic
     protected $SubscriptionData = null;
     protected $EventData = null;
     protected static $config = null;
-    //protected $CommunicationData = null;
     protected $EventTools = null;
 
     protected function initParameters(Application $app, $parameter_id=-1)

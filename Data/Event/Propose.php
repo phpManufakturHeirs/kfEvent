@@ -48,9 +48,10 @@ class Propose
         `new_event_id` INT(11) NOT NULL DEFAULT '-1',
         `new_organizer_id` INT(11) NOT NULL DEFAULT '-1',
         `new_location_id` INT(11) NOT NULL DEFAULT '-1',
-        `admin_status` ENUM('PENDING','REJECTED','CONFIRMED') NOT NULL DEFAULT 'PENDING',
+        `admin_status` ENUM('WAITING','PENDING','REJECTED','CONFIRMED') NOT NULL DEFAULT 'WAITING',
         `admin_status_when` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
         `admin_guid` VARCHAR(128) NOT NULL DEFAULT '',
+        `command_url` TEXT NOT NULL,
         `timestamp` TIMESTAMP,
         PRIMARY KEY (`id`),
         INDEX (`new_event_id`, `new_organizer_id`, `new_location_id`),
@@ -153,6 +154,56 @@ EOD;
     {
         try {
             $SQL = "SELECT * FROM `".self::$table_name."` WHERE `id`='$propose_id'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            if (!isset($result['id'])) {
+                return false;
+            }
+            $propose = array();
+            foreach ($result as $key => $value) {
+                $propose[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+            }
+            return $propose;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a propose record by the given submitter GUID
+     *
+     * @param string $guid
+     * @throws \Exception
+     * @return boolean|array
+     */
+    public function selectSubmitterGUID($guid)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `submitter_guid`='$guid'";
+            $result = $this->app['db']->fetchAssoc($SQL);
+            if (!isset($result['id'])) {
+                return false;
+            }
+            $propose = array();
+            foreach ($result as $key => $value) {
+                $propose[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+            }
+            return $propose;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select a propose record by the given administrator GUID
+     *
+     * @param string $guid
+     * @throws \Exception
+     * @return boolean|array
+     */
+    public function selectAdminGUID($guid)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `admin_guid`='$guid'";
             $result = $this->app['db']->fetchAssoc($SQL);
             if (!isset($result['id'])) {
                 return false;

@@ -228,6 +228,8 @@ return array(
         => 'Bitte geben Sie eine Kurzbeschreibung mit einer Länge von mindestens %minimum% Zeichen ein.',
     'Please type in a title with %minimum% characters at minimum.'
         => 'Bitte geben Sie einen Titel mit einer Länge von mindestens %minimum% Zeichen ein.',
+    'Proposed event: %event%'
+        => 'Vorgeschlagene Veranstaltung: %event%',
     'Publish from'
         => 'Veröffentlichen ab',
         'Publish to'
@@ -311,6 +313,8 @@ return array(
         => 'Es wurde kein Veranstaltungsort gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
     'There exists no organizer who fits to the search term %search%'
         => 'Es wurde kein Veranstalter gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
+    'This activation link was already used and is no longer valid!'
+        => 'Dieser Aktivierungslink wurde bereits verwendet und ist nicht mehr gültig!',
     'Type'
         => 'Typ',
 
@@ -319,6 +323,8 @@ return array(
     'Using qrcode[] is not enabled in config.event.json!'
         => 'qrcode[] ist nicht in der config.event.json freigegeben!',
 
+    'Your contact record is locked, so we can not perform any action. Please contact the administrator'
+        => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
     'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
         => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
     'You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name'

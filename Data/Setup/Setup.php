@@ -25,9 +25,11 @@ use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 use phpManufaktur\Event\Data\Event\Images;
 use phpManufaktur\Event\Data\Event\Subscription;
 use phpManufaktur\Event\Data\Event\Propose;
+use phpManufaktur\Event\Control\Configuration;
 
 class Setup
 {
+
 
     /**
      * Check if the config file exists and create it with default values
@@ -36,98 +38,8 @@ class Setup
      */
     protected function createConfigFile(Application $app)
     {
-        if (!file_exists(MANUFAKTUR_PATH.'/Event/config.event.json')) {
-            $config = array(
-                'general' => array(
-                    'max_execution_time' => 60
-                ),
-                'event' => array(
-                    'microdata' => array(
-                        'offer_count_unlimited' => 20
-                    ),
-                    'subscription' => array(
-                        'confirm' => array(
-                            'double_opt_in' => false,
-                            'mail_to' => array(
-                                'contact',
-                                'provider',
-                                'organizer'
-                            )
-                        )
-                    ),
-                    'description' => array(
-                        'title' => array(
-                            'min_length' => 5
-                        ),
-                        'short' => array(
-                            'min_length' => 30
-                        ),
-                        'long' => array(
-                            'min_length' => 50
-                        )
-                    ),
-                    'date' => array(
-                        'event_date_from' => array(
-                            'allow_date_in_past' => false
-                        ),
-                        'event_date_to' => array(
-
-                        ),
-                        'event_publish_from' => array(
-                            'subtract_days' => 21
-                        ),
-                        'event_publish_to' => array(
-                            'add_days' => 7
-                        )
-                    )
-                ),
-                'contact' => array(
-                    'confirm' => array(
-                        'double_opt_in' => true,
-                        'mail_to' => array(
-                            'contact',
-                            'provider'
-                        )
-                    )
-                ),
-                'permalink' => array(
-                    'cms' => array(
-                        'url' => ''
-                    )
-                ),
-                'ical' => array(
-                    'active' => true,
-                    'framework' => array(
-                        'path' => '/media/protected/event/ical'
-                    )
-                ),
-                'qrcode' => array(
-                    "active" => false,
-                    "framework" => array(
-                        "path" => array(
-                            "link" => '/media/protected/event/qrcode/link',
-                            "ical" => '/media/protected/event/qrcode/ical'
-                        )
-                    ),
-                    "settings" => array(
-                        "content" => "link",
-                        "size" => 3,
-                        "error_correction" => 1,
-                        "margin" => 2
-                    )
-                ),
-                'rating' => array(
-                    'active' => true,
-                    'type' => 'small',
-                    'length' => 5,
-                    'step' => true,
-                    'rate_max' => 5,
-                    'show_rate_info' => false
-                )
-            );
-            // write the formatted config file to the path
-            file_put_contents(MANUFAKTUR_PATH.'/Event/config.event.json', $app['utils']->JSONFormat($config));
-        }
+        // nothing else to do ...
+        $Config = new Configuration($app);
     }
 
     /**

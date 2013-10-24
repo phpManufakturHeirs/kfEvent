@@ -21,10 +21,487 @@ use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\Event;
 use phpManufaktur\Event\Data\Event\Propose as ProposeData;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Response;
 
 class Propose extends Basic
 {
 
+    /**
+     * Controller: The admin confirm the event and allow publishing
+     *
+     * @param Application $app
+     * @param string $guid
+     * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function controllerAdminPublish(Application $app, $guid)
+    {
+        $this->initParameters($app);
+
+        $ProposeData = new ProposeData($app);
+        if (false === ($propose = $ProposeData->selectAdminGUID($guid))) {
+            return new Response("The GUID $guid does not exists!");
+        }
+
+        // get the actual URL
+        $actual_url = $this->getCMSpageURL();
+
+        // set the permanent link as CMS page URI!
+        $this->setCMSpageURL($propose['command_url']);
+        // redirect to itself
+        $this->setRedirectRoute('/event/propose/publish/'.$guid);
+        // activate redirection
+        $this->setRedirectActive(true);
+
+        if ($actual_url != $propose['command_url']) {
+            // reload this page to fold the iframe into the CMS before performing anything
+            $app['monolog']->addInfo(sprintf("Reload route %s into CMS URL %s before performing anything",
+                '/event/propose/publish/'.$guid, $this->getCMSpageURL()));
+            return $app['twig']->render($app['utils']->getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/reload.twig'),
+                array('basic' => $this->getBasicSettings()));
+        }
+
+        if ($propose['admin_status'] != 'PENDING') {
+            return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
+        }
+
+        $Contact = new Contact($app);
+
+        // we have to activate all data of this proposed event
+        if ($propose['new_organizer_id'] > 0) {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['new_organizer_id'],
+                    'contact_status' => 'ACTIVE'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['new_organizer_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+        if ($propose['new_location_id'] > 0) {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['new_location_id'],
+                    'contact_status' => 'ACTIVE'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['new_location_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+
+        $ContactOverview = new Overview($app);
+        $contact = $ContactOverview->select($propose['submitter_id']);
+
+        $EventData = new Event($app);
+
+        $data = array(
+            'event_status' => 'ACTIVE'
+        );
+        $EventData->updateEvent($data, $propose['new_event_id']);
+
+        $event = $EventData->selectEvent($propose['new_event_id'], false);
+
+        // set the status of the propose to CONFIRMED
+        $data = array(
+            'admin_status' => 'CONFIRMED',
+            'admin_status_when' => date('Y-m-d H:i:s')
+        );
+        $ProposeData->update($propose['id'], $data);
+
+        $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            'command/mail/propose/submitter.published.twig',
+            $this->getPreferredTemplateStyle()),
+            array(
+                'event' => $event
+            )
+        );
+
+        // send a email to the contact
+        $message = \Swift_Message::newInstance()
+        ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+        ->setTo(array($contact['communication_email']))
+        ->setBody($body)
+        ->setContentType('text/html');
+        // send the message
+        $failedRecipients = null;
+        if (!$this->app['mailer']->send($message, $failedRecipients))  {
+            throw new \Exception("Can't send mail to: ".implode(',', $failedRecipients));
+        }
+
+        return new Response($app['translator']->trans('The event with the title %title% was published.', array('%title%' => $event['description_title'])));
+
+    }
+
+    /**
+     * Controller: The admin reject the event and delete all data
+     *
+     * @param Application $app
+     * @param string $guid
+     * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function controllerAdminReject(Application $app, $guid)
+    {
+        $this->initParameters($app);
+
+        $ProposeData = new ProposeData($app);
+        if (false === ($propose = $ProposeData->selectAdminGUID($guid))) {
+            return new Response("The GUID $guid does not exists!");
+        }
+
+        // get the actual URL
+        $actual_url = $this->getCMSpageURL();
+
+        // set the permanent link as CMS page URI!
+        $this->setCMSpageURL($propose['command_url']);
+        // redirect to itself
+        $this->setRedirectRoute('/event/propose/reject/'.$guid);
+        // activate redirection
+        $this->setRedirectActive(true);
+
+        if ($actual_url != $propose['command_url']) {
+            // reload this page to fold the iframe into the CMS before performing anything
+            $app['monolog']->addInfo(sprintf("Reload route %s into CMS URL %s before performing anything",
+                '/event/propose/reject/'.$guid, $this->getCMSpageURL()));
+            return $app['twig']->render($app['utils']->getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/reload.twig'),
+                array('basic' => $this->getBasicSettings()));
+        }
+
+        if ($propose['admin_status'] != 'PENDING') {
+            return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
+        }
+
+        $Contact = new Contact($app);
+
+        // we have to remove all data of this proposed event
+        if ($propose['new_organizer_id'] > 0) {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['new_organizer_id'],
+                    'contact_status' => 'DELETED'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['new_organizer_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+        if ($propose['new_location_id'] > 0) {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['new_location_id'],
+                    'contact_status' => 'DELETED'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['new_location_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+
+        $ContactOverview = new Overview($app);
+        $contact = $ContactOverview->select($propose['submitter_id']);
+
+        $EventData = new Event($app);
+
+        $data = array(
+            'event_status' => 'DELETED'
+        );
+        $EventData->updateEvent($data, $propose['new_event_id']);
+
+        $event = $EventData->selectEvent($propose['new_event_id'], false);
+
+        // set the status of the propose to CANCELLED
+        $data = array(
+            'admin_status' => 'REJECTED',
+            'admin_status_when' => date('Y-m-d H:i:s')
+        );
+        $ProposeData->update($propose['id'], $data);
+
+        $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            'command/mail/propose/submitter.rejected.twig',
+            $this->getPreferredTemplateStyle()),
+            array(
+                'event' => $event
+                )
+            );
+
+        // send a email to the contact
+        $message = \Swift_Message::newInstance()
+        ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+        ->setTo(array($contact['communication_email']))
+        ->setBody($body)
+        ->setContentType('text/html');
+        // send the message
+        $failedRecipients = null;
+        if (!$this->app['mailer']->send($message, $failedRecipients))  {
+            throw new \Exception("Can't send mail to: ".implode(',', $failedRecipients));
+        }
+
+        return new Response($app['translator']->trans('The event with the title %title% was rejected.', array('%title%' => $event['description_title'])));
+    }
+
+    /**
+     * Send a email to the administrator to activate the event with an activation link
+     *
+     * @param integer $submitter_id
+     * @throws \Exception
+     */
+    protected function sendAdminActivation($propose_id)
+    {
+        $ProposeData = new ProposeData($this->app);
+        if (false === ($propose = $ProposeData->select($propose_id))) {
+            throw new \Exception('Missing the propose data record');
+        }
+
+        $Contact = new Contact($this->app);
+        if (false === ($contact = $Contact->selectOverview($propose['submitter_id']))) {
+            throw new \Exception('Missing contact record for the submitter ID '.$propose['submitter_id']);
+        }
+
+        $EventData = new Event($this->app);
+        if (false === ($event = $EventData->selectEvent($propose['new_event_id'], false))) {
+            throw new \Exception('Missing the event data');
+        }
+
+        $body = $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            'command/mail/propose/admin.twig',
+            $this->getPreferredTemplateStyle()),
+            array(
+                'contact' => $contact,
+                'propose' => $propose,
+                'event' => $event,
+                'action' => array(
+                    'link' => array(
+                        'publish' => FRAMEWORK_URL.'/event/propose/publish/'.$propose['admin_guid'],
+                        'reject' => FRAMEWORK_URL.'/event/propose/reject/'.$propose['admin_guid']
+                    )
+                )
+            ));
+
+        // send a email to the contact
+        $message = \Swift_Message::newInstance()
+        ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
+        ->setFrom(array($contact['communication_email']))
+        ->setTo(array(SERVER_EMAIL_ADDRESS))
+        ->setBody($body)
+        ->setContentType('text/html');
+        // send the message
+        $failedRecipients = null;
+        if (!$this->app['mailer']->send($message, $failedRecipients))  {
+            throw new \Exception("Can't send mail to: ".implode(',', $failedRecipients));
+        }
+    }
+
+    public function controllerSubmitterActivate(Application $app, $guid)
+    {
+        $this->initParameters($app);
+
+        $ProposeData = new ProposeData($app);
+        if (false === ($propose = $ProposeData->selectSubmitterGUID($guid))) {
+            return new Response("The GUID $guid does not exists!");
+        }
+
+        // get the actual URL
+        $actual_url = $this->getCMSpageURL();
+
+        // set the permanent link as CMS page URI!
+        $this->setCMSpageURL($propose['command_url']);
+        // redirect to itself
+        $this->setRedirectRoute('/event/propose/confirm/'.$guid);
+        // activate redirection
+        $this->setRedirectActive(true);
+
+        if ($actual_url != $propose['command_url']) {
+            // reload this page to fold the iframe into the CMS before performing anything
+            $app['monolog']->addInfo(sprintf("Reload route %s into CMS URL %s before performing anything",
+                '/event/propose/confirm/'.$guid, $this->getCMSpageURL()));
+            return $app['twig']->render($app['utils']->getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/reload.twig'),
+                array('basic' => $this->getBasicSettings()));
+        }
+
+        if ($propose['submitter_status'] != 'PENDING') {
+            return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
+        }
+
+        $Contact = new Contact($app);
+
+        // confirm the submitter contact record!
+        $submitter = $Contact->select($propose['submitter_id']);
+        if ($submitter['contact']['contact_id'] < 1) {
+            throw new \Exception('The submitter contact record with the ID '.$propose['submitter_id'].' does not exists!');
+        }
+        if ($submitter['contact']['contact_status'] == 'PENDING') {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['submitter_id'],
+                    'contact_status' => 'ACTIVE'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['submitter_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+        elseif ($submitter['contact']['contact_status'] != 'ACTIVE') {
+            // this contact is not active, perhaps a problem?
+            $app['monolog']->addCritical('The contact with the ID '.$propose['submitter_id'].' is not ACTIVE but try to execute an activation link.',
+                array(__METHOD__, __LINE__));
+            return new Response($app['translator']->trans('Your contact record is locked, so we can not perform any action. Please contact the administrator'));
+        }
+
+        // change propose status
+        $data = array(
+            'submitter_status' => 'CONFIRMED',
+            'submitter_status_when' => date('Y-m-d H:i:s'),
+            'admin_status' => 'PENDING',
+            'admin_status_when' => date('Y-m-d H:i:s')
+        );
+        $ProposeData->update($propose['id'], $data);
+
+        $EventData = new Event($app);
+        if (false === ($event = $EventData->selectEvent($propose['new_event_id']))) {
+            throw new \Exception('Missing the event data');
+        }
+
+        // send a email to the administrator
+        $this->sendAdminActivation($propose['id']);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            "command/event.propose.submitter.confirm.twig",
+            $this->getPreferredTemplateStyle()),
+            array(
+                'basic' => $this->getBasicSettings(),
+                'propose' => $propose,
+                'event' => $event
+            ));
+    }
+
+    /**
+     * Controller: Submitter cancel the proposed event and stop publishing
+     *
+     * @param Application $app
+     * @param string $guid
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function controllerSubmitterCancelled(Application $app, $guid)
+    {
+        $this->initParameters($app);
+
+        $ProposeData = new ProposeData($app);
+        if (false === ($propose = $ProposeData->selectSubmitterGUID($guid))) {
+            return new Response("The GUID $guid does not exists!");
+        }
+
+        // get the actual URL
+        $actual_url = $this->getCMSpageURL();
+
+        // set the permanent link as CMS page URI!
+        $this->setCMSpageURL($propose['command_url']);
+        // redirect to itself
+        $this->setRedirectRoute('/event/propose/cancel/'.$guid);
+        // activate redirection
+        $this->setRedirectActive(true);
+
+        if ($actual_url != $propose['command_url']) {
+            // reload this page to fold the iframe into the CMS before performing anything
+            $app['monolog']->addInfo(sprintf("Reload route %s into CMS URL %s before performing anything",
+                '/event/propose/cancel/'.$guid, $this->getCMSpageURL()));
+            return $app['twig']->render($app['utils']->getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/reload.twig'),
+                array('basic' => $this->getBasicSettings()));
+        }
+
+        if ($propose['submitter_status'] != 'PENDING') {
+            return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
+        }
+
+        $Contact = new Contact($app);
+
+        // also if the event is cancelled we confirm the submitter contact record!
+        $submitter = $Contact->select($propose['submitter_id']);
+        if ($submitter['contact']['contact_id'] < 1) {
+            throw new \Exception('The submitter contact record with the ID '.$propose['submitter_id'].' does not exists!');
+        }
+        if ($submitter['contact']['contact_status'] == 'PENDING') {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['submitter_id'],
+                    'contact_status' => 'ACTIVE'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['submitter_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+        elseif ($submitter['contact']['contact_status'] != 'ACTIVE') {
+            // this contact is not active, perhaps a problem?
+            $app['monolog']->addCritical('The contact with the ID '.$propose['submitter_id'].' is not ACTIVE but try to execute an activation link.',
+                array(__METHOD__, __LINE__));
+            return new Response($app['translator']->trans('Your contact record is locked, so we can not perform any action. Please contact the administrator'));
+        }
+
+        // we have to remove all data of this proposed event
+        if ($propose['new_organizer_id'] > 0) {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['new_organizer_id'],
+                    'contact_status' => 'DELETED'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['new_organizer_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+        if ($propose['new_location_id'] > 0) {
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $propose['new_location_id'],
+                    'contact_status' => 'DELETED'
+                )
+            );
+            if (false === ($Contact->update($data, $propose['new_location_id']))) {
+                throw new \Exception(strip_tags($Contact->getMessage()));
+            }
+        }
+
+        $EventData = new Event($app);
+        $data = array(
+            'event_status' => 'DELETED'
+        );
+        $EventData->updateEvent($data, $propose['new_event_id']);
+
+        // set the status of the propose to CANCELLED
+        $data = array(
+            'submitter_status' => 'CANCELLED',
+            'submitter_status_when' => date('Y-m-d H:i:s')
+        );
+        $ProposeData->update($propose['id'], $data);
+
+        // get the event data
+        $event = $EventData->selectEvent($propose['new_event_id'], false);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            "command/event.propose.submitter.cancel.twig",
+            $this->getPreferredTemplateStyle()),
+            array(
+                'basic' => $this->getBasicSettings(),
+                'propose' => $propose,
+                'event' => $event
+            ));
+    }
+
+    /**
+     * Send a email to the submitter to activate the event with an activation link
+     *
+     * @param integer $submitter_id
+     * @throws \Exception
+     */
     protected function sendSubmitterConfirmation($submitter_id)
     {
         $Contact = new Contact($this->app);
@@ -66,11 +543,20 @@ class Propose extends Basic
         ->setBody($body)
         ->setContentType('text/html');
         // send the message
-        $this->app['mailer']->send($message);
-
-        return 'ok';
+        $failedRecipients = null;
+        if (!$this->app['mailer']->send($message, $failedRecipients))  {
+            throw new \Exception("Can't send mail to: ".implode(',', $failedRecipients));
+        }
     }
 
+    /**
+     * Controller check the email address of the submitter, send an activation
+     * link and display a dialog to change/complete the user data
+     *
+     * @param Application $app
+     * @throws \Exception
+     * @return string
+     */
     public function controllerSubmitterConfirm(Application $app)
     {
         $this->initParameters($app);
@@ -90,7 +576,8 @@ class Propose extends Basic
             $data = array(
                 'contact' => array(
                     'contact_id' => -1,
-                    'contact_type' => $request['email_type']
+                    'contact_type' => $request['email_type'],
+                    'contact_status' => 'PENDING'
                 ),
                 'person' => array(
                     array(
@@ -122,16 +609,32 @@ class Propose extends Basic
         // update the propose record
         $ProposeData = new ProposeData($app);
         $data = array(
-            'submitter_id' => $contact_id
+            'submitter_id' => $contact_id,
+            'command_url' => $this->getCMSpageURL(),
+            'submitter_status_when' => date('Y-m-d H:i:s')
         );
         $ProposeData->update($app['session']->get('propose_id'), $data);
 
         // send confirmation mail to the submitter
         $this->sendSubmitterConfirmation($contact_id);
 
-        return 'confirm';
+        // show confirmation dialog
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template',
+            "command/event.propose.submitter.send.twig",
+            $this->getPreferredTemplateStyle()),
+            array(
+                'basic' => $this->getBasicSettings(),
+            ));
     }
 
+    /**
+     * Controller confirm the new event and display a dialog to type in the
+     * email address of the submitter
+     *
+     * @param Application $app
+     */
     public function controllerSubmitter(Application $app)
     {
         $this->initParameters($app);
@@ -609,7 +1112,7 @@ class Propose extends Basic
                 'contact_type' => $request['contact_type'],
                 'contact_name' => null,
                 'contact_login' => $login,
-                'contact_status' => 'LOCKED'
+                'contact_status' => 'PENDING'
             ),
             'tag' => $tags,
             'company' => array(

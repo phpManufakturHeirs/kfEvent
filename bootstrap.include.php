@@ -240,3 +240,11 @@ $app->post('/event/propose/event/check',
     'phpManufaktur\Event\Control\Command\Propose::controllerEventCheck');
 $app->post('/event/propose/submitter/confirm',
     'phpManufaktur\Event\Control\Command\Propose::controllerSubmitterConfirm');
+$app->get('/event/propose/cancel/{guid}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSubmitterCancelled');
+$app->get('/event/propose/confirm/{guid}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerSubmitterActivate');
+$app->get('/event/propose/publish/{guid}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerAdminPublish');
+$app->get('/event/propose/reject/{guid}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerAdminReject');
