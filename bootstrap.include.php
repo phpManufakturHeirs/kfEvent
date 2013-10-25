@@ -173,9 +173,9 @@ $app->get('/admin/event/qrcode/rebuild',
     // rebuild all QR-Code files
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerRebuildAllQRCodeFiles');
 
-// handling of registrations
+// handling of subscriptions
 $app->get('/admin/event/registration',
-    'phpManufaktur\Event\Control\Backend\Registration::controllerList');
+    'phpManufaktur\Event\Control\Backend\Subscribe::controllerList');
 
 // handling of proposes
 $app->get('/admin/event/propose',

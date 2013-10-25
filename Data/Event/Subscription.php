@@ -12,6 +12,8 @@
 namespace phpManufaktur\Event\Data\Event;
 
 use Silex\Application;
+use phpManufaktur\Contact\Data\Contact\Overview;
+use phpManufaktur\Contact\Data\Contact\Message;
 
 class Subscription
 {
@@ -222,6 +224,13 @@ EOD;
         }
     }
 
+    /**
+     * Update a subscription record
+     *
+     * @param integer $subscription_id
+     * @param array $data
+     * @throws \Exception
+     */
     public function update($subscription_id, $data)
     {
         try {
@@ -231,4 +240,42 @@ EOD;
         }
     }
 
+    /**
+     * Return a list with subscriptions
+     *
+     * @param integer $limit
+     * @throws \Exception
+     * @return array
+     */
+    public function selectList($limit=150)
+    {
+        $SQL = "SELECT * FROM `".self::$table_name."` ORDER BY `subscription_date` DESC LIMIT $limit";
+        $results = $this->app['db']->fetchAll($SQL);
+        $subscriptions = array();
+        $EventData = new Event($this->app);
+        $ContactOverview = new Overview($this->app);
+        $MessageData = new Message($this->app);
+        foreach ($results as $subscription) {
+            if (false === ($event = $EventData->selectEvent($subscription['event_id'], false))) {
+                throw new \Exception('Missing the event ID '.$subscription['event_id']);
+            }
+            if (false === ($contact = $ContactOverview->select($subscription['contact_id']))) {
+                throw new \Exception('Missing the contact ID '.$subscription['contact_id']);
+            }
+            $message = '';
+            if ($subscription['message_id'] > 0) {
+                if (false === ($msg = $MessageData->select($subscription['message_id']))) {
+                    throw new \Exception('Missing the message ID '.$subscription['message_id']);
+                }
+                $message = $msg['message_content'];
+            }
+            $subscriptions[] = array(
+                'subscription' => $subscription,
+                'contact' => $contact,
+                'event' => $event,
+                'message' => $message
+            );
+        }
+        return $subscriptions;
+    }
 }

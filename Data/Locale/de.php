@@ -110,6 +110,8 @@ return array(
         => 'Anmeldeschluß',
     'event_id'
         => 'ID',
+    'event_participants_confirmed'
+        => 'Tln. best.',
     'event_participants_max'
         => 'max. Tln.',
     'event_participants_total'
@@ -232,6 +234,12 @@ return array(
         => 'Teilnehmer',
     'Participants maximum'
         => 'Teilnehmer, max. Anzahl',
+    'Participants canceled'
+        => 'Teilnehmer, storniert',
+    'Participants confirmed'
+        => 'Teilnehmer, bestätigt',
+    'Participants pending'
+        => 'Teilnehmer, unbestätigt',
     'Participants total'
         => 'Teilnehmer, angemeldet',
     'Pictures'

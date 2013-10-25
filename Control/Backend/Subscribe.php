@@ -13,8 +13,9 @@ namespace phpManufaktur\Event\Control\Backend;
 
 use phpManufaktur\Event\Control\Backend\Backend;
 use Silex\Application;
+use phpManufaktur\Event\Data\Event\Subscription;
 
-class Registration extends Backend {
+class Subscribe extends Backend {
 
     /**
      * Show the about dialog for Event
@@ -24,11 +25,16 @@ class Registration extends Backend {
     public function controllerList(Application $app)
     {
         $this->initialize($app);
+
+        $SubscriptionData = new Subscription($app);
+        $subscriptions = $SubscriptionData->selectList();
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'backend/registration.list.twig'),
+            '@phpManufaktur/Event/Template', 'backend/subscription.list.twig'),
             array(
                 'usage' => self::$usage,
-                'toolbar' => $this->getToolbar('registration')
+                'toolbar' => $this->getToolbar('registration'),
+                'subscriptions' => $subscriptions
             ));
     }
 
