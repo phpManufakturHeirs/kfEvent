@@ -174,10 +174,32 @@ EOD;
     public function deleteTypeByGroup($extra_type_id, $group_id)
     {
         try {
+            // delete the extra type
             $this->app['db']->delete(self::$table_name, array(
                 'extra_type_id' => $extra_type_id,
                 'group_id' => $group_id
             ));
+            // delete all associated records in table event_extra
+            $this->app['db']->delete(FRAMEWORK_TABLE_PREFIX.'event_extra', array(
+                'extra_type_id' => $extra_type_id,
+                'group_id' => $group_id
+            ));
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select all records for the given $extra_type_id
+     *
+     * @param integer $extra_type_id
+     * @throws \Exception
+     */
+    public function selectTypeID($extra_type_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `extra_type_id`='$extra_type_id'";
+            return $this->app['db']->fetchAll($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

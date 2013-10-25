@@ -14,11 +14,15 @@ namespace phpManufaktur\Event\Control\Backend;
 use phpManufaktur\Event\Control\Backend\Backend;
 use phpManufaktur\Event\Data\Event\ExtraType;
 use Silex\Application;
+use phpManufaktur\Event\Data\Event\ExtraGroup;
+use phpManufaktur\Event\Data\Event\Group;
 
 class ExtraFieldEdit extends Backend {
 
     protected $ExtraType = null;
     protected static $type_id = -1;
+    protected $ExtraGroup = null;
+    protected $EventGroup = null;
 
     public function __construct(Application $app=null)
     {
@@ -27,11 +31,13 @@ class ExtraFieldEdit extends Backend {
             $this->initialize($app);
         }
     }
-    
+
     protected function initialize(Application $app)
     {
         parent::initialize($app);
-        $this->ExtraType = new ExtraType($this->app);        
+        $this->ExtraType = new ExtraType($app);
+        $this->ExtraGroup = new ExtraGroup($app);
+        $this->EventGroup = new Group($app);
     }
 
     public function setTypeID($type_id)
@@ -120,9 +126,21 @@ class ExtraFieldEdit extends Backend {
                 }
                 elseif (!empty($type['delete'])) {
                     // delete the extra field
-                    $this->ExtraType->delete(self::$type_id);
-                    $this->setMessage('The record with the ID %id% was successfull deleted.', array('%id%' => self::$type_id));
-                    self::$type_id = -1;
+                    $extra_groups = $this->ExtraGroup->selectTypeID(self::$type_id);
+                    if (!empty($extra_groups)) {
+                        foreach ($extra_groups as $extra_group) {
+                            if (false === ($group = $this->EventGroup->select($extra_group['group_id']))) {
+                                throw new \Exception("Missing the event group with the ID {$extra_group['group_id']}");
+                            }
+                            $this->setMessage('This extra field is used in the event group %group%. First remove the extra field from the event group.',
+                                array('%group%' => $group['group_name']));
+                        }
+                    }
+                    else {
+                        $this->ExtraType->delete(self::$type_id);
+                        $this->setMessage('The record with the ID %id% was successfull deleted.', array('%id%' => self::$type_id));
+                        self::$type_id = -1;
+                    }
                 }
                 else {
                     // update a extra field

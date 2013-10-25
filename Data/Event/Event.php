@@ -317,6 +317,12 @@ EOD;
         }
     }
 
+    /**
+     * Get the rating data for the given event ID
+     *
+     * @param integer $event_id
+     * @return multitype:boolean Ambigous <number, unknown> unknown
+     */
     protected function getRatingData($event_id)
     {
         if (null === ($identifier = $this->RatingIdentifier->selectByTypeID('EVENT', $event_id))) {
@@ -356,6 +362,7 @@ EOD;
      * Select the complete Event record for the given $event_id
      *
      * @param integer $event_id
+     * @param bool $rating if true return also the rating information, otherwise null
      * @throws \Exception
      * @return array on success, boolean false if $event_id does not exists
      */
