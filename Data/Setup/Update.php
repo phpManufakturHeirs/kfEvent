@@ -57,6 +57,22 @@ class Update
     }
 
     /**
+     * Release 2.0.18
+     */
+    protected function release_2018()
+    {
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+        if (!isset($config['event']['description']['title']['required'])) {
+            $config['event']['description']['title']['required'] = true;
+            $config['event']['description']['short']['required'] = true;
+            $config['event']['description']['long']['required'] = true;
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
+        }
+    }
+
+    /**
      * Release 2.0.16
      */
     protected function release_2016()
@@ -102,9 +118,9 @@ class Update
                     'add_days' => 7
                 )
             );
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
         }
-        $Configuration->setConfiguration($config);
-        $Configuration->saveConfiguration();
     }
 
     /**
@@ -144,6 +160,9 @@ class Update
 
         // Release 2.0.16
         $this->release_2016();
+
+        // Release 2.0.18
+        $this->release_2018();
 
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Event'));

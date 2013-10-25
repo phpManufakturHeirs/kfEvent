@@ -22,6 +22,7 @@ use phpManufaktur\Event\Data\Event\Event;
 use phpManufaktur\Event\Data\Event\Propose as ProposeData;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
+use phpManufaktur\Event\Control\Configuration;
 
 class Propose extends Basic
 {
@@ -695,20 +696,32 @@ class Propose extends Basic
         $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
 
         // check the event data
-        if (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < $config['event']['description']['title']['min_length'])) {
+        if ($config['event']['description']['title']['required'] &&
+            (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < $config['event']['description']['title']['min_length']))) {
             $this->setMessage('Please type in a title with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['title']['min_length']));
             return $this->controllerEvent($app);
         }
-        if (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < $config['event']['description']['short']['min_length'])) {
+        elseif (!isset($event['description_title'])) {
+            $event['description_title'] = '';
+        }
+        if ($config['event']['description']['title']['required'] &&
+            (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < $config['event']['description']['short']['min_length']))) {
             $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['short']['min_length']));
             return $this->controllerEvent($app);
         }
-        if (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < $config['event']['description']['long']['min_length'])) {
+        elseif (!isset($event['description_short'])) {
+            $event['description_short'] = '';
+        }
+        if ($config['event']['description']['title']['required'] &&
+            (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < $config['event']['description']['long']['min_length']))) {
             $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['long']['min_length']));
             return $this->controllerEvent($app);
+        }
+        elseif (!isset($event['description_long'])) {
+            $event['description_long'] = '';
         }
 
         if (!$config['event']['date']['event_date_from']['allow_date_in_past'] &&
@@ -836,6 +849,9 @@ class Propose extends Basic
             throw new \Exception("The Location does not exists!");
         }
 
+        $ConfigData = new Configuration($app);
+        $config = $ConfigData->getConfiguration();
+
         // get the form fields
         $event = $this->app['request']->request->get('form', array());
 
@@ -888,17 +904,18 @@ class Propose extends Basic
         ))
         ->add('description_title', 'text', array(
             'data' => isset($event['description_title']) ? $event['description_title'] : '',
-            'label' => 'Title'
+            'label' => 'Title',
+            'required' => $config['event']['description']['title']['required']
         ))
         ->add('description_short', 'textarea', array(
             'data' => isset($event['description_short']) ? $event['description_short'] : '',
             'label' => 'Short description',
-            'required' => false
+            'required' => $config['event']['description']['short']['required']
         ))
         ->add('description_long', 'textarea', array(
             'data' => isset($event['description_long']) ? $event['description_long'] : '',
             'label' => 'Long description',
-            'required' => false
+            'required' => $config['event']['description']['long']['required']
         ))
         ;
         $form = $fields->getForm();
@@ -916,7 +933,8 @@ class Propose extends Basic
                     'event' => array(
                         'check' => '/event/propose/event/check'
                     )
-                )
+                ),
+                'config' => $config
             ));
     }
 

@@ -56,12 +56,15 @@ class Configuration
                 ),
                 'description' => array(
                     'title' => array(
+                        'required' => true,
                         'min_length' => 5
                     ),
                     'short' => array(
+                        'required' => true,
                         'min_length' => 30
                     ),
                     'long' => array(
+                        'required' => true,
                         'min_length' => 50
                     )
                 ),

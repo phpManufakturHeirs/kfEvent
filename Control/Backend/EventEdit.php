@@ -214,17 +214,18 @@ class EventEdit extends Backend {
         ))
         ->add('description_title', 'text', array(
             'data' => $event['description_title'],
-            'label' => 'Title'
+            'label' => 'Title',
+            'required' => self::$config['event']['description']['title']['required']
         ))
         ->add('description_short', 'textarea', array(
             'data' => $event['description_short'],
             'label' => 'Short description',
-            'required' => false
+            'required' => self::$config['event']['description']['short']['required']
         ))
         ->add('description_long', 'textarea', array(
             'data' => $event['description_long'],
             'label' => 'Long description',
-            'required' => false
+            'required' => self::$config['event']['description']['long']['required']
         ))
         ;
 
@@ -448,22 +449,33 @@ class EventEdit extends Backend {
                 self::$event_id = $event['event_id'];
                 $checked = true;
 
-
                 // check the event data
-                if (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < self::$config['event']['description']['title']['min_length'])) {
+                if (self::$config['event']['description']['title']['required'] &&
+                    (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < self::$config['event']['description']['title']['min_length']))) {
                     $this->setMessage('Please type in a title with %minimum% characters at minimum.',
                         array('%minimum%' => self::$config['event']['description']['title']['min_length']));
                     $checked = false;
                 }
-                if (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < self::$config['event']['description']['short']['min_length'])) {
+                elseif (!isset($event['description_title'])) {
+                    $event['description_title'] = '';
+                }
+                if (self::$config['event']['description']['short']['required'] &&
+                    (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < self::$config['event']['description']['short']['min_length']))) {
                     $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
                         array('%minimum%' => self::$config['event']['description']['short']['min_length']));
                     $checked = false;
                 }
-                if (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < self::$config['event']['description']['long']['min_length'])) {
+                elseif (!isset($event['description_short'])) {
+                    $event['description_short'] = '';
+                }
+                if (self::$config['event']['description']['long']['required'] &&
+                    (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < self::$config['event']['description']['long']['min_length']))) {
                     $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
                         array('%minimum%' => self::$config['event']['description']['long']['min_length']));
                     $checked = false;
+                }
+                elseif (!isset($event['description_long'])) {
+                    $event['description_long'] = '';
                 }
 
                 if ($this->app['session']->get('create_new_event', false) &&

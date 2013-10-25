@@ -120,7 +120,7 @@ input#form_city {
   margin: 10px 0 5px 0;
   padding: 0;
 }
-.label:after {
+.required:after {
   content: '*';
   color: #da251d;
   background-color: transparent;
