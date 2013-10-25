@@ -34,8 +34,21 @@ class EventSearch
         $this->Carbon = new Carbon();
     }
 
-
-    public function search($search_term, $groups=null, $status='DELETED', $status_operator='!=', $order_by='description_title', $order_direction='ASC', $return_detail=false)
+    /**
+     * Search in the events for the given search term.
+     *
+     * @param string $search_term
+     * @param array $groups if not NULL search only in the array of given group IDs
+     * @param string $status default 'DELETED'
+     * @param string $status_operator default '!='
+     * @param string $order_by field to order for, default 'description_title'
+     * @param string $order_direction default 'ASC' for ascending
+     * @param string $return_detail if true return a full event record with all details
+     * @param string $return_rating only if $return_detail is true, return also the rating information
+     * @throws \Exception
+     * @return Ambigous <boolean, array> FALSE if no hit or array with events
+     */
+    public function search($search_term, $groups=null, $status='DELETED', $status_operator='!=', $order_by='description_title', $order_direction='ASC', $return_detail=false, $return_rating=false)
     {
         try {
             $SQL = ($return_detail) ? "SELECT event.event_id FROM " : "SELECT * FROM ";
@@ -149,7 +162,7 @@ class EventSearch
                 // return a detailed record with all information
                 $EventData = new Event($this->app);
                 foreach ($results as $result) {
-                    $events[] = $EventData->selectEvent($result['event_id'], false);
+                    $events[] = $EventData->selectEvent($result['event_id'], $return_rating);
                 }
             }
             else {

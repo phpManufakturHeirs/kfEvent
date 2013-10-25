@@ -19,6 +19,12 @@ use phpManufaktur\Event\Data\Event\EventSearch as Search;
 class EventSearch extends Basic
 {
 
+    /**
+     * Return the search results from search dialog
+     *
+     * @param Application $app
+     * @return string
+     */
     public function controllerSearch(Application $app)
     {
         // init BASIC
@@ -31,7 +37,7 @@ class EventSearch extends Basic
         else {
             $groups = $this->app['request']->get('groups');
             $SearchData = new Search($app);
-            if (false === ($events = $SearchData->search($search, $groups, 'ACTIVE', '=', 'event_date_from', 'ASC', true))) {
+            if (false === ($events = $SearchData->search($search, $groups, 'ACTIVE', '=', 'event_date_from', 'ASC', true, true))) {
                 $this->setMessage('No hits for the search term <i>%search%</i>!', array('%search%' => $search));
                 return $this->controllerDialog($app);
             }
@@ -77,6 +83,12 @@ class EventSearch extends Basic
             ));
     }
 
+    /**
+     * Show a dialog to search for events, called by class /Control/Command/Action
+     *
+     * @param Application $app
+     * @return string search dialog
+     */
     public function controllerDialog(Application $app)
     {
         // init BASIC
