@@ -32,16 +32,16 @@
       <thead>
         <tr>
           <th>{{ 'Date'|trans }}</th>
-          <th class="right">{{ 'Submitter ID'|trans }}</th>
-          <th>{{ 'Submitter Status'|trans }}</th>
-          <th>{{ 'Admin Status'|trans }}</th>
+          <th class="right">{{ 'Submitter ID' }}</th>
+          <th>{{ 'Submitter Status' }}</th>
+          <th>{{ 'Admin Status' }}</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th class="right">{{ 'Event ID'|trans }}</th>
+          <th class="right">{{ 'Event ID' }}</th>
           <th>{{ 'Event Title'|trans }}</th>
-          <th>{{ 'Event Date' }}</th>
-          <th class="right">{{ 'Organizer ID'|trans }}</th>
-          <th class="right">{{ 'Location ID'|trans }}</th>
+          <th>{{ 'Date'|trans }}</th>
+          <th class="right">{{ 'Organizer ID' }}</th>
+          <th class="right">{{ 'Location ID' }}</th>
         </tr>
       </thead>
       <tbody>
@@ -49,12 +49,12 @@
         {% for item in proposes %}
           <tr class="{{ cycle(['flop','flip'], i) }}">
             <td>{{ item.propose.submitted_when|date('DATETIME_FORMAT'|trans) }}</td>
-            <td class="right"><a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.propose.submitter_id ~ '?usage=' ~ usage }}">{{ item.propose.submitter_id }}</a></td>
+            <td class="right{% if item.submitter.contact_status == 'PENDING' %} pending{% endif %}"><a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.propose.submitter_id ~ '?usage=' ~ usage }}">{{ item.propose.submitter_id }}</a></td>
             <td class="{{ item.propose.submitter_status|lower }}" title="{{ item.propose.submitter_status_when|date('DATETIME_FORMAT'|trans) }}">{{ item.propose.submitter_status }}</td>
             <td class="{{ item.propose.admin_status|lower }}" title="{{ item.propose.admin_status_when|date('DATETIME_FORMAT'|trans) }}">{{ item.propose.admin_status }}</td>
             {% if item.propose.admin_status == 'PENDING' %}
-              <td class="confirmed action" title="{{ 'Publish this event'|trans }}"><a href="{{ FRAMEWORK_URL ~ '/event/propose/publish/' ~ item.propose.admin_guid }}" target="_blank"><strong>C</strong></a></td>
-              <td class="rejected action" title="{{ 'Reject this event'|trans }}"><a href="{{ FRAMEWORK_URL ~ '/event/propose/reject/' ~ item.propose.admin_guid }}" target="_blank"><strong>R</strong></a></td>
+              <td class="confirmed action" title="{{ 'Publish the event'|trans }}"><a href="{{ FRAMEWORK_URL ~ '/event/propose/publish/' ~ item.propose.admin_guid }}" target="_blank">C</a></td>
+              <td class="rejected action" title="{{ 'Reject this event'|trans }}"><a href="{{ FRAMEWORK_URL ~ '/event/propose/reject/' ~ item.propose.admin_guid }}" target="_blank">R</a></td>
             {% else %}
               <td>&nbsp;</td>
               <td>&nbsp;</td>
@@ -62,9 +62,18 @@
             <td class="right"><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ item.event.event_id ~ '?usage=' ~ usage }}">{{ item.event.event_id }}</a></td>
             <td>{{ item.event.description_title }}</td>
             <td>{{ item.event.event_date_from|date('DATETIME_FORMAT'|trans) }}</td>
-            <td class="right">{% if item.organizer.contact_id is defined %}<a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.organizer.contact_id ~ '?usage=' ~ usage }}">{{ item.organizer.contact_id }}</a>{% endif %}</td>
-            <td class="right">{% if item.location.contact_id is defined %}<a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.location.contact_id ~ '?usage=' ~ usage }}">{{ item.location.contact_id }}</a>{% endif %}</td>
+            {% if item.organizer.contact_id is defined %}
+              <td class="right{% if item.organizer.contact_status == 'PENDING' %} pending{% endif %}"><a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.organizer.contact_id ~ '?usage=' ~ usage }}">{{ item.organizer.contact_id }}</a></td>
+            {% else %}
+              <td>&nbsp;</td>
+            {% endif %}
+            {% if item.location.contact_id is defined %}
+              <td class="right{% if item.location.contact_status == 'PENDING' %} pending{% endif %}"><a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.location.contact_id ~ '?usage=' ~ usage }}">{{ item.location.contact_id }}</a></td>
+            {% else %}
+              <td>&nbsp;</td>
+            {% endif %}
           </tr>
+          {% set i = i+1 %}
         {% endfor %}
       </tbody>
     </table>

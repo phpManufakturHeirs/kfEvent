@@ -5,7 +5,7 @@ th {
     text-align: left;
     font-size: 11px;
     color: #000;
-    background-color: #f4a460;
+    background-color: #b0c4de;
     font-weight: normal;
 }
 th.active {
@@ -17,7 +17,7 @@ td {
 }
 td.pending {
   color: #000;
-  background-color: #ffdab9;
+  background-color: #deb887;
 }
 td.confirmed {
   color: #000;
@@ -39,7 +39,7 @@ td.action a {
 }
 td.action a:link,
 td.action a:visited {
-  color: #fff;
+  color: #fff !important;
   background-color: transparent;
   text-decoration: none;
 }
@@ -55,7 +55,7 @@ td.right {
 }
 tr.flip {
     color: #000;
-    background-color: #ffdead;
+    background-color: #e6e6fa;
 }
 tr.flop {
     color: #000;

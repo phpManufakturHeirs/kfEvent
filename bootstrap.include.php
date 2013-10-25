@@ -226,8 +226,12 @@ $app->get('/event/subscribe/guid/{guid}',
     'phpManufaktur\Event\Control\Command\ConfirmSubscription::exec');
 
 $app->post('/event/search',
+    // search dialog results
     'phpManufaktur\Event\Control\Command\EventSearch::controllerSearch');
 
+/**
+ * Propose a event
+ */
 $app->match('/event/propose/organizer/search',
     'phpManufaktur\Event\Control\Command\Propose::controllerSearchOrganizer');
 $app->post('/event/propose/organizer/select',

@@ -36,6 +36,8 @@ return array(
         => 'Markierung hinzufügen',
     'Add title'
         => 'Titel hinzufügen',
+    'Admin Status'
+        => 'Administrator Status',
     'At least we need one communication channel, so please tell us a email address, phone or a URL'
         => 'Wir benötigen mindestens einen Kommunikationsweg, bitte nennen Sie uns eine E-Mail Adresse, Telefonummer oder die URL der Homepage.',
 
@@ -91,6 +93,8 @@ return array(
         => 'Beschreibung (übersetzt)',
     'Detected a kitEvent installation (Release: %release%) with %count% active or locked events.'
         => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
+    'Do not publish the event'
+        => 'Veranstaltung nicht veröffentlichen',
 
     'email usage'
         => 'Verwendung',
@@ -123,10 +127,16 @@ return array(
         => 'Veranstaltung',
     'Event costs'
         => 'Eintrittspreis',
+    'Event Date'
+        => 'Veranstaltungsdatum',
     'Event date from'
         => 'Beginn der Veranstaltung',
     'Event date to'
         => 'Ende der Veranstaltung',
+    'Event ID'
+        => 'Veranstaltung ID',
+    'Event Title'
+        => 'Titel der Veranstaltung',
     'Extra field'
         => 'Zusatzfeld',
     'Extra fields'
@@ -183,6 +193,8 @@ return array(
         => 'Übersicht über alle Anmeldungen zu Veranstaltungen',
     'Location'
         => 'Veranstaltungsort',
+    'Location ID'
+        => 'Veranstaltungsort ID',
     'Location Tags'
         => 'Veranstaltungsorte',
     'Locations'
@@ -199,6 +211,8 @@ return array(
 
     'Organizer'
         => 'Veranstalter',
+    'Organizer ID'
+        => 'Veranstalter ID',
     'Organizer Tags'
         => 'Veranstalter',
 
@@ -222,6 +236,8 @@ return array(
         => 'Teilnehmer, angemeldet',
     'Pictures'
         => 'Bilder',
+    'Please check the event data and use one of the following action links'
+        => 'Bitte prüfen Sie die Angaben zu der Veranstaltung und verwenden Sie anschließend einen der folgenden Aktions-Links',
     'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.'
         => 'Bitte definieren Sie einen permanenten Link in der config.event.json. Ohne diesen Link kann Event keine Verweise auf Veranstaltungen erzeugen oder auf Anfragen von Veranstaltungsteilnehmern reagieren.',
     'Please type in a long description with %minimum% characters at minimum.'
@@ -236,13 +252,17 @@ return array(
         => 'Vorgeschlagene Veranstaltung: %event%',
     'Publish from'
         => 'Veröffentlichen ab',
-        'Publish to'
-            => 'Veröffentlichen bis',
+    'Publish the event'
+        => 'Veranstaltung veröffentlichen',
+    'Publish to'
+        => 'Veröffentlichen bis',
 
     'Registrations'
         => 'Anmeldungen',
     'regular email address of a company, institution or association'
         => 'offizielle E-Mail Adresse einer Firma, Einrichtung oder eines Verein',
+    'Reject this event'
+        => 'Veranstaltung ablehnen',
 
     'Search Location'
         => 'Veranstaltungsort suchen',
@@ -258,6 +278,12 @@ return array(
         => 'kitEvent ID <b>%event_id%</b> übersprungen: Ungültiger Wert in Feld %field%',
     'Start import from kitEvent'
         => 'Import aus kitEvent starten',
+    'Submitter'
+        => 'Übermittler',
+    'Submitter ID'
+        => 'Übermittler ID',
+    'Submitter Status'
+        => 'Übermittler Status',
     'Subscribe to event'
         => 'Zu der Veranstaltung anmelden',
 
@@ -267,6 +293,8 @@ return array(
         => 'Text - HTML formatiert',
     'Text - plain'
         => 'Text - unformatiert',
+    'Thank you for proposing the following event'
+        => 'Vielen Dank für Ihren Veranstaltungsvorschlag',
     'Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!'
         => 'Vielen Dank für Ihre Anmeldung. Wir haben Ihnen eine E-Mail geschickt, bitte benutzen Sie den enthaltenen Bestätigungslink um Ihre E-Mail Adresse zu bestätigen und die Anmeldung zu aktivieren.',
     'Thank you for your subscription, we have send you a receipt at your email address.'
@@ -309,6 +337,8 @@ return array(
         => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
     'The submitted GUID %guid% does not exists.'
         => 'Die übermittelte GUID %guid% existiert nicht!',
+    'The user %contact_name% with the ID %contact_id% and the email address %email% has proposed the following event'
+        => 'Der Kontakt %contact_name% mit der der ID %contact_id% und der E-Mail Adresse %email% hat die folgende Veranstaltung vorgeschlagen',
     'The view <b>%view%</b> does not exists!'
         => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
@@ -319,6 +349,8 @@ return array(
         => 'Es wurde kein Veranstalter gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
     'This activation link was already used and is no longer valid!'
         => 'Dieser Aktivierungslink wurde bereits verwendet und ist nicht mehr gültig!',
+    'This extra field is used in the event group %group%. First remove the extra field from the event group.'
+        => 'Dieses Zusatzfeld wird in der Veranstaltungs Gruppe %group% verwendet. Sie müssen das Zusatzfeld zunächst aus der Gruppe entfernen.',
     'Type'
         => 'Typ',
 

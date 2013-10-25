@@ -17,6 +17,7 @@ use phpManufaktur\Event\Data\Event\Propose as ProposeData;
 
 class Propose extends Backend {
 
+
     /**
      * Show the about dialog for Event
      *
