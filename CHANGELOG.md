@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.17** - 2013-10-25
+
+* added status list for proposed events (backend)
+* add rating to detailed search results
+* bugfix: deleting extra fields does not remove the values and missed some checks to prevent trouble
+* added subscription overview and handling to the backend
+
 **2.0.16** - 2013-10-24
 
 * added class *Propose* to enable a dialog guided proposing of new events for the visitors and supporters. Double-opt-in, activation for submitter and admin with different activation links
