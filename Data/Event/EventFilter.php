@@ -122,6 +122,22 @@ class EventFilter
                             $end_date = $this->Carbon->toDateTimeString();
                         }
                     }
+                    elseif (strtolower($end) == 'year') {
+                        $this->Carbon->month(12);
+                        $this->Carbon->day(31);
+                        $this->Carbon->endOfDay();
+                        $end_date = $this->Carbon->toDateTimeString();
+                    }
+                    elseif (strtolower($end) == 'month') {
+                        $this->Carbon->endOfMonth();
+                        $this->Carbon->endOfDay();
+                        $end_date = $this->Carbon->toDateTimeString();
+                    }
+                    elseif (strtolower($end) == 'week') {
+                        $this->Carbon->endOfWeek();
+                        $this->Carbon->endOfDay();
+                        $end_date = $this->Carbon->toDateTimeString();
+                    }
                     elseif (!is_numeric($end)) {
                         // filter is not valid
                         $skip = true;
@@ -353,6 +369,9 @@ class EventFilter
                     $start = true;
                     foreach ($zips as $zip) {
                         if (trim($zip) == '') continue;
+                        if (strtolower($zip) == 'null') {
+                            $zip = '0';
+                        }
                         if (!$start) {
                             $SQL .= " OR ";
                         }
@@ -362,6 +381,9 @@ class EventFilter
                         $SQL .= "`address_zip` LIKE '".trim($zip)."%'";
                     }
                     $SQL .= ") ";
+                }
+                elseif (strtolower(trim($filter['zip'])) == 'null') {
+                    $SQL .= "AND `address_zip` LIKE '0%' ";
                 }
                 else {
                     $SQL .= "AND `address_zip` LIKE '".$filter['zip']."%' ";

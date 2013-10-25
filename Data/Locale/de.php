@@ -210,6 +210,8 @@ return array(
         => 'Bezeichner',
     'Name (translated)'
         => 'Bezeichner (übersetzt)',
+    'No results for this filter!'
+        => 'Dieser Filter lieferte kein Ergebnis!',
 
     'Organizer'
         => 'Veranstalter',
