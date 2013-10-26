@@ -64,9 +64,12 @@ class Update
         $Configuration = new Configuration($this->app);
         $config = $Configuration->getConfiguration();
         if (!isset($config['event']['description']['title']['required'])) {
+            // enable/disable title, description short & long
             $config['event']['description']['title']['required'] = true;
             $config['event']['description']['short']['required'] = true;
             $config['event']['description']['long']['required'] = true;
+            // enable frontend edit
+            $config['event']['edit']['frontend'] = true;
             $Configuration->setConfiguration($config);
             $Configuration->saveConfiguration();
         }

@@ -81,7 +81,10 @@ class Configuration
                     'event_publish_to' => array(
                         'add_days' => 7
                     )
-                )
+                ),
+                'edit' => array(
+                    'frontend' => true
+                ),
             ),
             'contact' => array(
                 'confirm' => array(
