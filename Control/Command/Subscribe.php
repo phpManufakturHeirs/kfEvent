@@ -321,7 +321,7 @@ class Subscribe extends Basic
                 // create the message
                 $message = \Swift_Message::newInstance()
                 ->setSubject($event['description_title'])
-                ->setFrom(array(SERVER_EMAIL_ADDRESS))
+                ->setFrom(array(SERVER_EMAIL_ADDRESS => SERVER_EMAIL_NAME))
                 ->setTo(array($contact['contact']['contact_login']))
                 ->setBody($body)
                 ->setContentType('text/html');
@@ -354,7 +354,7 @@ class Subscribe extends Basic
                     if (!empty($to_array)) {
                         $message = \Swift_Message::newInstance()
                         ->setSubject($contact['contact']['contact_login'])
-                        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+                        ->setFrom(array(SERVER_EMAIL_ADDRESS => SERVER_EMAIL_NAME))
                         ->setTo($to_array)
                         ->setBody($body)
                         ->setContentType('text/html');
@@ -383,7 +383,7 @@ class Subscribe extends Basic
                     if (!empty($to_array)) {
                         $message = \Swift_Message::newInstance()
                         ->setSubject($contact['contact']['contact_login'])
-                        ->setFrom(array(SERVER_EMAIL_ADDRESS))
+                        ->setFrom(array(SERVER_EMAIL_ADDRESS => SERVER_EMAIL_NAME))
                         ->setTo($to_array)
                         ->setBody($body)
                         ->setContentType('text/html');
