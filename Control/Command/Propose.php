@@ -123,8 +123,8 @@ class Propose extends Basic
         // send a email to the contact
         $message = \Swift_Message::newInstance()
         ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
-        ->setFrom(array(SERVER_EMAIL_ADDRESS))
-        ->setTo(array($contact['communication_email']))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS => SERVER_EMAIL_NAME))
+        ->setTo(array($contact['communication_email'] => $contact['contact_name']))
         ->setBody($body)
         ->setContentType('text/html');
         // send the message
@@ -233,8 +233,8 @@ class Propose extends Basic
         // send a email to the contact
         $message = \Swift_Message::newInstance()
         ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
-        ->setFrom(array(SERVER_EMAIL_ADDRESS))
-        ->setTo(array($contact['communication_email']))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS => SERVER_EMAIL_NAME))
+        ->setTo(array($contact['communication_email'] => $contact['contact_name']))
         ->setBody($body)
         ->setContentType('text/html');
         // send the message
@@ -285,11 +285,21 @@ class Propose extends Basic
                 )
             ));
 
+        $ConfigData = new Configuration($this->app);
+        $config = $ConfigData->getConfiguration();
+
+        $mail_to = $config['event']['propose']['confirm']['mail_to'];
+        if (in_array('provider', $mail_to)) {
+            $mail_to[] = SERVER_EMAIL_ADDRESS;
+            unset($mail_to[array_search('provider', $mail_to)]);
+        }
+
         // send a email to the contact
         $message = \Swift_Message::newInstance()
         ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
-        ->setFrom(array($contact['communication_email']))
-        ->setTo(array(SERVER_EMAIL_ADDRESS))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS => $contact['contact_name']))
+        ->setTo($mail_to)
+        ->setReplyTo($contact['communication_email'])
         ->setBody($body)
         ->setContentType('text/html');
         // send the message
@@ -539,8 +549,8 @@ class Propose extends Basic
         // send a email to the contact
         $message = \Swift_Message::newInstance()
         ->setSubject($this->app['translator']->trans('Proposed event: %event%', array('%event%' => $event['description_title'])))
-        ->setFrom(array(SERVER_EMAIL_ADDRESS))
-        ->setTo(array($contact['communication_email']))
+        ->setFrom(array(SERVER_EMAIL_ADDRESS => SERVER_EMAIL_NAME))
+        ->setTo(array($contact['communication_email'] => $contact['contact_name']))
         ->setBody($body)
         ->setContentType('text/html');
         // send the message
@@ -705,7 +715,7 @@ class Propose extends Basic
         elseif (!isset($event['description_title'])) {
             $event['description_title'] = '';
         }
-        if ($config['event']['description']['title']['required'] &&
+        if ($config['event']['description']['short']['required'] &&
             (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < $config['event']['description']['short']['min_length']))) {
             $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['short']['min_length']));
@@ -714,7 +724,7 @@ class Propose extends Basic
         elseif (!isset($event['description_short'])) {
             $event['description_short'] = '';
         }
-        if ($config['event']['description']['title']['required'] &&
+        if ($config['event']['description']['long']['required'] &&
             (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < $config['event']['description']['long']['min_length']))) {
             $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['long']['min_length']));

@@ -70,6 +70,8 @@ class Update
             $config['event']['description']['long']['required'] = true;
             // enable frontend edit
             $config['event']['edit']['frontend'] = true;
+            // enable additional administrative email addresses
+            $config['event']['propose']['confirm']['mail_to'] = array('provider');
             $Configuration->setConfiguration($config);
             $Configuration->saveConfiguration();
         }

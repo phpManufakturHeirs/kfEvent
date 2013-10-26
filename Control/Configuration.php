@@ -85,6 +85,13 @@ class Configuration
                 'edit' => array(
                     'frontend' => true
                 ),
+                'propose' => array(
+                    'confirm' => array(
+                        'mail_to' => array(
+                            'provider'
+                        )
+                    )
+                )
             ),
             'contact' => array(
                 'confirm' => array(

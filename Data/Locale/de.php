@@ -321,6 +321,10 @@ return array(
         => 'Es existieren keine aktiven Veranstaltungen, legen Sie eine neue Versanstaltung an.',
     'The event start date is behind the event end date!'
         => 'Das Anfangsdatum der Veranstaltung liegt nach dem Enddatum der Veranstaltung!',
+    'The event with the title %title% was published.'
+        => 'Die Veranstaltung mit der Bezeichnung %title% wurde veröffentlicht.',
+    'The event with the title %title% was rejected.'
+        => 'Die Veranstaltung mit der Bezeichnung %title% wurde zurückgewiesen.',
     'The field list is empty, please define a extra field!'
         => 'Es wurden noch keine Zusatzfelder definiert, bitte erstellen Sie ein neues Zusatzfeld!',
     'The group list is empty, please define a group!'
