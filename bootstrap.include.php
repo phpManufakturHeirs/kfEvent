@@ -14,6 +14,14 @@ use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 // not really needed but make error control more easy ...
 global $app;
 
+$roles = $app['security.role_hierarchy'];
+if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
+    $roles['ROLE_ADMIN'][] = 'ROLE_EVENT_ADMIN';
+    $roles['ROLE_EVENT_ADMIN'][] = 'ROLE_EVENT_EDIT';
+    $app['security.role_hierarchy'] = $roles;
+}
+
+
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
 // scan the /Locale/Custom directory and add all available languages
@@ -260,3 +268,15 @@ $app->get('/event/propose/publish/{guid}',
     'phpManufaktur\Event\Control\Command\Propose::controllerAdminPublish');
 $app->get('/event/propose/reject/{guid}',
     'phpManufaktur\Event\Control\Command\Propose::controllerAdminReject');
+
+/**
+ * Edit a event
+ */
+$app->get('/event/edit/id/{event_id}/redirect/{redirect}',
+    'phpManufaktur\Event\Control\Command\Edit::controllerCheck');
+$app->post('/admin/event/frontend/edit',
+    'phpManufaktur\Event\Control\Command\Edit::controllerEditEvent');
+$app->match('/event/frontend/login',
+    'phpManufaktur\Event\Control\Command\Edit::controllerLogin');
+$app->post('/event/frontend/login/check',
+    'phpManufaktur\Event\Control\Command\Edit::controllerLoginCheck');

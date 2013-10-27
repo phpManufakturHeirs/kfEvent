@@ -96,6 +96,8 @@ return array(
     'Do not publish the event'
         => 'Veranstaltung nicht veröffentlichen',
 
+    'Edit event'
+        => 'Veranstaltung bearbeiten',
     'email usage'
         => 'Verwendung',
 
@@ -373,6 +375,8 @@ return array(
     'Using qrcode[] is not enabled in config.event.json!'
         => 'qrcode[] ist nicht in der config.event.json freigegeben!',
 
+    'You are authenticated but not allowed to edit this event. Please contact the admin if you are of the mind that you should be able for.'
+        => 'Sie sind korrekt angemeldet jedoch nicht berechtigt diese Veranstaltung zu bearbeiten. Bitte wenden Sie sich an den Administrator um die erforderliche Berechtigung zu erhalten.',
     'Your contact record is locked, so we can not perform any action. Please contact the administrator'
         => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
     'You have already subscribed to this Event at %datetime%, you can not subscribe again.'

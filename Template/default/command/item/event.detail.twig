@@ -1,7 +1,14 @@
 <div class="event item container">
   {% include '@phpManufaktur/Event/Template/default/command/item/event.schema.org.twig' %}
 
+  {% if config.event.edit.frontend and parameter.link.edit.active %}
+    <div class="edit">
+      <a href="{{ parameter.link.edit.url }}" target="{{ parameter.link.edit.target }}" title="{{ 'Edit event'|trans }}"><i class="icon-edit"></i></a>
+    </div>
+  {% endif %}
+  
   <h2>DETAIL {{ event.description_title }}</h2>
+  
   <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
   <div class="event view description long">{{ event.description_long }}</div>
 

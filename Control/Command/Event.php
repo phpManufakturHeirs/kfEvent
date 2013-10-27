@@ -90,7 +90,6 @@ class Event extends Basic
         if (false === ($event = $this->EventData->selectEvent($event_id))) {
             return $this->Message->render('The record with the ID %id% does not exists!', array('%id%' => $event_id));
         }
-
         // check the view
         if (isset(self::$parameter['view'])) {
             $view = strtolower(self::$parameter['view']);
@@ -148,7 +147,7 @@ class Event extends Basic
 
         $event_id = (isset(self::$parameter['id'])) ? self::$parameter['id'] : null;
 
-        $available_links = array('detail', 'ical', 'map', 'permanent', 'subscribe');
+        $available_links = array('detail', 'ical', 'map', 'permanent', 'subscribe', 'edit');
         foreach ($available_links as $link) {
             self::$parameter['link'][$link]['target'] = '_self';
             switch ($link) {
@@ -196,6 +195,12 @@ class Event extends Basic
                     $view = isset(self::$parameter['view']) ? strtolower(self::$parameter['view']) : 'small';
                     $route = base64_encode('/event/id/'.self::$parameter['id'].'/view/'.$view);
                     self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/subscribe/id/$event_id/redirect/$route?pid=".$this->getParameterID() : null;
+                    break;
+                case 'edit':
+                    self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
+                    $view = isset(self::$parameter['view']) ? strtolower(self::$parameter['view']) : 'small';
+                    $route = base64_encode('/event/id/'.self::$parameter['id'].'/view/'.$view);
+                    self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL.'/event/edit/id/'.$event_id.'/redirect/'.$route.'?pid='.$this->getParameterID() : null;
                     break;
                 default:
                     throw new \Exception("The link $link is not defined!");

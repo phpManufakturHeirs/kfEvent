@@ -7,6 +7,23 @@
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 */
+
+a {
+  text-decoration: none;
+}
+a:link,
+a:visited {
+  color: #da251d;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:hover,
+a:active {
+  color: #da251d;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
 .event.view.container {
   margin: 0;
   padding: 5px;
@@ -89,4 +106,10 @@
 	position:relative;
 	left:0;
 	z-index:3;
+}
+
+.edit {
+  float: right;
+  margin: 0;
+  padding: 0;
 }
