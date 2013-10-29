@@ -1,3 +1,12 @@
+{#
+  Event
+
+  @author Team phpManufaktur <team@phpmanufaktur.de>
+  @link https://kit2.phpmanufaktur.de
+  @link https://github.com/phpManufaktur/kitFramework/wiki
+  @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
+  @license MIT License (MIT) http://www.opensource.org/licenses/MIT
+#}
 <p>{{ 'The user %contact_name% with the ID %contact_id% and the email address %email% has proposed the following event'|trans({'%contact_name%':contact.contact_name, '%contact_id%':contact.contact_id, '%email%':contact.communication_email}) }}:</p>
 <div>{{ 'Organizer'|trans }}:<br />
   {% if event.contact.organizer.contact.contact_type == 'COMPANY' %}
