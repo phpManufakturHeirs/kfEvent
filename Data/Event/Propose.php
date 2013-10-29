@@ -267,4 +267,28 @@ EOD;
             throw new \Exception($e);
         }
     }
+
+    /**
+     * Select proses by the given submitter ID
+     *
+     * @param integer $submitter_id
+     * @throws \Exception
+     * @return Ambigous <boolean, multitype:>
+     */
+    public function selectBySubmitterID($submitter_id)
+    {
+        try {
+            $SQL = "SELECT * FROM `".self::$table_name."` WHERE `submitter_id`='$submitter_id'";
+            $results = $this->app['db']->fetchAll($SQL);
+            $proposes = array();
+            foreach ($results as $result) {
+                foreach ($result as $key => $value) {
+                    $propose[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                }
+            }
+            return (!empty($proposes)) ? $proposes : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }
