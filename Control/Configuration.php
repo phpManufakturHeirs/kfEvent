@@ -93,6 +93,13 @@ class Configuration
                     )
                 )
             ),
+            'account' => array(
+                    'confirm' => array(
+                        'mail_to' => array(
+                            'provider'
+                        )
+                    )
+                ),
             'contact' => array(
                 'confirm' => array(
                     'double_opt_in' => true,
