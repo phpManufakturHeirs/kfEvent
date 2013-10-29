@@ -175,15 +175,15 @@ class ConfirmSubscription extends Basic
                             'email' => $contact['contact_login'],
                             'password' => $this->Users->encodePassword($password),
                             'displayname' => $contact['contact_name'],
-                            'roles' => 'EVENT_USER'
+                            'roles' => 'ROLE_EVENT_USER'
                         );
                         $this->Users->insertUser($data);
                     }
                     else {
                         $user = $this->Users->selectUser($contact['contact_login']);
                         $roles = explode(',', $user['roles']);
-                        if (!in_array('EVENT_USER', $roles)) {
-                            $roles[] = 'EVENT_USER';
+                        if (!in_array('ROLE_EVENT_USER', $roles)) {
+                            $roles[] = 'ROLE_EVENT_USER';
                             $data = array(
                                 'roles' => implode(',', $roles)
                             );
