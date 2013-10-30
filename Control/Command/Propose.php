@@ -23,6 +23,7 @@ use phpManufaktur\Event\Data\Event\Propose as ProposeData;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 use phpManufaktur\Event\Control\Configuration;
+use phpManufaktur\Contact\Control\Configuration as ContactConfiguration;
 
 class Propose extends Basic
 {
@@ -1278,6 +1279,9 @@ class Propose extends Basic
 
         $ContactControl = new Contact($this->app);
 
+        $ContactConfiguration = ContactConfiguration($this->app);
+        $contactConfig = $ContactConfiguration->getConfiguration();
+
         $fields = $this->app['form.factory']->createBuilder('form')
         ->add('create_type', 'hidden', array(
             'data' => $type
@@ -1363,7 +1367,8 @@ class Propose extends Basic
             'multiple' => false,
             'required' => true,
             'label' => 'Country',
-            'data' => isset($request['address_country']) ? $request['address_country'] : null
+            'data' => isset($request['address_country']) ? $request['address_country'] : null,
+            'preferred_choices' => $contactConfig['countries']['preferred']
         ))
         ->add('note', 'textarea', array(
             'required' => false,
