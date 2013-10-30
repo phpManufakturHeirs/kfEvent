@@ -291,4 +291,16 @@ EOD;
             throw new \Exception($e);
         }
     }
+
+    public function checkSubmitterCanEdit($submitter_id, $event_id) {
+        try {
+            $SQL = "SELECT `submitter_id` FROM `".self::$table_name."` WHERE `submitter_id`='$submitter_id' AND ".
+                "`new_event_id`='$event_id' AND `submitter_status`='CONFIRMED' AND ".
+                "`admin_status`='CONFIRMED'";
+            $result = $this->app['db']->fetchColumn($SQL);
+            return ($result == $submitter_id);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }
