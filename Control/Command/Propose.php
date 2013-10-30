@@ -866,6 +866,15 @@ class Propose extends Basic
         $event = $this->app['request']->request->get('form', array());
 
         $fields = $this->app['form.factory']->createBuilder('form')
+        ->add('event_id', 'hidden', array(
+            'data' => -1
+        ))
+        ->add('event_organizer', 'hidden', array(
+            'data' => $this->app['session']->get('organizer_id', -1)
+        ))
+        ->add('event_location', 'hidden', array(
+            'data' => $this->app['session']->get('location_id', -1)
+        ))
         // Event date
         ->add('event_date_from', 'text', array(
             'attr' => array('class' => 'event_date_from'),

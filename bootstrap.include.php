@@ -274,8 +274,11 @@ $app->get('/event/propose/reject/{guid}',
  */
 $app->get('/event/edit/id/{event_id}/redirect/{redirect}',
     'phpManufaktur\Event\Control\Command\Edit::controllerCheck');
-$app->post('/admin/event/frontend/edit',
+$app->post('/event/frontend/edit',
     'phpManufaktur\Event\Control\Command\Edit::controllerEditEvent');
+$app->post('/event/frontend/edit/check',
+    'phpManufaktur\Event\Control\Command\Edit::controllerEditEventCheck');
+
 $app->match('/event/frontend/login',
     'phpManufaktur\Event\Control\Command\Edit::controllerLogin');
 $app->post('/event/frontend/login/check',

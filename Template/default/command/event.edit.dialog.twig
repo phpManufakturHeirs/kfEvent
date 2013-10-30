@@ -21,34 +21,15 @@
   {{ parent() }}
   <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" media="screen, projection" />
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/jquery-ui-timepicker-addon.css" media="screen, projection" />
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.propose.css" media="screen, projection" />
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.edit.css" media="screen, projection" />
 {% endblock stylesheet %}
 {% block content %}
-  
-  {% if app.translator.locale == 'de' %}
-    {# german translation #}
-    <h2>Veranstaltung anlegen</h2>
-    {{ parent() }}
-    {% if basic.message|length < 1 %}
-      <div class="iframe_content message">
-        <p>Bitte geben Sie uns zu der Veranstaltung so viele Informationen wie möglich.</p>
-        <p>Eintrittspreis: Falls Sie den Eintrittspreis nicht kennen tragen Sie 0 ein. Ist der Eintritt frei tragen Sie bitte -1 ein.</p>
-        <p>Teilnehmeranzahl: Tragen Sie -1 für eine Veranstaltung ohne festgelegte Anzahl ein.</p>
-      </div>
-    {% endif %}    
-  {% else %}
-    {# english language #}
-    <h2>Create a event</h2>
-    {{ parent() }}
-    {% if basic.message|length < 1 %}
-      <div class="iframe_content message">
-        <p>Please give us as much as possible information about the event</p>
-      </div>
-    {% endif %}
-  {% endif %}
-    
+  {{ parent() }}
   <div class="contact_form">
+    <div class="small right">{{ displayname }} <a href="{{ logout_url }}">{{ 'Logout'|trans }}</a></div>
+    <h2>{{ 'Edit event'|trans }}</h2>
+    <p>&nbsp;</p>
     {% include '@phpManufaktur/Event/Template/default/command/item/event.edit.twig' %}
   </div>
 {% endblock %}

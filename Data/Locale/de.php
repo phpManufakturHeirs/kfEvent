@@ -161,6 +161,8 @@ return array(
         => 'Veranstaltungen, Übersicht',
     'Event location'
         => 'Veranstaltungsort',
+    'Event successfull updated'
+        => 'Die Veranstaltung wurde aktualisiert',
     'Event url'
         => 'Veranstaltungs URL',
 
