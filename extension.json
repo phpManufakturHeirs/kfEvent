@@ -11,9 +11,9 @@
     "about":"\/event\/about"
   },
   "release":{
-    "number":"2.0.18",
+    "number":"2.0.19",
     "date":"2013-10-30",
-    "status":"alpha"
+    "status":"beta"
   },
   "description":{
     "en":{

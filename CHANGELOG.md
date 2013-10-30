@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.19** - 2013-10-30
+
+* add preferred choices for the country selection
+* first public beta release
+
 **2.0.18** - 2013-10-30
 
 * event `description_title`, `description_short` and `description_long` can now set as required or not in `config.event.json`
