@@ -6,6 +6,17 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.18** - 2013-10-30
+
+* event `description_title`, `description_short` and `description_long` can now set as required or not in `config.event.json`
+* extended filter 'actual' with end terms: year, month and week
+* avoid to show subscription information multiple in different iframes - uses null.twig to suppress
+* added SERVER_EMAIL_NAME to confirmation mails
+* add config[edit][frontend]
+* enable different administrative emails (enhancement #10)
+* added configuration for email addresses for confirming account and role actions
+* introduce frontend editing with role checking, getting account, getting new password, etc.
+
 **2.0.17** - 2013-10-25
 
 * added status list for proposed events (backend)
