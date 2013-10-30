@@ -280,3 +280,17 @@ $app->match('/event/frontend/login',
     'phpManufaktur\Event\Control\Command\Edit::controllerLogin');
 $app->post('/event/frontend/login/check',
     'phpManufaktur\Event\Control\Command\Edit::controllerLoginCheck');
+
+$app->get('/event/frontend/account/select/event/{event_id}/redirect/{redirect}',
+    'phpManufaktur\Event\Control\Command\Edit::controllerSelectAccount');
+$app->post('/event/frontend/account/select/check',
+    'phpManufaktur\Event\Control\Command\Edit::controllerSelectAccountCheck');
+
+$app->get('/event/frontend/edit/account/activate/{guid}',
+    'phpManufaktur\Event\Control\Command\Edit::controllerActivateRole');
+$app->get('/event/frontend/edit/account/reject/{guid}',
+    'phpManufaktur\Event\Control\Command\Edit::controllerRejectRole');
+$app->get('/event/frontend/edit/account/password',
+    'phpManufaktur\Event\Control\Command\Edit::controllerNewPasswordDialog');
+$app->post('/event/frontend/edit/account/password/check',
+    'phpManufaktur\Event\Control\Command\Edit::controllerNewPasswordCheck');

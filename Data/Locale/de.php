@@ -24,6 +24,8 @@ return array(
 
     'About'
         => '?',
+    'Activate the desired account role'
+        => 'Das beantragte Benutzerrecht aktivieren',
     'Add a image'
         => 'Ein Bild hinzufügen',
     'Add category'
@@ -46,8 +48,18 @@ return array(
     'by selecting a event group'
         => 'durch Auswahl einer Veranstaltungsgruppe',
 
+    'Change account rights'
+        => 'Änderung der Benutzerrechte',
     'Checking the GUID identifier'
         => 'Überprüfung der GUID Kennung',
+    'CHOICE_ADMIN_ACCOUNT'
+        => 'Ich möchte als Administrator alle Veranstaltungen bearbeiten können',
+    'CHOICE_LOCATION_ACCOUNT'
+        => 'Ich vertrete einen Veranstaltungsort und möchte Veranstaltungen bearbeiten können, die dort stattfinden',
+    'CHOICE_ORGANIZER_ACCOUNT'
+        => 'Ich vertrete einen Veranstalter, Verein oder eine Organisation und möchte deren Veranstaltungen bearbeiten können',
+    'CHOICE_SUBMITTER_ACCOUNT'
+        => 'Ich möchte Veranstaltungen bearbeiten können, die ich übermittelt habe',
     'company, institution or association'
         => 'Firma, Institution oder Verein',
     'Contact list'
@@ -174,6 +186,11 @@ return array(
     'Groups'
         => 'Gruppen',
 
+    'Hello %name%'
+        => 'Hallo %name%',
+
+    'If you are prompted to login, please use your username and password'
+        => 'Wenn Sie aufgefordert werden sich anzumelden, verwenden Sie bitte Ihren Benutzernamen und Ihr Passwort',
     'Import events from kitEvent'
         => 'Veranstaltungen aus kitEvent importieren',
     'Information about the Event extension'
@@ -182,6 +199,8 @@ return array(
         => 'Ganzzahl',
     'Integer'
         => 'Ganzzahl',
+    'Invalid login'
+        => 'Ungültiger Login, Benutzername oder Passwort falsch',
     'It is not allowed that the event start in the past!'
         => 'Der Veranstaltungsbeginn darf nicht in der Vergangenheit liegen!',
 
@@ -212,6 +231,8 @@ return array(
         => 'Bezeichner',
     'Name (translated)'
         => 'Bezeichner (übersetzt)',
+    'New password'
+        => 'Neues Passwort',
     'No results for this filter!'
         => 'Dieser Filter lieferte kein Ergebnis!',
 
@@ -224,6 +245,8 @@ return array(
 
     'personal email address'
         => 'persönliche E-Mail Adresse',
+    'Please feel free to order a account.'
+        => 'Fordern Sie ein Benutzerkonto an',
     'Please search for for a organizer or select the checkbox to create a new one.'
         => 'Bitte suchen Sie nach einem Veranstalter oder haken Sie die Checkbox an um einen neuen Veranstalter anzulegen.',
     'Please search for for a location or select the checkbox to create a new one.'
@@ -252,6 +275,8 @@ return array(
         => 'Bitte prüfen Sie die Angaben zu der Veranstaltung und verwenden Sie anschließend einen der folgenden Aktions-Links',
     'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.'
         => 'Bitte definieren Sie einen permanenten Link in der config.event.json. Ohne diesen Link kann Event keine Verweise auf Veranstaltungen erzeugen oder auf Anfragen von Veranstaltungsteilnehmern reagieren.',
+    'Please select action'
+        => 'Bitte wählen Sie eine Aktion',
     'Please type in a long description with %minimum% characters at minimum.'
         => 'Bitte geben Sie eine Langbeschreibung mit einer Länge von mindestens %minimum% Zeichen ein.',
     'Please type in a short description with %minimum% characters at minimum.'
@@ -269,17 +294,31 @@ return array(
     'Publish to'
         => 'Veröffentlichen bis',
 
+    'Received request'
+        => 'Anfrage erhalten',
     'Registrations'
         => 'Anmeldungen',
     'regular email address of a company, institution or association'
         => 'offizielle E-Mail Adresse einer Firma, Einrichtung oder eines Verein',
+    'Reject the desired account role'
+        => 'Das gewünschte Benutzerrecht zurückweisen',
     'Reject this event'
         => 'Veranstaltung ablehnen',
+    'ROLE_EVENT_ADMIN'
+        => 'Benutzerrecht: Veranstaltungen als Administrator bearbeiten',
+    'ROLE_EVENT_LOCATION'
+        => 'Benutzerrecht: Veranstaltungen bearbeiten, die diesem Veranstaltungsort zugewiesen sind',
+    'ROLE_EVENT_ORGANIZER'
+        => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Veranstalter zugewiesen sind',
+    'ROLE_EVENT_SUBMITTER'
+        => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Benutzer vorgeschlagen wurden',
 
     'Search Location'
         => 'Veranstaltungsort suchen',
     'Search Organizer'
         => 'Veranstalter suchen',
+    'Select account type'
+        => 'Kontotyp wählen',
     'Select event group'
         => 'Veranstaltungsgruppe auswählen',
     'Short description'
@@ -305,18 +344,28 @@ return array(
         => 'Text - HTML formatiert',
     'Text - plain'
         => 'Text - unformatiert',
+    'Thank you, one of the admins will approve your request and contact you.'
+        => 'Vielen Dank, ein Administrator wird Ihre Anfrage prüfen und sich mit Ihnen in Verbindung setzen.',
     'Thank you for proposing the following event'
         => 'Vielen Dank für Ihren Veranstaltungsvorschlag',
     'Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!'
         => 'Vielen Dank für Ihre Anmeldung. Wir haben Ihnen eine E-Mail geschickt, bitte benutzen Sie den enthaltenen Bestätigungslink um Ihre E-Mail Adresse zu bestätigen und die Anmeldung zu aktivieren.',
     'Thank you for your subscription, we have send you a receipt at your email address.'
         => 'Vielen Dank für Ihre Anmeldung, wir haben Ihnen eine Bestätigung an Ihre E-Mail Adresse gesendet.',
+    'The action link was successfull executed'
+        => 'Der Aktionslink wurde erfolgreich ausgeführt',
+    'The change of your account rights is approved by admin'
+        => 'Die Änderung Ihrer Benutzerrechte wurde durch den Administrator genehmigt',
+    'The change of your account rights is rejected by admin'
+        => 'Die Änderung Ihrer Benutzerrechte wurde durch den Administrator abgelehnt',
     'The contact record was successfull updated.'
         => 'Der Adressdatensatz wurde aktualisiert.',
     'The deadline ends after the event start date!'
         => 'Der Anmeldeschluß liegt nach dem Beginn der Veranstaltung!',
     'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
         => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
+    'The email address %email% is not registered. We can only create a account for you if there was already a interaction, i.e. you have proposed a event. If you represent an organizer or a location and your public email address is not registered, please contact the administrator.'
+        => 'Die E-Mail Adresse %email% ist nicht registriert. Wir können nur dann ein Benutzerkonto für Sie anlegen, wenn bereits eine Interaktion stattgefunden hat und Sie z.B. eine Veranstaltung vorgeschlagen haben. Falls Sie einen Veranstalter oder einen Veranstaltungsort vertreten und Ihre öffentliche E-Mail Adresse nicht registriert ist, wenden Sie sich bitte an den Administrator.',
     'The event group with the name %group% does not exists!'
         => 'Die Veranstaltungs-Gruppe %group% existiert nicht!',
     'The event list is empty, please create a event!'
@@ -355,6 +404,14 @@ return array(
         => 'Die übermittelte GUID %guid% existiert nicht!',
     'The user %contact_name% with the ID %contact_id% and the email address %email% has proposed the following event'
         => 'Der Kontakt %contact_name% mit der der ID %contact_id% und der E-Mail Adresse %email% hat die folgende Veranstaltung vorgeschlagen',
+    'The user %user% does not exists!'
+        => 'Der Benutzer %user% existiert nicht!',
+    'The user %user% has already proposed %count% events'
+        => 'Der Kontakt %user% hat bereits %count% Veranstaltungen vorgeschlagen',
+    'The user %user% has never proposed a event'
+        => 'Der Kontakt %user% hat noch nie eine Veranstaltung vorgeschlagen',
+    'The user %user% want to get the right'
+        => 'Der Benutzer %user% möchte die Berechtigung erhalten',
     'The view <b>%view%</b> does not exists!'
         => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
     'There exists no kitEvent installation at the parent CMS!'
@@ -367,6 +424,10 @@ return array(
         => 'Dieser Aktivierungslink wurde bereits verwendet und ist nicht mehr gültig!',
     'This extra field is used in the event group %group%. First remove the extra field from the event group.'
         => 'Dieses Zusatzfeld wird in der Veranstaltungs Gruppe %group% verwendet. Sie müssen das Zusatzfeld zunächst aus der Gruppe entfernen.',
+    'This user has a account but was never in contact in context with events'
+        => 'Dieser Benutzer verfügt über ein Benutzerkonto, war jedoch im Zusammenhang mit Veranstaltungen noch nie im Kontakt',
+    'This user has a contact record but was never in contact in context with events'
+        => 'Dieser Benutzer verfügt über einen Kontaktdatensatz, war jedoch im Zusammenhang mit Veranstaltungen noch nie im Kontakt',
     'Type'
         => 'Typ',
 
@@ -375,16 +436,27 @@ return array(
     'Using qrcode[] is not enabled in config.event.json!'
         => 'qrcode[] ist nicht in der config.event.json freigegeben!',
 
+    'We send you a new password to your email address.'
+        => 'Wir senden Ihnen ein neues Passwort an Ihre E-Mail Adresse.',
+
     'You are authenticated but not allowed to edit this event. Please contact the admin if you are of the mind that you should be able for.'
         => 'Sie sind korrekt angemeldet jedoch nicht berechtigt diese Veranstaltung zu bearbeiten. Bitte wenden Sie sich an den Administrator um die erforderliche Berechtigung zu erhalten.',
+    'Your are not authenticated, please login!'
+        => 'Sie sind nicht berechtigt auf diese Inhalte zuzugreifen, bitte melden Sie sich an!',
     'Your contact record is locked, so we can not perform any action. Please contact the administrator'
         => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
     'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
         => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
+    'You have already the right to edit events (%role%). Please contact the administrator if you want to change or extend your account rights'
+        => 'Sie verfügen bereits über ein Benutzerkonto und das Recht Veranstaltungen zu bearbeiten (%role%). Bitte wenden Sie sich an den Administrator, wenn Sie geänderte oder erweiterte Benutzerrechte benötigen.',
+    'You have now the additional right to: "%role%"'
+        => 'Sie verfügen jetzt über das zusätzliche Recht: "%role%"',
     'You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name'
         => 'Sie haben <i>Firma, Institution oder Verein</i> als Kontakt Typ angegeben, bitte nennen Sie uns den Namen der Einrichtung.',
     'You have selected <i>natural person</i> as contact type, so please give us the last name of the person.'
         => 'Sie haben <i>natürliche Person</i> als Kontakt Typ gewählt, bitte nennen Sie uns den Nachnamen der Person.',
+    'You need a account if you want to edit events. In general we will give accounts to all event organizers, locations and persons which submit events frequently.'
+        => 'Sie benötigen ein Benutzerkonto um Veranstaltungen ändern und ergänzen zu können. Im Allgemeinen erhalten alle Veranstalter, Veranstaltungsorte sowie Personen, die regelmäßig Veranstaltungen eintragen, einen Zugang von uns.',
     'Your subscription for the event %event% is already confirmed.'
         => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
 );
