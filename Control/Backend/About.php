@@ -24,10 +24,14 @@ class About extends Backend {
     public function exec(Application $app)
     {
         $this->initialize($app);
+
+        $extension = $this->app['utils']->readJSON(MANUFAKTUR_PATH.'/Event/extension.json');
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/about.twig'),
             array(
                 'usage' => self::$usage,
-                'toolbar' => $this->getToolbar('about')
+                'toolbar' => $this->getToolbar('about'),
+                'extension' => $extension
             ));
     }
 
