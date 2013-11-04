@@ -101,7 +101,7 @@ EOD;
             foreach ($results as $tag) {
                 $tag_names[] = $tag['tag_name'];
             }
-            return $tag_names;
+            return empty($tag_names) ? false : $tag_names;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

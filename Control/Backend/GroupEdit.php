@@ -68,7 +68,7 @@ class GroupEdit extends Backend {
         // get the extra fields for this group
         $extra_field_ids = $this->ExtraGroup->selectTypeIDByGroupID(self::$group_id);
 
-        $form = $this->app['form.factory']->createBuilder('form')
+        $fields = $this->app['form.factory']->createBuilder('form')
         ->add('group_id', 'hidden', array(
             'data' => $data['group_id']
         ))
@@ -97,7 +97,7 @@ class GroupEdit extends Backend {
             'multiple' => true,
             'required' => true,
             'label' => 'Organizer Tags',
-            'data' => $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id)
+            'data' => (false === ($tags = $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id))) ? null : $tags
         ))
         ->add('group_location_contact_tags', 'choice', array(
             'choices' => $this->ContactControl->getTagArrayForTwig(),
@@ -105,7 +105,7 @@ class GroupEdit extends Backend {
             'multiple' => true,
             'required' => true,
             'label' => 'Location Tags',
-            'data' => $this->LocationTag->selectTagNamesByGroupID(self::$group_id)
+            'data' => (false === ($tags = $this->LocationTag->selectTagNamesByGroupID(self::$group_id))) ? null : $tags
         ))
         ->add('group_participant_contact_tags', 'choice', array(
             'choices' => $this->ContactControl->getTagArrayForTwig(),
@@ -113,17 +113,18 @@ class GroupEdit extends Backend {
             'multiple' => true,
             'required' => true,
             'label' => 'Participant Tags',
-            'data' => $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id)
+            'data' => (false === ($tags = $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id))) ? null : $tags
         ))
         ->add('group_extra_fields', 'hidden', array(
             'data' => implode(',', $extra_field_ids)
-        ));
+        ))
+        ;
 
         // insert the extra fields
         $choice_extra_field = $this->ExtraType->getArrayForTwig();
         foreach ($extra_field_ids as $type_id) {
             $type = $this->ExtraType->select($type_id);
-            $form->add("extra_field_".$type_id, 'choice', array(
+            $fields->add("extra_field_".$type_id, 'choice', array(
                 'choices' => array($type['extra_type_type'] => ucfirst(strtolower($type['extra_type_type']))),
                 'empty_value' => '- delete field -',
                 'multiple' => false,
@@ -136,7 +137,7 @@ class GroupEdit extends Backend {
         }
 
         // add selection for an extra field
-        $form->add('add_extra_field', 'choice', array(
+        $fields->add('add_extra_field', 'choice', array(
             'choices' => $choice_extra_field,
             'empty_value' => '- please select -',
             'expanded' => false,
@@ -145,7 +146,7 @@ class GroupEdit extends Backend {
             'label' => 'Add extra field'
         ));
 
-        return $form;
+        return $fields;
     }
 
     public function exec(Application $app, $group_id=null)
@@ -171,6 +172,7 @@ class GroupEdit extends Backend {
 
         $fields = $this->getFormFields($group);
         $form = $fields->getForm();
+echo "OK";
 
         if ('POST' == $this->app['request']->getMethod()) {
             // the form was submitted, bind the request
