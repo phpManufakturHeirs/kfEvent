@@ -3,7 +3,18 @@
   "guid":"DC674566-0F4E-4E6D-A325-101915925BA5",
   "category":"extension",
   "group":"phpManufaktur",
-  "vendor":"phpManufaktur",
+  "vendor":{
+      "name":"phpManufaktur",
+      "url":"https:\/\/phpmanufaktur.de",
+      "mail":"team@phpmanufaktur.de",
+      "address":{
+          "street":"Stockholmer Straße 31",
+          "zip":"13359",
+          "city":"Berlin",
+          "country":"Germany"
+      },
+      "phone":"+49 30 68813647"
+  },
   "type":"application",
   "path":"\/extension\/phpmanufaktur\/phpManufaktur\/Event",
   "namespace":"phpManufaktur\\Event",
@@ -56,9 +67,16 @@
   "setup": {
       "install":"\/admin\/event\/setup",
       "update":"\/admin\/event\/update",
-      "uninstall":"\/admin\/event\/uninstall"
+      "uninstall":"\/admin\/event\/uninstall",
+      "icon_path":{
+        "BlackCat":"\/extension\/phpmanufaktur\/phpManufaktur\/Event\/Data\/Setup\/icon\/icon.jpg",
+        "WebsiteBaker":"\/extension\/phpmanufaktur\/phpManufaktur\/Event\/Data\/Setup\/icon\/tool_icon.jpg"
+      }
   },
-  "license":"MIT License",
+  "license": {
+    "name":"MIT License",
+    "url":"https:\/\/github.com\/phpManufaktur\/kfEvent\/raw\/master\/LICENSE.md"
+  },
   "download": {
     "availability":"public",
     "agreement":"free",
@@ -67,5 +85,25 @@
       "repository":"kfEvent"
     },
     "url":"https:\/\/github.com\/phpManufaktur\/kfEvent"
+  },
+  "wiki": {
+    "en": {
+      "url":"https:\/\/github.com/phpManufaktur\/kfEvent\/wiki"
+    }
+  },
+  "firststeps": {
+    "de": {
+      "url":"https:\/\/kit2.phpmanufaktur.de\/event\/firststeps"
+    }
+  },
+  "issues": {
+    "en": {
+      "url":"https:\/\/github.com/phpManufaktur\/kfEvent\/issues"
+    }
+  },
+  "support": {
+    "en": {
+      "url":"https:\/\/support.phpmanufaktur.de"
+    }
   }
 }
