@@ -86,7 +86,9 @@
         {% if email_id > 0 %}
           {% for email in event.contact.location.communication %}
             {% if email.communication_id == email_id %}
-              <i class="icon-envelope"></i>&nbsp;{{ mailHide(email.communication_value) }}<br />
+              {% if '@testdomain.tld' not in email.communication_value %}
+                <i class="icon-envelope"></i>&nbsp;{{ mailHide(email.communication_value) }}<br />
+              {% endif %}
             {% endif %}
           {% endfor %}
         {% endif %}

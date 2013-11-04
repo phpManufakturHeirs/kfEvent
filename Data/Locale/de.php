@@ -438,6 +438,8 @@ return array(
     'Using qrcode[] is not enabled in config.event.json!'
         => 'qrcode[] ist nicht in der config.event.json freigegeben!',
 
+    'We have send you a new password, please check your email account'
+        => 'Wir haben Ihnen ein neues Passwort an Ihre E-Mail Adresse gesendet, bitte prüfen Sie Ihren Posteingang',
     'We send you a new password to your email address.'
         => 'Wir senden Ihnen ein neues Passwort an Ihre E-Mail Adresse.',
 
