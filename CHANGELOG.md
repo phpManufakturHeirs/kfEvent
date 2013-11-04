@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.20** - 2013-11-04
+
+* added support for additional vendor information
+* introduce extended about dialog
+* fixed: invalid class initialization in `Propose.php`
+* hide table header if search return zero hits
+* added sample to event.detail.twig how to hide emails which match a search pattern
+* added backend icons for WebsiteBaker 2.8.4 and BlackCat
+
 **2.0.19** - 2013-10-30
 
 * add preferred choices for the country selection
