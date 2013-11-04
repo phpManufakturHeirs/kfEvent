@@ -1279,7 +1279,7 @@ class Propose extends Basic
 
         $ContactControl = new Contact($this->app);
 
-        $ContactConfiguration = ContactConfiguration($this->app);
+        $ContactConfiguration = new ContactConfiguration($this->app);
         $contactConfig = $ContactConfiguration->getConfiguration();
 
         $fields = $this->app['form.factory']->createBuilder('form')
