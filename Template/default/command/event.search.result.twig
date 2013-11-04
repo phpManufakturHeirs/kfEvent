@@ -26,36 +26,40 @@
     </form>    
   </div>
   <div class="event list container" >
-    <table>
-      <thead>
-        <tr>
-          <th>{{ 'event_date_from'|trans }}</th>
-          <th>{{ 'event_date_to'|trans }}</th>
-          <th>{{ 'description_title'|trans }}</th>
-          <th>{{ 'zip'|trans }}</th>
-          <th>{{ 'location'|trans }}</th>
-          <th>{{ 'organizer'|trans }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for event in events %}
+    {% if events|length > 0 %}
+      <table>
+        <thead>
           <tr>
-            <td>{{ event.event_date_from|date('DATE_FORMAT'|trans) }}</td>
-            <td>{{ event.event_date_to|date('DATE_FORMAT'|trans) }}</td>
-            <td><a href="{{ FRAMEWORK_URL }}/event/perma/id/{{ event.event_id }}?pid={{ basic.pid }}" target="_top">{{ event.description_title }}</a></td>            
-            <td>{{ event.contact.location.address.0.address_zip }}</td>
-            <td>{{ event.contact.location.address.0.address_city }}</td>
-            <td>
-              {% if event.contact.location.contact.contact_type == 'COMPANY' %}
-                {{ event.contact.location.company.0.company_name }}
-              {% else %}
-                {{ event.contact.location.person.0.person_last_name }}
-              {% endif %}
-            </td>
+            <th>{{ 'event_date_from'|trans }}</th>
+            <th>{{ 'event_date_to'|trans }}</th>
+            <th>{{ 'description_title'|trans }}</th>
+            <th>{{ 'zip'|trans }}</th>
+            <th>{{ 'location'|trans }}</th>
+            <th>{{ 'organizer'|trans }}</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for event in events %}
+            <tr>
+              <td>{{ event.event_date_from|date('DATE_FORMAT'|trans) }}</td>
+              <td>{{ event.event_date_to|date('DATE_FORMAT'|trans) }}</td>
+              <td><a href="{{ FRAMEWORK_URL }}/event/perma/id/{{ event.event_id }}?pid={{ basic.pid }}" target="_top">{{ event.description_title }}</a></td>            
+              <td>{{ event.contact.location.address.0.address_zip }}</td>
+              <td>{{ event.contact.location.address.0.address_city }}</td>
+              <td>
+                {% if event.contact.location.contact.contact_type == 'COMPANY' %}
+                  {{ event.contact.location.company.0.company_name }}
+                {% else %}
+                  {{ event.contact.location.person.0.person_last_name }}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      {# here you can place a prompt if no search result exists #}
+    {% endif %}
   </div>
 
 {% endblock %}
