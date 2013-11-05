@@ -7,7 +7,7 @@
     </div>
   {% endif %}
   
-  <h2>DETAIL {{ event.description_title }}</h2>
+  <h2>{{ event.description_title }}</h2>
   
   <div class="event view date">{{ event.event_date_from|date('d.m.Y') }}</div>
   <div class="event view description long">{{ event.description_long }}</div>
@@ -23,7 +23,7 @@
           {% set person = event.contact.organizer.person.0 %}
           {{ person.person_gender|trans }}
           {% if person.person_first_name|length > 0 %}{{ person.person_first_name }} {% endif %}
-          {{ person.last_name }}
+          {{ person.person_last_name }}
         {% endif %}
       </div>
       {% if parameter.qrcode.active %}
@@ -87,7 +87,7 @@
           {% for email in event.contact.location.communication %}
             {% if email.communication_id == email_id %}
               {% if '@testdomain.tld' not in email.communication_value %}
-                <i class="icon-envelope"></i>&nbsp;{{ mailHide(email.communication_value) }}<br />
+                <i class="icon-envelope"></i>&nbsp;<a href="mailto:{{ email.communication_value }}">{{ email.communication_value }}</a><br />
               {% endif %}
             {% endif %}
           {% endfor %}
@@ -105,7 +105,7 @@
         {# link to Google Map #}
         {% if parameter.link.map.active and ((address.address_city|length > 0) or (address.address_zip|length > 0)) %}
             {% set location = address.address_street ~ ',' ~ address.address_zip ~ ',' ~ address.address_city %}
-            <i class="icon-map-marker"></i> <a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a><br />
+            <i class="icon-map-marker"></i>&nbsp;<a href="https://maps.google.de/maps?hl=de&q={{ location }}" target="_blank">{{ 'Google Map'|trans }}</a><br />
         {% endif %}
 
         {# link to iCal file #}
@@ -187,7 +187,13 @@
 
     <div class="row">
       <div class="cell width-150 right">{{ 'Deadline'|trans }}</div>
-      <div class="cell width-150">{{ event.event_deadline|date('d.m.Y') }}</div>
+      <div class="cell width-150">
+        {% if event.event_deadline != '0000-00-00 00:00:00' %}
+          {{ event.event_deadline|date('d.m.Y') }}
+        {% else %}
+          {# deadline is not defined #}
+        {% endif %}
+      </div>
       <div class="cell width-150 right" >{{ 'Costs'|trans }}</div>
       <div class="cell width-150" >{%if event.event_costs > 0 %}{{ event.event_costs|number_format(2,',','.') }} &euro;{% else %}{{ 'free of charge'|trans }}{% endif %}</div>
     </div>
@@ -201,7 +207,6 @@
       <a href="{{ parameter.link.subscribe.url }}">{{ 'Subscribe to event'|trans }}</a>
     {% endif %}
   </div>
-  
   {% if parameter.rating and config.rating.active %}
     <div class="rating-container">
       <div class="rating-stars rating_{{ event.rating.identifier_id }}" 

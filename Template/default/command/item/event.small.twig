@@ -17,7 +17,12 @@
         {% endif %}
       </div>
       <div class="cell width-150">{{ 'Participants total'|trans }}</div>
-      <div class="cell width-100">{{ event.event_participants_total }}</div>
+      <div class="cell width-100">
+        {{ event.participants.confirmed }}
+        {% if event.participants.pending > 0 %}
+          &nbsp;({{ event.participants.confirmed + event.participants.pending }})
+        {% endif %}
+      </div>
     </div>
     <div class="row">
       <div class="cell"></div>

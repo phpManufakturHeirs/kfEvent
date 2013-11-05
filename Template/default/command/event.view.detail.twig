@@ -29,6 +29,7 @@
   </div>
 {% endblock %}
 {% block footer %}
+  {% set iframe_add_height = 20 %}  
   {{ parent() }} 
   {% if config.rating.active and parameter.rating %}
     <script type="text/javascript">

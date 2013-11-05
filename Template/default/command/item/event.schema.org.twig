@@ -20,7 +20,7 @@
     {% if person.person_first_name|length > 0 %}
       {% set organizer = organizer ~ person.person_first_name ~ ' ' %}
     {% endif %}
-    {% set organizer = organizer ~ person.last_name %}
+    {% set organizer = organizer ~ person.person_last_name %}
   {% endif %}
   <meta itemprop="performer" content="{{ organizer }}">
   {% if event.contact.location.contact.contact_type == 'COMPANY' %}

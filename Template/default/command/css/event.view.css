@@ -26,10 +26,9 @@ a:active {
 
 .event.view.container {
   margin: 0;
-  padding: 5px;
+  padding: 0;
   width: auto;
   height: auto;
-  border: 1px solid #dcdcdc;
   font-size: 11px;
 }
 .event.view.date {
