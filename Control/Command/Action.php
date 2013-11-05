@@ -78,6 +78,9 @@ class Action extends Basic
                 case 'search':
                     $Search = new EventSearch();
                     return $Search->controllerDialog($app);
+                case 'config':
+                    $EventConfig = new EventConfig();
+                    return $EventConfig->exec($app);
                 default:
                     return $this->Message->render('The action <b>%action%</b> is unknown, please check the parameters for the kitCommand!',
                         array('%action%' => $parameters['action']));
