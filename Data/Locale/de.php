@@ -201,6 +201,8 @@ return array(
         => 'Ganzzahl',
     'Integer'
         => 'Ganzzahl',
+    'Invalid key => value pair in the set[] parameter!'
+        => 'Ungültiges Schlüssel => Wert Paar für den set[] Parameter!',
     'Invalid login'
         => 'Ungültiger Login, Benutzername oder Passwort falsch',
     'It is not allowed that the event start in the past!'
@@ -245,6 +247,8 @@ return array(
     'Organizer Tags'
         => 'Veranstalter',
 
+    'Permalink successfull changed'
+        => 'Der Permanent Link wurde erfolgreich geändert',
     'personal email address'
         => 'persönliche E-Mail Adresse',
     'Please feel free to order a account.'
@@ -255,6 +259,8 @@ return array(
         => 'Bitte suchen Sie nach einem Veranstaltungsort oder haken Sie die Checkbox an um einen neuen Veranstaltungsort anzulegen.',
     'Please select at minimum one tag for the %type%.'
         => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
+    'Please use the parameter set[] to set a configuration value.'
+        => 'Bitte verwenden Sie den Paramter set[] um einen Konfigurationswert zu setzen!',
     'Participant'
         => 'Teilnehmer',
     'Participant Tags'
@@ -463,4 +469,7 @@ return array(
         => 'Sie benötigen ein Benutzerkonto um Veranstaltungen ändern und ergänzen zu können. Im Allgemeinen erhalten alle Veranstalter, Veranstaltungsorte sowie Personen, die regelmäßig Veranstaltungen eintragen, einen Zugang von uns.',
     'Your subscription for the event %event% is already confirmed.'
         => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
+
+    'zip'
+        => 'PLZ'
 );
