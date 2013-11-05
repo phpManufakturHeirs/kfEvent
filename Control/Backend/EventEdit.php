@@ -493,24 +493,24 @@ class EventEdit extends Backend {
                 $event['event_date_to'] = $dt->toDateTimeString();
 
                 if (empty($event['event_publish_from'])) {
-                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_date_from']);
+                    $dt = Carbon::createFromTimestamp(strtotime($event['event_date_from']));
                     $dt->subDays(self::$config['event']['date']['event_publish_from']['subtract_days']);
                     $dt->startOfDay();
                     $event['event_publish_from'] = $dt->toDateTimeString();
                 }
                 else {
-                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_from']);
+                    $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_from']);
                     $event['event_publish_from'] = $dt->toDateTimeString();
                 }
 
                 if (empty($event['event_publish_to'])) {
-                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_date_to']);
+                    $dt = Carbon::createFromTimestamp(strtotime($event['event_date_to']));
                     $dt->addDays(self::$config['event']['date']['event_publish_to']['add_days']);
                     $dt->endOfDay();
                     $event['event_publish_to'] = $dt->toDateTimeString();
                 }
                 else {
-                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_to']);
+                    $dt = Carbon::createFromFormat($app['translator']->trans('DATETIME_FORMAT'), $event['event_publish_to']);
                     $event['event_publish_to'] = $dt->toDateTimeString();
                 }
 
