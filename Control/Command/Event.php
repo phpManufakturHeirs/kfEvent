@@ -168,12 +168,12 @@ class Event extends Basic
                         self::$parameter['link'][$link]['url'] = sprintf('%s%s%s', $url, strpos($url, '?') ? '&' : '?',
                             http_build_query(array(
                                 'cmd' => 'event',
-                                'id' => self::$parameter['id']
+                                'id' => $event_id
                             )));
                     }
                     else {
                         // use the route to event ID
-                        self::$parameter['link'][$link]['url'] = FRAMEWORK_URL."/event/id/".self::$parameter['id']."/view/detail?pid=".$this->getParameterID();
+                        self::$parameter['link'][$link]['url'] = FRAMEWORK_URL."/event/id/$event_id/view/detail?pid=".$this->getParameterID();
                     }
                     break;
                 case 'ical':
@@ -193,13 +193,13 @@ class Event extends Basic
                 case 'subscribe':
                     self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
                     $view = isset(self::$parameter['view']) ? strtolower(self::$parameter['view']) : 'small';
-                    $route = base64_encode('/event/id/'.self::$parameter['id'].'/view/'.$view);
+                    $route = base64_encode('/event/id/'.$event_id.'/view/'.$view);
                     self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL."/event/subscribe/id/$event_id/redirect/$route?pid=".$this->getParameterID() : null;
                     break;
                 case 'edit':
                     self::$parameter['link'][$link]['active'] = (!is_null($event_id) && in_array($link, $links));
                     $view = isset(self::$parameter['view']) ? strtolower(self::$parameter['view']) : 'small';
-                    $route = base64_encode('/event/id/'.self::$parameter['id'].'/view/'.$view);
+                    $route = base64_encode('/event/id/'.$event_id.'/view/'.$view);
                     self::$parameter['link'][$link]['url'] = !is_null($event_id) ? FRAMEWORK_URL.'/event/edit/id/'.$event_id.'/redirect/'.$route.'?pid='.$this->getParameterID() : null;
                     break;
                 default:
@@ -266,7 +266,7 @@ class Event extends Basic
         else {
             // no parameter which can be processed
             $Message = new Message($this->app);
-            return $Message->render('Missing a second parameter corresponding to the mode <i>item</i>');
+            return $Message->render('Missing a second parameter corresponding to the parameter <i>action[event]</i>');
         }
     }
 
