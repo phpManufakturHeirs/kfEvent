@@ -6,6 +6,14 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.21** - 2013-11-05
+
+* fixed problem assigning Organizer, Location or Participant to the Event group
+* fixed: wrong time converting for event_publish_to and event_publish_from
+* fixed wrong linking for event title in backend event list
+* added `action[config]` to enable configuration with the kitCommand `~~ event ~~`
+* fixed wrong usage of the `event_id` in Event Detail view
+
 **2.0.20** - 2013-11-04
 
 * added support for additional vendor information
