@@ -28,22 +28,20 @@
           <th>{{ 'event_date_from'|trans }}</th>
           <th>{{ 'event_date_to'|trans }}</th>
           <th>{{ 'description_title'|trans }}</th>
-          <th>{{ 'zip'|trans }}</th>
-          <th>{{ 'location'|trans }}</th>
-          <th>{{ 'organizer'|trans }}</th>
+          <th>{{ 'Location'|trans }}</th>
+          <th>{{ 'Organizer'|trans }}</th>
           {% if parameter.rating and config.rating.active %}
             <th>{{ 'Rating'|trans }}</th>
           {% endif %}
         </tr>
       </thead>
       <tbody>
+        {% set i = 0 %}
         {% for event in events %}
-          <tr>
+          <tr class="{{ cycle(['flop','flip'], i) }}">
             <td>{{ event.event_date_from|date('DATE_FORMAT'|trans) }}</td>
             <td>{{ event.event_date_to|date('DATE_FORMAT'|trans) }}</td>
             <td><a href="{{ FRAMEWORK_URL }}/event/perma/id/{{ event.event_id }}?pid={{ basic.pid }}" target="_top">{{ event.description_title }}</a></td>            
-            <td>{{ event.contact.location.address.0.address_zip }}</td>
-            <td>{{ event.contact.location.address.0.address_city }}</td>
             <td>
               {% if event.contact.location.contact.contact_type == 'COMPANY' %}
                 {{ event.contact.location.company.0.company_name }}
@@ -51,6 +49,14 @@
                 {{ event.contact.location.person.0.person_last_name }}
               {% endif %}
             </td>
+            <td>
+              {% if event.contact.organizer.contact.contact_type == 'COMPANY' %}
+                {{ event.contact.organizer.company.0.company_name }}
+              {% else %}
+                {{ event.contact.organizer.person.0.person_last_name }}
+              {% endif %}
+            </td>
+            
             {% if parameter.rating and config.rating.active %}
               <td>              
                 <div class="rating-container">
@@ -62,6 +68,7 @@
               </td>
            {% endif %}
           </tr>
+          {% set i = i+1 %}
         {% endfor %}
       </tbody>
     </table>
