@@ -172,7 +172,6 @@ class GroupEdit extends Backend {
 
         $fields = $this->getFormFields($group);
         $form = $fields->getForm();
-echo "OK";
 
         if ('POST' == $this->app['request']->getMethod()) {
             // the form was submitted, bind the request
