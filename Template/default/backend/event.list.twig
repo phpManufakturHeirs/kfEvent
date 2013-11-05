@@ -98,7 +98,7 @@
                     </td>
                   {% elseif column == 'description_title' %}
                     <td class="{{ column }}">
-                      <a href="{{ FRAMEWORK_URL ~ route.edit|replace({'{event_id}':value}) }}">{{ value }}</a>
+                      <a href="{{ FRAMEWORK_URL ~ route.edit|replace({'{event_id}':event.event_id}) }}">{{ value }}</a>
                     </td>
                   {% elseif ((column == 'description_short') or (column == 'description_short')) %}
                     <td class="{{ column }}">{{ value|striptags }}</td>
