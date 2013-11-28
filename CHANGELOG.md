@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.23** - 2013-11-28
+
+* check for a `scroll_to_id` parameter for the permanent link redirection
+* added handling for `comments_info`
+
 **2.0.22** - 2013-11-10
 
 * missed `$roles` definition if user has a account but was never active
