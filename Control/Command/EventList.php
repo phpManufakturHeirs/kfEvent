@@ -56,11 +56,17 @@ class EventList extends Basic
         $parameter['rating'] = (isset($parameter['rating']) &&
             ((strtolower($parameter['rating']) == 'false') || ($parameter['rating'] == 0))) ? false : true;
 
+        // should information about comments added to the result?
+        $parameter['comments_info'] = (isset($parameter['comments_info']) &&
+            ((strtolower($parameter['comments_info']) == 'true') || ($parameter['comments_info'] == 1))) ? true : false;
 
+        // which comments type must be used?
+        $parameter['comments_type'] = (isset($parameter['comments_type'])) ? strtoupper($parameter['comments_type']) : 'EVENT';
 
         $messages = array();
         $SQL = '';
-        if (false === ($events = $EventFilter->filter($filter, $messages, $SQL))) {
+        if (false === ($events = $EventFilter->filter(
+            $filter, $messages, $SQL, $parameter['comments_info'], $parameter['comments_type']))) {
             foreach ($messages as $message) {
                 $this->setMessage($message);
             }

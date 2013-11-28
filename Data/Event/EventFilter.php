@@ -14,6 +14,7 @@ namespace phpManufaktur\Event\Data\Event;
 use Silex\Application;
 use phpManufaktur\Event\Data\Event\Event;
 use Carbon\Carbon;
+use phpManufaktur\CommandCollection\Data\Comments\Comments;
 
 
 class EventFilter
@@ -21,6 +22,7 @@ class EventFilter
     protected $app = null;
     protected $Event = null;
     protected $Carbon = null;
+    protected $Comments = null;
 
     /**
      * Constructor for the Event filter
@@ -32,10 +34,23 @@ class EventFilter
         $this->app = $app;
         $this->Event = new Event($app);
         $this->Carbon = new Carbon();
+        $this->Comments = new Comments($app);
     }
 
 
-    public function filter($filter=array(), &$messages=array(), &$SQL='')
+    /**
+     * The filter function for events
+     *
+     * @param array $filter
+     * @param array reference $messages
+     * @param string $SQL
+     * @param boolean $comments_info
+     * @param string $comments_type
+     * @throws \Exception
+     * @return Ambigous <boolean, array>
+     * @link https://gist.github.com/hertsch/6289857#param_filter
+     */
+    public function filter($filter=array(), &$messages=array(), &$SQL='', $comments_info=false, $comments_type='EVENT')
     {
         try {
             // SQL body
@@ -494,12 +509,16 @@ class EventFilter
 
 
             // execute the filter and get all event IDs
-            //$this->app['db']->query("SET NAMES utf8");
             $results = $this->app['db']->fetchAll($SQL);
             $events = array();
             foreach ($results as $result) {
                 // loop through the events and get all details
-                $events[] = $this->Event->selectEvent($result['event_id']);
+                $event = $this->Event->selectEvent($result['event_id']);
+                if ($comments_info) {
+                    // add information about comments
+                    $event['comments']['count'] = $this->Comments->countComments($comments_type, $result['event_id']);
+                }
+                $events[] = $event;
             }
             // return the event array or false
             return (!empty($events)) ? $events : false;
