@@ -309,6 +309,10 @@ class Event extends Basic
                     'cmd' => 'event',
                     'id' => $event_id
                 )));
+            // check if a scroll_to_id parameter exists
+            if ($this->isSetFrameScrollToID()) {
+                $redirect .= '&fsti='.$this->getFrameScrollToID();
+            }
             // redirect - no direct call
             return $this->app->redirect($redirect);
         }
