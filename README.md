@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/phpManufaktur/kfEvent.png?label=ready)](https://waffle.io/phpManufaktur/kfEvent)  
 kfEvent
 =======
 
