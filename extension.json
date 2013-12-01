@@ -22,8 +22,8 @@
     "about":"\/event\/about"
   },
   "release":{
-    "number":"2.0.23",
-    "date":"2013-11-10",
+    "number":"2.0.24",
+    "date":"2013-12-01",
     "status":"beta"
   },
   "description":{
@@ -36,7 +36,7 @@
     "de": {
       "title":"Veranstaltungskalender für das kitFramework",
       "short":"Verwalten Sie Termine und Veranstaltungen und veröffentlichen Sie diese auf Ihrer Website",
-      "long":"Event ist eine vollständige Verwaltungssoftware für alle Termine, Kurse und Veranstaltungen.",
+      "long":"Event ist eine vollständige Verwaltungssoftware für alle Termine, Kurse und Veranstaltungen. Auf Grund seiner sehr flexiblen Struktur eignet sich Event sowohl für Freelancer, die einige Seminare auf Ihrer Website anbieten möchten, als auch für Portale, die mehrere tausend Veranstaltungen präsentieren und leistungsfähige Filter-, Sortier- und Suchfunktionen benötigen.",
       "url":"https:\/\/kit2.phpmanufaktur.de"
     }
   },

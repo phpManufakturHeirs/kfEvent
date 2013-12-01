@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.24** - 2013-12-01
+
+* fixed some typos and changed description
+
 **2.0.23** - 2013-11-28
 
 * check for a `scroll_to_id` parameter for the permanent link redirection
