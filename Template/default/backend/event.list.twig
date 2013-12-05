@@ -42,7 +42,7 @@
       {#
         The pagination serve a automatic 1 2 3 ... 17 18 19 pagination and
         navigation for the table if it contain more rows than specified in:
-        /Contact/Template/default/backend/simple/list.contact.json
+        /Event/Template/default/backend/event.list.json
         Changes here must be also done at the footer of the table !!!
        #}
       {% include '@phpManufaktur/Event/Template/default/backend/pagination.twig' with {
@@ -58,7 +58,7 @@
             {#
                 Enable an automatic ordering of the table by the columns, just
                 clicking at the head of the column. Default order is specified in:
-                /Contact/Template/default/backend/simple/list.contact.json
+                /Event/Template/default/backend/event.list.json
              #}
             {% set order_by_str = order_by|join(',') %}
             {% for head in events.0|keys %}
@@ -100,7 +100,7 @@
                     <td class="{{ column }}">
                       <a href="{{ FRAMEWORK_URL ~ route.edit|replace({'{event_id}':event.event_id}) }}">{{ value }}</a>
                     </td>
-                  {% elseif ((column == 'description_short') or (column == 'description_short')) %}
+                  {% elseif ((column == 'description_short') or (column == 'description_long')) %}
                     <td class="{{ column }}">{{ value|striptags }}</td>
                   {% elseif ((column == 'event_date_from') or (column == 'event_date_to') or (column == 'event_publish_from') or (column == 'event_publish_to') or (column == 'event_deadline')) %}
                     {# formatting date and time #}
