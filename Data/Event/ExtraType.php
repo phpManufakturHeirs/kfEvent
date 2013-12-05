@@ -154,7 +154,7 @@ EOD;
             $insert = array();
             foreach ($data as $key => $value) {
                 if (($key == 'extra_type_id') || ($key == 'extra_type_timestamp')) continue;
-                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
+                $insert[$this->app['db']->quoteIdentifier($key)] = is_string($value) ? $this->app['utils']->sanitizeText($value) : $value;
             }
             $this->app['db']->insert(self::$table_name, $insert);
             $type_id = $this->app['db']->lastInsertId();
