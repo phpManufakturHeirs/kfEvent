@@ -17,6 +17,7 @@
       <meta name="robots" content="noindex,nofollow" />
       <meta name="description" content="{% block description %}{% endblock %}" />
       <meta name="keywords" content="{% block keywords %}{% endblock %}" />
+      <meta name="generator" content="kitFramework (https://kit2.phpmanufaktur.de)" />
       {% block stylesheet %}
         <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
       {% endblock stylesheet %}
@@ -26,7 +27,7 @@
       {% endblock jquery %} 
     {% endblock head %}
   </head>
-  <body>
+  <body>    
     <div id="content">
       {% block content %}
       {% endblock content %}
