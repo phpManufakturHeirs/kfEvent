@@ -254,6 +254,8 @@ $app->match('/event/propose/location/search',
     'phpManufaktur\Event\Control\Command\Propose::controllerSearchLocation');
 $app->post('/event/propose/location/select',
     'phpManufaktur\Event\Control\Command\Propose::controllerSelectLocation');
+$app->get('/event/propose/location/create/group/{group_id}',
+    'phpManufaktur\Event\Control\Command\Propose::controllerCreateLocation');
 $app->get('/event/propose/location/id/{contact_id}',
     'phpManufaktur\Event\Control\Command\Propose::controllerLocationID');
 $app->post('/event/propose/event/check',
