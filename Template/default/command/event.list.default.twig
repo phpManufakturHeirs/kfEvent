@@ -42,7 +42,7 @@
             <td>{{ event.event_date_from|date('DATE_FORMAT'|trans) }}</td>
             <td>{{ event.event_date_to|date('DATE_FORMAT'|trans) }}</td>
             <td><a href="{{ FRAMEWORK_URL }}/event/perma/id/{{ event.event_id }}?pid={{ basic.pid }}" target="_top">{{ event.description_title }}</a></td>            
-            <td>
+            <td>              
               {% if event.contact.location.contact.contact_type == 'COMPANY' %}
                 {{ event.contact.location.company.0.company_name }}
               {% else %}

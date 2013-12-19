@@ -11,24 +11,26 @@
 <form action="{{ FRAMEWORK_URL ~ route.event.check ~ '?pid=' ~ basic.pid }}" method="post">
   {#{ form_widget(form) }#}
 
-  <div>
-    <label>{{ 'Organizer'|trans }}</label>
-    <div class="address_info">
-      {% if organizer.contact_type == 'COMPANY' %}
-        {{ organizer.company_name }}<br />
-      {% else %}
-        {{ organizer.person_gender|trans }}
-        {% if organizer.person_first_name|length > 0 %}{{ organizer.person_first_name }} {% endif %}
-        {{ organizer.person_last_name }}<br />
-      {% endif %}
-      {% if organizer.address_street|length > 0 %}{{ organizer.address_street }}<br />{% endif %}  
-      {{ organizer.address_country_code }} {{ organizer.address_zip }} {{ organizer.address_city }}<br />
-      {% if organizer.communication_phone|length > 0 %}<i class="icon-phone"></i> {{ organizer.communication_phone }}<br />{% endif %}
-      {% if organizer.communication_email|length > 0 %}<i class="icon-envelope"></i> <a href="mailto:{{ organizer.communication_email }}">{{ organizer.communication_email }}</a>{% endif %}
-    </div>
-  </div>
-  <div class="clear"></div>
-  <div>&nbsp;</div>
+  {% if 'unknown.organizer@event.dummy.tld' not in organizer.contact_login %}
+    <div>
+      <label>{{ 'Organizer'|trans }}</label>
+      <div class="address_info">
+        {% if organizer.contact_type == 'COMPANY' %}
+          {{ organizer.company_name }}<br />
+        {% else %}
+          {{ organizer.person_gender|trans }}
+          {% if organizer.person_first_name|length > 0 %}{{ organizer.person_first_name }} {% endif %}
+          {{ organizer.person_last_name }}<br />
+        {% endif %}
+        {% if organizer.address_street|length > 0 %}{{ organizer.address_street }}<br />{% endif %}  
+        {{ organizer.address_country_code }} {{ organizer.address_zip }} {{ organizer.address_city }}<br />
+        {% if organizer.communication_phone|length > 0 %}<i class="icon-phone"></i> {{ organizer.communication_phone }}<br />{% endif %}
+        {% if organizer.communication_email|length > 0 %}<i class="icon-envelope"></i> <a href="mailto:{{ organizer.communication_email }}">{{ organizer.communication_email }}</a>{% endif %}
+      </div>
+    </div>  
+    <div class="clear"></div>  
+    <div>&nbsp;</div>
+  {% endif %}
   <div>
     <label>{{ 'Event location'|trans }}</label>
     <div class="address_info">
