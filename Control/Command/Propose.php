@@ -959,8 +959,8 @@ class Propose extends Basic
     }
 
     /**
-     * Controller set the contact ID for the location and redirect to create
-     * a new Event record
+     * Controller set the contact ID for the location and redirect to search
+     * a organizer record
      *
      * @param Application $app
      * @param integer $contact_id
@@ -969,7 +969,7 @@ class Propose extends Basic
     public function controllerLocationID(Application $app, $contact_id)
     {
         $app['session']->set('location_id', $contact_id);
-        return $this->controllerEvent($app);
+        return $this->controllerSearchOrganizer($app);
     }
 
     /**
@@ -1039,10 +1039,37 @@ class Propose extends Basic
     {
         $this->initParameters($app);
 
+        // get the parameters
+        $parameter = $this->getCommandParameters();
+
+        // check if a event group isset
+        $form_request = $this->app['request']->request->get('form', array());
+        if (isset($form_request['event_group'])) {
+            $group_id = $form_request['event_group'];
+        }
+        elseif (isset($parameter['group'])) {
+            if (is_numeric($parameter['group'])) {
+                $group_id = intval($parameter['group']);
+            }
+            else {
+                $EventGroup = new EventGroup($app);
+                if (false === ($group_id = $EventGroup->getGroupID($parameter['group']))) {
+                    $Message = new Message($app);
+                    return $Message->render('The event group with the name %group% does not exists!',
+                        array('%group%' => $parameter['group']), 'group[]', array(), true);
+                }
+            }
+        }
+
+        $app['session']->set('group_id', $group_id);
+
         $fields = $this->app['form.factory']->createBuilder('form')
         ->add('search', 'text', array(
             'label' => 'Search Location',
             'required' => false
+        ))
+        ->add('event_group', 'hidden', array(
+            'data' => $group_id
         ))
         ->add('new_location', 'checkbox', array(
             'required' => false
@@ -1074,7 +1101,8 @@ class Propose extends Basic
     public function controllerOrganizerID(Application $app, $contact_id)
     {
         $app['session']->set('organizer_id', $contact_id);
-        return $this->controllerSearchLocation($app);
+        return $this->controllerEvent($app);
+        //return $this->controllerSearchLocation($app);
     }
 
     /**
@@ -1088,28 +1116,42 @@ class Propose extends Basic
     {
         $this->initParameters($app);
 
+        $Configuration = new Configuration($app);
+        $config = $Configuration->getConfiguration();
+
         $request = $app['request']->request->get('form');
 
         // some checks before creating the contact
         if ($request['contact_type'] == 'PERSON') {
             // check for a PERSON contact
-            if (empty($request['person_last_name'])) {
+            if ((($request['create_type'] == 'location') &&
+                $config['event']['location']['required']['name'] &&
+                empty($request['person_last_name'])) ||
+                (($request['create_type'] == 'organizer') && empty($request['person_last_name']))) {
                 $this->setMessage('You have selected <i>natural person</i> as contact type, so please give us the last name of the person.');
                 return $this->createContact($request['create_type'], $request['group_id']);
             }
         }
         else {
             // check for COMPANY contact
-            if (empty($request['company_name'])) {
+            if ((($request['create_type'] == 'location') &&
+                $config['event']['location']['required']['name'] &&
+                empty($request['company_name'])) ||
+                (($request['create_type'] == 'organizer') && empty($request['company_name']))) {
                 $this->setMessage('You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name');
                 return $this->createContact($request['create_type'], $request['group_id']);
             }
         }
 
         if (empty($request['email']) && empty($request['phone']) && empty($request['url'])) {
-            // at least we need one communication way
-            $this->setMessage('At least we need one communication channel, so please tell us a email address, phone or a URL');
-            return $this->createContact($request['create_type'], $request['group_id']);
+            if (($request['create_type'] == 'location') && !$config['event']['location']['required']['communication']) {
+                // skip ...
+            }
+            else {
+                // at least we need one communication way
+                $this->setMessage('At least we need one communication channel, so please tell us a email address, phone or a URL');
+                return $this->createContact($request['create_type'], $request['group_id']);
+            }
         }
 
         if ($request['create_type'] == 'organizer') {
@@ -1139,10 +1181,34 @@ class Propose extends Basic
             $login = strtolower($request['email']);
         }
         elseif ($request['contact_type'] == 'PERSON') {
-            $login = sprintf('%s_%s', strtolower($request['person_last_name']), date('zHi'));
+            if (!empty($request['person_last_name'])) {
+                $login = sprintf('%s_%s', strtolower($request['person_last_name']), date('zHi'));
+            }
+            elseif (!empty($request['address_zip'])) {
+                // create fragmentary address
+                $login = sprintf('%s_%s_%s%s', $request['address_zip'], strtolower($request['address_city']), date('zHi'),
+                    $config['contact']['fragmentary']['login']['suffix']);
+            }
+            else {
+                // create fragmentary address
+                $login = sprintf('%s_%s%s', strtolower($request['address_city']), date('zHi'),
+                    $config['contact']['fragmentary']['login']['suffix']);
+            }
         }
         else {
-            $login = sprintf('%s_%s', strtolower($request['company_name']), date('zHi'));
+            if (!empty($request['company_name'])) {
+                $login = sprintf('%s_%s', strtolower($request['company_name']), date('zHi'));
+            }
+            elseif (!empty($request['address_zip'])) {
+                // create fragmentary address
+                $login = sprintf('%s_%s_%s%s', $request['address_zip'], strtolower($request['address_city']), date('zHi'),
+                    $config['contact']['fragmentary']['login']['suffix']);
+            }
+            else {
+                // create fragmentary address
+                $login = sprintf('%s_%s%s', strtolower($request['address_city']), date('zHi'),
+                    $config['contact']['fragmentary']['login']['suffix']);
+            }
         }
 
         $data = array(
@@ -1243,7 +1309,7 @@ class Propose extends Basic
                 // update existing propose record
                 $ProposeData->update($propose_id, $data);
             }
-            return $this->controllerSearchLocation($app);
+            return $this->controllerEvent($app);
         }
         else {
             // set session for 'location_id'
@@ -1261,7 +1327,7 @@ class Propose extends Basic
                 // update existing propose record
                 $ProposeData->update($propose_id, $data);
             }
-            return $this->controllerEvent($app);
+            return $this->controllerSearchOrganizer($app);
         }
     }
 
@@ -1281,6 +1347,13 @@ class Propose extends Basic
 
         $ContactConfiguration = new ContactConfiguration($this->app);
         $contactConfig = $ContactConfiguration->getConfiguration();
+
+        $zip_required = false;
+        if ($type == 'location') {
+            $Configuration = new Configuration($this->app);
+            $config = $Configuration->getConfiguration();
+            $zip_required = $config['event']['location']['required']['zip'];
+        }
 
         $fields = $this->app['form.factory']->createBuilder('form')
         ->add('create_type', 'hidden', array(
@@ -1346,7 +1419,7 @@ class Propose extends Basic
             'data' => isset($request['address_street']) ? $request['address_street'] : ''
         ))
         ->add('address_zip', 'text', array(
-            'required' => false,
+            'required' => $zip_required,
             'label' => 'Zip',
             'data' => isset($request['address_zip']) ? $request['address_zip'] : ''
         ))
@@ -1407,6 +1480,111 @@ class Propose extends Basic
     }
 
     /**
+     * Controller to create a new contact of type 'location'
+     *
+     * @param Application $app
+     * @param integer $group_id
+     * @return string
+     */
+    public function controllerCreateLocation(Application $app, $group_id)
+    {
+        $this->initParameters($app);
+        return $this->createContact('location', $group_id);
+    }
+
+    /**
+     * Use a unkown organizer instead of a regular record
+     *
+     * @throws \Exception
+     * @return string dialog create event
+     */
+    protected function checkUnknownOrganizer()
+    {
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+
+        $ContactControl = new Contact($this->app);
+        if (false === ($organizer_id = $ContactControl->existsLogin($config['event']['organizer']['unknown']['identifier']))) {
+            // missing the contact record for unknown organizers, create it!
+
+            // get the TAGS assigned to the organizer
+            $OrganizerTag = new OrganizerTag($this->app);
+            if (false === ($group_tags = $OrganizerTag->selectTagNamesByGroupID($this->app['session']->get('group_id')))) {
+                throw new \Exception("Missing the organizer TAG names for the group ID ".$this->app['session']->get('group_id'));
+            }
+
+            $contact_id = ($organizer_id > 0) ? $organizer_id : -1;
+
+            $tags = array();
+            foreach ($group_tags as $tag) {
+                $tags[] = array(
+                    'contact_id' => $contact_id,
+                    'tag_name' => $tag
+                );
+            }
+
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $contact_id,
+                    'contact_type' => 'COMPANY',
+                    'contact_name' => $config['event']['organizer']['unknown']['identifier'],
+                    'contact_login' => $config['event']['organizer']['unknown']['identifier'],
+                    'contact_status' => 'ACTIVE'
+                ),
+                'tag' => $tags,
+                'company' => array(
+                    array(
+                        'company_id' => -1,
+                        'contact_id' => -1,
+                        'company_name' => $config['event']['organizer']['unknown']['identifier']
+                    )
+                ),
+            );
+
+            $ContactControl = new Contact($this->app);
+            $organizer_id = -1;
+            if (false === ($ContactControl->insert($data, $organizer_id))) {
+                // don't return as message to to visitor, better throw an error
+                throw new \Exception(strip_tags($ContactControl->getMessage()));
+            }
+        }
+        $status = $ContactControl->getStatus($config['event']['organizer']['unknown']['identifier']);
+
+        if ($status != 'ACTIVE') {
+            // the unknown organizer is not active - update the record
+            $data = array(
+                'contact' => array(
+                    'contact_id' => $organizer_id,
+                    'contact_status' => 'ACTIVE'
+                )
+            );
+            $has_changed = false;
+            if (!$ContactControl->update($data, $organizer_id, $has_changed, true)) {
+                // don't return as message to to visitor, better throw an error
+                throw new \Exception(strip_tags($ContactControl->getMessage()));
+            }
+        }
+
+        // set session for 'organizer_id'
+        $this->app['session']->set('organizer_id', $organizer_id);
+        $data = array(
+            'new_organizer_id' => $organizer_id
+        );
+        $ProposeData = new ProposeData($this->app);
+        if (null == ($propose_id = $this->app['session']->get('propose_id'))) {
+            // create a new propose record
+            $ProposeData->insert($data, $propose_id);
+            // set the session for further usage
+            $this->app['session']->set('propose_id', $propose_id);
+        }
+        else {
+            // update existing propose record
+            $ProposeData->update($propose_id, $data);
+        }
+        return $this->controllerEvent($this->app);
+    }
+
+    /**
      * Controller to select a organizer from the list, created by search results
      *
      * @param Application $app
@@ -1421,24 +1599,25 @@ class Propose extends Basic
         $form_request = $this->app['request']->request->get('form', array());
 
         // check the search term
-        if (!isset($form_request['new_organizer']) && (!isset($form_request['search']) || empty($form_request['search']))) {
+        if ((!isset($form_request['new_organizer']) && (!isset($form_request['unknown_organizer']))) &&
+            (!isset($form_request['search']) || empty($form_request['search']))) {
             $this->setMessage('Please search for for a organizer or select the checkbox to create a new one.');
             return $this->controllerSearchOrganizer($app);
         }
 
-        // check the event group ID
-        if (!isset($form_request['event_group'])) {
-            throw new \Exception("Missing the group ID!");
-        }
-
         if (isset($form_request['new_organizer'])) {
             // create a new organizer record
-            return $this->createContact('organizer', $form_request['event_group']);
+            return $this->createContact('organizer', $this->app['session']->get('group_id'));
+        }
+
+        if (isset($form_request['unknown_organizer'])) {
+            // unknown organizer
+            return $this->checkUnknownOrganizer();
         }
 
         // get the TAGS assigned to the organizer
         $OrganizerTag = new OrganizerTag($app);
-        if (false === ($tags = $OrganizerTag->selectTagNamesByGroupID($form_request['event_group']))) {
+        if (false === ($tags = $OrganizerTag->selectTagNamesByGroupID($this->app['session']->get('group_id')))) {
             throw new \Exception("Missing the organizer TAG names for the group ID ".$form_request['event_group']);
         }
 
@@ -1448,9 +1627,6 @@ class Propose extends Basic
             $this->setMessage('There exists no organizer who fits to the search term %search%', array('%search%' => $form_request['search']));
             return $this->controllerSearchOrganizer($app);
         }
-
-        // set session for the event group ID
-        $this->app['session']->set('group_id', $form_request['event_group']);
 
         // show the list with the matching organizers
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
@@ -1464,7 +1640,7 @@ class Propose extends Basic
                 'route' => array(
                     'organizer' => array(
                         'search' => '/event/propose/organizer/search',
-                        'create' => '/event/propose/organizer/create/group/'.$form_request['event_group'],
+                        'create' => '/event/propose/organizer/create/group/'.$this->app['session']->get('group_id'),
                         'id' => '/event/propose/organizer/id/{contact_id}'
                     )
                 )
@@ -1480,36 +1656,12 @@ class Propose extends Basic
     {
         $this->initParameters($app);
 
-        // get the parameters
-        $parameter = $this->getCommandParameters();
-
-        // check if a event group isset
-        $form_request = $this->app['request']->request->get('form', array());
-        if (isset($form_request['event_group'])) {
-            $group_id = $form_request['event_group'];
-        }
-        elseif (isset($parameter['group'])) {
-            if (is_numeric($parameter['group'])) {
-                $group_id = intval($parameter['group']);
-            }
-            else {
-                $EventGroup = new EventGroup($app);
-                if (false === ($group_id = $EventGroup->getGroupID($parameter['group']))) {
-                    $Message = new Message($app);
-                    return $Message->render('The event group with the name %group% does not exists!',
-                        array('%group%' => $parameter['group']), 'group[]', array(), true);
-                }
-            }
-        }
-
-        $app['session']->set('group_id', $group_id);
-
         $fields = $this->app['form.factory']->createBuilder('form')
-        ->add('event_group', 'hidden', array(
-            'data' => $group_id
-        ))
         ->add('search', 'text', array(
             'label' => 'Search Organizer',
+            'required' => false
+        ))
+        ->add('unknown_organizer', 'checkbox', array(
             'required' => false
         ))
         ->add('new_organizer', 'checkbox', array(
@@ -1564,6 +1716,9 @@ class Propose extends Basic
                 'route' => array(
                     'organizer' => array(
                         'search' => '/event/propose/organizer/search'
+                    ),
+                    'location' => array(
+                        'search' => '/event/propose/location/search'
                     )
                 )
             ));
@@ -1595,6 +1750,9 @@ class Propose extends Basic
             // must first select a group
             return $this->controllerSelectGroup($app);
         }
+
+        // select the location for the proposed event
+        return $this->controllerSearchLocation($app);
 
         // select the organizer for the proposed event
         return $this->controllerSearchOrganizer($app);

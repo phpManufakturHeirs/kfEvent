@@ -46,6 +46,10 @@
         <label for="new_organizer">&nbsp;</label>
         {{ form_widget(form.new_organizer) }}<div class="checkbox_label">{{ 'Create a new Organizer record'|trans }}</div>
       </div>
+      <div>
+        <label for="unknown_organizer">&nbsp;</label>
+        {{ form_widget(form.unknown_organizer) }}<div class="checkbox_label">{{ "I really don't know the Organizer"|trans }}</div>          
+      </div>
       {{ form_rest(form) }}
       <div>
         <label for="submit">&nbsp;</label>

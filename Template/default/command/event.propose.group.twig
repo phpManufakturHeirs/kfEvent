@@ -17,7 +17,7 @@
 {% block content %}
   {{ parent() }}
   <div class="contact_form">
-    <form action="{{ FRAMEWORK_URL ~ route.organizer.search ~ '?pid=' ~ basic.pid }}" method="post">
+    <form action="{{ FRAMEWORK_URL ~ route.location.search ~ '?pid=' ~ basic.pid }}" method="post">
       {{ form_widget(form) }}
       <div>
         <label for="submit">&nbsp;</label>

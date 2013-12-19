@@ -191,6 +191,8 @@ return array(
     'Hello %name%'
         => 'Hallo %name%',
 
+    "I really don't know the Organizer"
+        => 'Der Veranstalter ist mir leider nicht bekannt',
     'If you are prompted to login, please use your username and password'
         => 'Wenn Sie aufgefordert werden sich anzumelden, verwenden Sie bitte Ihren Benutzernamen und Ihr Passwort',
     'Import events from kitEvent'

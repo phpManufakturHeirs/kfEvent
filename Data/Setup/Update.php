@@ -154,6 +154,47 @@ class Update
     }
 
     /**
+     * Release 2.0.25
+     */
+    protected function release_2025()
+    {
+        if (file_exists(MANUFAKTUR_PATH.'/Event/config.event.json')) {
+            $config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+            if (!isset($config['event']['location']['unknown'])) {
+                $config['event']['location'] = array(
+                    'unknown' => array(
+                        'enabled' => false,
+                        'identifier' => 'unknown.location@event.dummy.tld'
+                    ),
+                    'required' => array(
+                        'name' => false,
+                        'zip' => true,
+                        'city' => true,
+                        'communication' => false
+                    )
+                );
+                $config['event']['organizer']['unknown'] = array(
+                    'enabled' => true,
+                    'identifier' => 'unknown.organizer@event.dummy.tld'
+                );
+                // write the formatted config file to the path
+                file_put_contents(MANUFAKTUR_PATH.'/Event/config.event.json', $this->app['utils']->JSONFormat($config));
+                $this->app['monolog']->addDebug('Added rating -> active to /Event/config.event.json');
+            }
+            if (!isset($config['contact']['fragmentary'])) {
+                $config['contact']['fragmentary'] = array(
+                    'login' => array(
+                        'suffix' => '@event.dummy.tld'
+                    )
+                );
+                // write the formatted config file to the path
+                file_put_contents(MANUFAKTUR_PATH.'/Event/config.event.json', $this->app['utils']->JSONFormat($config));
+                $this->app['monolog']->addDebug('Added rating -> active to /Event/config.event.json');
+            }
+        }
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -170,6 +211,9 @@ class Update
 
         // Release 2.0.18
         $this->release_2018();
+
+        // Release 2.0.25
+        $this->release_2025();
 
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Event'));

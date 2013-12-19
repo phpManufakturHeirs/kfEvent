@@ -49,12 +49,14 @@
     </thead>
     <tbody>
       {% for location in locations %}
-        <tr>
-          <td><a href="{{ FRAMEWORK_URL ~ route.location.id|replace({'{contact_id}':location.contact_id}) ~ '?pid=' ~ basic.pid }}">{{ location.contact_name }}</a></td>
-          <td>{{ location.address_zip }}</td>
-          <td>{{ location.address_city }}</td>
-          <td>{{ location.address_street }}</td>
-        </tr>
+        {% if '@event.dummy.tld' not in location.contact_login %}
+          <tr>
+            <td><a href="{{ FRAMEWORK_URL ~ route.location.id|replace({'{contact_id}':location.contact_id}) ~ '?pid=' ~ basic.pid }}">{{ location.contact_name }}</a></td>
+            <td>{{ location.address_zip }}</td>
+            <td>{{ location.address_city }}</td>
+            <td>{{ location.address_street }}</td>
+          </tr>
+        {% endif %}
       {% endfor %}
     </tbody>
   </table>  

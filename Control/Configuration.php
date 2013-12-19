@@ -44,6 +44,24 @@ class Configuration
                 'microdata' => array(
                     'offer_count_unlimited' => 20
                 ),
+                'location' => array(
+                    'unknown' => array(
+                        'enabled' => false,
+                        'identifier' => 'unkown.location@event.dummy.tld'
+                    ),
+                    'required' => array(
+                        'name' => false,
+                        'zip' => true,
+                        'city' => true,
+                        'communication' => false,
+                    )
+                ),
+                'organizer' => array(
+                    'unknown' => array(
+                        'enabled' => true,
+                        'identifier' => 'unknown.organizer@event.dummy.tld'
+                    ),
+                ),
                 'subscription' => array(
                     'confirm' => array(
                         'double_opt_in' => false,
@@ -106,6 +124,11 @@ class Configuration
                     'mail_to' => array(
                         'contact',
                         'provider'
+                    )
+                ),
+                'fragmentary' => array(
+                    'login' => array(
+                        'suffix' => '@event.dummy.tld'
                     )
                 )
             ),
