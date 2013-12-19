@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.25**
+
+* added meta tag `generator`
+* added `setPageTitle()` for events
+* rewrite event propose. Now first step is to submit location, then organizer. The organizer can now also be `unknown`!
+* suppress organizer indicated with `unknown.organizer@event.dummy.tld`
+
 **2.0.24** - 2013-12-01
 
 * fixed some typos and changed description
