@@ -237,9 +237,9 @@ class kitEvent extends Dialog {
                 'event_participants_max' => $event['evt_participants_max'],
                 'event_participants_total' => $event['evt_participants_total'],
                 'event_deadline' => $event['evt_deadline'],
-                'description_title' => $item['item_title'],
-                'description_short' => $item['item_desc_short'],
-                'description_long' => $item['item_desc_long'],
+                'description_title' => $this->app['utils']->sanitizeText($item['item_title']),
+                'description_short' => $this->app['utils']->sanitizeText($item['item_desc_short']),
+                'description_long' => $this->app['utils']->sanitizeText($item['item_desc_long']),
                 'event_status' => ($event['evt_status'] == '1') ? 'ACTIVE' : 'LOCKED'
             );
 
@@ -275,8 +275,8 @@ class kitEvent extends Dialog {
         $prompt_success = true;
         if (self::$import_is_possible) {
             // execute the import
-
-            $event_ids = $this->kitEvent->getAllKitEventIDs();
+            $start_id = $this->app['session']->get('EVENT_IMPORT_LAST_ID', 1);
+            $event_ids = $this->kitEvent->getAllKitEventIDs($start_id);
 
             // first handle the kitEvent Groups
             $groups = $this->kitEvent->getEventGroups();
@@ -290,6 +290,7 @@ class kitEvent extends Dialog {
                     // dont count
                     continue;
                 }
+                $this->app['session']->set('EVENT_IMPORT_LAST_ID', $event['evt_id']);
                 // increase counter
                 $counter++;
                 $total = $this->app['session']->get('EVENT_IMPORT_EVENTS_IMPORTED', 0) + $counter;
@@ -314,6 +315,7 @@ class kitEvent extends Dialog {
 
                 $this->app['session']->remove('EVENT_IMPORT_EVENTS_DETECTED');
                 $this->app['session']->remove('EVENT_IMPORT_EVENTS_IMPORTED');
+                $this->app['session']->remove('EVENT_IMPORT_LAST_ID');
             }
         }
         else {

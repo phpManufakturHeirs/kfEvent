@@ -69,10 +69,11 @@ class kitEvent
         }
     }
 
-    public function getAllKitEventIDs()
+    public function getAllKitEventIDs($start_id=1)
     {
         try {
-            $SQL = "SELECT `evt_id` FROM `".CMS_TABLE_PREFIX."mod_kit_event` WHERE (`evt_status`='1' OR `evt_status`='0') ORDER BY `evt_id` ASC";
+            $SQL = "SELECT `evt_id` FROM `".CMS_TABLE_PREFIX."mod_kit_event` WHERE (`evt_status`='1' OR `evt_status`='0') ".
+                "AND `evt_id` >= '$start_id' ORDER BY `evt_id` ASC";
             return $this->app['db']->fetchAll($SQL);
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
