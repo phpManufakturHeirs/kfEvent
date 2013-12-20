@@ -14,6 +14,7 @@ namespace phpManufaktur\Event\Data\Setup;
 use Silex\Application;
 use phpManufaktur\Event\Data\Event\Propose;
 use phpManufaktur\Event\Control\Configuration;
+use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
 
 class Update
 {
@@ -214,6 +215,10 @@ class Update
 
         // Release 2.0.25
         $this->release_2025();
+
+        // re-install or update the admin-tool
+        $AdminTool = new InstallAdminTool($app);
+        $AdminTool->exec(MANUFAKTUR_PATH.'/Event/extension.json', '/event/cms');
 
         return $app['translator']->trans('Successfull updated the extension %extension%.',
             array('%extension%' => 'Event'));

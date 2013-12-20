@@ -259,6 +259,8 @@ return array(
         => 'Bitte suchen Sie nach einem Veranstalter oder haken Sie die Checkbox an um einen neuen Veranstalter anzulegen.',
     'Please search for for a location or select the checkbox to create a new one.'
         => 'Bitte suchen Sie nach einem Veranstaltungsort oder haken Sie die Checkbox an um einen neuen Veranstaltungsort anzulegen.',
+    'Please search for the event you want to copy data from.'
+        => 'Bitte suchen Sie nach der Veranstaltung, die Sie kopieren möchten.',
     'Please select at minimum one tag for the %type%.'
         => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
     'Please use the parameter set[] to set a configuration value.'
@@ -432,6 +434,8 @@ return array(
         => 'Es wurde kein Veranstalter gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
     'This activation link was already used and is no longer valid!'
         => 'Dieser Aktivierungslink wurde bereits verwendet und ist nicht mehr gültig!',
+    'This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!'
+        => 'Diese Veranstaltung ist eine Kopie der Veranstaltung mit der ID %id%. Bitte beachten Sie, daß Sie die Datumsangaben anpassen bevor Sie diese Veranstaltung veröffentlichen - Sie erzeugen sonst doppelte Einträge!',
     'This extra field is used in the event group %group%. First remove the extra field from the event group.'
         => 'Dieses Zusatzfeld wird in der Veranstaltungs Gruppe %group% verwendet. Sie müssen das Zusatzfeld zunächst aus der Gruppe entfernen.',
     'This user has a account but was never in contact in context with events'

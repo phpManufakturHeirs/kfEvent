@@ -19,6 +19,7 @@ class Backend {
     protected static $usage = null;
     protected static $usage_param = null;
     protected static $message = '';
+    protected static $message_type = 'info';
 
     /**
      * Constructor
@@ -138,4 +139,25 @@ class Backend {
     {
         return !empty(self::$message);
     }
+
+    /**
+     * Set the message type. Possible values: success, info, warning, danger
+     *
+     * @param string $type
+     */
+    public function setMessageType($type)
+    {
+        self::$message_type = strtolower($type);
+    }
+
+    /**
+     * Get the message type
+     *
+     * @return string message type
+     */
+    public function getMessageType()
+    {
+        return self::$message_type;
+    }
+
  }

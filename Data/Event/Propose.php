@@ -236,8 +236,13 @@ EOD;
             $EventData = new Event($this->app);
             $ContactOverview = new Overview($this->app);
             foreach ($results as $propose) {
+                if (($propose['submitter_id'] < 1) || ($propose['new_event_id'] < 1)) {
+                    // invalid record, skip!
+                    $this->app['monolog']->addDebug(sprintf('The event propose record with the ID %d is invalid and should be removed.', $propose['id']));
+                    continue;
+                }
                 if (false === ($event = $EventData->selectEvent($propose['new_event_id']))) {
-                    throw new \Exception('Missing the event ID '.$propose['event_id']);
+                    throw new \Exception('Missing the event ID '.$propose['new_event_id']);
                 }
                 if (false === ($submitter = $ContactOverview->select($propose['submitter_id']))) {
                     throw new \Exception('Missing the submitter ID '.$propose['submitter_id']);

@@ -157,6 +157,13 @@ $app->match('/admin/event/image/delete/id/{image_id}/event/{event_id}',
     // delete image from event
     'phpManufaktur\Event\Control\Backend\EventEdit::deleteImage');
 
+$app->get('/admin/event/copy',
+    'phpManufaktur\Event\Control\Backend\EventCopy::controllerCopyEvent');
+$app->post('/admin/event/copy/search/check',
+    'phpManufaktur\Event\Control\Backend\EventCopy::controllerSearchCheck');
+$app->get('/admin/event/copy/id/{event_id}',
+    'phpManufaktur\Event\Control\Backend\EventCopy::controllerCopyID');
+
 $app->match('/admin/event/list',
     // Show the Event List
     'phpManufaktur\Event\Control\Backend\EventList::exec');

@@ -22,6 +22,8 @@ use phpManufaktur\Event\Data\Event\Description as EventDescription;
 use phpManufaktur\Event\Data\Event\Extra;
 use phpManufaktur\Event\Data\Event\Images;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class EventEdit extends Backend {
 
@@ -377,6 +379,11 @@ class EventEdit extends Backend {
         if (isset($form_request['event_id'])) {
             self::$event_id = $form_request['event_id'];
         }
+
+        if (null != ($message = $this->app['request']->query->get('message'))) {
+            $this->setMessage($message);
+        }
+
         // additional information for extra fields
         $extra_info = array();
         // help to detect if this is the first call of the function
@@ -387,7 +394,8 @@ class EventEdit extends Backend {
             if (isset($form_request['create_by'])) {
                 if ($form_request['create_by'] == 'COPY') {
                     // show the dialog to copy an existing event into a new one
-                    throw new \Exception('The COPY dialog is not implemented yet!');
+                    $subRequest = Request::create('/admin/event/copy', 'GET', array('usage' => self::$usage));
+                    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
                 }
                 else {
                     // show the dialog to select a event group

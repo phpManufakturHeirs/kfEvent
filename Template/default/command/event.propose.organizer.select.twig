@@ -49,12 +49,14 @@
     </thead>
     <tbody>
       {% for organizer in organizers %}
-        <tr>
-          <td><a href="{{ FRAMEWORK_URL ~ route.organizer.id|replace({'{contact_id}':organizer.contact_id}) ~ '?pid=' ~ basic.pid }}">{{ organizer.contact_name }}</a></td>
-          <td>{{ organizer.address_zip }}</td>
-          <td>{{ organizer.address_city }}</td>
-          <td>{{ organizer.address_street }}</td>
-        </tr>
+        {% if 'unknown.organizer@event.dummy.tld' not in organizer.contact_login %}
+          <tr>
+            <td><a href="{{ FRAMEWORK_URL ~ route.organizer.id|replace({'{contact_id}':organizer.contact_id}) ~ '?pid=' ~ basic.pid }}">{{ organizer.contact_name }}</a></td>
+            <td>{{ organizer.address_zip }}</td>
+            <td>{{ organizer.address_city }}</td>
+            <td>{{ organizer.address_street }}</td>
+          </tr>
+        {% endif %}
       {% endfor %}
     </tbody>
   </table>  
