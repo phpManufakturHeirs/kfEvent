@@ -6,7 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
-**2.0.25**
+**2.0.26** - 2013-12-20
+
+* introduce Bootstrap 3 for the backend
+* changed about dialog to Bootstrap 3
+* added the function to copy events with all needed dialogs 
+
+**2.0.25** - 2013-12-19
 
 * added meta tag `generator`
 * added `setPageTitle()` for events
