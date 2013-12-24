@@ -15,6 +15,10 @@
   {% set template_file = 'backend/bootstrap/body.twig' %}
 {% endif %}
 {% extends getTemplateFile(template_namespace, template_file) %}
+{% block stylesheet %}
+  {{ parent() }}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/bootstrap/css/event.min.css" media="screen, projection" />
+{% endblock stylesheet %}
 {% block title %}{{ 'Event Administration - Copy Event'|trans }}{% endblock %}
   
 {% block content %}
@@ -27,16 +31,16 @@
     </div>
 
     <div class=" pull-right">
-    <form action="{{ FRAMEWORK_URL ~ route.check }}" class="navbar-form navbar-left" role="form" method="post">
-      {{ form_errors(form) }}
-      {{ form_row(form._token) }}
-      <div class="input-group search-event-small">
-        {{ form_widget(form.search, {'attr':{'class':'form-control input-default'}}) }}
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-        </span>
-      </div>
-    </form>
+      <form action="{{ FRAMEWORK_URL ~ route.check }}" class="navbar-form navbar-left" role="form" method="post">
+        {{ form_errors(form) }}
+        {{ form_row(form._token) }}
+        <div class="input-group search-event-small">
+          {{ form_widget(form.search, {'attr':{'class':'form-control input-default'}}) }}
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div>
+      </form>
     </div>  
     {% if events|length > 0 %}
       <div class="table-responsive">  

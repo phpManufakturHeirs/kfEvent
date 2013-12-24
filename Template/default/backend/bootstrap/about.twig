@@ -15,11 +15,16 @@
   {% set template_file = 'backend/bootstrap/body.twig' %}
 {% endif %}
 {% extends getTemplateFile(template_namespace, template_file) %}
-{% block title %}{{ 'Event Administration - Copy Event'|trans }}{% endblock %}
+{% block stylesheet %}
+  {{ parent() }}
+  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/bootstrap/css/event.min.css" media="screen, projection" />
+{% endblock stylesheet %}
+{% block title %}{{ 'Event Administration - About'|trans }}{% endblock %}
   
 {% block content %}
   <div class="container">
     {% include '@phpManufaktur/Event/Template/default/backend/bootstrap/toolbar.twig' %}
+    {# use the standard 'about' dialog from BASIC #}
     {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/about.twig' %}
   </div>
 {% endblock content %}
