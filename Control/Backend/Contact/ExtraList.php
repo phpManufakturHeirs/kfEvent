@@ -19,25 +19,18 @@ class ExtraList extends Backend {
 
     protected $SimpleExtraFieldList = null;
 
-    public function __construct(Application $app=null)
-    {
-        parent::__construct($app);
-        if (!is_null($app)) {
-            $this->initialize($app);
-        }
-    }
-
     protected function initialize(Application $app)
     {
         parent::initialize($app);
         $this->SimpleExtraFieldList = new SimpleExtraFieldList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'list' => 'backend/contact.extra.list.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'list' => 'bootstrap/admin/contact/list.extra.twig'
             ),
             'route' => array(
-                'edit' => '/admin/event/contact/extra/edit/id/{type_id}?usage='.self::$usage
+                'edit' => '/admin/event/contact/extra/edit/id/{type_id}?usage='.self::$usage,
+                'create' => '/admin/event/contact/extra/edit?usage='.self::$usage
             )
         ));
     }

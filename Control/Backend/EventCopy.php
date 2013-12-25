@@ -41,7 +41,7 @@ class EventCopy extends Backend
             self::$columns = $this->EventData->getColumns();
         }
         self::$route =  array(
-            'start' => '/admin/event/copy?usaage='.self::$usage,
+            'start' => '/admin/event/copy?usage='.self::$usage,
             'select' => '/admin/event/copy/id/{event_id}?usage='.self::$usage,
             'check' => '/admin/event/copy/search/check?usage='.self::$usage
         );
@@ -71,15 +71,15 @@ class EventCopy extends Backend
         $fields = $this->getSearchFormFields();
         $form = $fields->getForm();
 
+        $this->setAlert('Please search for the event you want to copy data from.', array(), self::ALERT_TYPE_INFO);
+
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'backend/bootstrap/event.copy.start.twig'),
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/event.copy.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_edit'),
-                'message' => array(
-                    'type' => $this->getMessageType(),
-                    'content' => $this->getMessage()
-                ),
+                'alert' => $this->getAlert(),
+                'events' => array(),
                 'form' => $form->createView(),
                 'route' => self::$route
             ));
@@ -107,23 +107,23 @@ class EventCopy extends Backend
             $EventSearch = new EventSearch($app);
             if (false === ($events = $EventSearch->search($search['search']))) {
                 // no hits, return to the search dialog
-                $this->setMessage('No hits for the search term <i>%search%</i>!', array('%search%' => $search['search']));
+                $this->setAlert('No hits for the search term <i>%search%</i>!',
+                    array('%search%' => $search['search']), self::ALERT_TYPE_WARNING);
                 return $this->controllerCopyEvent($app);
             }
 
-            $this->setMessage('%count% hits for the search term </i>%search%</i>.',
-                array('%count%' => count($events), '%search%' => $search['search']));
-            $this->setMessageType('success');
+            $this->setAlert('%count% hits for the search term </i>%search%</i>.',
+                array('%count%' => count($events), '%search%' => $search['search']), self::ALERT_TYPE_SUCCESS);
+
+            $this->setAlert('Please select the event you want to copy into a new one',
+                array(), self::ALERT_TYPE_INFO);
 
             return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                '@phpManufaktur/Event/Template', 'backend/bootstrap/event.copy.list.twig'),
+                '@phpManufaktur/Event/Template', 'bootstrap/admin/event.copy.twig'),
                 array(
                     'usage' => self::$usage,
                     'toolbar' => $this->getToolbar('event_edit'),
-                    'message' => array(
-                        'content' => $this->getMessage(),
-                        'type' => $this->getMessageType()
-                    ),
+                    'alert' => $this->getAlert(),
                     'events' => $events,
                     'columns' => self::$columns,
                     'route' => self::$route,

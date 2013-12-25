@@ -24,7 +24,7 @@ class TagEdit extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
 
     protected function initialize(Application $app)
@@ -33,15 +33,16 @@ class TagEdit extends Backend {
         $this->SimpleTagEdit = new SimpleTagEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'edit' => 'backend/contact.tag.edit.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'edit' => 'bootstrap/admin/contact/edit.tag.twig'
             ),
             'route' => array(
-                'action' => '/admin/event/contact/tag/edit?usage='.self::$usage
+                'action' => '/admin/event/contact/tag/edit?usage='.self::$usage,
+                'list' => '/admin/event/contact/tag/list?usage='.self::$usage
             )
         ));
     }
-    
+
     /**
      * @param number $tag_id
      */

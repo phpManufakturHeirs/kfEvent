@@ -1,13 +1,13 @@
-{#
+{# 
   Event
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki
+  @link https://github.com/phpManufaktur/kitFramework/wiki  
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
-{% if extra.usage == 'framework' %}
+{% if usage == 'framework' %}
   {% set template_namespace = '@phpManufaktur/Basic/Template' %}
   {% set template_file = 'framework/body.twig' %}
 {% else %}
@@ -23,11 +23,12 @@
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL ~ '/Event/Template/default/bootstrap/css/admin.min.css' }}" media="screen, projection" />
   {% endif %}
 {% endblock stylesheet %}
-{% block title %}{{ 'Event Administration - Contact list'|trans }}{% endblock %}
+{% block title %}{{ 'Event Administration - About'|trans }}{% endblock %}
+  
 {% block content %}
   <div class="container">
-    {% include '@phpManufaktur/Event/Template/default/bootstrap/admin/toolbar.twig' with {toolbar: extra.toolbar} only %}
-    <h1>{{ 'Search'|trans }}</h1> 
-    {% include '@phpManufaktur/Contact/Template/default/pattern/admin/simple/list.search.twig' %}
-  </div>    
+    {% include '@phpManufaktur/Event/Template/default/bootstrap/admin/toolbar.twig' %}
+    {# use the standard 'about' dialog from BASIC #}
+    {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/about.twig' %}
+  </div>
 {% endblock content %}

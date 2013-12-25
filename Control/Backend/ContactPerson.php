@@ -24,23 +24,24 @@ class ContactPerson extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
-    
+
     protected function initialize(Application $app)
     {
         parent::initialize($app);
         $this->SimpleContactPerson = new SimpleContactPerson($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'contact' => 'backend/contact.person.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'contact' => 'bootstrap/admin/contact/edit.contact.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/person/edit?usage='.self::$usage,
                 'category' => '/admin/event/contact/category/list?usage='.self::$usage,
                 'title' => '/admin/event/contact/title/list?usage='.self::$usage,
-                'tag' => '/admin/event/contact/tag/list?usage='.self::$usage
+                'tag' => '/admin/event/contact/tag/list?usage='.self::$usage,
+                'list' => '/admin/event/contact/list?usage='.self::$usage
             )
         ));
     }

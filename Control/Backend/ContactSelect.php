@@ -24,7 +24,7 @@ class ContactSelect extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
 
     protected function initialize(Application $app)
@@ -33,8 +33,8 @@ class ContactSelect extends Backend {
         $this->SimpleContactSelect = new SimpleContactSelect($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'select' => 'backend/contact.select.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'select' => 'bootstrap/admin/contact/select.contact.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/select?usage='.self::$usage,
@@ -51,7 +51,7 @@ class ContactSelect extends Backend {
             )
         ));
     }
-    
+
     public function setContactID($contact_id)
     {
         $this->SimpleContactSelect->setContactID($contact_id);

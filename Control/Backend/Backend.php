@@ -12,32 +12,24 @@
 namespace phpManufaktur\Event\Control\Backend;
 
 use Silex\Application;
+use phpManufaktur\Event\Control\Alert;
 
-class Backend {
+class Backend extends Alert
+{
 
-    protected $app = null;
     protected static $usage = null;
     protected static $usage_param = null;
     protected static $message = '';
     protected static $message_type = 'info';
 
     /**
-     * Constructor
-     */
-    public function __construct(Application $app=null) {
-        if (!is_null($app)) {
-            $this->initialize($app);
-        }
-    }
-
-    /**
-     * Initialize the class with the needed parameters
      *
      * @param Application $app
      */
     protected function initialize(Application $app)
     {
-        $this->app = $app;
+        parent::initialize($app);
+
         $cms = $this->app['request']->get('usage');
         self::$usage = is_null($cms) ? 'framework' : $cms;
         self::$usage_param = (self::$usage != 'framework') ? '?usage='.self::$usage : '';

@@ -26,18 +26,19 @@ class TitleEdit extends Backend {
             $this->initialize($app);
         }
     }
-    
+
     protected function initialize(Application $app)
     {
         parent::initialize($app);
         $this->SimpleTitleEdit = new SimpleTitleEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'edit' => 'backend/contact.title.edit.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'edit' => 'bootstrap/admin/contact/edit.title.twig'
             ),
             'route' => array(
-                'action' => '/admin/event/contact/title/edit?usage='.self::$usage
+                'action' => '/admin/event/contact/title/edit?usage='.self::$usage,
+                'list' => '/admin/event/contact/title/list?usage='.self::$usage
             )
         ));
     }

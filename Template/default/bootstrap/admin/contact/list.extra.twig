@@ -12,26 +12,27 @@
   {% set template_file = 'framework/body.twig' %}
 {% else %}
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
-  {% set template_file = 'backend/body.twig' %}
+  {% set template_file = 'bootstrap/admin/body.twig' %}
 {% endif %}
 {% extends getTemplateFile(template_namespace, template_file) %}
-{% block title %}{{ 'Contact list'|trans }}{% endblock %}
 {% block stylesheet %}
   {{ parent() }}
-  {% if extra.usage == 'framework' %}
-    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/backend.css" media="screen, projection" />
+  {% if fileExists(MANUFAKTUR_PATH ~ '/Event/Template/' ~ FRAMEWORK_TEMPLATES.0 ~ '/bootstrap/css/admin.min.css') %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL ~ '/Event/Template/' ~ FRAMEWORK_TEMPLATES.0 ~ '/bootstrap/css/admin.min.css' }}" media="screen, projection" />
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL ~ '/Event/Template/default/bootstrap/css/admin.min.css' }}" media="screen, projection" />
   {% endif %}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/css/contact.list.css" media="screen, projection" />
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Contact/Template/default/font-awesome/4.0.3/css/font-awesome.min.css" media="screen, projection" />
 {% endblock stylesheet %}
+{% block title %}{{ 'Event Administration - Categories list'|trans }}{% endblock %}
 {% block content %}
-  <div id="event_content">
-    {% include '@phpManufaktur/Event/Template/default/backend/toolbar.twig' with {toolbar: extra.toolbar} only %}
-
-    {% if message|length > 0 %}
-      <div class="message">{{ message }}</div>
-    {% endif %}
-
-    {% include '@phpManufaktur/Contact/Template/default/backend/form/list.contact.twig' %}
-  </div>
+  <div class="container">
+    {% include '@phpManufaktur/Event/Template/default/bootstrap/admin/toolbar.twig' with {toolbar: extra.toolbar} only %}
+    <h1>{{ 'Extra fields'|trans }}</h1> 
+    <div class="height-15"></div>
+    <div class="text-right">
+      <a class="btn btn-default" role="button" href="{{ FRAMEWORK_URL ~ route.create }}">{{ 'Add a new extra field'|trans }}</a>
+    </div>
+    <div class="height-15"></div>
+    {% include '@phpManufaktur/Contact/Template/default/pattern/admin/simple/list.extra.twig' %}
+  </div>    
 {% endblock content %}

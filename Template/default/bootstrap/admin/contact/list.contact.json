@@ -17,8 +17,7 @@
     ],
     "order":{
       "by":[
-        "person_last_name",
-        "person_first_name"
+        "person_last_name"
       ],
       "direction":"ASC"
     }

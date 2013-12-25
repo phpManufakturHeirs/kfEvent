@@ -26,18 +26,19 @@ class CategoryList extends Backend {
             $this->initialize($app);
         }
     }
-    
+
     protected function initialize(Application $app)
     {
         parent::initialize($app);
         $this->SimpleCategoryList = new SimpleCategoryList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'list' => 'backend/contact.category.list.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'list' => 'bootstrap/admin/contact/list.category.twig'
             ),
             'route' => array(
-                'edit' => '/admin/event/contact/category/edit/id/{category_id}?usage='.self::$usage
+                'edit' => '/admin/event/contact/category/edit/id/{category_id}?usage='.self::$usage,
+                'create' => '/admin/event/contact/category/edit?usage='.self::$usage
             )
         ));
     }

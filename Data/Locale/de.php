@@ -263,6 +263,8 @@ return array(
         => 'Bitte suchen Sie nach der Veranstaltung, die Sie kopieren möchten.',
     'Please select at minimum one tag for the %type%.'
         => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
+    'Please select the event you want to copy into a new one'
+        => 'Wählen Sie die Veranstaltung aus, deren Daten für eine neue Veranstaltung übernommen werden sollen.',
     'Please use the parameter set[] to set a configuration value.'
         => 'Bitte verwenden Sie den Paramter set[] um einen Konfigurationswert zu setzen!',
     'Participant'

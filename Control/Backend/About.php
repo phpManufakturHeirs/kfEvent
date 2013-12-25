@@ -28,7 +28,7 @@ class About extends Backend {
         $extension = $this->app['utils']->readJSON(MANUFAKTUR_PATH.'/Event/extension.json');
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'backend/bootstrap/about.twig'),
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/about.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('about'),

@@ -8,23 +8,18 @@
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 */
 
-a {
-  text-decoration: none;
-}
-a:link,
-a:visited {
-  color: #da251d;
-  background-color: transparent;
-  text-decoration: none;
-}
-a:hover,
-a:active {
-  color: #da251d;
-  background-color: transparent;
-  text-decoration: underline;
-}
+/*
+  Label for the form fields
+*/
 label {
   margin: 0 0 3px 0;
+  width: 100%;
+  text-align: right;
+}
+@media (max-width: 767px) {
+  label {
+    text-align: left;
+  }
 }
 label.required:after {
   content: '*';
@@ -32,40 +27,53 @@ label.required:after {
   background-color: transparent;
   font-weight: bold;
 }
-ul.pagination a:link,
-ul.pagination a:visited,
-a:link.btn,
-a:visited.btn,
-.nav-tabs li a:link,
-.nav-tabs li a:visited {
-  color: #000;
-  text-decoration: none;
+
+fieldset {
+  border: 1px solid #dcdcdc;
+  padding: 10px;
+  margin: 10px 0;
 }
-ul.pagination a:hover,
-ul.pagination a:active,
-a:hover.btn,
-a:active.btn,
-.nav-tabs li a:hover,
-.nav-tabs li a:active {
-  color: #da251d;
-  text-decoration: none;
+legend {
+  width: auto;
+  padding: 0 10px;
+  margin-bottom: 0;
+  border-bottom: none;
+  font-size: 12px;
+  color: #dcdcdc;
 }
-ul.pagination li.active a {
-  color: #fff;
-}
+
+/*
+  Wrapper for the about dialog
+*/
 #about-wrap {
   margin: 50px 0 0 0;
   padding: 0;
 }
+
+/*
+  stripes for the tables
+*/
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-  background-color: #fdf5e6;
+  background-color: #e8e8e8;
 }
 .table-hover > tbody > tr:hover > td,
 .table-hover > tbody > tr:hover > th {
-  background-color: #ffe4b5;
+  background-color: #e0e0e0;
 }
 
+.row {
+  margin: 5px 0;
+}
+
+/*
+  add some additional vertical space ...
+*/
+.height-5:before,
+.height-15:before,
+.height-30:before {
+  clear: both;
+}
 .height-5 {
   min-height: 5px;
 }
@@ -75,29 +83,32 @@ ul.pagination li.active a {
 .height-30 {
   min-height: 30px;
 }
-.height-tag-dialog {
-  min-height: 450px;
-}
-.height-category-dialog {
-  min-height: 530px;
-}
+
+/*
+  Formatting form items
+*/
 select {
   width: auto;
 }
 input {
   width: 100%;  
 }
-input#form_delete {
-  width: 15px;
+input[type=radio],
+input[type=checkbox] {
+  width: auto;
+}
+.checkbox,
+.radio {
+  margin-top: 0;
+}
+.checkbox.tag  {
+  margin-bottom: 0;
 }
 input.btn.btn-default {
   width: auto;
-  padding: 0 30px;
-}
-input.btn.btn-default:hover {
-  color: #da251d;
 }
 
-.input-group.search-event-small {
+.search-contact-small,
+.search-event-small {
   width: 250px;
 }

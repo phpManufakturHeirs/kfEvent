@@ -24,20 +24,21 @@ class TagList extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
-    
+
     protected function initialize(Application $app)
     {
         parent::initialize($app);
         $this->SimpleTagList = new SimpleTagList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'list' => 'backend/contact.tag.list.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'list' => 'bootstrap/admin/contact/list.tag.twig'
             ),
             'route' => array(
-                'edit' => '/admin/event/contact/tag/edit/id/{tag_id}?usage='.self::$usage
+                'edit' => '/admin/event/contact/tag/edit/id/{tag_id}?usage='.self::$usage,
+                'create' => '/admin/event/contact/tag/edit?usage='.self::$usage
             )
         ));
     }

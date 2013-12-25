@@ -12,24 +12,26 @@
   {% set template_file = 'framework/body.twig' %}
 {% else %}
   {% set template_namespace = '@phpManufaktur/Event/Template' %}
-  {% set template_file = 'backend/bootstrap/body.twig' %}
+  {% set template_file = 'bootstrap/admin/body.twig' %}
 {% endif %}
 {% extends getTemplateFile(template_namespace, template_file) %}
 {% block stylesheet %}
   {{ parent() }}
-  <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/backend/bootstrap/css/event.min.css" media="screen, projection" />
+  {% if fileExists(MANUFAKTUR_PATH ~ '/Event/Template/' ~ FRAMEWORK_TEMPLATES.0 ~ '/bootstrap/css/admin.min.css') %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL ~ '/Event/Template/' ~ FRAMEWORK_TEMPLATES.0 ~ '/bootstrap/css/admin.min.css' }}" media="screen, projection" />
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL ~ '/Event/Template/default/bootstrap/css/admin.min.css' }}" media="screen, projection" />
+  {% endif %}
 {% endblock stylesheet %}
 {% block title %}{{ 'Event Administration - Copy Event'|trans }}{% endblock %}
   
 {% block content %}
   <div class="container">
-    {% include '@phpManufaktur/Event/Template/default/backend/bootstrap/toolbar.twig' %}
+    {% include '@phpManufaktur/Event/Template/default/bootstrap/admin/toolbar.twig' %}
     <div class="height-15"></div>
-    <div class="alert alert-{{ message.type|default('info') }}">
-      <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
-      {{ message.content|default('Please search for the event you want to copy data from.'|trans) }}        
-    </div>
-
+    
+    {{ alert }}
+    
     <div class=" pull-right">
       <form action="{{ FRAMEWORK_URL ~ route.check }}" class="navbar-form navbar-left" role="form" method="post">
         {{ form_errors(form) }}

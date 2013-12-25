@@ -24,7 +24,7 @@ class TitleList extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
 
     protected function initialize(Application $app)
@@ -33,15 +33,16 @@ class TitleList extends Backend {
         $this->SimpleTitleList = new SimpleTitleList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'list' => 'backend/contact.title.list.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'list' => 'bootstrap/admin/contact/list.title.twig'
             ),
             'route' => array(
-                'edit' => '/admin/event/contact/title/edit/id/{title_id}?usage='.self::$usage
+                'edit' => '/admin/event/contact/title/edit/id/{title_id}?usage='.self::$usage,
+                'create' => '/admin/event/contact/title/edit?usage='.self::$usage
             )
         ));
     }
-    
+
     public function exec(Application $app)
     {
         $this->initialize($app);

@@ -24,7 +24,7 @@ class ContactCompany extends Backend {
         parent::__construct($app);
         if (!is_null($app)) {
             $this->initialize($app);
-        }        
+        }
     }
 
     protected function initialize(Application $app)
@@ -33,17 +33,18 @@ class ContactCompany extends Backend {
         $this->SimpleContactCompany = new SimpleContactCompany($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'message' => 'backend/message.twig',
-                'contact' => 'backend/contact.company.twig'
+                'alert' => 'bootstrap/alert.twig',
+                'contact' => 'bootstrap/admin/contact/edit.contact.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/company/edit?usage='.self::$usage,
                 'category' => '/admin/event/contact/category/list?usage='.self::$usage,
-                'tag' => '/admin/event/contact/tag/list?usage='.self::$usage
+                'tag' => '/admin/event/contact/tag/list?usage='.self::$usage,
+                'list' => '/admin/event/contact/list?usage='.self::$usage
             )
         ));
     }
-    
+
     public function setContactID($contact_id)
     {
         $this->SimpleContactCompany->setContactID($contact_id);
