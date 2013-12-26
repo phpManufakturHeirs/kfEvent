@@ -34,7 +34,6 @@ class ContactSearch extends Backend {
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
                 'settings' => 'bootstrap/admin/contact/list.contact.json',
-                'alert' => 'bootstrap/alert.twig',
                 'search' => 'bootstrap/admin/contact/list.search.twig'
             ),
             'route' => array(

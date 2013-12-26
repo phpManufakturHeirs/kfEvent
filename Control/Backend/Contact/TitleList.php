@@ -33,7 +33,6 @@ class TitleList extends Backend {
         $this->SimpleTitleList = new SimpleTitleList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'alert' => 'bootstrap/alert.twig',
                 'list' => 'bootstrap/admin/contact/list.title.twig'
             ),
             'route' => array(

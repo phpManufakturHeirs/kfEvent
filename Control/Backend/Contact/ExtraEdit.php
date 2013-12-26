@@ -33,7 +33,6 @@ class ExtraEdit extends Backend {
         $this->SimpleExtraFieldEdit = new SimpleExtraFieldEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'alert' => 'bootstrap/alert.twig',
                 'edit' => 'bootstrap/admin/contact/edit.extra.twig'
             ),
             'route' => array(

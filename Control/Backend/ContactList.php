@@ -34,7 +34,6 @@ class ContactList extends Backend {
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
                 'settings' => 'bootstrap/admin/contact/list.contact.json',
-                'alert' => 'bootstrap/alert.twig',
                 'list' => 'bootstrap/admin/contact/list.contact.twig'
             ),
             'route' => array(

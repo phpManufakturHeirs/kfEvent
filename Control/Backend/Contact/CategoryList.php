@@ -33,7 +33,6 @@ class CategoryList extends Backend {
         $this->SimpleCategoryList = new SimpleCategoryList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'alert' => 'bootstrap/alert.twig',
                 'list' => 'bootstrap/admin/contact/list.category.twig'
             ),
             'route' => array(

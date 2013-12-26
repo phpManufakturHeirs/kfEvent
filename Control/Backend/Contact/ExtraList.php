@@ -25,7 +25,6 @@ class ExtraList extends Backend {
         $this->SimpleExtraFieldList = new SimpleExtraFieldList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'alert' => 'bootstrap/alert.twig',
                 'list' => 'bootstrap/admin/contact/list.extra.twig'
             ),
             'route' => array(

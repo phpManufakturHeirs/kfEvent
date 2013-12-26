@@ -33,7 +33,6 @@ class CategoryEdit extends Backend {
         $this->SimpleCategoryEdit = new SimpleCategoryEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'alert' => 'bootstrap/alert.twig',
                 'edit' => 'bootstrap/admin/contact/edit.category.twig'
             ),
             'route' => array(
