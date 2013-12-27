@@ -195,6 +195,22 @@ class Update
         }
     }
 
+    protected function release_2028()
+    {
+        $files = array(
+            '/Event/Control/Import/Dialog.php',
+            '/Event/Template/default/backend',
+            '/Event/Template/default/import'
+        );
+        foreach ($files as $file) {
+            // remove no longer needed directories and files
+            if ($this->app['filesystem']->exists(MANUFAKTUR_PATH.$file)) {
+                $this->app['filesystem']->remove(MANUFAKTUR_PATH.$file);
+                $this->app['monolog']->addInfo(sprintf('[Event Update] Removed file or directory %s', $file));
+            }
+        }
+    }
+
     /**
      * Execute the update for Event
      *
@@ -215,6 +231,9 @@ class Update
 
         // Release 2.0.25
         $this->release_2025();
+
+        // Release 2.0.28
+        $this->release_2028();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);
