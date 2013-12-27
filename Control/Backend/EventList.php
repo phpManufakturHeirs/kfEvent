@@ -54,7 +54,7 @@ class EventList extends Backend {
 
         try {
             // search for the config file in the template directory
-            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.list.json', '', true);
+            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.json', '', true);
             // get the columns to show in the list
             $cfg = $this->app['utils']->readJSON($cfg_file);
             self::$columns = isset($cfg['columns']) ? $cfg['columns'] : $this->EventData->getColumns();
@@ -131,18 +131,19 @@ class EventList extends Backend {
 
         $events = $this->getList(self::$current_page, self::$rows_per_page, self::$select_status, self::$max_pages, $order_by, $order_direction);
 
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.list.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_list'),
-                'message' => $this->getMessage(),
                 'events' => $events,
                 'columns' => self::$columns,
                 'current_page' => self::$current_page,
                 'route' => self::$route,
                 'order_by' => $order_by,
                 'order_direction' => strtolower($order_direction),
-                'last_page' => self::$max_pages
+                'last_page' => self::$max_pages,
+                'alert' => $this->getAlert()
             ));
     }
 

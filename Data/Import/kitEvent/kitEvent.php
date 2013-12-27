@@ -159,6 +159,13 @@ class kitEvent
         }
     }
 
+    /**
+     * Get the event by the given item ID
+     *
+     * @param integer $item_id
+     * @throws \Exception
+     * @return boolean|array
+     */
     public function getEventItem($item_id)
     {
         try {
@@ -172,6 +179,21 @@ class kitEvent
                 $item[$key] = is_string($value) ? $this->app['utils']->unsanitizeText($value) : $value;
             }
             return $item;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    public function isAlreadyImported($organizer_id, $location_id, $event_date_from, $event_date_to, $event_title)
+    {
+        try {
+            $event = FRAMEWORK_TABLE_PREFIX.'event_event';
+            $desc = FRAMEWORK_TABLE_PREFIX.'event_description';
+            $SQL = "SELECT $event.event_id FROM `$event`, `$desc` WHERE $event.event_id=$desc.event_id AND $event.event_organizer='$organizer_id' AND ".
+                "$event.event_location='$location_id' AND $event.event_date_from='$event_date_from' AND $event.event_date_to='$event_date_to' AND ".
+                "$desc.description_title='$event_title'";
+            $event_id = $this->app['db']->fetchColumn($SQL);
+            return (is_numeric($event_id) && ($event_id > 0)) ? $event_id : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

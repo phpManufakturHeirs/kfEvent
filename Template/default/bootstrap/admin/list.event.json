@@ -18,7 +18,7 @@
       "by":[
         "event_id"
       ],
-      "direction":"ASC"
+      "direction":"DESC"
     }
   }
 }

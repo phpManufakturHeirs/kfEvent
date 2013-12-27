@@ -33,17 +33,10 @@ class GroupEdit extends Backend {
 
     protected static $group_id = -1;
 
-    public function __construct(Application $app=null)
-    {
-        parent::__construct($app);
-        if (!is_null($app)) {
-            $this->initialize($app);
-        }
-    }
-
     protected function initialize(Application $app)
     {
         parent::initialize($app);
+
         $this->GroupData = new GroupData($this->app);
         $this->ContactControl = new ContactControl($this->app);
         $this->ExtraType = new ExtraType($this->app);
@@ -357,11 +350,12 @@ class GroupEdit extends Backend {
             }
         }
 
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/group.edit.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/edit.group.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('group'),
-                'message' => $this->getMessage(),
+                'alert' => $this->getAlert(),
                 'form' => $form->createView(),
             ));
     }

@@ -31,11 +31,12 @@ class Propose extends Backend {
         $proposes = $ProposeData->selectList();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'backend/propose.list.twig'),
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/list.propose.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('propose'),
-                'proposes' => $proposes
+                'proposes' => $proposes,
+                'alert' => $this->getAlert()
             ));
     }
 

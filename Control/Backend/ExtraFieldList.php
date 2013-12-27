@@ -19,27 +19,23 @@ class ExtraFieldList extends Backend {
 
     protected $ExtraType = null;
 
-    public function __construct(Application $app=null)
-    {
-        parent::__construct($app);        
-    }
-
     protected function initialize(Application $app)
     {
         parent::initialize($app);
         $this->ExtraType = new ExtraType($this->app);
     }
-    
+
     public function exec(Application $app)
     {
         $this->initialize($app);
         $fields = $this->ExtraType->selectAll();
 
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/extra.field.list.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/list.extra.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('group'),
-                'message' => $this->getMessage(),
+                'alert' => $this->getAlert(),
                 'fields' => $fields
             ));
     }

@@ -1,9 +1,9 @@
-/* 
+/*
   Event
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 */
@@ -26,6 +26,11 @@ label.required:after {
   color: #da251d;
   background-color: transparent;
   font-weight: bold;
+}
+
+.col-sm-12 label,
+.col-lg-12 label {
+  text-align: left;
 }
 
 fieldset {
@@ -91,7 +96,7 @@ select {
   width: auto;
 }
 input {
-  width: 100%;  
+  width: 100%;
 }
 input[type=radio],
 input[type=checkbox] {
@@ -100,10 +105,9 @@ input[type=checkbox] {
 .checkbox,
 .radio {
   margin-top: 0;
-}
-.checkbox.tag  {
   margin-bottom: 0;
 }
+
 input.btn.btn-default {
   width: auto;
 }
@@ -111,4 +115,49 @@ input.btn.btn-default {
 .search-contact-small,
 .search-event-small {
   width: 250px;
+}
+
+.image {
+	height: auto;
+	width: 150px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.image img {
+	max-height: 150px;
+	max-width: 150px;
+}
+.image .close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 20px;
+  text-align: right;
+}
+
+.image a {
+  text-decoration: none !important;
+}
+.image a:link,
+.image a:visited {
+  color: #000 !important;
+  background-color: transparent;
+  text-decoration: none;
+}
+.image a:hover,
+.image a:active {
+  color: #da251d !important;
+  background-color: transparent;
+  text-decoration: none !important;
+}
+
+td.pending {
+  background-color: #cbac93 !important;
+}
+td.confirmed {
+  background-color: #88bc88 !important;
+}
+td.rejected {
+  background-color: #cb9393 !important;
 }

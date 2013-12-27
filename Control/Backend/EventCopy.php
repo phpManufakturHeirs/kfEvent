@@ -32,7 +32,8 @@ class EventCopy extends Backend
         parent::initialize($app);
         try {
             // search for the config file in the template directory
-            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.list.json', '', true);
+            $cfg_file = $this->app['utils']->getTemplateFile(
+                '@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.json', '', true);
             // get the columns to show in the list
             $cfg = $this->app['utils']->readJSON($cfg_file);
             self::$columns = isset($cfg['columns']) ? $cfg['columns'] : $this->EventData->getColumns();
@@ -74,7 +75,7 @@ class EventCopy extends Backend
         $this->setAlert('Please search for the event you want to copy data from.', array(), self::ALERT_TYPE_INFO);
 
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/event.copy.twig'),
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/copy.event.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_edit'),
@@ -119,7 +120,7 @@ class EventCopy extends Backend
                 array(), self::ALERT_TYPE_INFO);
 
             return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                '@phpManufaktur/Event/Template', 'bootstrap/admin/event.copy.twig'),
+                '@phpManufaktur/Event/Template', 'bootstrap/admin/copy.event.twig'),
                 array(
                     'usage' => self::$usage,
                     'toolbar' => $this->getToolbar('event_edit'),
@@ -132,8 +133,7 @@ class EventCopy extends Backend
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setMessage('The form is not valid, please check your input and try again!');
-            $this->setMessageType('warning');
+            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
             return $this->controllerCopyEvent($app);
         }
     }
@@ -152,8 +152,7 @@ class EventCopy extends Backend
         $EventData = new Event($app);
         if (false === ($event = $EventData->selectEvent($event_id, false))) {
             // Ooops, ID does not exists!
-            $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => $event_id));
-            $this->setMessageType('danger');
+            $this->setAlert('The record with the ID %id% does not exists!', array('%id%' => $event_id), self::ALERT_TYPE_WARNING);
             return $this->controllerCopyEvent($app);
         }
 
@@ -172,9 +171,9 @@ class EventCopy extends Backend
         // the request method must be GET not POST!
         $subRequest = Request::create("/admin/event/edit/id/$new_event_id", 'GET', array(
             'usage' => self::$usage,
-            'message' => $app['translator']->trans('This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!',
+            'alert' => $app['translator']->trans('This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!',
                 array('%id%' => $event_id)),
-            'message_type' => 'success'
+            'alert_type' => self::ALERT_TYPE_SUCCESS
         ));
         return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }

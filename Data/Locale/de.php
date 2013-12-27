@@ -32,8 +32,8 @@ return array(
         => 'Kategorie hinzufügen',
     'Add extra field'
         => 'Zusatzfeld hinzufügen',
-    'Add group'
-        => 'Gruppe hinzufügen',
+    'Add a new group'
+        => 'Eine neue Gruppe hinzufügen',
     'Add tag'
         => 'Markierung hinzufügen',
     'Add title'
@@ -42,6 +42,10 @@ return array(
         => 'Administrator Status',
     'At least we need one communication channel, so please tell us a email address, phone or a URL'
         => 'Wir benötigen mindestens einen Kommunikationsweg, bitte nennen Sie uns eine E-Mail Adresse, Telefonummer oder die URL der Homepage.',
+    'At the moment there are no proposed events'
+        => 'Momentan liegen keine Veranstaltungsvorschläge vor.',
+    'At the moment there are no subscriptions for your events'
+        => 'Momentan liegen keine Anmeldungen zu Ihren Veranstaltungen vor.',
 
     'by copying from a existing event'
         => 'durch Kopieren einer existierenden Veranstaltung',

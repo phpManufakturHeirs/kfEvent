@@ -51,9 +51,11 @@ $admin->get('/event/uninstall',
     // uninstall routine for kfEvent
     'phpManufaktur\Event\Data\Setup\Uninstall::exec');
 
-
+$app->get('/admin/event',
+    'phpManufaktur\Event\Control\Backend\About::exec');
+$app->get('/admin/event/',
+    'phpManufaktur\Event\Control\Backend\About::exec');
 $app->get('/admin/event/about',
-    // About dialog
     'phpManufaktur\Event\Control\Backend\About::exec');
 
 $app->match('/admin/event/contact/list',
@@ -173,8 +175,10 @@ $app->match('/admin/event/list/page/{page}',
 $app->match('/admin/event/search',
     'phpManufaktur\Event\Control\Backend\EventSearch::exec');
 
+// Import from kitEvent
+$app->match('/admin/event/import',
+    'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
 $app->match('/admin/event/import/kitevent',
-    // Import events from kitEvent
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');
 $app->match('/admin/event/import/kitevent/start',
     'phpManufaktur\Event\Control\Import\kitEvent\kitEvent::start');

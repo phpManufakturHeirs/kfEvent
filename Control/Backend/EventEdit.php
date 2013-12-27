@@ -77,7 +77,9 @@ class EventEdit extends Backend {
             'data' => self::$event_id
         ))
         ->add('create_by', 'choice', array(
-            'choices' => array('GROUP' => 'by selecting a event group', 'COPY' => 'by copying from a existing event'),
+            'choices' => array(
+                'GROUP' => 'by selecting a event group',
+                'COPY' => 'by copying from a existing event'),
             'expanded' => true,
             'label' => 'Create a new event',
             'data' => 'GROUP'
@@ -335,11 +337,11 @@ class EventEdit extends Backend {
                 'image_width' => $width
             );
             $this->Images->insert($data);
-            $this->setMessage('The image <b>%image%</b> has been added to the event.',
-                array('%image%' => basename($image), '%event_id%' => $event_id));
+            $this->setAlert('The image <b>%image%</b> has been added to the event.',
+                array('%image%' => basename($image), '%event_id%' => $event_id), self::ALERT_TYPE_SUCCESS);
         }
         else {
-            $this->setMessage('No image selected, nothing to do.');
+            $this->setAlert('No image selected, nothing to do.', array(), self::ALERT_TYPE_INFO);
         }
         return $this->exec($app, $event_id);
     }
@@ -352,8 +354,8 @@ class EventEdit extends Backend {
         $this->setEventID($event_id);
         // delete the image
         $this->Images->delete($image_id);
-        $this->setMessage('The image with the ID %image_id% was successfull deleted.',
-            array('%image_id%' => $image_id));
+        $this->setAlert('The image with the ID %image_id% was successfull deleted.',
+            array('%image_id%' => $image_id), self::ALERT_TYPE_SUCCESS);
         // show event dialog
         return $this->exec($app, $event_id);
     }
@@ -380,8 +382,9 @@ class EventEdit extends Backend {
             self::$event_id = $form_request['event_id'];
         }
 
-        if (null != ($message = $this->app['request']->query->get('message'))) {
-            $this->setMessage($message);
+        if (null != ($alert = $this->app['request']->query->get('alert'))) {
+            $alert_type = $this->app['request']->query->get('alert_type', self::ALERT_TYPE_INFO);
+            $this->setAlert($alert, array(), $alert_type);
         }
 
         // additional information for extra fields
@@ -401,11 +404,12 @@ class EventEdit extends Backend {
                     // show the dialog to select a event group
                     $fields = $this->getCreateByGroupFormFields();
                     $form = $fields->getForm();
-                    return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.create.by.group.twig'),
+                    return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+                        '@phpManufaktur/Event/Template', 'bootstrap/admin/group.event.twig'),
                         array(
                             'usage' => self::$usage,
                             'toolbar' => $this->getToolbar('event_edit'),
-                            'message' => $this->getMessage(),
+                            'alert' => $this->getAlert(),
                             'form' => $form->createView()
                         ));
                 }
@@ -426,11 +430,11 @@ class EventEdit extends Backend {
                 $fields = $this->getCreateStartFormFields();
                 $form = $fields->getForm();
                 return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                    '@phpManufaktur/Event/Template', 'backend/event.create.start.twig'),
+                    '@phpManufaktur/Event/Template', 'bootstrap/admin/create.event.twig'),
                     array(
                         'usage' => self::$usage,
                         'toolbar' => $this->getToolbar('event_edit'),
-                        'message' => $this->getMessage(),
+                        'alert' => $this->getAlert(),
                         'form' => $form->createView()
                     ));
             }
@@ -439,7 +443,8 @@ class EventEdit extends Backend {
         else {
             if (false === ($event = $this->EventData->selectEvent(self::$event_id))) {
                 $event = $this->EventData->getDefaultRecord();
-                $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$event_id));
+                $this->setAlert('The record with the ID %id% does not exists!',
+                    array('%id%' => self::$event_id), self::ALERT_TYPE_WARNING);
                 self::$event_id = -1;
             }
         }
@@ -460,8 +465,8 @@ class EventEdit extends Backend {
                 // check the event data
                 if (self::$config['event']['description']['title']['required'] &&
                     (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < self::$config['event']['description']['title']['min_length']))) {
-                    $this->setMessage('Please type in a title with %minimum% characters at minimum.',
-                        array('%minimum%' => self::$config['event']['description']['title']['min_length']));
+                    $this->setAlert('Please type in a title with %minimum% characters at minimum.',
+                        array('%minimum%' => self::$config['event']['description']['title']['min_length']), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
                 elseif (!isset($event['description_title'])) {
@@ -469,8 +474,8 @@ class EventEdit extends Backend {
                 }
                 if (self::$config['event']['description']['short']['required'] &&
                     (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < self::$config['event']['description']['short']['min_length']))) {
-                    $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
-                        array('%minimum%' => self::$config['event']['description']['short']['min_length']));
+                    $this->setAlert('Please type in a short description with %minimum% characters at minimum.',
+                        array('%minimum%' => self::$config['event']['description']['short']['min_length']), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
                 elseif (!isset($event['description_short'])) {
@@ -478,8 +483,8 @@ class EventEdit extends Backend {
                 }
                 if (self::$config['event']['description']['long']['required'] &&
                     (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < self::$config['event']['description']['long']['min_length']))) {
-                    $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
-                        array('%minimum%' => self::$config['event']['description']['long']['min_length']));
+                    $this->setAlert('Please type in a long description with %minimum% characters at minimum.',
+                        array('%minimum%' => self::$config['event']['description']['long']['min_length']), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
                 elseif (!isset($event['description_long'])) {
@@ -489,7 +494,7 @@ class EventEdit extends Backend {
                 if ($this->app['session']->get('create_new_event', false) &&
                     !self::$config['event']['date']['event_date_from']['allow_date_in_past'] &&
                     (strtotime($event['event_date_from']) < time())) {
-                    $this->setMessage('It is not allowed that the event start in the past!');
+                    $this->setAlert('It is not allowed that the event start in the past!', array(), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
 
@@ -532,15 +537,18 @@ class EventEdit extends Backend {
 
 
                 if (strtotime($event['event_date_from']) > strtotime($event['event_date_to'])) {
-                    $this->setMessage('The event start date is behind the event end date!');
+                    $this->setAlert('The event start date is behind the event end date!',
+                        array(), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
                 if (strtotime($event['event_publish_to']) < strtotime($event['event_date_from'])) {
-                    $this->setMessage('The publishing date ends before the event starts, this is not allowed!');
+                    $this->setAlert('The publishing date ends before the event starts, this is not allowed!',
+                        array(), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
                 if (strtotime($event['event_deadline']) > strtotime($event['event_date_from'])) {
-                    $this->setMessage('The deadline ends after the event start date!');
+                    $this->setAlert('The deadline ends after the event start date!',
+                        array(), self::ALERT_TYPE_WARNING);
                     $checked = false;
                 }
 
@@ -581,15 +589,17 @@ class EventEdit extends Backend {
             }
             else {
                 // general error (timeout, CSFR ...)
-                $this->setMessage('The form is not valid, please check your input and try again!');
+                $this->setAlert('The form is not valid, please check your input and try again!',
+                    array(), self::ALERT_TYPE_DANGER);
             }
         }
 
-        return $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/event.edit.twig'),
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'bootstrap/admin/edit.event.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_edit'),
-                'message' => $this->getMessage(),
+                'alert' => $this->getAlert(),
                 'form' => $form->createView(),
                 'extra_info' => $extra_info,
                 'add_image_url' => $this->createAddImageURL(),
