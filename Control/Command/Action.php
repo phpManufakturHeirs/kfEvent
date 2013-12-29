@@ -65,7 +65,7 @@ class Action extends Basic
                 $app['monolog']->addError("kfEvent: $message");
             }
 
-            switch ($parameters['action']) {
+            switch (strtolower($parameters['action'])) {
                 case 'event':
                     $Event = new Event();
                     return $Event->exec($app);
