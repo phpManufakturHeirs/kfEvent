@@ -53,8 +53,10 @@
             var content_height = $('#content').height() + {{ iframe_add_height|default(30) }} + "px"; 
             parent.document.getElementById(frame_id).style.height = content_height;    
             
-            {# enable the bootstrap close button for alerts #}
-            $(".alert").alert();
+            if ($('.container').hasClass('alert')) {
+              {# enable the bootstrap close button for alerts #}
+              $('.alert').alert();
+            }
           });
         }
       </script>
