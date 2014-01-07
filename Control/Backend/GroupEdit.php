@@ -159,7 +159,7 @@ class GroupEdit extends Backend {
         }
         elseif (false === ($group = $this->GroupData->select(self::$group_id))) {
             $group = $this->GroupData->getDefaultRecord();
-            $this->setMessage('The record with the ID %id% does not exists!', array('%id%' => self::$group_id));
+            $this->setAlert('The record with the ID %id% does not exists!', array('%id%' => self::$group_id), self::ALERT_TYPE_WARNING);
             self::$group_id = -1;
         }
 
@@ -194,29 +194,30 @@ class GroupEdit extends Backend {
                     $group_name = str_replace(' ', '_', strtoupper($group['group_name']));
                     if (preg_match_all('/[^A-Z0-9_$]/', $group_name, $matches)) {
                         // name check fail
-                        $this->setMessage('Allowed characters for the %identifier% identifier are only A-Z, 0-9 and the Underscore. The identifier will be always converted to uppercase.',
-                            array('%identifier%' => $this->app['translator']->trans('Group name')));
+                        $this->setAlert('Allowed characters for the %identifier% identifier are only A-Z, 0-9 and the Underscore. The identifier will be always converted to uppercase.',
+                            array('%identifier%' => $this->app['translator']->trans('Group name')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     elseif ($this->GroupData->existsGroupName($group_name)) {
                         // the tag already exists
-                        $this->setMessage('The identifier %identifier% already exists!', array('%identifier%' => $group_name));
+                        $this->setAlert('The identifier %identifier% already exists!',
+                            array('%identifier%' => $group_name), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     // go ahead with the checks
                     if (empty($group['group_organizer_contact_tags'])) {
-                        $this->setMessage('Please select at minimum one tag for the %type%.',
-                            array('%type%' => $this->app['translator']->trans('Organizer')));
+                        $this->setAlert('Please select at minimum one tag for the %type%.',
+                            array('%type%' => $this->app['translator']->trans('Organizer')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     if (empty($group['group_location_contact_tags'])) {
-                        $this->setMessage('Please select at minimum one tag for the %type%.',
-                            array('%type%' => $this->app['translator']->trans('Location')));
+                        $this->setAlert('Please select at minimum one tag for the %type%.',
+                            array('%type%' => $this->app['translator']->trans('Location')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     if (empty($group['group_participant_contact_tags'])) {
-                        $this->setMessage('Please select at minimum one tag for the %type%.',
-                            array('%type%' => $this->app['translator']->trans('Participant')));
+                        $this->setAlert('Please select at minimum one tag for the %type%.',
+                            array('%type%' => $this->app['translator']->trans('Participant')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
 
@@ -228,8 +229,8 @@ class GroupEdit extends Backend {
                             'group_description' => (!is_null($group['group_description'])) ? $group['group_description'] : '',
                         );
                         $this->GroupData->insert($data, self::$group_id);
-                        $this->setMessage('The record with the ID %id% was successfull inserted.',
-                            array('%id%' => self::$group_id));
+                        $this->setAlert('The record with the ID %id% was successfull inserted.',
+                            array('%id%' => self::$group_id), self::ALERT_TYPE_SUCCESS);
 
                         // insert organizer tags
                         foreach ($group['group_organizer_contact_tags'] as $key => $value)
@@ -259,18 +260,18 @@ class GroupEdit extends Backend {
                     // update a group
                     $check = true;
                     if (empty($group['group_organizer_contact_tags'])) {
-                        $this->setMessage('Please select at minimum one tag for the %type%.',
-                            array('%type%' => $this->app['translator']->trans('Organizer')));
+                        $this->setAlert('Please select at minimum one tag for the %type%.',
+                            array('%type%' => $this->app['translator']->trans('Organizer')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     if (empty($group['group_location_contact_tags'])) {
-                        $this->setMessage('Please select at minimum one tag for the %type%.',
-                            array('%type%' => $this->app['translator']->trans('Location')));
+                        $this->setAlert('Please select at minimum one tag for the %type%.',
+                            array('%type%' => $this->app['translator']->trans('Location')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     if (empty($group['group_participant_contact_tags'])) {
-                        $this->setMessage('Please select at minimum one tag for the %type%.',
-                            array('%type%' => $this->app['translator']->trans('Participant')));
+                        $this->setAlert('Please select at minimum one tag for the %type%.',
+                            array('%type%' => $this->app['translator']->trans('Participant')), self::ALERT_TYPE_WARNING);
                         $check = false;
                     }
                     if ($check) {
@@ -332,8 +333,8 @@ class GroupEdit extends Backend {
                             'group_description' => $group['group_description'],
                         );
                         $this->GroupData->update($data, self::$group_id);
-                        $this->setMessage('The record with the ID %id% was successfull updated.',
-                            array('%id%' => self::$group_id));
+                        $this->setAlert('The record with the ID %id% was successfull updated.',
+                            array('%id%' => self::$group_id), self::ALERT_TYPE_SUCCESS);
                     }
                 }
 
@@ -346,7 +347,7 @@ class GroupEdit extends Backend {
             }
             else {
                 // general error (timeout, CSFR ...)
-                $this->setMessage('The form is not valid, please check your input and try again!');
+                $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
             }
         }
 

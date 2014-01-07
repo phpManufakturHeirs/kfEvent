@@ -19,8 +19,6 @@ class Backend extends Alert
 
     protected static $usage = null;
     protected static $usage_param = null;
-    protected static $message = '';
-    protected static $message_type = 'info';
 
     /**
      *
@@ -108,56 +106,4 @@ class Backend extends Alert
         return $toolbar_array;
     }
 
-    /**
-     * @return the $message
-     */
-    public function getMessage ()
-    {
-        return self::$message;
-    }
-
-      /**
-     * @param string $message
-     */
-    public function setMessage($message, $params=array())
-    {
-        self::$message .= $this->app['twig']->render($this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'backend/message.twig'),
-            array('message' => $this->app['translator']->trans($message, $params)));
-    }
-
-    public function clearMessage()
-    {
-        self::$message = '';
-    }
-
-    /**
-     * Check if a message is active
-     *
-     * @return boolean
-     */
-    public function isMessage()
-    {
-        return !empty(self::$message);
-    }
-
-    /**
-     * Set the message type. Possible values: success, info, warning, danger
-     *
-     * @param string $type
-     */
-    public function setMessageType($type)
-    {
-        self::$message_type = strtolower($type);
-    }
-
-    /**
-     * Get the message type
-     *
-     * @return string message type
-     */
-    public function getMessageType()
-    {
-        return self::$message_type;
-    }
-
- }
+}
