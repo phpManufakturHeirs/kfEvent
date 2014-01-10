@@ -276,55 +276,58 @@ class GroupEdit extends Backend {
                     }
                     if ($check) {
                         // get the actual organizer tags
-                        $organizer_tags = $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id);
-                        foreach ($organizer_tags as $old_tag) {
-                            if (!in_array($old_tag, $group['group_organizer_contact_tags'])) {
-                                // delete this tag
-                                $this->OrganizerTag->deleteTagByGroup($old_tag, self::$group_id);
+                        if (false !== ($organizer_tags = $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id))) {
+                            foreach ($organizer_tags as $old_tag) {
+                                if (!in_array($old_tag, $group['group_organizer_contact_tags'])) {
+                                    // delete this tag
+                                    $this->OrganizerTag->deleteTagByGroup($old_tag, self::$group_id);
+                                }
                             }
-                        }
-                        foreach ($group['group_organizer_contact_tags'] as $new_tag) {
-                            if (!in_array($new_tag, $organizer_tags)) {
-                                // insert a new tag
-                                $this->OrganizerTag->insert(array(
-                                    'group_id' => self::$group_id,
-                                    'tag_name' => $new_tag
-                                ));
+                            foreach ($group['group_organizer_contact_tags'] as $new_tag) {
+                                if (!in_array($new_tag, $organizer_tags)) {
+                                    // insert a new tag
+                                    $this->OrganizerTag->insert(array(
+                                        'group_id' => self::$group_id,
+                                        'tag_name' => $new_tag
+                                    ));
+                                }
                             }
                         }
 
                         // get the actual location tags
-                        $location_tags = $this->LocationTag->selectTagNamesByGroupID(self::$group_id);
-                        foreach ($location_tags as $old_tag) {
-                            if (!in_array($old_tag, $group['group_location_contact_tags'])) {
-                                // delete this tag
-                                $this->LocationTag->deleteTagByGroup($old_tag, self::$group_id);
+                        if (false !== ($location_tags = $this->LocationTag->selectTagNamesByGroupID(self::$group_id))) {
+                            foreach ($location_tags as $old_tag) {
+                                if (!in_array($old_tag, $group['group_location_contact_tags'])) {
+                                    // delete this tag
+                                    $this->LocationTag->deleteTagByGroup($old_tag, self::$group_id);
+                                }
                             }
-                        }
-                        foreach ($group['group_location_contact_tags'] as $new_tag) {
-                            if (!in_array($new_tag, $location_tags)) {
-                                // insert a new tag
-                                $this->LocationTag->insert(array(
-                                    'group_id' => self::$group_id,
-                                    'tag_name' => $new_tag
-                                ));
+                            foreach ($group['group_location_contact_tags'] as $new_tag) {
+                                if (!in_array($new_tag, $location_tags)) {
+                                    // insert a new tag
+                                    $this->LocationTag->insert(array(
+                                        'group_id' => self::$group_id,
+                                        'tag_name' => $new_tag
+                                    ));
+                                }
                             }
                         }
 
-                        $participant_tags = $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id);
-                        foreach ($participant_tags as $old_tag) {
-                            if (!in_array($old_tag, $group['group_participant_contact_tags'])) {
-                                // delete this tag
-                                $this->ParticipantTag->deleteTagByGroup($old_tag, self::$group_id);
+                        if (false !== ($participant_tags = $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id))) {
+                            foreach ($participant_tags as $old_tag) {
+                                if (!in_array($old_tag, $group['group_participant_contact_tags'])) {
+                                    // delete this tag
+                                    $this->ParticipantTag->deleteTagByGroup($old_tag, self::$group_id);
+                                }
                             }
-                        }
-                        foreach ($group['group_participant_contact_tags'] as $new_tag) {
-                            if (!in_array($new_tag, $participant_tags)) {
-                                // insert a new tag
-                                $this->ParticipantTag->insert(array(
-                                    'group_id' => self::$group_id,
-                                    'tag_name' => $new_tag
-                                ));
+                            foreach ($group['group_participant_contact_tags'] as $new_tag) {
+                                if (!in_array($new_tag, $participant_tags)) {
+                                    // insert a new tag
+                                    $this->ParticipantTag->insert(array(
+                                        'group_id' => self::$group_id,
+                                        'tag_name' => $new_tag
+                                    ));
+                                }
                             }
                         }
 
