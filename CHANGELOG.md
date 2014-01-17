@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.30** - 2014-01-17
+
+* disabled function `cleanupEvents()` due possible problems with data integrity
+
 **2.0.29** - 2014-01-07
 
 * fixed: $messages are no longer in use and replaced by $alert
