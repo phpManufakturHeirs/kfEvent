@@ -115,6 +115,7 @@ class EventList extends Backend {
      *
      * @param Application $app
      * @return string rendered Event List
+     * @todo cleanupEvents() disabled due problems - but function is needed!
      */
     public function exec(Application $app, $page=null)
     {
@@ -124,7 +125,7 @@ class EventList extends Backend {
         }
 
         // cleanup events
-        $this->EventData->cleanupEvents();
+        // $this->EventData->cleanupEvents();
 
         $order_by = explode(',', $this->app['request']->get('order', implode(',', self::$order_by)));
         $order_direction = $this->app['request']->get('direction', self::$order_direction);
