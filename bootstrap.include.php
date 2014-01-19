@@ -21,6 +21,19 @@ if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
     $app['security.role_hierarchy'] = $roles;
 }
 
+$entry_points = $app['security.role_entry_points'];
+if (!in_array('ROLE_EVENT_ADMIN', $entry_points)) {
+    $entry_points['ROLE_EVENT_ADMIN'] = array(
+        'route' => '/admin/event',
+        'name' => 'Event',
+        'info' => '',
+        'icon' => array(
+            'path' => MANUFAKTUR_PATH.'/Event/extension.jpg',
+            'url' => MANUFAKTUR_URL.'/Event/extension.jpg'
+        )
+    );
+    $app['security.role_entry_points'] = $entry_points;
+}
 
 // scan the /Locale directory and add all available languages
 $app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
