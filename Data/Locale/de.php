@@ -165,6 +165,8 @@ return array(
         => 'Veranstaltungen, Übersicht',
     'Event location'
         => 'Veranstaltungsort',
+    'Event management suite for freelancers and organizers'
+        => 'Veranstaltungs Verwaltung und Organisation',
     'Event successfull updated'
         => 'Die Veranstaltung wurde aktualisiert',
     'Event url'
