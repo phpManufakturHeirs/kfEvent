@@ -15,7 +15,17 @@ use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 $roles = $app['security.role_hierarchy'];
 if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
     $roles['ROLE_ADMIN'][] = 'ROLE_EVENT_ADMIN';
-    $roles['ROLE_EVENT_ADMIN'][] = 'ROLE_EVENT_EDIT';
+    $roles['ROLE_EVENT_ADMIN'] =array(
+        'ROLE_EVENT_CONTACT',
+        'ROLE_EVENT_EDIT_ADMIN',
+        'ROLE_EVENT_EDIT_LOCATION',
+        'ROLE_EVENT_EDIT_ORGANIZER',
+        'ROLE_EVENT_EDIT_SUBMITTER',
+        'ROLE_EVENT_LOCATION',
+        'ROLE_EVENT_ORGANIZER',
+        'ROLE_EVENT_SUBMITTER',
+        'ROLE_EVENT_USER'
+    );
     $app['security.role_hierarchy'] = $roles;
 }
 
