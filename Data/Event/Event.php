@@ -269,10 +269,10 @@ EOD;
                                 $event[$column] = $this->Subscription->countParticipants($evt['event_id']);
                                 break;
                             case 'event_participants_pending':
-                                $evt[$column] = $this->Subscription->countParticipants($evt['event_id'], 'PENDING');
+                                $event[$column] = $this->Subscription->countParticipants($evt['event_id'], 'PENDING');
                                 break;
                             case 'event_participants_canceled':
-                                $evt[$column] = $this->Subscription->countParticipants($evt['event_id'], 'CANCELED');
+                                $event[$column] = $this->Subscription->countParticipants($evt['event_id'], 'CANCELED');
                                 break;
                         }
                     }
