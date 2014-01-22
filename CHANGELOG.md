@@ -6,6 +6,13 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.31** - 2014-01-22
+
+* expand the width of the backend body container
+* added security entry points
+* added security role hierarchy
+* fixed a wrong variable assignment in data `event`
+
 **2.0.30** - 2014-01-17
 
 * disabled function `cleanupEvents()` due possible problems with data integrity
