@@ -49,6 +49,9 @@
             "Basic":{
                 "release":"0.67"
             },
+            "Library":{
+                "release":"0.12"
+            },
             "Contact":{
                 "release":"2.0.30"
             },
