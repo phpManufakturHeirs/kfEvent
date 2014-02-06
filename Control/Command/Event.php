@@ -309,7 +309,7 @@ class Event extends Basic
                 http_build_query(array(
                     'cmd' => 'event',
                     'id' => $event_id
-                )));
+                ), '', '&'));
             // check if a scroll_to_id parameter exists
             if ($this->isSetFrameScrollToID()) {
                 $redirect .= '&fsti='.$this->getFrameScrollToID();
