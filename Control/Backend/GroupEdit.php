@@ -355,7 +355,7 @@ class GroupEdit extends Backend {
         }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/edit.group.twig'),
+            '@phpManufaktur/Event/Template', 'admin/edit.group.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('group'),

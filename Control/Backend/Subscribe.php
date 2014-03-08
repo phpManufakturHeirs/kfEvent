@@ -30,7 +30,7 @@ class Subscribe extends Backend {
         $subscriptions = $SubscriptionData->selectList();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/list.subscription.twig'),
+            '@phpManufaktur/Event/Template', 'admin/list.subscription.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('registration'),

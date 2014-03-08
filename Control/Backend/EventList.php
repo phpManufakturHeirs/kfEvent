@@ -54,7 +54,7 @@ class EventList extends Backend {
 
         try {
             // search for the config file in the template directory
-            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.json', '', true);
+            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'admin/list.event.json', '', true);
             // get the columns to show in the list
             $cfg = $this->app['utils']->readJSON($cfg_file);
             self::$columns = isset($cfg['columns']) ? $cfg['columns'] : $this->EventData->getColumns();
@@ -133,7 +133,7 @@ class EventList extends Backend {
         $events = $this->getList(self::$current_page, self::$rows_per_page, self::$select_status, self::$max_pages, $order_by, $order_direction);
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.twig'),
+            '@phpManufaktur/Event/Template', 'admin/list.event.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_list'),

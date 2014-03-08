@@ -405,7 +405,7 @@ class EventEdit extends Backend {
                     $fields = $this->getCreateByGroupFormFields();
                     $form = $fields->getForm();
                     return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                        '@phpManufaktur/Event/Template', 'bootstrap/admin/group.event.twig'),
+                        '@phpManufaktur/Event/Template', 'admin/group.event.twig'),
                         array(
                             'usage' => self::$usage,
                             'toolbar' => $this->getToolbar('event_edit'),
@@ -430,7 +430,7 @@ class EventEdit extends Backend {
                 $fields = $this->getCreateStartFormFields();
                 $form = $fields->getForm();
                 return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                    '@phpManufaktur/Event/Template', 'bootstrap/admin/create.event.twig'),
+                    '@phpManufaktur/Event/Template', 'admin/create.event.twig'),
                     array(
                         'usage' => self::$usage,
                         'toolbar' => $this->getToolbar('event_edit'),
@@ -595,7 +595,7 @@ class EventEdit extends Backend {
         }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/edit.event.twig'),
+            '@phpManufaktur/Event/Template', 'admin/edit.event.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_edit'),

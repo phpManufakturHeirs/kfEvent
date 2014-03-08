@@ -33,7 +33,7 @@ class TitleEdit extends Backend {
         $this->SimpleTitleEdit = new SimpleTitleEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'edit' => 'bootstrap/admin/contact/edit.title.twig'
+                'edit' => 'admin/contact/edit.title.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/title/edit?usage='.self::$usage,

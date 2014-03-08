@@ -33,7 +33,7 @@ class ContactSelect extends Backend {
         $this->SimpleContactSelect = new SimpleContactSelect($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'select' => 'bootstrap/admin/contact/select.contact.twig'
+                'select' => 'admin/contact/select.contact.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/select?usage='.self::$usage,

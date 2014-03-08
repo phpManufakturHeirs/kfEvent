@@ -164,7 +164,7 @@ class ExtraFieldEdit extends Backend {
         }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/edit.extra.twig'),
+            '@phpManufaktur/Event/Template', 'admin/edit.extra.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('group'),

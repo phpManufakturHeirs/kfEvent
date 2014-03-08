@@ -33,7 +33,7 @@ class ContactPerson extends Backend {
         $this->SimpleContactPerson = new SimpleContactPerson($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'contact' => 'bootstrap/admin/contact/edit.contact.twig'
+                'contact' => 'admin/contact/edit.contact.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/person/edit?usage='.self::$usage,

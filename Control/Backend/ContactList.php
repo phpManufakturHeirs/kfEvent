@@ -33,8 +33,8 @@ class ContactList extends Backend {
         $options = array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'settings' => 'bootstrap/admin/contact/list.contact.json',
-                'list' => 'bootstrap/admin/contact/list.contact.twig'
+                'settings' => 'admin/contact/list.contact.json',
+                'list' => 'admin/contact/list.contact.twig'
             ),
             'route' => array(
                 'pagination' => '/admin/event/contact/list/page/{page}?order={order}&direction={direction}&usage='.self::$usage,

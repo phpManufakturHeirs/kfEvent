@@ -22,6 +22,7 @@
   {% endif %}  
 {% endblock jquery %}
 {% block content %}
+  <!-- {{ _self.getTemplateName() }} -->  
   {{ parent() }}
   <div class="event view container" >
     {% include '@phpManufaktur/Event/Template/default/command/item/event.detail.twig' %}

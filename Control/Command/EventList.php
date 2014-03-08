@@ -63,6 +63,8 @@ class EventList extends Basic
         // which comments type must be used?
         $parameter['comments_type'] = (isset($parameter['comments_type'])) ? strtoupper($parameter['comments_type']) : 'EVENT';
 
+        $parameter['compatibility'] = isset($parameter['compatibility']);
+
         $messages = array();
         $SQL = '';
         if (false === ($events = $EventFilter->filter(

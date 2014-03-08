@@ -25,6 +25,7 @@
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.edit.css" media="screen, projection" />
 {% endblock stylesheet %}
 {% block content %}
+  <!-- {{ _self.getTemplateName() }} -->  
   {{ parent() }}
   <div class="contact_form">
     <div class="small right">{{ displayname }} <a href="{{ logout_url }}">{{ 'Logout'|trans }}</a></div>

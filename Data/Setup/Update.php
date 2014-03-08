@@ -212,6 +212,20 @@ class Update
     }
 
     /**
+     * Release 2.0.32
+     */
+    protected function release_2032()
+    {
+        // remove no longer needed files and directories
+        $items = array(
+            MANUFAKTUR_PATH.'/Event/Template/default/admin/bootstrap'
+        );
+        foreach ($items as $item) {
+            $this->app['filesystem']->remove($item);
+        }
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -234,6 +248,9 @@ class Update
 
         // Release 2.0.28
         $this->release_2028();
+
+        // Release 2.0.32
+        $this->release_2032();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);

@@ -35,7 +35,7 @@ class EventSearch extends Backend {
 
         try {
             // search for the config file in the template directory
-            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.json', '', true);
+            $cfg_file = $this->app['utils']->getTemplateFile('@phpManufaktur/Event/Template', 'admin/list.event.json', '', true);
             // get the columns to show in the list
             $cfg = $this->app['utils']->readJSON($cfg_file);
             self::$columns = isset($cfg['columns']) ? $cfg['columns'] : $this->EventData->getColumns();
@@ -77,7 +77,7 @@ class EventSearch extends Backend {
         }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/list.search.twig'),
+            '@phpManufaktur/Event/Template', 'admin/list.search.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_list'),

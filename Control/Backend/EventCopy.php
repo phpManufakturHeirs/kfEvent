@@ -33,7 +33,7 @@ class EventCopy extends Backend
         try {
             // search for the config file in the template directory
             $cfg_file = $this->app['utils']->getTemplateFile(
-                '@phpManufaktur/Event/Template', 'bootstrap/admin/list.event.json', '', true);
+                '@phpManufaktur/Event/Template', 'admin/list.event.json', '', true);
             // get the columns to show in the list
             $cfg = $this->app['utils']->readJSON($cfg_file);
             self::$columns = isset($cfg['columns']) ? $cfg['columns'] : $this->EventData->getColumns();
@@ -75,7 +75,7 @@ class EventCopy extends Backend
         $this->setAlert('Please search for the event you want to copy data from.', array(), self::ALERT_TYPE_INFO);
 
         return $app['twig']->render($app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/copy.event.twig'),
+            '@phpManufaktur/Event/Template', 'admin/copy.event.twig'),
             array(
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('event_edit'),
@@ -120,7 +120,7 @@ class EventCopy extends Backend
                 array(), self::ALERT_TYPE_INFO);
 
             return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-                '@phpManufaktur/Event/Template', 'bootstrap/admin/copy.event.twig'),
+                '@phpManufaktur/Event/Template', 'admin/copy.event.twig'),
                 array(
                     'usage' => self::$usage,
                     'toolbar' => $this->getToolbar('event_edit'),

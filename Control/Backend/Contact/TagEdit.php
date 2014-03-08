@@ -33,7 +33,7 @@ class TagEdit extends Backend {
         $this->SimpleTagEdit = new SimpleTagEdit($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'edit' => 'bootstrap/admin/contact/edit.tag.twig'
+                'edit' => 'admin/contact/edit.tag.twig'
             ),
             'route' => array(
                 'action' => '/admin/event/contact/tag/edit?usage='.self::$usage,

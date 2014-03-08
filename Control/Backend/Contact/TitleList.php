@@ -33,7 +33,7 @@ class TitleList extends Backend {
         $this->SimpleTitleList = new SimpleTitleList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'list' => 'bootstrap/admin/contact/list.title.twig'
+                'list' => 'admin/contact/list.title.twig'
             ),
             'route' => array(
                 'edit' => '/admin/event/contact/title/edit/id/{title_id}?usage='.self::$usage,

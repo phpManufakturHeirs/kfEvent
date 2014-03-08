@@ -33,7 +33,7 @@ class TagList extends Backend {
         $this->SimpleTagList = new SimpleTagList($this->app, array(
             'template' => array(
                 'namespace' => '@phpManufaktur/Event/Template',
-                'list' => 'bootstrap/admin/contact/list.tag.twig'
+                'list' => 'admin/contact/list.tag.twig'
             ),
             'route' => array(
                 'edit' => '/admin/event/contact/tag/edit/id/{tag_id}?usage='.self::$usage,
