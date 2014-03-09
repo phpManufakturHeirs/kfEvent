@@ -16,7 +16,6 @@ use phpManufaktur\Basic\Control\kitCommand\Basic;
 use phpManufaktur\Event\Data\Event\Group as EventGroup;
 use phpManufaktur\Contact\Data\Contact\Overview;
 use phpManufaktur\Event\Data\Event\OrganizerTag;
-use phpManufaktur\Contact\Control\Contact;
 use phpManufaktur\Event\Data\Event\LocationTag;
 use phpManufaktur\Event\Data\Event\Event;
 use phpManufaktur\Event\Data\Event\Propose as ProposeData;
@@ -67,8 +66,6 @@ class Propose extends Basic
             return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
         }
 
-        $Contact = new Contact($app);
-
         // we have to activate all data of this proposed event
         if ($propose['new_organizer_id'] > 0) {
             $data = array(
@@ -77,8 +74,8 @@ class Propose extends Basic
                     'contact_status' => 'ACTIVE'
                 )
             );
-            if (false === ($Contact->update($data, $propose['new_organizer_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['new_organizer_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
         if ($propose['new_location_id'] > 0) {
@@ -88,13 +85,12 @@ class Propose extends Basic
                     'contact_status' => 'ACTIVE'
                 )
             );
-            if (false === ($Contact->update($data, $propose['new_location_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['new_location_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
 
-        $ContactOverview = new Overview($app);
-        $contact = $ContactOverview->select($propose['submitter_id']);
+        $contact = $app['contact']->selectOverview($propose['submitter_id']);
 
         $EventData = new Event($app);
 
@@ -177,7 +173,6 @@ class Propose extends Basic
             return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
         }
 
-        $Contact = new Contact($app);
 
         // we have to remove all data of this proposed event
         if ($propose['new_organizer_id'] > 0) {
@@ -187,8 +182,8 @@ class Propose extends Basic
                     'contact_status' => 'DELETED'
                 )
             );
-            if (false === ($Contact->update($data, $propose['new_organizer_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['new_organizer_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
         if ($propose['new_location_id'] > 0) {
@@ -198,13 +193,12 @@ class Propose extends Basic
                     'contact_status' => 'DELETED'
                 )
             );
-            if (false === ($Contact->update($data, $propose['new_location_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['new_location_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
 
-        $ContactOverview = new Overview($app);
-        $contact = $ContactOverview->select($propose['submitter_id']);
+        $contact = $app['contact']->selectOverview($propose['submitter_id']);
 
         $EventData = new Event($app);
 
@@ -260,8 +254,7 @@ class Propose extends Basic
             throw new \Exception('Missing the propose data record');
         }
 
-        $Contact = new Contact($this->app);
-        if (false === ($contact = $Contact->selectOverview($propose['submitter_id']))) {
+        if (false === ($contact = $this->app['contact']->selectOverview($propose['submitter_id']))) {
             throw new \Exception('Missing contact record for the submitter ID '.$propose['submitter_id']);
         }
 
@@ -341,10 +334,8 @@ class Propose extends Basic
             return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
         }
 
-        $Contact = new Contact($app);
-
         // confirm the submitter contact record!
-        $submitter = $Contact->select($propose['submitter_id']);
+        $submitter = $app['contact']->select($propose['submitter_id']);
         if ($submitter['contact']['contact_id'] < 1) {
             throw new \Exception('The submitter contact record with the ID '.$propose['submitter_id'].' does not exists!');
         }
@@ -355,8 +346,8 @@ class Propose extends Basic
                     'contact_status' => 'ACTIVE'
                 )
             );
-            if (false === ($Contact->update($data, $propose['submitter_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['submitter_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
         elseif ($submitter['contact']['contact_status'] != 'ACTIVE') {
@@ -432,10 +423,8 @@ class Propose extends Basic
             return new Response($app['translator']->trans('This activation link was already used and is no longer valid!'));
         }
 
-        $Contact = new Contact($app);
-
         // also if the event is cancelled we confirm the submitter contact record!
-        $submitter = $Contact->select($propose['submitter_id']);
+        $submitter = $app['contact']->select($propose['submitter_id']);
         if ($submitter['contact']['contact_id'] < 1) {
             throw new \Exception('The submitter contact record with the ID '.$propose['submitter_id'].' does not exists!');
         }
@@ -446,8 +435,8 @@ class Propose extends Basic
                     'contact_status' => 'ACTIVE'
                 )
             );
-            if (false === ($Contact->update($data, $propose['submitter_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['submitter_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
         elseif ($submitter['contact']['contact_status'] != 'ACTIVE') {
@@ -465,8 +454,8 @@ class Propose extends Basic
                     'contact_status' => 'DELETED'
                 )
             );
-            if (false === ($Contact->update($data, $propose['new_organizer_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['new_organizer_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
         if ($propose['new_location_id'] > 0) {
@@ -476,8 +465,8 @@ class Propose extends Basic
                     'contact_status' => 'DELETED'
                 )
             );
-            if (false === ($Contact->update($data, $propose['new_location_id']))) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (false === ($app['contact']->update($data, $propose['new_location_id']))) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
 
@@ -516,8 +505,7 @@ class Propose extends Basic
      */
     protected function sendSubmitterConfirmation($submitter_id)
     {
-        $Contact = new Contact($this->app);
-        if (false === ($contact = $Contact->selectOverview($submitter_id))) {
+        if (false === ($contact = $this->app['contact']->selectOverview($submitter_id))) {
             throw new \Exception('Missing contact recorde for the submitter ID '.$submitter_id);
         }
 
@@ -582,8 +570,7 @@ class Propose extends Basic
             throw new \Exception('Missing the email_type!');
         }
 
-        $Contact = new Contact($app);
-        if (false === ($contact_id = $Contact->existsLogin($request['email']))) {
+        if (false === ($contact_id = $app['contact']->existsLogin($request['email']))) {
             // create a new contact
             $data = array(
                 'contact' => array(
@@ -613,8 +600,8 @@ class Propose extends Basic
                     )
                 )
             );
-            if (!$Contact->insert($data, $contact_id)) {
-                throw new \Exception(strip_tags($Contact->getMessage()));
+            if (!$app['contact']->insert($data, $contact_id)) {
+                throw new \Exception(strip_tags($app['contact']->getAlert()));
             }
         }
 
@@ -850,13 +837,12 @@ class Propose extends Basic
     {
         $this->initParameters($app);
 
-        $ContactData = new Contact($app);
         // get the organizer data
-        if (false === ($organizer = $ContactData->selectOverview($this->app['session']->get('organizer_id', -1)))) {
+        if (false === ($organizer = $app['contact']->selectOverview($this->app['session']->get('organizer_id', -1)))) {
             throw new \Exception("The Organizer does not exists!");
         }
         // get the location data
-        if (false === ($location = $ContactData->selectOverview($this->app['session']->get('location_id', -1)))) {
+        if (false === ($location = $app['contact']->selectOverview($this->app['session']->get('location_id', -1)))) {
             throw new \Exception("The Location does not exists!");
         }
 
@@ -1285,11 +1271,10 @@ class Propose extends Basic
             )
         );
 
-        $ContactControl = new Contact($app);
         $contact_id = -1;
-        if (false === ($ContactControl->insert($data, $contact_id))) {
+        if (false === ($app['contact']->insert($data, $contact_id))) {
             // don't return as message to to visitor, better throw an error
-            throw new \Exception(strip_tags($ContactControl->getMessage()));
+            throw new \Exception(strip_tags($app['contact']->getAlert()));
         }
 
         $ProposeData = new ProposeData($app);
@@ -1343,8 +1328,6 @@ class Propose extends Basic
     protected function createContact($type, $group_id)
     {
         $request = $this->app['request']->request->get('form');
-
-        $ContactControl = new Contact($this->app);
 
         $ContactConfiguration = new ContactConfiguration($this->app);
         $contactConfig = $ContactConfiguration->getConfiguration();
@@ -1435,7 +1418,7 @@ class Propose extends Basic
             'data' => isset($request['address_state']) ? $request['address_state'] : ''
         ))
         ->add('address_country', 'choice', array(
-            'choices' => $ContactControl->getCountryArrayForTwig(),
+            'choices' => $this->app['contact']->getCountryArrayForTwig(),
             'empty_value' => '- please select -',
             'expanded' => false,
             'multiple' => false,
@@ -1505,8 +1488,7 @@ class Propose extends Basic
         $Configuration = new Configuration($this->app);
         $config = $Configuration->getConfiguration();
 
-        $ContactControl = new Contact($this->app);
-        if (false === ($organizer_id = $ContactControl->existsLogin($config['event']['organizer']['unknown']['identifier']))) {
+        if (false === ($organizer_id = $this->app['contact']->existsLogin($config['event']['organizer']['unknown']['identifier']))) {
             // missing the contact record for unknown organizers, create it!
 
             // get the TAGS assigned to the organizer
@@ -1543,14 +1525,13 @@ class Propose extends Basic
                 ),
             );
 
-            $ContactControl = new Contact($this->app);
             $organizer_id = -1;
-            if (false === ($ContactControl->insert($data, $organizer_id))) {
+            if (false === ($this->app['contact']->insert($data, $organizer_id))) {
                 // don't return as message to to visitor, better throw an error
-                throw new \Exception(strip_tags($ContactControl->getMessage()));
+                throw new \Exception(strip_tags($this->app['contact']->getAlert()));
             }
         }
-        $status = $ContactControl->getStatus($config['event']['organizer']['unknown']['identifier']);
+        $status = $this->app['contact']->getStatus($config['event']['organizer']['unknown']['identifier']);
 
         if ($status != 'ACTIVE') {
             // the unknown organizer is not active - update the record
@@ -1561,9 +1542,9 @@ class Propose extends Basic
                 )
             );
             $has_changed = false;
-            if (!$ContactControl->update($data, $organizer_id, $has_changed, true)) {
+            if (!$this->app['contact']->update($data, $organizer_id, $has_changed, true)) {
                 // don't return as message to to visitor, better throw an error
-                throw new \Exception(strip_tags($ContactControl->getMessage()));
+                throw new \Exception(strip_tags($this->app['contact']->getAlert()));
             }
         }
 
