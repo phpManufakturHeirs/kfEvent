@@ -945,6 +945,7 @@ class Propose extends Basic
             "command/event.propose.event.create.twig",
             $this->getPreferredTemplateStyle()),
             array(
+                'parameter' => $this->getCommandParameters(),
                 'basic' => $this->getBasicSettings(),
                 'form' => $form->createView(),
                 'organizer' => $organizer,
@@ -1456,6 +1457,7 @@ class Propose extends Basic
             "command/event.propose.contact.create.twig",
             $this->getPreferredTemplateStyle()),
             array(
+                'parameter' => $this->getCommandParameters(),
                 'basic' => $this->getBasicSettings(),
                 'form' => $form->createView(),
                 'route' => array(

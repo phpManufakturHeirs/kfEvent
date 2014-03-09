@@ -49,6 +49,15 @@
   </div>
   <div class="clear"></div>
   <div>&nbsp;</div>
+  
+  {% if parameter.mode is defined and parameter.mode == 'simple' %}
+    {# show only a minimum of form fields #}
+    {% set mode = 'simple' %}
+  {% else %}
+    {# show all available form fields #}
+    {% set mode = 'full' %}
+  {% endif %}
+
   {{ form_row(form._token) }}
 
   {{ form_row(form.event_id) }}
@@ -58,14 +67,25 @@
   {{ form_row(form.event_date_from) }}
   {{ form_row(form.event_date_to) }}
 
-  {{ form_row(form.event_publish_from) }}
-  {{ form_row(form.event_publish_to) }}
-  {{ form_row(form.event_deadline) }}
+  {% if mode == 'full' %}
+    {{ form_row(form.event_publish_from) }}
+    {{ form_row(form.event_publish_to) }}
+    {{ form_row(form.event_deadline) }}
+  {% else %}
+    {{ form_widget(form.event_publish_from, {'attr': {'class':'hidden'}} ) }}
+    {{ form_widget(form.event_publish_to, {'attr': {'class':'hidden'}} ) }}
+    {{ form_widget(form.event_deadline, {'attr': {'class':'hidden'}} ) }}
+  {% endif %}
 
   {{ form_row(form.event_url) }}
-  {{ form_row(form.event_costs) }}
-
-  {{ form_row(form.event_participants_max) }}
+    
+  {% if mode == 'full' %}  
+    {{ form_row(form.event_costs) }}
+    {{ form_row(form.event_participants_max) }}
+  {% else %}
+    {{ form_widget(form.event_costs, {'attr': {'class':'hidden'}} ) }}
+    {{ form_widget(form.event_participants_max, {'attr': {'class':'hidden'}} ) }}
+  {% endif %}
 
   {{ form_row(form.description_title) }}
 
@@ -82,19 +102,25 @@
       ) }}
     </div>
   </div>
-  <div class="clear"></div>
-  <div>
-    <div class="label{% if config.event.description.long.required %} required{% endif %}">{{ form.description_long.vars.label|trans }}</div>
-    <div class="value">
-      {{ CKEditor(
-            form.description_long.vars.id,
-            form.description_long.vars.full_name,
-            form.description_long.vars.value,
-            '98%', '250px',
-            MANUFAKTUR_URL ~ '/Event/Template/default/command/ckeditor.config.simple.js'
-      ) }}
+  
+  {% if mode == 'full' %}
+    <div class="clear"></div>
+    <div>
+      <div class="label{% if config.event.description.long.required %} required{% endif %}">{{ form.description_long.vars.label|trans }}</div>
+      <div class="value">
+        {{ CKEditor(
+              form.description_long.vars.id,
+              form.description_long.vars.full_name,
+              form.description_long.vars.value,
+              '98%', '250px',
+              MANUFAKTUR_URL ~ '/Event/Template/default/command/ckeditor.config.simple.js'
+        ) }}
+      </div>
     </div>
-  </div>
+  {% else %}
+    {{ form_widget(form.description_long, {'attr': {'class':'hidden'}} ) }}
+  {% endif %}
+  
   <div>&nbsp;</div>
   <div>
     <label for="submit">&nbsp;</label>
