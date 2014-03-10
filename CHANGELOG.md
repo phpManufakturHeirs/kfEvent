@@ -6,6 +6,19 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.32** - 2014-03-10
+
+* multiple smaller bugfixes
+* added dependency: Libray
+* switch back to version numbers instead use of 'latest' in templates
+* set explicit arg separator at `http_build_query()` to avoid problems if the server uses another one
+* changed dynamically usage of Carbon to static usage to avoid problems
+* changed templates to usage with the central Library
+* introduce /Template/deprecated and prepare changing of /command templates to Bootstrap 3
+* add parameter `mode[]` to propose dialog to enable simplified forms
+* cleanup CONTACT usage in propose dialog
+* add a dialog to pass comments from parent event
+
 **2.0.31** - 2014-01-22
 
 * expand the width of the backend body container

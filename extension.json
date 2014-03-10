@@ -22,8 +22,8 @@
     "about":"\/event\/about"
   },
   "release":{
-    "number":"2.0.31",
-    "date":"2013-01-22",
+    "number":"2.0.32",
+    "date":"2013-03-10",
     "status":"beta"
   },
   "description":{
@@ -42,27 +42,27 @@
   },
   "require":{
     "framework":{
-      "release":"0.26"
+      "release":"0.27"
     },
     "extension":{
         "phpmanufaktur":{
             "Basic":{
-                "release":"0.67"
+                "release":"0.83"
             },
             "Library":{
-                "release":"0.12"
+                "release":"0.19"
             },
             "Contact":{
-                "release":"2.0.30"
+                "release":"2.0.33"
             },
             "CKEditor":{
-                "release":"0.20"
+                "release":"0.23"
             },
             "MediaBrowser":{
-                "release":"0.25"
+                "release":"0.27"
             },
             "CommandCollection":{
-                "release":"0.29"
+                "release":"0.33"
             }
         }
     }
