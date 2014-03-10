@@ -64,6 +64,8 @@ return array(
         => 'Ich vertrete einen Veranstalter, Verein oder eine Organisation und möchte deren Veranstaltungen bearbeiten können',
     'CHOICE_SUBMITTER_ACCOUNT'
         => 'Ich möchte Veranstaltungen bearbeiten können, die ich übermittelt habe',
+    'Comments handling'
+        => 'Kommentar Behandlung',
     'company, institution or association'
         => 'Firma, Institution oder Verein',
     'Contact list'
@@ -201,6 +203,8 @@ return array(
         => 'Der Veranstalter ist mir leider nicht bekannt',
     'If you are prompted to login, please use your username and password'
         => 'Wenn Sie aufgefordert werden sich anzumelden, verwenden Sie bitte Ihren Benutzernamen und Ihr Passwort',
+    'Ignore existing comments'
+        => 'Existierende Kommentare werden nicht übernommen',
     'Import events from kitEvent'
         => 'Veranstaltungen aus kitEvent importieren',
     'Information about the Event extension'
@@ -255,10 +259,14 @@ return array(
     'Organizer Tags'
         => 'Veranstalter',
 
+    'Pass comments from parent'
+        => 'Kommentare werden aktiv von der ursprünglichen Veranstaltung vererbt',
     'Permalink successfull changed'
         => 'Der Permanent Link wurde erfolgreich geändert',
     'personal email address'
         => 'persönliche E-Mail Adresse',
+    'Please determine the handling for the comments.'
+        => 'Bitte legen Sie die Handhabung für die Kommentare fest.',
     'Please feel free to order a account.'
         => 'Fordern Sie ein Benutzerkonto an',
     'Please search for for a organizer or select the checkbox to create a new one.'

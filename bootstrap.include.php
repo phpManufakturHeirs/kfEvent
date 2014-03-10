@@ -224,6 +224,8 @@ $app->post('/admin/event/copy/search/check',
     'phpManufaktur\Event\Control\Backend\EventCopy::controllerSearchCheck');
 $app->get('/admin/event/copy/id/{event_id}',
     'phpManufaktur\Event\Control\Backend\EventCopy::controllerCopyID');
+$app->post('/admin/event/copy/comments/check',
+    'phpManufaktur\Event\Control\Backend\EventCopy::controllerCommentsCheck');
 
 $app->match('/admin/event/list',
     // Show the Event List

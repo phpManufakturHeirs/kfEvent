@@ -17,6 +17,7 @@ use phpManufaktur\Event\Data\Event\EventSearch;
 use phpManufaktur\Event\Data\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\CommandCollection\Data\Comments\CommentsPassed;
 
 class EventCopy extends Backend
 {
@@ -44,7 +45,8 @@ class EventCopy extends Backend
         self::$route =  array(
             'start' => '/admin/event/copy?usage='.self::$usage,
             'select' => '/admin/event/copy/id/{event_id}?usage='.self::$usage,
-            'check' => '/admin/event/copy/search/check?usage='.self::$usage
+            'check' => '/admin/event/copy/search/check?usage='.self::$usage,
+            'comments' => '/admin/event/copy/comments/check?usage='.self::$usage
         );
     }
 
@@ -85,6 +87,7 @@ class EventCopy extends Backend
                 'route' => self::$route
             ));
     }
+
 
     /**
      * Check the search term, display result list or again the search dialog
@@ -138,6 +141,82 @@ class EventCopy extends Backend
         }
     }
 
+    protected function getHandleCommentsFormFields($event_id, $new_event_id)
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('event_id', 'hidden', array(
+            'data' => $event_id
+        ))
+        ->add('new_event_id', 'hidden', array(
+            'data' => $new_event_id
+        ))
+        ->add('comments', 'choice', array(
+            'choices' => array(
+                'IGNORE' => 'Ignore existing comments',
+                'PASS_FROM' => 'Pass comments from parent'
+            ),
+            'expanded' => true,
+            'required' => true,
+            'label' => 'Comments handling',
+            'data' => 'IGNORE'
+        ));
+    }
+
+    protected function HandleComments($event_id, $new_event_id)
+    {
+        $fields = $this->getHandleCommentsFormFields($event_id, $new_event_id);
+        $form = $fields->getForm();
+
+        $this->setAlert('Please determine the handling for the comments.', array(), self::ALERT_TYPE_INFO);
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/copy.event.comments.twig'),
+            array(
+                'usage' => self::$usage,
+                'toolbar' => $this->getToolbar('event_edit'),
+                'alert' => $this->getAlert(),
+                'form' => $form->createView(),
+                'route' => self::$route
+            ));
+    }
+
+    public function controllerCommentsCheck(Application $app)
+    {
+        $this->initialize($app);
+
+        // get the form
+        $fields = $this->getHandleCommentsFormFields(-1, -1);
+        $form = $fields->getForm();
+        // get the requested data
+        $form->bind($this->app['request']);
+
+        if ($form->isValid()) {
+            // the form is valid
+            $data = $form->getData();
+
+            if (isset($data['comments']) && ($data['comments'] == 'PASS_FROM')) {
+                // pass the comments from the old EVENT ID to the new one
+                $CommentsPassed = new CommentsPassed($app);
+                $CommentsPassed->insertPassTo('EVENT', $data['event_id'], $data['new_event_id']);
+            }
+
+            // the request method must be GET not POST!
+            $subRequest = Request::create("/admin/event/edit/id/".$data['new_event_id'], 'GET', array(
+                'usage' => self::$usage,
+                'alert' => $app['translator']->trans('This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!',
+                    array('%id%' => $data['event_id'])),
+                'alert_type' => self::ALERT_TYPE_SUCCESS
+            ));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            return $this->controllerCopyEvent($app);
+        }
+    }
+
+
     /**
      * Controller for the selected Event ID to copy the new event from
      *
@@ -168,13 +247,9 @@ class EventCopy extends Backend
         $new_event_id = -1;
         $EventData->insertEvent($event, $new_event_id, true);
 
-        // the request method must be GET not POST!
-        $subRequest = Request::create("/admin/event/edit/id/$new_event_id", 'GET', array(
-            'usage' => self::$usage,
-            'alert' => $app['translator']->trans('This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!',
-                array('%id%' => $event_id)),
-            'alert_type' => self::ALERT_TYPE_SUCCESS
-        ));
-        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+
+        return $this->HandleComments($event_id, $new_event_id);
+
+
     }
 }
