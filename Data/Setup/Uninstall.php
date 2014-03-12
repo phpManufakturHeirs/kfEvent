@@ -25,6 +25,7 @@ use phpManufaktur\Basic\Control\CMS\UninstallAdminTool;
 use phpManufaktur\Event\Data\Event\Images;
 use phpManufaktur\Event\Data\Event\Subscription;
 use phpManufaktur\Event\Data\Event\Propose;
+use phpManufaktur\Event\Data\Event\RecurringEvent;
 
 class Uninstall
 {
@@ -69,6 +70,9 @@ class Uninstall
 
             $Propose = new Propose($app);
             $Propose->dropTable();
+
+            $RecurringEvent = new RecurringEvent($app);
+            $RecurringEvent->dropTable();
 
             // uninstall kit_framework_event from the CMS
             $admin_tool = new UninstallAdminTool($app);

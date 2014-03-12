@@ -15,6 +15,7 @@ use Silex\Application;
 use phpManufaktur\Event\Data\Event\Propose;
 use phpManufaktur\Event\Control\Configuration;
 use phpManufaktur\Basic\Control\CMS\InstallAdminTool;
+use phpManufaktur\Event\Data\Event\RecurringEvent;
 
 class Update
 {
@@ -226,6 +227,24 @@ class Update
     }
 
     /**
+     * Release 2.0.33
+     */
+    protected function release_2033()
+    {
+        if (!$this->app['db.utils']->tableExists(FRAMEWORK_TABLE_PREFIX.'event_recurring_event')) {
+            $RecurringEvent = new RecurringEvent($this->app);
+            $RecurringEvent->createTable();
+        }
+
+        if (!$this->app['db.utils']->ColumnExists(FRAMEWORK_TABLE_PREFIX.'event_event', 'event_recurring_id')) {
+            // add field event_url in table event_event
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."event_event` ADD `event_recurring_id` INT(11) NOT NULL DEFAULT -1 AFTER `event_status`";
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo('[Event Update] Add field `event_recurring_id` to table `event_event`');
+        }
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -251,6 +270,9 @@ class Update
 
         // Release 2.0.32
         $this->release_2032();
+
+        // Release 2.0.33
+        $this->release_2033();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);

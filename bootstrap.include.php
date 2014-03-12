@@ -227,6 +227,18 @@ $app->get('/admin/event/copy/id/{event_id}',
 $app->post('/admin/event/copy/comments/check',
     'phpManufaktur\Event\Control\Backend\EventCopy::controllerCommentsCheck');
 
+$app->get('/admin/event/recurring/id/{event_id}',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerStart')
+    ->value('event_id', -1);
+$app->post('/admin/event/recurring/check/type',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckType');
+$app->post('/admin/event/recurring/check/day/type',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckDayType');
+$app->post('/admin/event/recurring/check/day/sequence',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckDaySequence');
+$app->post('/admin/event/recurring/check/week/sequence',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckWeekSequence');
+
 $app->match('/admin/event/list',
     // Show the Event List
     'phpManufaktur\Event\Control\Backend\EventList::exec');

@@ -26,6 +26,7 @@ use phpManufaktur\Event\Data\Event\Images;
 use phpManufaktur\Event\Data\Event\Subscription;
 use phpManufaktur\Event\Data\Event\Propose;
 use phpManufaktur\Event\Control\Configuration;
+use phpManufaktur\Event\Data\Event\RecurringEvent;
 
 class Setup
 {
@@ -90,6 +91,9 @@ class Setup
 
             $Propose = new Propose($app);
             $Propose->createTable();
+
+            $RecurringEvent = new RecurringEvent($app);
+            $RecurringEvent->createTable();
 
             // setup kit_framework_event as Add-on in the CMS
             $admin_tool = new InstallAdminTool($app);

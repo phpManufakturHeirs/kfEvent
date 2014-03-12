@@ -17,6 +17,11 @@
   {{ block('form_row_simple') }}
 {% endblock %}
 
+{% block integer_row %}
+  {% set type = 'integer' %}
+  {{ block('form_row_simple') }}
+{% endblock %}
+
 {% block password_row %}
   {% set type = 'password' %}
   {{ block('form_row_simple') }}
@@ -34,7 +39,7 @@
   {% endif %}
   <div class="form-group">
     {{ block('form_label') }}
-    <div class="col-sm-9">
+    <div class="col-sm-8">
       {% if attr.prefix is defined %}
         <span class="prefix-block">{{ attr.prefix|trans }}</span>
       {% endif %}
@@ -153,8 +158,8 @@
       <div {{ block('widget_container_attributes') }}>
       {% for child in form %}
         <div class="row">
-          <div class="col-lg-12">
-            <div class="pull-left choice-radio">{{ form_widget(child) }}</div>
+          <div class="col-sm-12">
+            <div class="pull-left choice-checkbox">{{ form_widget(child) }}&nbsp;&nbsp;</div>
             <div>{{ child.vars.label|trans }}</div>
           </div>
         </div>

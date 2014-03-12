@@ -95,6 +95,8 @@ return array(
     'description_title'
         => 'Titel',
 
+    'Daily recurring'
+        => 'Tägliche Wiederholung',
     'Date'
         => 'Datum',
     'Date and Time'
@@ -241,6 +243,9 @@ return array(
     'Long description'
         => 'Langbeschreibung',
 
+    'Monthly recurring'
+        => 'Monatliche Wiederholung',
+
     'natural person'
         => 'Natürliche Person',
     'Name'
@@ -249,6 +254,10 @@ return array(
         => 'Bezeichner (übersetzt)',
     'New password'
         => 'Neues Passwort',
+    'No recurring event'
+        => 'Keinen Serientermin festlegen',
+    'No recurring event type selected'
+        => 'Es wurde kein Serientermin Typ ausgewählt.',
     'No results for this filter!'
         => 'Dieser Filter lieferte kein Ergebnis!',
 
@@ -324,6 +333,8 @@ return array(
 
     'Received request'
         => 'Anfrage erhalten',
+    'Recurring event'
+        => 'Serientermin',
     'Registrations'
         => 'Anmeldungen',
     'regular email address of a company, institution or association'
@@ -332,6 +343,12 @@ return array(
         => 'Das gewünschte Benutzerrecht zurückweisen',
     'Reject this event'
         => 'Veranstaltung ablehnen',
+    'Repeat each x-days'
+        => 'Alle x-Tage wiederholen',
+    'Repeat each x-weeks'
+        => 'Alle x-Wochen wiederholen',
+    'Repeat at workdays'
+        => 'An Werktagen wiederholen',
     'ROLE_EVENT_ADMIN'
         => 'Benutzerrecht: Veranstaltungen als Administrator bearbeiten',
     'ROLE_EVENT_LOCATION'
@@ -349,6 +366,8 @@ return array(
         => 'Kontotyp wählen',
     'Select event group'
         => 'Veranstaltungsgruppe auswählen',
+    'Select type'
+        => 'Typ auswählen',
     'Short description'
         => 'Kurzbeschreibung',
     'Show detailed information'
@@ -388,6 +407,8 @@ return array(
         => 'Die Änderung Ihrer Benutzerrechte wurde durch den Administrator abgelehnt',
     'The contact record was successfull updated.'
         => 'Der Adressdatensatz wurde aktualisiert.',
+    'The daily sequence must be greater than zero!'
+        => 'Die Sequenz der täglichen Wiederholung muss größer als Null sein!',
     'The deadline ends after the event start date!'
         => 'Der Anmeldeschluß liegt nach dem Beginn der Veranstaltung!',
     'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
@@ -442,6 +463,8 @@ return array(
         => 'Der Benutzer %user% möchte die Berechtigung erhalten',
     'The view <b>%view%</b> does not exists!'
         => 'Die Ansicht (view) <b>%view%</b> existiert nicht!',
+    'The weekly sequence must be greater than zero!'
+        => 'Die Sequenz der wöchentlichen Wiederholung muss größer als Null sein!',
     'There exists no kitEvent installation at the parent CMS!'
         => 'Es wurde keine kitEvent Installation in dem übergeordeneten Content Management System gefunden!',
     'There exists no locations who fits to the search term %search%'
@@ -470,7 +493,11 @@ return array(
         => 'Wir haben Ihnen ein neues Passwort an Ihre E-Mail Adresse gesendet, bitte prüfen Sie Ihren Posteingang',
     'We send you a new password to your email address.'
         => 'Wir senden Ihnen ein neues Passwort an Ihre E-Mail Adresse.',
+    'Weekly recurring'
+        => 'Wöchentliche Wiederholung',
 
+    'Yearly recurring'
+        => 'Jährliche Wiederholung',
     'You are authenticated but not allowed to edit this event. Please contact the admin if you are of the mind that you should be able for.'
         => 'Sie sind korrekt angemeldet jedoch nicht berechtigt diese Veranstaltung zu bearbeiten. Bitte wenden Sie sich an den Administrator um die erforderliche Berechtigung zu erhalten.',
     'Your are not authenticated, please login!'

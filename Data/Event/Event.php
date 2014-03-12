@@ -82,6 +82,7 @@ class Event
         `event_deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
         `event_url` TEXT NOT NULL,
         `event_status` ENUM('ACTIVE', 'LOCKED', 'DELETED') NOT NULL DEFAULT 'ACTIVE',
+        `event_recurring_id` INT(11) NOT NULL DEFAULT -1,
         `event_timestamp` TIMESTAMP,
         PRIMARY KEY (`event_id`),
         FOREIGN KEY (`group_id`) REFERENCES $group_table(`group_id`) ON DELETE CASCADE

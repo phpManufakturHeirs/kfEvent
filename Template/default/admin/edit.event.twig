@@ -307,6 +307,12 @@
           <div class="row">
             <div class="col-lg-12">
               <input class="btn btn-default" type="submit" value="{{ 'Submit'|trans }}" />&nbsp;
+              {% if form.event_id.vars.value > 0 and form.event_status.vars.value == 'ACTIVE' %}
+                {% set recurring_disabled = '' %}
+              {% else %}
+                {% set recurring_disabled = ' disabled' %}
+              {% endif %}
+              <a class="btn btn-default{{ recurring_disabled }}" href="{{ FRAMEWORK_URL }}/admin/event/recurring/id/{{ form.event_id.vars.value }}?usage={{ usage }}" role="button">{{ 'Recurring event'|trans }}</a>              
             </div>
           </div>
           
