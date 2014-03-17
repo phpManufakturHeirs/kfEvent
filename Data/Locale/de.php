@@ -82,6 +82,8 @@ return array(
         => 'Ich vertrete einen Veranstalter, Verein oder eine Organisation und möchte deren Veranstaltungen bearbeiten können',
     'CHOICE_SUBMITTER_ACCOUNT'
         => 'Ich möchte Veranstaltungen bearbeiten können, die ich übermittelt habe',
+    'Click to subscribe'
+        => 'Anklicken um sich zu dieser Veranstaltung anzumelden',
     'Comments handling'
         => 'Kommentar Behandlung',
     'company, institution or association'
@@ -288,6 +290,8 @@ return array(
         => 'Bezeichner (übersetzt)',
     'New password'
         => 'Neues Passwort',
+    'Next event dates'
+        => 'Die nächsten Veranstaltungstermine',
     'No recurring event'
         => 'Keinen Serientermin festlegen',
     'No recurring event type selected'
@@ -432,6 +436,8 @@ return array(
         => 'Übermittler Status',
     'Subscribe to event'
         => 'Zu der Veranstaltung anmelden',
+    'Successfull inserted a recurring event'
+        => 'Es wurden erfolgreich sich wiederholende Veranstaltungen angelegt.',
 
     'Text - 256 characters'
         => 'Text - max. 256 Zeichen',

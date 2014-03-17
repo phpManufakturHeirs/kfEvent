@@ -15,10 +15,12 @@ use Silex\Application;
 use phpManufaktur\Basic\Control\kitCommand\Basic;
 use phpManufaktur\Event\Data\Event\Event as EventData;
 use phpManufaktur\Basic\Data\CMS\Page;
+use phpManufaktur\Event\Data\Event\RecurringEvent as RecurringEventData;
 
 class Event extends Basic
 {
     protected $EventData = null;
+    protected $RecurringData = null;
     protected $Message = null;
     protected static $parameter = null;
     protected static $event_id = -1;
@@ -64,6 +66,7 @@ class Event extends Basic
 
         $this->EventData = new EventData($app);
         $this->Message = new Message($app);
+        $this->RecurringData = new RecurringEventData($app);
     }
 
     /**
@@ -94,10 +97,42 @@ class Event extends Basic
         if (isset(self::$parameter['view'])) {
             $view = strtolower(self::$parameter['view']);
         }
-        if (!in_array($view, array('small', 'detail', 'custom'))) {
+        if (!in_array($view, array('small', 'detail', 'custom', 'recurring'))) {
             // undefined view!
             return $this->Message->render('The view <b>%view%</b> does not exists for the action event!',
                 array('%view%' => $view));
+        }
+
+        $recurring = array();
+        $recurring_events = array();
+        if ($view == 'recurring') {
+            if ($event['event_recurring_id'] < 1) {
+                // no recurring event
+                $view = 'detail';
+            }
+            elseif (false !== ($recurring = $this->RecurringData->select($event['event_recurring_id']))) {
+                // this is a recurring event
+                // first get the parent event record
+                if (false === ($event = $this->EventData->selectEvent($recurring['parent_event_id']))) {
+                    return $this->Message->render('The record with the ID %id% does not exists!', array('%id%' => $recurring['parent_event_id']));
+                }
+                // get all active recurring events
+                if (false === ($items = $this->EventData->selectRecurringEvents($recurring['recurring_id']))) {
+                    return $this->Message->render('No active events for the recurring ID %id%!',
+                        array('%id%' => $recurring['recurring_id']));
+                }
+                foreach ($items as $item) {
+                    $route = base64_encode('/event/id/'.$event_id.'/view/'.$view);
+                    $item['link']['subscribe'] = FRAMEWORK_URL.'/event/subscribe/id/'.$item['event_id'].'/redirect/'.$route.'?pid='.$this->getParameterID();
+                    $recurring_events[] = $item;
+                }
+            }
+            else {
+                // recurring ID does not exists
+                $view = 'detail';
+                $this->setAlert('The record with the ID %id% does not exists!',
+                    array('%id%' => $event['event_recurring_id']), self::ALERT_TYPE_DANGER, true, array(__METHOD__, __LINE__));
+            }
         }
 
         // set redirect route
@@ -114,6 +149,8 @@ class Event extends Basic
                 'event' => $event,
                 'parameter' => self::$parameter,
                 'config' => self::$config,
+                'recurring' => $recurring,
+                'recurring_events' => $recurring_events
             ));
     }
 

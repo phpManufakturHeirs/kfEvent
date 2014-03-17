@@ -407,4 +407,5 @@ EOD;
                 throw new \Exception('Invalid integer value for the day of week: '.$day);
         }
     }
+
 }

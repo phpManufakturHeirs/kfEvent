@@ -24,7 +24,7 @@ use phpManufaktur\Event\Data\Event\Images;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use phpManufaktur\Event\Data\Event\RecurringEvent;
+use phpManufaktur\Event\Data\Event\RecurringEvent as RecurringEventData;
 
 class EventEdit extends Backend {
 
@@ -59,7 +59,7 @@ class EventEdit extends Backend {
         $this->EventDescription = new EventDescription($this->app);
         $this->Extra = new Extra($this->app);
         $this->Images = new Images($this->app);
-        $this->RecurringData = new RecurringEvent($app);
+        $this->RecurringData = new RecurringEventData($app);
         self::$config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
     }
 

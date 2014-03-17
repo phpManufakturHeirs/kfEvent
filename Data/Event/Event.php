@@ -641,4 +641,23 @@ EOD;
             throw new \Exception($e);
         }
     }
+
+    public function selectRecurringEvents($recurring_id)
+    {
+        try {
+            $SQL = "SELECT `event_id` FROM `".self::$table_name."` WHERE `event_recurring_id`=$recurring_id AND ".
+                "`event_status`='ACTIVE' AND `event_publish_from` <= NOW() AND `event_publish_to` >= NOW() AND ".
+                "`event_date_from` >= NOW() ORDER BY `event_date_from` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+            $events = array();
+            foreach ($results as $result) {
+                if (false !== ($event = $this->selectEvent($result['event_id']))) {
+                    $events[] = $event;
+                }
+            }
+            return (!empty($events)) ? $events : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }
