@@ -23,7 +23,6 @@
   {{ parent() }}
   <link rel="stylesheet" type="text/css" href="{{ LIBRARY_URL }}/jquery/ui/1.10.3/themes/smoothness/jquery-ui.min.css" />
   <link rel="stylesheet" type="text/css" href="{{ LIBRARY_URL }}/jquery/ui/1.10.3/themes/smoothness/jquery.ui.theme.css" />
-  <link rel="stylesheet" type="text/css" href="{{ LIBRARY_URL }}/jquery/timepicker/1.4.3/jquery-ui-timepicker-addon.min.css" />
   {% if fileExists(MANUFAKTUR_PATH ~ '/Event/Template/' ~ FRAMEWORK_TEMPLATES.0 ~ '/css/admin.min.css') %}
     <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL ~ '/Event/Template/' ~ FRAMEWORK_TEMPLATES.0 ~ '/css/admin.min.css' }}" media="screen, projection" />
   {% else %}
@@ -37,19 +36,38 @@
   <div class="container">
     {% include '@phpManufaktur/Event/Template/default/admin/toolbar.twig' %}
     
-    <h1>{{ 'Daily recurring'|trans }}</h1>
+    <h1>{{ header|trans }}</h1>
     
     {{ alert }}
     
     {% form_theme form '@phpManufaktur/Event/Template/default/admin/form.fields.horizontal.twig' %}
     
-    <form action="{{ FRAMEWORK_URL ~ '/admin/event/recurring/check/day/type?usage=' ~ usage }}" role="form" method="post">
+    <form action="{{ action }}" role="form" method="post">
       {{ form_widget(form) }}
       <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">
-          <input type="submit" class="btn btn-default form-control" value="{{ 'Submit'|trans }}" />
+          <div class="height-15"></div>
+          <input type="submit" class="btn btn-default form-control" value="{{ 'Submit'|trans }}" />&nbsp;
+          <a href="{{ abort }}" class="btn btn-default" role="button">{{ 'Cancel'|trans }}</a>
         </div>
       </div>
     </form>
   </div>
 {% endblock content %}
+  
+{% block footer_jquery %}
+  {{ parent() }}
+  <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/ui/1.10.3/ui/minified/jquery-ui.min.js"></script>    
+  <script type="text/javascript" src="{{ LIBRARY_URL }}/jquery/ui/1.10.3/ui/minified/i18n/jquery-ui-i18n.min.js"></script>  
+{% endblock footer_jquery %}
+  
+{% block footer %}
+  {{ parent() }}
+  <script type="text/javascript">
+    if (typeof 'jQuery' !== 'undefined') {
+      $(document).ready(function() {
+        $('#form_recurring_date_end').datepicker($.datepicker.regional['{{ app.translator.locale }}']);
+      });
+    }
+  </script>
+{% endblock footer %}  

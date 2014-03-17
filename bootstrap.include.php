@@ -238,6 +238,21 @@ $app->post('/admin/event/recurring/check/day/sequence',
     'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckDaySequence');
 $app->post('/admin/event/recurring/check/week/sequence',
     'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckWeekSequence');
+$app->post('/admin/event/recurring/check/month/type',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckMonthType');
+$app->post('/admin/event/recurring/check/month/sequence',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckMonthSequence');
+$app->post('/admin/event/recurring/check/month/pattern',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckMonthPattern');
+$app->post('/admin/event/recurring/check/year/type',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckYearType');
+$app->post('/admin/event/recurring/check/year/sequence',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckYearSequence');
+$app->post('/admin/event/recurring/check/year/pattern',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckYearPattern');
+$app->post('/admin/event/recurring/check/date/end',
+    'phpManufaktur\Event\Control\Backend\RecurringEvent::ControllerCheckRecurringDateEnd');
+
 
 $app->match('/admin/event/list',
     // Show the Event List

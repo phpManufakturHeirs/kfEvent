@@ -17,8 +17,13 @@
   {{ block('form_row_simple') }}
 {% endblock %}
 
+{% block number_row %}
+  {% set type = 'number' %}
+  {{ block('form_row_simple') }}
+{% endblock %}
+
 {% block integer_row %}
-  {% set type = 'integer' %}
+  {% set type = 'number' %}
   {{ block('form_row_simple') }}
 {% endblock %}
 
@@ -39,7 +44,7 @@
   {% endif %}
   <div class="form-group">
     {{ block('form_label') }}
-    <div class="col-sm-8">
+    <div class="col-sm-9">
       {% if attr.prefix is defined %}
         <span class="prefix-block">{{ attr.prefix|trans }}</span>
       {% endif %}

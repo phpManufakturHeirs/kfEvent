@@ -40,13 +40,31 @@ return array(
         => 'Titel hinzufügen',
     'Admin Status'
         => 'Administrator Status',
+    'At day x of month'
+        => 'Jeden x. Tag des Monat',
+    'At day x of month must be greater than zero and less than 28.'
+        => 'Der Wert für Ausführen am x. Tag des Monats muss größer als Null und kleiner als 28 sein.',
     'At least we need one communication channel, so please tell us a email address, phone or a URL'
         => 'Wir benötigen mindestens einen Kommunikationsweg, bitte nennen Sie uns eine E-Mail Adresse, Telefonummer oder die URL der Homepage.',
+    'At month'
+        => 'Im Monat',
+    'At the first'
+        => 'Am ersten',
+    'At the fourth'
+        => 'Am vierten',
+    'At the last'
+        => 'Am letzten',
     'At the moment there are no proposed events'
         => 'Momentan liegen keine Veranstaltungsvorschläge vor.',
     'At the moment there are no subscriptions for your events'
         => 'Momentan liegen keine Anmeldungen zu Ihren Veranstaltungen vor.',
+    'At the second'
+        => 'Am zweiten',
+    'At the third'
+        => 'Am dritten',
 
+    ' but not at %dates%.'
+        => ', jedoch nicht am %dates%.',
     'by copying from a existing event'
         => 'durch Kopieren einer existierenden Veranstaltung',
     'by selecting a event group'
@@ -115,6 +133,8 @@ return array(
         => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
     'Do not publish the event'
         => 'Veranstaltung nicht veröffentlichen',
+    "Don't know how to handle the month type %type%"
+        => 'Unbekannter Monatstyp %type%',
 
     'Edit event'
         => 'Veranstaltung bearbeiten',
@@ -175,6 +195,8 @@ return array(
         => 'Die Veranstaltung wurde aktualisiert',
     'Event url'
         => 'Veranstaltungs URL',
+    'Exclude dates'
+        => 'Daten ausschließen',
 
     'Field name'
         => 'Bezeichner',
@@ -182,8 +204,12 @@ return array(
         => 'Bezeichner (übersetzt)',
     'Field type'
         => 'Feld Typ',
+    'first'
+        => 'ersten',
     'Float'
         => 'Dezimalzahl',
+    'fourth'
+        => 'vierten',
     'free of charge'
         => 'kostenlos',
 
@@ -222,6 +248,8 @@ return array(
     'It is not allowed that the event start in the past!'
         => 'Der Veranstaltungsbeginn darf nicht in der Vergangenheit liegen!',
 
+    'last'
+        => 'letzten',
     'List of actual submitted proposes for events'
         => 'Übersicht über die aktuellen Vorschläge zu Veranstaltungen',
     'List of all active events'
@@ -232,6 +260,8 @@ return array(
         => 'Übersicht über alle verfügbaren Veranstaltungsgruppen',
     'List of all registrations for events'
         => 'Übersicht über alle Anmeldungen zu Veranstaltungen',
+    'List single dates in format <b>%format%</b> separated by comma to exclude them from recurring'
+        => 'Schließen Sie einzelne Daten im Format <b>%format%</b> durch ein Komma getrennt von der Sequenz aus.',
     'Location'
         => 'Veranstaltungsort',
     'Location ID'
@@ -284,6 +314,8 @@ return array(
         => 'Bitte suchen Sie nach einem Veranstaltungsort oder haken Sie die Checkbox an um einen neuen Veranstaltungsort anzulegen.',
     'Please search for the event you want to copy data from.'
         => 'Bitte suchen Sie nach der Veranstaltung, die Sie kopieren möchten.',
+    'Please select at least one weekday!'
+        => 'Bitte wählen Sie mindestens einen Wochentag aus!',
     'Please select at minimum one tag for the %type%.'
         => 'Bitte legen Sie mindestens eine Markierung für %type% fest!',
     'Please select the event you want to copy into a new one'
@@ -333,6 +365,8 @@ return array(
 
     'Received request'
         => 'Anfrage erhalten',
+    'Recurring date end'
+        => 'Letzte Wiederholung',
     'Recurring event'
         => 'Serientermin',
     'Registrations'
@@ -345,6 +379,12 @@ return array(
         => 'Veranstaltung ablehnen',
     'Repeat each x-days'
         => 'Alle x-Tage wiederholen',
+    'Repeat each x-month'
+        => 'Wiederhole jeden x. Monat',
+    'Repeat each x-year'
+        => 'Wiederhole jedes x. Jahr',
+    'Repeat x-month must be greater than zero and less then 13.'
+        => 'Der Wert für Wiederhole jeden x. Monat muß größer als Null und kleiner als 13 sein.',
     'Repeat each x-weeks'
         => 'Alle x-Wochen wiederholen',
     'Repeat at workdays'
@@ -362,6 +402,8 @@ return array(
         => 'Veranstaltungsort suchen',
     'Search Organizer'
         => 'Veranstalter suchen',
+    'second'
+        => 'zweiten',
     'Select account type'
         => 'Kontotyp wählen',
     'Select event group'
@@ -415,6 +457,20 @@ return array(
         => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
     'The email address %email% is not registered. We can only create a account for you if there was already a interaction, i.e. you have proposed a event. If you represent an organizer or a location and your public email address is not registered, please contact the administrator.'
         => 'Die E-Mail Adresse %email% ist nicht registriert. Wir können nur dann ein Benutzerkonto für Sie anlegen, wenn bereits eine Interaktion stattgefunden hat und Sie z.B. eine Veranstaltung vorgeschlagen haben. Falls Sie einen Veranstalter oder einen Veranstaltungsort vertreten und Ihre öffentliche E-Mail Adresse nicht registriert ist, wenden Sie sich bitte an den Administrator.',
+    'The event [%event_id%] will be repeated at %pattern_type% %pattern_day% of each %pattern_sequence%. month%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird am %pattern_type% %pattern_day% jedes %pattern_sequence%. Monat wiederholt%exclude%',
+    'The event [%event_id%] will be repeated at each workday%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird an jedem Werktag wiederholt%exclude%',
+    'The event [%event_id%] will be repeated at the %month_day%. day of each %month_sequence%. month%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird am %month_day%. Tag jedes %month_sequence%. Monat wiederholt%exclude%',
+    'The event [%event_id%] will be repeated each %day_sequence% day(s)%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird jeden %day_sequence%. Tag wiederholt%exclude%',
+    'The event [%event_id%] will be repeated each %week_sequence% week(s) at %week_days%%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird jede %week_sequence%. Woche an den Tagen %week_days% wiederholt%exclude%',
+    'The event [%event_id%] will be repeated each %year_repeat%. year at %month_day%. %month_name%%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird jedes %year_repeat%. Jahr am %month_day%. %month_name% wiederholt%exclude%',
+    'The event [%event_id%] will be repeated each %year_repeat%. year at %pattern_type% %pattern_day% of %pattern_month%%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird jedes %year_repeat%. Jahr am %pattern_type% %pattern_day% im %pattern_month% wiederholt%exclude%',
     'The event group with the name %group% does not exists!'
         => 'Die Veranstaltungs-Gruppe %group% existiert nicht!',
     'The event list is empty, please create a event!'
@@ -447,6 +503,8 @@ return array(
         => 'Der Datensatz mit der ID %id% wurde erfolgreich eingefügt.',
     'The record with the ID %id% was successfull updated.'
         => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
+    'The repeat each x-year sequence must be greater than zero and less than 10!'
+        => 'Der Wert für die jährliche Wiederholung muss größer als Null und kleiner als 10 sein!',
     'The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.'
         => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
     'The submitted GUID %guid% does not exists.'
@@ -471,6 +529,8 @@ return array(
         => 'Es wurde kein Veranstaltungsort gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
     'There exists no organizer who fits to the search term %search%'
         => 'Es wurde kein Veranstalter gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
+    'third'
+        => 'dritten',
     'This activation link was already used and is no longer valid!'
         => 'Dieser Aktivierungslink wurde bereits verwendet und ist nicht mehr gültig!',
     'This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!'

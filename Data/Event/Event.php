@@ -144,6 +144,7 @@ EOD;
             'event_participants_max' => -1,
             'event_deadline' => '0000-00-00 00:00:00',
             'event_status' => 'ACTIVE',
+            'event_recurring_id' => -1,
             'event_timestamp' => '0000-00-00 00:00:00'
         );
     }
@@ -621,4 +622,23 @@ EOD;
         }
     }
 
+    /**
+     * Set the status of all recurring events of parent event ID to DELETED and
+     * remove the recurring ID from the parent event ID record
+     *
+     * @param integer $parent_event_id
+     * @param integer $recurring_id
+     * @throws \Exception
+     */
+    public function deleteRecurringEventsOfParent($parent_event_id, $recurring_id)
+    {
+        try {
+            $SQL = "UPDATE `".self::$table_name."` SET `event_status`='DELETED' WHERE `event_recurring_id`=$recurring_id AND `event_id` != $parent_event_id";
+            $this->app['db']->query($SQL);
+            $SQL = "UPDATE `".self::$table_name."` SET `event_recurring_id`=-1 WHERE `event_id`=$parent_event_id";
+            $this->app['db']->query($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }

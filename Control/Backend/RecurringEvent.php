@@ -16,17 +16,39 @@ use Silex\Application;
 use phpManufaktur\Event\Data\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Event\Data\Event\RecurringEvent as RecurringEventData;
+use Carbon\Carbon;
+use phpManufaktur\Event\Control\Configuration;
 
 class RecurringEvent extends Backend {
 
     protected $EventData = null;
+    protected $RecurringData = null;
+    protected static $config = null;
 
+    protected static $recurring_id = null;
     protected static $event_id = null;
+    protected static $parent_event_id = null;
     protected static $recurring_type = null;
     protected static $day_type = null;
     protected static $day_sequence = null;
     protected static $week_sequence = null;
-    protected static $week_days = null;
+    protected static $week_day = null;
+    protected static $month_type = null;
+    protected static $month_sequence_day = null;
+    protected static $month_sequence_month = null;
+    protected static $month_pattern_type = null;
+    protected static $month_pattern_day = null;
+    protected static $month_pattern_sequence = null;
+    protected static $year_type = null;
+    protected static $year_repeat = null;
+    protected static $year_sequence_day = null;
+    protected static $year_sequence_month = null;
+    protected static $year_pattern_type = null;
+    protected static $year_pattern_day = null;
+    protected static $year_pattern_month = null;
+    protected static $recurring_date_end = null;
+    protected static $exclude_dates = null;
 
     /**
      * (non-PHPdoc)
@@ -37,7 +59,10 @@ class RecurringEvent extends Backend {
         parent::initialize($app);
 
         $this->EventData = new Event($app);
+        $this->RecurringData = new RecurringEventData($app);
 
+        $Configuration = new Configuration($app);
+        self::$config = $Configuration->getConfiguration();
     }
 
     /**
@@ -47,8 +72,14 @@ class RecurringEvent extends Backend {
     protected function getSelectTypeFormFields()
     {
         return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
         ->add('event_id', 'hidden', array(
             'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
         ))
         ->add('recurring_type', 'choice', array(
             'choices' => array(
@@ -61,7 +92,7 @@ class RecurringEvent extends Backend {
             'expanded' => true,
             'required' => true,
             'label' => 'Select type',
-            'data' => 'NONE'
+            'data' => !is_null(self::$recurring_type) ? self::$recurring_type : 'NONE'
         ));
     }
 
@@ -71,8 +102,14 @@ class RecurringEvent extends Backend {
     protected function getSelectDayTypeFormFields()
     {
         return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
         ->add('event_id', 'hidden', array(
             'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
         ))
         ->add('recurring_type', 'hidden', array(
             'data' => self::$recurring_type
@@ -85,7 +122,7 @@ class RecurringEvent extends Backend {
             'expanded' => true,
             'required' => true,
             'label' => 'Select type',
-            'data' => 'DAILY'
+            'data' => !is_null(self::$day_type) ? self::$day_type : 'DAILY'
         ));
     }
 
@@ -95,8 +132,14 @@ class RecurringEvent extends Backend {
     protected function getSelectDaySequenceFormFields()
     {
         return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
         ->add('event_id', 'hidden', array(
             'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
         ))
         ->add('recurring_type', 'hidden', array(
             'data' => self::$recurring_type
@@ -104,9 +147,14 @@ class RecurringEvent extends Backend {
         ->add('day_type', 'hidden', array(
             'data' => self::$day_type
         ))
-        ->add('day_sequence', 'text', array(
+        ->add('day_sequence', 'number', array(
             'label' => 'Repeat each x-days',
-            'required' => true
+            'required' => true,
+            'attr' => array(
+                'min' => 1,
+                'max' => 31
+            ),
+            'data' => self::$day_sequence
         ));
     }
 
@@ -115,18 +163,30 @@ class RecurringEvent extends Backend {
      */
     protected function getSelectWeekSequenceFormFields()
     {
+
         return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
         ->add('event_id', 'hidden', array(
             'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
         ))
         ->add('recurring_type', 'hidden', array(
             'data' => self::$recurring_type
         ))
-        ->add('week_sequence', 'text', array(
+        ->add('week_sequence', 'integer', array(
             'label' => 'Repeat each x-weeks',
-            'required' => true
+            'required' => true,
+            'data' => !is_null(self::$week_sequence) ? self::$week_sequence : 1,
+            'attr' => array(
+                'min' => 1,
+                'max' => 52
+            )
         ))
-        ->add('week_days', 'choice', array(
+        ->add('week_day_view', 'choice', array(
             'choices' => array(
                 'MONDAY' => 'Monday',
                 'TUESDAY' => 'Tuesday',
@@ -136,11 +196,439 @@ class RecurringEvent extends Backend {
                 'SATURDAY' => 'Saturday',
                 'SUNDAY' => 'Sunday'
             ),
-            'expanded' => true,
-            'multiple' => true,
+            'expanded' => false,
+            'multiple' => false,
             'required' => true,
-            'label' => 'Weekdays',
-            'data' => null
+            'label' => 'Weekday',
+            'data' => !is_null(self::$week_day) ? self::$week_day : 'MONDAY',
+            'disabled' => true
+        ))
+        ->add('week_day', 'hidden', array(
+            'data' => !is_null(self::$week_day) ? self::$week_day : 'MONDAY'
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields to select the monthly type
+     *
+     */
+    protected function getSelectMonthTypeFormFields()
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('month_type', 'choice', array(
+            'choices' => array(
+                'SEQUENCE' => 'Repeat sequently at day x of month',
+                'PATTERN' => 'Repeat by pattern, i.e. at the last tuesday of the month',
+            ),
+            'expanded' => true,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'Select type',
+            'data' => !is_null(self::$month_type) ? self::$month_type : 'SEQUENCE'
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields to select a monthly sequence
+     */
+    protected function getSelectMonthSequenceFormFields()
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('month_type', 'hidden', array(
+            'data' => self::$month_type
+        ))
+        ->add('month_sequence_day', 'hidden', array(
+            'data' => !is_null(self::$month_sequence_day) ? self::$month_sequence_day : 1
+        ))
+        ->add('month_sequence_day_view', 'integer', array(
+            'label' => 'At day x of month',
+            'required' => true,
+            'data' => !is_null(self::$month_sequence_day) ? self::$month_sequence_day : 1,
+            'attr' => array(
+                'min' => 1,
+                'max' => 31
+            ),
+            'disabled' => true
+        ))
+        ->add('month_sequence_month', 'integer', array(
+            'label' => 'Repeat each x-month',
+            'required' => true,
+            'data' => !is_null(self::$month_sequence_month) ? self::$month_sequence_month : 1,
+            'attr' => array(
+                'min' => 1,
+                'max' => 12
+            )
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields to select a monthly PATTERN
+     */
+    protected function getSelectMonthPatternFormFields()
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('month_type', 'hidden', array(
+            'data' => self::$month_type
+        ))
+        ->add('month_pattern_type', 'choice', array(
+            'choices' => array(
+                'FIRST' => 'At the first',
+                'SECOND' => 'At the second',
+                'THIRD' => 'At the third',
+                'FOURTH' => 'At the fourth',
+                'LAST' => 'At the last'
+            ),
+            'empty_value' => '- please select -',
+            'expanded' => false,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'Select pattern',
+            'data' => !is_null(self::$month_pattern_type) ? self::$month_pattern_type : 'FIRST',
+            'required' => true
+        ))
+        ->add('month_pattern_day', 'hidden', array(
+            'data' => !is_null(self::$month_pattern_day) ? self::$month_pattern_day : 'MONDAY'
+        ))
+        ->add('month_pattern_day_view', 'choice', array(
+            'choices' => array(
+                'MONDAY' => 'Monday',
+                'TUESDAY' => 'Tuesday',
+                'WEDNESDAY' => 'Wednesday',
+                'THURSDAY' => 'Thursday',
+                'FRIDAY' => 'Friday',
+                'SATURDAY' => 'Saturday',
+                'SUNDAY' => 'Sunday'
+            ),
+            'empty_value' => '- please select -',
+            'expanded' => false,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'Select day',
+            'data' => !is_null(self::$month_pattern_day) ? self::$month_pattern_day : 'MONDAY',
+            'required' => true,
+            'disabled' => true
+        ))
+        ->add('month_pattern_sequence', 'integer', array(
+            'required' => true,
+            'label' => 'Repeat each x-month',
+            'data' => !is_null(self::$month_pattern_sequence) ? self::$month_pattern_sequence : 2,
+            'attr' => array(
+                'min' => 1,
+                'max' => 11
+            )
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields for the YEAR TYPE
+     */
+    protected function getSelectYearTypeFormFields()
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('year_type', 'choice', array(
+            'choices' => array(
+                'SEQUENCE' => 'Repeat sequently at day x of month',
+                'PATTERN' => 'Repeat by pattern, i.e. at the last tuesday of the month',
+            ),
+            'expanded' => true,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'Select type',
+            'data' => !is_null(self::$year_type) ? self::$year_type : 'SEQUENCE'
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields for the YEAR SEQUENCE
+     */
+    protected function getSelectYearSequenceFormFields()
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('year_type', 'hidden', array(
+            'data' => self::$year_type
+        ))
+        ->add('year_repeat', 'integer', array(
+            'required' => true,
+            'label' => 'Repeat each x-year',
+            'data' => !is_null(self::$year_repeat) ? self::$year_repeat : 1,
+            'attr' => array(
+                'min' => 1,
+                'max' => 10
+            )
+        ))
+        ->add('year_sequence_day', 'integer', array(
+            'required' => true,
+            'label' => 'At day x of month',
+            'data' => !is_null(self::$year_sequence_day) ? self::$year_sequence_day : 1,
+            'attr' => array(
+                'min' => 1,
+                'max' => 31
+            )
+        ))
+        ->add('year_sequence_month', 'choice', array(
+            'choices' => array(
+                'JANUARY' => 'January',
+                'FEBRUARY' => 'February',
+                'MARCH' => 'March',
+                'APRIL' => 'April',
+                'MAY' => 'May',
+                'JUNE' => 'June',
+                'JULY' => 'July',
+                'AUGUST' => 'August',
+                'SEPTEMBER' => 'September',
+                'OCTOBER' => 'October',
+                'NOVEMBER' => 'November',
+                'DECEMBER' => 'December'
+            ),
+            'empty_value' => '- please select -',
+            'expanded' => false,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'At month',
+            'data' => !is_null(self::$year_sequence_month) ? self::$year_sequence_month : 'JANUARY'
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields for the YEAR PATTERN
+     */
+    protected function getSelectYearPatternFormFields()
+    {
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('year_type', 'hidden', array(
+            'data' => self::$year_type
+        ))
+        ->add('year_repeat', 'number', array(
+            'required' => true,
+            'label' => 'Repeat each x-year',
+            'data' => !is_null(self::$year_repeat) ? self::$year_repeat : 1,
+            'attr' => array(
+                'min' => 1,
+                'max' => 10
+            )
+        ))
+        ->add('year_pattern_type', 'choice', array(
+            'choices' => array(
+                'FIRST' => 'At the first',
+                'SECOND' => 'At the second',
+                'THIRD' => 'At the third',
+                'FOURTH' => 'At the fourth',
+                'LAST' => 'At the last'
+            ),
+            'empty_value' => '- please select -',
+            'expanded' => false,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'Select pattern',
+            'data' => !is_null(self::$year_pattern_type) ? self::$year_pattern_type : 'FIRST',
+            'required' => true
+        ))
+        ->add('year_pattern_day', 'choice', array(
+            'choices' => array(
+                'MONDAY' => 'Monday',
+                'TUESDAY' => 'Tuesday',
+                'WEDNESDAY' => 'Wednesday',
+                'THURSDAY' => 'Thursday',
+                'FRIDAY' => 'Friday',
+                'SATURDAY' => 'Saturday',
+                'SUNDAY' => 'Sunday'
+            ),
+            'empty_value' => '- please select -',
+            'expanded' => false,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'Select day',
+            'data' => !is_null(self::$year_pattern_day) ? self::$year_pattern_day : 'MONDAY',
+            'required' => true
+        ))
+        ->add('year_pattern_month', 'choice', array(
+            'choices' => array(
+                'JANUARY' => 'January',
+                'FEBRUARY' => 'February',
+                'MARCH' => 'March',
+                'APRIL' => 'April',
+                'MAY' => 'May',
+                'JUNE' => 'June',
+                'JULY' => 'July',
+                'AUGUST' => 'August',
+                'SEPTEMBER' => 'September',
+                'OCTOBER' => 'October',
+                'NOVEMBER' => 'November',
+                'DECEMBER' => 'December'
+            ),
+            'empty_value' => '- please select -',
+            'expanded' => false,
+            'multiple' => false,
+            'required' => true,
+            'label' => 'At month',
+            'data' => !is_null(self::$year_pattern_month) ? self::$year_pattern_month : 'JANUARY'
+        ))
+        ;
+    }
+
+    /**
+     * Get the form fields to FINISH the RECURRING
+     *
+     */
+    protected function getSelectRecurringDateEndFormFields()
+    {
+
+        return $this->app['form.factory']->createBuilder('form')
+        ->add('recurring_id', 'hidden', array(
+            'data' => self::$recurring_id
+        ))
+        ->add('event_id', 'hidden', array(
+            'data' => self::$event_id
+        ))
+        ->add('parent_event_id', 'hidden', array(
+            'data' => self::$parent_event_id
+        ))
+        ->add('recurring_type', 'hidden', array(
+            'data' => self::$recurring_type
+        ))
+        ->add('day_type', 'hidden', array(
+            'data' => self::$day_type
+        ))
+        ->add('day_sequence', 'hidden', array(
+            'data' => self::$day_sequence
+        ))
+        ->add('week_sequence', 'hidden', array(
+            'data' => self::$week_sequence
+        ))
+        ->add('week_day', 'hidden', array(
+            'data' => self::$week_day
+        ))
+        ->add('month_type', 'hidden', array(
+            'data' => self::$month_type
+        ))
+        ->add('month_sequence_day', 'hidden', array(
+            'data' => self::$month_sequence_day
+        ))
+        ->add('month_sequence_month', 'hidden', array(
+            'data' => self::$month_sequence_month
+        ))
+        ->add('month_pattern_type', 'hidden', array(
+            'data' => self::$month_pattern_type
+        ))
+        ->add('month_pattern_day', 'hidden', array(
+            'data' => self::$month_pattern_day
+        ))
+        ->add('month_pattern_sequence', 'hidden', array(
+            'data' => self::$month_pattern_sequence
+        ))
+        ->add('year_repeat', 'hidden', array(
+            'data' => self::$year_repeat
+        ))
+        ->add('year_type', 'hidden', array(
+            'data' => self::$year_type
+        ))
+        ->add('year_sequence_day', 'hidden', array(
+            'data' => self::$year_sequence_day
+        ))
+        ->add('year_sequence_month', 'hidden', array(
+            'data' => self::$year_sequence_month
+        ))
+        ->add('year_pattern_type', 'hidden', array(
+            'data' => self::$year_pattern_type
+        ))
+        ->add('year_pattern_day', 'hidden', array(
+            'data' => self::$year_pattern_day
+        ))
+        ->add('year_pattern_month', 'hidden', array(
+            'data' => self::$year_pattern_month
+        ))
+        ->add('recurring_date_end', 'text', array(
+            'label' => 'Recurring date end',
+            'required' => true,
+            'data' => self::$recurring_date_end
+        ))
+        ->add('exclude_dates', 'textarea', array(
+            'label' => 'Exclude dates',
+            'required' => false,
+            'data' => self::$exclude_dates,
+            'attr' => array(
+                'help' => $this->app['translator']->trans(
+                    'List single dates in format <b>%format%</b> separated by comma to exclude them from recurring',
+                    array('%format%' => $this->app['translator']->trans('DATE_FORMAT')))
+            )
         ))
         ;
     }
@@ -152,16 +640,23 @@ class RecurringEvent extends Backend {
      */
     protected function selectDayType()
     {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$day_type = $recurring['day_type'];
+        }
+
         $fields = $this->getSelectDayTypeFormFields();
         $form = $fields->getForm();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'admin/recurring/day.type.twig'),
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
             array(
                 'usage' => self::$usage,
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'header' => 'Daily recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/day/type?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
     }
 
@@ -170,16 +665,23 @@ class RecurringEvent extends Backend {
      */
     protected function selectDaySequence()
     {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$day_sequence = $recurring['day_sequence'];
+        }
+
         $fields = $this->getSelectDaySequenceFormFields();
         $form = $fields->getForm();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'admin/recurring/day.sequence.twig'),
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
             array(
                 'usage' => self::$usage,
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'header' => 'Daily recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/day/sequence?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
     }
 
@@ -199,7 +701,9 @@ class RecurringEvent extends Backend {
 
         if ($form->isValid()) {
             $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
             self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
             self::$recurring_type = $data['recurring_type'];
             self::$day_type = $data['day_type'];
 
@@ -237,7 +741,9 @@ class RecurringEvent extends Backend {
 
         if ($form->isValid()) {
             $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
             self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
             self::$recurring_type = $data['recurring_type'];
             self::$day_type = $data['day_type'];
             self::$day_sequence = (int) $data['day_sequence'];
@@ -261,16 +767,38 @@ class RecurringEvent extends Backend {
      */
     protected function selectWeekSequence()
     {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$week_sequence = $recurring['week_sequence'];
+            self::$week_day = $recurring['week_day'];
+        }
+        else {
+            // get the weekday from the parent event
+            $event = $this->EventData->selectEvent(self::$parent_event_id);
+            $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+            switch ($day->day) {
+                case 0: self::$week_day = 'SUNDAY'; break;
+                case 1: self::$week_day = 'MONDAY'; break;
+                case 2: self::$week_day = 'TUESDAY'; break;
+                case 3: self::$week_day = 'WEDNESDAY'; break;
+                case 4: self::$week_day = 'THURSDAY'; break;
+                case 5: self::$week_day = 'FRIDAY'; break;
+                case 6: self::$week_day = 'SATURDAY'; break;
+            }
+        }
+
         $fields = $this->getSelectWeekSequenceFormFields();
         $form = $fields->getForm();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'admin/recurring/week.sequence.twig'),
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
             array(
                 'usage' => self::$usage,
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'header' => 'Weekly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/week/sequence?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
     }
 
@@ -290,15 +818,22 @@ class RecurringEvent extends Backend {
 
         if ($form->isValid()) {
             $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
             self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
             self::$recurring_type = $data['recurring_type'];
             self::$week_sequence = (int) $data['week_sequence'];
+            self::$week_day = $data['week_day'];
             if (self::$week_sequence < 1) {
                 $this->setAlert('The weekly sequence must be greater than zero!', array(), self::ALERT_TYPE_WARNING);
                 return $this->selectWeekSequence();
             }
-            // now select the week days
-            return $this->selectWeekDays();
+            if (empty(self::$week_day)) {
+                $this->setAlert('Please select at least one weekday!', array(), self::ALERT_TYPE_WARNING);
+                return $this->selectWeekSequence();
+            }
+            // save the recurring event
+            return $this->selectRecurringDateEnd();
         }
         else {
             // general error (timeout, CSFR ...)
@@ -309,23 +844,436 @@ class RecurringEvent extends Backend {
     }
 
     /**
-     * Select the Week Days
+     * Select the month type
+     *
+     */
+    protected function selectMonthType()
+    {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$month_type = $recurring['month_type'];
+        }
+
+        $fields = $this->getSelectMonthTypeFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Monthly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/month/type?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
+            ));
+    }
+
+    /**
+     * Select the monthly sequence
+     */
+    protected function selectMonthSequence()
+    {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$month_sequence_day = $recurring['month_sequence_day'];
+            self::$month_sequence_month = $recurring['month_sequence_month'];
+        }
+        else {
+            $event = $this->EventData->selectEvent(self::$parent_event_id);
+            $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+            self::$month_sequence_day = $day->day;
+        }
+
+        $fields = $this->getSelectMonthSequenceFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Monthly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/month/sequence?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
+            ));
+    }
+
+    /**
+     * Select a PATTERN for the month
+     */
+    protected function selectMonthPattern()
+    {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$month_pattern_day = $recurring['month_pattern_day'];
+            self::$month_pattern_sequence = $recurring['month_pattern_sequence'];
+            self::$month_pattern_type = $recurring['month_pattern_type'];
+        }
+        else {
+            $event = $this->EventData->selectEvent(self::$parent_event_id);
+            $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+            switch ($day->dayOfWeek) {
+                case 0: self::$month_pattern_day = 'SUNDAY'; break;
+                case 1: self::$month_pattern_day = 'MONDAY'; break;
+                case 2: self::$month_pattern_day = 'TUESDAY'; break;
+                case 3: self::$month_pattern_day = 'WEDNESDAY'; break;
+                case 4: self::$month_pattern_day = 'THURSDAY'; break;
+                case 5: self::$month_pattern_day = 'FRIDAY'; break;
+                case 6: self::$month_pattern_day = 'SATURDAY'; break;
+            }
+        }
+
+        $fields = $this->getSelectMonthPatternFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Monthly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/month/pattern?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
+            ));
+    }
+
+    /**
+     * Controller to check the monthly PATTERN
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerCheckMonthPattern(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSelectMonthPatternFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+            self::$recurring_type = $data['recurring_type'];
+            self::$month_type = $data['month_type'];
+            self::$month_pattern_type = $data['month_pattern_type'];
+            self::$month_pattern_day = $data['month_pattern_day'];
+            self::$month_pattern_sequence = (int) $data['month_pattern_sequence'];
+
+            if ((self::$month_pattern_sequence < 1) || (self::$month_pattern_sequence > 12)) {
+                $this->setAlert('Repeat x-month must be greater than zero and less then 13.',
+                    array(), self::ALERT_TYPE_WARNING);
+                return $this->selectMonthPattern();
+            }
+            // save the recurring event
+            return $this->selectRecurringDateEnd();
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectMonthPattern();
+        }
+    }
+
+    /**
+     * Controller to check the monthly SEQUENCE
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerCheckMonthSequence(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSelectMonthSequenceFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+            self::$recurring_type = $data['recurring_type'];
+            self::$month_type = $data['month_type'];
+            self::$month_sequence_day = (int) $data['month_sequence_day'];
+            self::$month_sequence_month = (int) $data['month_sequence_month'];
+
+            if ((self::$month_sequence_day < 1) || (self::$month_sequence_day > 28)) {
+                $this->setAlert('At day x of month must be greater than zero and less than 28.',
+                    array(), self::ALERT_TYPE_WARNING);
+                return $this->selectMonthSequence();
+            }
+
+            if ((self::$month_sequence_month < 1) || (self::$month_sequence_month > 12)) {
+                $this->setAlert('Repeat x-month must be greater than zero and less then 13.',
+                    array(), self::ALERT_TYPE_WARNING);
+                return $this->selectMonthSequence();
+            }
+            // save the recurring event
+            return $this->selectRecurringDateEnd();
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectMonthSequence();
+        }
+    }
+
+    /**
+     * Controller to check the Month TYPE
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerCheckMonthType(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSelectMonthTypeFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+            self::$recurring_type = $data['recurring_type'];
+            self::$month_type = $data['month_type'];
+
+            switch (self::$month_type) {
+                case 'SEQUENCE':
+                    return $this->selectMonthSequence();
+                case 'PATTERN':
+                    return $this->selectMonthPattern();
+                default:
+                    $this->setAlert("Don't know how to handle the month type %type%",
+                        array('%type%' => self::$month_type), self::ALERT_TYPE_DANGER);
+                    return $this->selectMonthType();
+            }
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectMonthType();
+        }
+    }
+
+    /**
+     * Select the type for the yearly recurring
+     *
+     */
+    protected function selectYearType()
+    {
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$year_type = $recurring['year_type'];
+        }
+
+        $fields = $this->getSelectYearTypeFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Yearly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/year/type?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
+            ));
+    }
+
+    /**
+     * Controller to check the YEAR TYPE
+     *
+     * @param Application $app
+     */
+    public function ControllerCheckYearType(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSelectYearTypeFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+            self::$recurring_type = $data['recurring_type'];
+            self::$year_type = $data['year_type'];
+            switch (self::$year_type) {
+                case 'SEQUENCE':
+                    return $this->selectYearSequence();
+                case 'PATTERN':
+                    return $this->selectYearPattern();
+                default:
+                    $this->setAlert("Don't know how to handle the year type %type%",
+                        array('%type%' => self::$year_type), self::ALERT_TYPE_DANGER);
+                    return $this->selectYearType();
+            }
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectYearType();
+        }
+    }
+
+    /**
+     * Select the YEAR SEQUENCE
      *
      * @return string
      */
-    protected function selectWeekDays()
+    protected function selectYearSequence()
     {
-        return __METHOD__;
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$year_repeat = $recurring['year_repeat'];
+            self::$year_sequence_day = $recurring['year_sequence_day'];
+            self::$year_sequence_month = $recurring['year_sequence_month'];
+        }
+
+        $fields = $this->getSelectYearSequenceFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Yearly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/year/sequence?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
+            ));
     }
 
-    protected function selectMonthType()
+    /**
+     * Controller to check the YEAR SEQUENCE
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerCheckYearSequence(Application $app)
     {
-        return __METHOD__;
+        $this->initialize($app);
+
+        $fields = $this->getSelectYearSequenceFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+            self::$recurring_type = $data['recurring_type'];
+            self::$year_type = $data['year_type'];
+            self::$year_sequence_day = $data['year_sequence_day'];
+            self::$year_sequence_month = $data['year_sequence_month'];
+            self::$year_repeat = $data['year_repeat'];
+
+            if ((self::$year_repeat < 1) || (self::$year_repeat > 10)) {
+                $this->setAlert('The repeat each x-year sequence must be greater than zero and less than 10!',
+                    array(), self::ALERT_TYPE_WARNING);
+                return $this->selectYearSequence();
+            }
+
+            // save the recurring event
+            return $this->selectRecurringDateEnd();
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectYearSequence();
+        }
     }
 
-    protected function selectYearType()
+    /**
+     * Select the YEAR PATTERN
+     *
+     */
+    protected function selectYearPattern()
     {
-        return __METHOD__;
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            self::$year_repeat = $recurring['year_repeat'];
+            self::$year_pattern_day = $recurring['year_pattern_day'];
+            self::$year_pattern_month = $recurring['year_pattern_month'];
+            self::$year_pattern_type = $recurring['year_pattern_type'];
+        }
+
+        $fields = $this->getSelectYearPatternFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Yearly recurring',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/year/pattern?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
+            ));
+    }
+
+    /**
+     * Controller to check the YEAR PATTERN
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerCheckYearPattern(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSelectYearPatternFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+            self::$recurring_type = $data['recurring_type'];
+            self::$year_type = $data['year_type'];
+            self::$year_pattern_day = $data['year_pattern_day'];
+            self::$year_pattern_month = $data['year_pattern_month'];
+            self::$year_pattern_type = $data['year_pattern_type'];
+            self::$year_repeat = $data['year_repeat'];
+
+            if ((self::$year_repeat < 1) || (self::$year_repeat > 10)) {
+                $this->setAlert('The repeat each x-year sequence must be greater than zero and less than 10!',
+                    array(), self::ALERT_TYPE_WARNING);
+                return $this->selectYearPattern();
+            }
+
+            // save the recurring event
+            return $this->selectRecurringDateEnd();
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectYearPattern();
+        }
     }
 
     /**
@@ -334,7 +1282,119 @@ class RecurringEvent extends Backend {
      */
     protected function selectRecurringDateEnd()
     {
-        return __METHOD__;
+        if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            $dt = Carbon::createFromFormat('Y-m-d', $recurring['recurring_date_end']);
+            self::$recurring_date_end = $dt->format($this->app['translator']->trans('DATE_FORMAT'));
+            if (!empty($recurring['exclude_dates'])) {
+                $dates = explode(',', $recurring['exclude_dates']);
+                $exclude_dates = array();
+                foreach ($dates as $date) {
+                    $dt = Carbon::createFromFormat('Y-m-d', $date);
+                    $exclude_dates[] = $dt->format($this->app['translator']->trans('DATE_FORMAT'));
+                }
+                self::$exclude_dates = implode(', ', $exclude_dates);
+            }
+        }
+
+        $fields = $this->getSelectRecurringDateEndFormFields();
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
+            array(
+                'usage' => self::$usage,
+                'alert' => $this->getAlert(),
+                'toolbar' => $this->getToolbar('event_edit'),
+                'form' => $form->createView(),
+                'header' => 'Recurring date end',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/date/end?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage,
+                'iframe_add_height' => 100
+            ));
+    }
+
+    /**
+     * This controller finish the recurring definition
+     *
+     * @param Application $app
+     * @return string
+     */
+    public function ControllerCheckRecurringDateEnd(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSelectRecurringDateEndFormFields();
+        $form = $fields->getForm();
+        $form->bind($app['request']);
+
+        if ($form->isValid()) {
+            // get all data from the form
+            $data = $form->getData();
+
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
+
+            // convert the localized date to standard
+            $dt = Carbon::createFromFormat($this->app['translator']->trans('DATE_FORMAT'), $data['recurring_date_end']);
+            $data['recurring_date_end'] = $dt->toDateString();
+
+            if (!empty($data['exclude_dates'])) {
+                if (strpos($data['exclude_dates'], ',')) {
+                    $items = explode(',', $data['exclude_dates']);
+                    $dates = array();
+                    foreach ($items as $item) {
+                        $item = str_replace(' ', '', $item);
+                        $dt = Carbon::createFromFormat($this->app['translator']->trans('DATE_FORMAT'), trim($item));
+                        if ($dt->year < 2000) {
+                            $dt->year($dt->year + 2000);
+                        }
+                        $dates[] = $dt->toDateString();
+                    }
+                    sort($dates);
+                }
+                else {
+                    $data['exclude_dates'] = str_replace(' ', '', $data['exclude_dates']);
+                    $dt = Carbon::createFromFormat($this->app['translator']->trans('DATE_FORMAT'), trim($data['exclude_dates']));
+                    if ($dt->year < 2000) {
+                            $dt->year($dt->year + 2000);
+                        }
+                    $dates = array($dt->toDateString());
+                }
+                $data['exclude_dates'] = implode(',', $dates);
+            }
+
+            if ($data['recurring_id'] < 1) {
+                // insert a new record
+                self::$recurring_id = $this->RecurringData->insert($data);
+                $this->setAlert('Successfull inserted a recurring event');
+                // create the recurring events
+                $this->createRecurringEvent();
+            }
+            elseif ($this->RecurringData->hasChanged($data['recurring_id'], $data)) {
+                // the existing data has changed - delete the old recurring records
+                self::$recurring_id = $data['recurring_id'];
+                $this->deleteRecurringEvent();
+                self::$recurring_id = $this->RecurringData->insert($data);
+                $this->setAlert('Rewrite the the recurring event', array(), self::ALERT_TYPE_INFO);
+                $this->createRecurringEvent();
+            }
+            else {
+                $this->setAlert('The recurring event was not changed.', array(), self::ALERT_TYPE_INFO);
+            }
+
+            // return to the event editing
+            if (self::$event_id != self::$parent_event_id) {
+                $this->setAlert('Redirect to the parent event ID!', array(), self::ALERT_TYPE_INFO);
+            }
+            $subRequest = Request::create('/admin/event/edit/id/'.self::$parent_event_id, 'GET', array('usage' => self::$usage));
+            return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!',
+                array(), self::ALERT_TYPE_DANGER);
+            return $this->selectYearPattern();
+        }
     }
 
     /**
@@ -355,12 +1415,25 @@ class RecurringEvent extends Backend {
         if ($form->isValid()) {
             // the form is valid
             $data = $form->getData();
+            self::$recurring_id = $data['recurring_id'];
             self::$event_id = $data['event_id'];
+            self::$recurring_id = $data['recurring_id'];
+            self::$event_id = $data['event_id'];
+            self::$parent_event_id = $data['parent_event_id'];
             self::$recurring_type = $data['recurring_type'];
             if (self::$recurring_type == 'NONE') {
-                // nothing to do, return to event edit dialog
-                $this->setAlert('No recurring event type selected', array(), self::ALERT_TYPE_SUCCESS);
-                $subRequest = Request::create('/admin/event/edit/id/'.self::$event_id, 'GET', array('usage' => self::$usage));
+                if (self::$recurring_id > 0) {
+                    // delete this recurring event!
+                    $this->deleteRecurringEvent();
+                }
+                else {
+                    // nothing to do, return to event edit dialog
+                    $this->setAlert('No recurring event type selected', array(), self::ALERT_TYPE_SUCCESS);
+                }
+                if (self::$event_id != self::$parent_event_id) {
+                    $this->setAlert('Redirect to the parent event ID!', array(), self::ALERT_TYPE_INFO);
+                }
+                $subRequest = Request::create('/admin/event/edit/id/'.self::$parent_event_id, 'GET', array('usage' => self::$usage));
                 return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
             switch (self::$recurring_type) {
@@ -391,32 +1464,257 @@ class RecurringEvent extends Backend {
      * Controller to start handling recurring events
      *
      * @param Application $app
-     * @param integer $event_id
+     * @param integer $parent_event_id
      */
     public function ControllerStart(Application $app, $event_id)
     {
         $this->initialize($app);
 
-        self::$event_id = $event_id;
-
-        if (self::$event_id < 1) {
+        if ($event_id < 1) {
             // invalid event ID
             $this->setAlert('Missing a valid Event ID!', array(), self::ALERT_TYPE_DANGER);
             $subRequest = Request::create('/admin/event/list', 'GET', array('usage' => self::$usage));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        }
+        self::$event_id = $event_id;
+
+        if (false !== ($recurring = $this->RecurringData->selectByEventID($event_id))) {
+            // this is the parent event itself
+            self::$parent_event_id = $recurring['parent_event_id'];
+            self::$recurring_id = $recurring['recurring_id'];
+            self::$recurring_type = $recurring['recurring_type'];
+        }
+        elseif ((false !== ($event = $this->EventData->selectEvent(self::$event_id))) &&
+                (false !== ($recurring = $this->RecurringData->select($event['event_recurring_id'])))) {
+            // got the recurring record from the parent
+            self::$parent_event_id = $recurring['parent_event_id'];
+            self::$recurring_id = $recurring['recurring_id'];
+            self::$recurring_type = $recurring['recurring_type'];
+        }
+        else {
+            self::$parent_event_id = self::$event_id;
+            self::$recurring_id = -1;
+        }
+
+        if (false !== ($status = $this->RecurringData->getReadableCurringEvent($recurring['recurring_id']))) {
+            $this->setAlert($status);
+        }
+        else {
+            $this->setAlert('For the event with the ID %event_id% is no recurring defined.',
+                array('%event_id%' => self::$parent_event_id));
         }
 
         $fields = $this->getSelectTypeFormFields();
         $form = $fields->getForm();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'admin/recurring/start.twig'),
+            '@phpManufaktur/Event/Template', 'admin/recurring.select.twig'),
             array(
                 'usage' => self::$usage,
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'route' => '/admin'
+                'header' => 'Recurring event',
+                'action' => FRAMEWORK_URL.'/admin/event/recurring/check/type?usage='.self::$usage,
+                'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
+    }
+
+    /**
+     * Delete the recurring event
+     *
+     */
+    protected function deleteRecurringEvent()
+    {
+        // delete the depending events and remove the recurring ID from parent event
+        $this->EventData->deleteRecurringEventsOfParent(self::$parent_event_id, self::$recurring_id);
+        $this->app['monolog']->addDebug('Deleted all recurring events with ID '.self::$recurring_id.' depending on event ID '.self::$parent_event_id);
+        // delete the recurring event
+        $this->RecurringData->delete(self::$recurring_id);
+        $this->setAlert('The recurring event was successfull deleted.');
+    }
+
+    /**
+     * Create a new Event record from the parent with the given insert date
+     *
+     * @param array $parent
+     * @param Carbon $insert_date
+     */
+    protected function createEventFromParent($parent, Carbon $insert_date)
+    {
+        $data = $parent;
+
+        unset($data['event_id']);
+        unset($data['event_timestamp']);
+        unset($data['participants']);
+        unset($data['rating']);
+
+        // get the parent event dates
+        $parent_date_from = Carbon::createFromFormat('Y-m-d H:i:s', $parent['event_date_from']);
+        $parent_date_to = Carbon::createFromFormat('Y-m-d H:i:s', $parent['event_date_to']);
+        $parent_deadline = Carbon::createFromFormat('Y-m-d H:i:s', $parent['event_deadline']);
+        // different in minutes between event start and end
+        $date_diff_minutes = $parent_date_from->diffInMinutes($parent_date_to);
+        // different in minutes between deadline and event start
+        $deadline_diff_minutes = $parent_deadline->diffInMinutes($parent_date_from);
+
+        // the new event date FROM
+        $date_from = $insert_date->copy();
+        $date_from->hour($parent_date_from->hour);
+        $date_from->minute($parent_date_from->minute);
+        $data['event_date_from'] = $date_from->toDateTimeString();
+
+        // the new event date TO
+        $date_to = $date_from->copy();
+        $date_to->addMinutes($date_diff_minutes);
+        $data['event_date_to'] = $date_to->toDateTimeString();
+
+        // the new publish FROM
+        $publish_from = $date_from->copy();
+        $publish_from->startOfDay();
+        $publish_from->subDays(self::$config['event']['date']['event_publish_from']['subtract_days']);
+        $data['event_publish_from'] = $publish_from->toDateTimeString();
+
+        // the new publish TO
+        $publish_to = $date_to->copy();
+        $publish_to->endOfDay();
+        $publish_to->addDays(self::$config['event']['date']['event_publish_to']['add_days']);
+        $data['event_publish_to'] = $publish_to->toDateTimeString();
+
+        // the new deadline
+        if ($parent['event_deadline'] != '0000-00-00 00:00:00') {
+            $deadline = $date_from->copy();
+            $deadline->subMinutes($deadline_diff_minutes);
+            $data['event_deadline'] = $deadline->toDateTimeString();
+        }
+
+        $data['event_recurring_id'] = self::$recurring_id;
+
+        $event_id = -1;
+        $this->EventData->insertEvent($data, $event_id);
+
+        $this->setAlert('Create a new recurring event with the ID %event_id%',
+            array('%event_id%' => $event_id), self::ALERT_TYPE_SUCCESS);
+    }
+
+    /**
+     * Create the recurring event
+     *
+     * @return boolean
+     */
+    protected function createRecurringEvent()
+    {
+        if (false === ($parent = $this->EventData->selectEvent(self::$parent_event_id))) {
+            $this->setAlert('xxThe record with the ID %id% does not exists!',
+                array('%id%' => self::$parent_event_id), self::ALERT_TYPE_DANGER);
+            return false;
+        }
+
+        if ($parent['event_recurring_id'] != self::$recurring_id) {
+            // insert the recurring ID into the parent event record
+            $data = array(
+                'event_recurring_id' => self::$recurring_id
+            );
+            $this->EventData->updateEvent($data, self::$parent_event_id);
+        }
+
+        if (false === ($recurring = $this->RecurringData->select(self::$recurring_id))) {
+            $this->setAlert('The record with the ID %id% does not exists!',
+                array('%id%' => self::$parent_event_id), self::ALERT_TYPE_DANGER);
+            return false;
+        }
+
+        // start date of the recurring
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', $parent['event_date_from']);
+        // end date of the recurring
+        $end = Carbon::createFromFormat('Y-m-d', $recurring['recurring_date_end']);
+        $end->endOfDay();
+
+        // actual date
+        $now = Carbon::create();
+
+        $exclude = explode(',', $recurring['exclude_dates']);
+
+        // create date is identical with the start date!
+        $create = $start->copy();
+        // skip the first date because it already exists
+        $create_event = false;
+
+        // loop through the recurring dates
+        while ($create->lt($end)) {
+            if ($create->lt($now) || in_array($create->toDateString(), $exclude)) {
+                $create_event = false;
+            }
+            if ($create_event) {
+                // create a new recurring event
+                $this->createEventFromParent($parent, $create);
+            }
+            else {
+                // set $create_event again to true!
+                $create_event = true;
+            }
+
+            // calculate the next recurring date
+            switch ($recurring['recurring_type']) {
+                case 'DAY':
+                    if ($recurring['day_type'] == 'DAILY') {
+                        // increase the date by adding the day sequence
+                        $create->addDays($recurring['day_sequence']);
+                    }
+                    else {
+                        // increase the date by adding the next weekday
+                        $create->addWeekday();
+                    }
+                    break;
+                case 'WEEK':
+                    // weekly recurring
+                    $create->addWeeks($recurring['week_sequence']);
+                    break;
+                case 'MONTH':
+                    if ($recurring['month_type'] == 'SEQUENCE') {
+                        $create->addMonths($recurring['month_sequence_month']);
+                    }
+                    else {
+                        // using a pattern
+                        $create->addMonths($recurring['month_sequence_month']);
+                        // get the integer day of week
+                        switch ($recurring['month_pattern_day']) {
+                            case 'MONDAY': $dayOfWeek = 1; break;
+                            case 'TUESDAY': $dayOfWeek = 2; break;
+                            case 'WEDNESDAY': $dayOfWeek = 3; break;
+                            case 'THURSDAY': $dayOfWeek = 4; break;
+                            case 'FRIDAY': $dayOfWeek = 5; break;
+                            case 'SATURDAY': $dayOfWeek = 6; break;
+                            case 'SUNDAY': $dayOfWeek = 0; break;
+                        }
+                        switch ($recurring['month_pattern_type']) {
+                            case 'FIRST':
+                                $create->firstOfMonth($dayOfWeek);
+                                break;
+                            case 'SECOND':
+                                $create->nthOfMonth(2, $dayOfWeek);
+                                break;
+                            case 'THIRD':
+                                $create->nthOfMonth(3, $dayOfWeek);
+                                break;
+                            case 'FOURTH':
+                                $create->nthOfMonth(4, $dayOfWeek);
+                                break;
+                            case 'LAST':
+                                $create->lastOfMonth($dayOfWeek);
+                                break;
+                        }
+                        break;
+                    }
+                    break;
+                default:
+                    $this->setAlert("Don't know how to handle the recurring type %type%.",
+                            array('%type%' => $recurring['recurring_type']), self::ALERT_TYPE_DANGER);
+                    return false;
+            }
+
+        } // while
+
+        return true;
     }
 }
