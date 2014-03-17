@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.33** - 2014-03-17
+
+* added recurring events by day, week, month or year in a sequence or by specific pattern
+* fixed some smaller problems in handling of events
+
 **2.0.32** - 2014-03-10
 
 * multiple smaller bugfixes
