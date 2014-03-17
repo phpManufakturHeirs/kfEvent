@@ -421,16 +421,23 @@ class RecurringEvent extends Backend {
                 'max' => 10
             )
         ))
-        ->add('year_sequence_day', 'integer', array(
+        ->add('year_sequence_day', 'hidden', array(
+            'data' => !is_null(self::$year_sequence_day) ? self::$year_sequence_day : 1
+        ))
+        ->add('year_sequence_day_view', 'integer', array(
             'required' => true,
             'label' => 'At day x of month',
             'data' => !is_null(self::$year_sequence_day) ? self::$year_sequence_day : 1,
             'attr' => array(
                 'min' => 1,
                 'max' => 31
-            )
+            ),
+            'disabled' => true
         ))
-        ->add('year_sequence_month', 'choice', array(
+        ->add('year_sequence_month', 'hidden', array(
+            'data' => !is_null(self::$year_sequence_month) ? self::$year_sequence_month : 'JANUARY'
+        ))
+        ->add('year_sequence_month_view', 'choice', array(
             'choices' => array(
                 'JANUARY' => 'January',
                 'FEBRUARY' => 'February',
@@ -450,7 +457,8 @@ class RecurringEvent extends Backend {
             'multiple' => false,
             'required' => true,
             'label' => 'At month',
-            'data' => !is_null(self::$year_sequence_month) ? self::$year_sequence_month : 'JANUARY'
+            'data' => !is_null(self::$year_sequence_month) ? self::$year_sequence_month : 'JANUARY',
+            'disabled' => true
         ))
         ;
     }
@@ -501,7 +509,10 @@ class RecurringEvent extends Backend {
             'data' => !is_null(self::$year_pattern_type) ? self::$year_pattern_type : 'FIRST',
             'required' => true
         ))
-        ->add('year_pattern_day', 'choice', array(
+        ->add('year_pattern_day', 'hidden', array(
+            'data' => !is_null(self::$year_pattern_day) ? self::$year_pattern_day : 'MONDAY'
+        ))
+        ->add('year_pattern_day_view', 'choice', array(
             'choices' => array(
                 'MONDAY' => 'Monday',
                 'TUESDAY' => 'Tuesday',
@@ -517,9 +528,13 @@ class RecurringEvent extends Backend {
             'required' => true,
             'label' => 'Select day',
             'data' => !is_null(self::$year_pattern_day) ? self::$year_pattern_day : 'MONDAY',
-            'required' => true
+            'required' => true,
+            'disabled' => true
         ))
-        ->add('year_pattern_month', 'choice', array(
+        ->add('year_pattern_month', 'hidden', array(
+            'data' => !is_null(self::$year_pattern_month) ? self::$year_pattern_month : 'JANUARY'
+        ))
+        ->add('year_pattern_month_view', 'choice', array(
             'choices' => array(
                 'JANUARY' => 'January',
                 'FEBRUARY' => 'February',
@@ -539,7 +554,8 @@ class RecurringEvent extends Backend {
             'multiple' => false,
             'required' => true,
             'label' => 'At month',
-            'data' => !is_null(self::$year_pattern_month) ? self::$year_pattern_month : 'JANUARY'
+            'data' => !is_null(self::$year_pattern_month) ? self::$year_pattern_month : 'JANUARY',
+            'disabled' => true
         ))
         ;
     }
@@ -769,22 +785,12 @@ class RecurringEvent extends Backend {
     {
         if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
             self::$week_sequence = $recurring['week_sequence'];
-            self::$week_day = $recurring['week_day'];
         }
-        else {
-            // get the weekday from the parent event
-            $event = $this->EventData->selectEvent(self::$parent_event_id);
-            $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
-            switch ($day->day) {
-                case 0: self::$week_day = 'SUNDAY'; break;
-                case 1: self::$week_day = 'MONDAY'; break;
-                case 2: self::$week_day = 'TUESDAY'; break;
-                case 3: self::$week_day = 'WEDNESDAY'; break;
-                case 4: self::$week_day = 'THURSDAY'; break;
-                case 5: self::$week_day = 'FRIDAY'; break;
-                case 6: self::$week_day = 'SATURDAY'; break;
-            }
-        }
+
+        // get the weekday from the parent event
+        $event = $this->EventData->selectEvent(self::$parent_event_id);
+        $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+        self::$week_day = $this->RecurringData->getDayOfWeekString($day->dayOfWeek);
 
         $fields = $this->getSelectWeekSequenceFormFields();
         $form = $fields->getForm();
@@ -876,13 +882,11 @@ class RecurringEvent extends Backend {
     {
         if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
             self::$month_sequence_day = $recurring['month_sequence_day'];
-            self::$month_sequence_month = $recurring['month_sequence_month'];
         }
-        else {
-            $event = $this->EventData->selectEvent(self::$parent_event_id);
-            $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
-            self::$month_sequence_day = $day->day;
-        }
+
+        $event = $this->EventData->selectEvent(self::$parent_event_id);
+        $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+        self::$month_sequence_day = $day->day;
 
         $fields = $this->getSelectMonthSequenceFormFields();
         $form = $fields->getForm();
@@ -906,23 +910,13 @@ class RecurringEvent extends Backend {
     protected function selectMonthPattern()
     {
         if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
-            self::$month_pattern_day = $recurring['month_pattern_day'];
             self::$month_pattern_sequence = $recurring['month_pattern_sequence'];
             self::$month_pattern_type = $recurring['month_pattern_type'];
         }
-        else {
-            $event = $this->EventData->selectEvent(self::$parent_event_id);
-            $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
-            switch ($day->dayOfWeek) {
-                case 0: self::$month_pattern_day = 'SUNDAY'; break;
-                case 1: self::$month_pattern_day = 'MONDAY'; break;
-                case 2: self::$month_pattern_day = 'TUESDAY'; break;
-                case 3: self::$month_pattern_day = 'WEDNESDAY'; break;
-                case 4: self::$month_pattern_day = 'THURSDAY'; break;
-                case 5: self::$month_pattern_day = 'FRIDAY'; break;
-                case 6: self::$month_pattern_day = 'SATURDAY'; break;
-            }
-        }
+
+        $event = $this->EventData->selectEvent(self::$parent_event_id);
+        $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+        self::$month_pattern_day = $this->RecurringData->getDayOfWeekString($day->dayOfWeek);
 
         $fields = $this->getSelectMonthPatternFormFields();
         $form = $fields->getForm();
@@ -1140,11 +1134,16 @@ class RecurringEvent extends Backend {
      */
     protected function selectYearSequence()
     {
+
         if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
             self::$year_repeat = $recurring['year_repeat'];
-            self::$year_sequence_day = $recurring['year_sequence_day'];
-            self::$year_sequence_month = $recurring['year_sequence_month'];
         }
+
+        // select the event data record
+        $event = $this->EventData->selectEvent(self::$parent_event_id);
+        $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+        self::$year_sequence_day = $day->day;
+        self::$year_sequence_month = strtoupper($day->format('F'));
 
         $fields = $this->getSelectYearSequenceFormFields();
         $form = $fields->getForm();
@@ -1212,10 +1211,15 @@ class RecurringEvent extends Backend {
     {
         if (false !== ($recurring = $this->RecurringData->select(self::$recurring_id))) {
             self::$year_repeat = $recurring['year_repeat'];
-            self::$year_pattern_day = $recurring['year_pattern_day'];
-            self::$year_pattern_month = $recurring['year_pattern_month'];
             self::$year_pattern_type = $recurring['year_pattern_type'];
         }
+
+        // select the event data record
+        $event = $this->EventData->selectEvent(self::$parent_event_id);
+        $day = Carbon::createFromFormat('Y-m-d H:i:s', $event['event_date_from']);
+
+        self::$year_pattern_day = strtoupper($day->format('l'));
+        self::$year_pattern_month = strtoupper($day->format('F'));
 
         $fields = $this->getSelectYearPatternFormFields();
         $form = $fields->getForm();
@@ -1531,7 +1535,7 @@ class RecurringEvent extends Backend {
         $this->app['monolog']->addDebug('Deleted all recurring events with ID '.self::$recurring_id.' depending on event ID '.self::$parent_event_id);
         // delete the recurring event
         $this->RecurringData->delete(self::$recurring_id);
-        $this->setAlert('The recurring event was successfull deleted.');
+        $this->setAlert('The recurring events where successfull deleted.');
     }
 
     /**
@@ -1605,7 +1609,7 @@ class RecurringEvent extends Backend {
     protected function createRecurringEvent()
     {
         if (false === ($parent = $this->EventData->selectEvent(self::$parent_event_id))) {
-            $this->setAlert('xxThe record with the ID %id% does not exists!',
+            $this->setAlert('The record with the ID %id% does not exists!',
                 array('%id%' => self::$parent_event_id), self::ALERT_TYPE_DANGER);
             return false;
         }
@@ -1675,18 +1679,11 @@ class RecurringEvent extends Backend {
                         $create->addMonths($recurring['month_sequence_month']);
                     }
                     else {
-                        // using a pattern
+                        // using a PATTERN
                         $create->addMonths($recurring['month_sequence_month']);
-                        // get the integer day of week
-                        switch ($recurring['month_pattern_day']) {
-                            case 'MONDAY': $dayOfWeek = 1; break;
-                            case 'TUESDAY': $dayOfWeek = 2; break;
-                            case 'WEDNESDAY': $dayOfWeek = 3; break;
-                            case 'THURSDAY': $dayOfWeek = 4; break;
-                            case 'FRIDAY': $dayOfWeek = 5; break;
-                            case 'SATURDAY': $dayOfWeek = 6; break;
-                            case 'SUNDAY': $dayOfWeek = 0; break;
-                        }
+                        // get the day of week integer value
+                        $dayOfWeek = $this->RecurringData->getDayOfWeekInteger($recurring['month_pattern_day']);
+                        // create the recurring date from type
                         switch ($recurring['month_pattern_type']) {
                             case 'FIRST':
                                 $create->firstOfMonth($dayOfWeek);
@@ -1705,6 +1702,35 @@ class RecurringEvent extends Backend {
                                 break;
                         }
                         break;
+                    }
+                    break;
+                case 'YEAR':
+                    if ($recurring['year_type'] == 'SEQUENCE') {
+                        $create->addYears($recurring['year_repeat']);
+                    }
+                    else {
+                        // using a PATTERN
+                        $create->addYears($recurring['year_repeat']);
+                        // get the day of week integer value
+                        $dayOfWeek = $this->RecurringData->getDayOfWeekInteger($recurring['year_pattern_day']);
+                        // create the recurring date from type
+                        switch ($recurring['year_pattern_type']) {
+                            case 'FIRST':
+                                $create->firstOfMonth($dayOfWeek);
+                                break;
+                            case 'SECOND':
+                                $create->nthOfMonth(2, $dayOfWeek);
+                                break;
+                            case 'THIRD':
+                                $create->nthOfMonth(3, $dayOfWeek);
+                                break;
+                            case 'FOURTH':
+                                $create->nthOfMonth(4, $dayOfWeek);
+                                break;
+                            case 'LAST':
+                                $create->lastOfMonth($dayOfWeek);
+                                break;
+                        }
                     }
                     break;
                 default:

@@ -104,6 +104,8 @@ return array(
         => 'Einen neuen Veranstaltungsort anlegen',
     'Create a new Organizer record'
         => 'Eine neue Veranstalter Adresse anlegen',
+    'Create a new recurring event with the ID %event_id%'
+        => 'Neue sich wiederholende Veranstaltung mit der ID %event_id% angelegt.',
 
     // event data columns
     'description_long'
@@ -135,6 +137,8 @@ return array(
         => 'Veranstaltung nicht veröffentlichen',
     "Don't know how to handle the month type %type%"
         => 'Unbekannter Monatstyp %type%',
+    "Don't know how to handle the recurring type %type%."
+        => 'Unbekannter Wiederholungstyp %type%.',
 
     'Edit event'
         => 'Veranstaltung bearbeiten',
@@ -369,6 +373,8 @@ return array(
         => 'Letzte Wiederholung',
     'Recurring event'
         => 'Serientermin',
+    'Redirect to the parent event ID!'
+        => 'Umgeleitet auf die ursprüngliche Veranstaltungs ID!',
     'Registrations'
         => 'Anmeldungen',
     'regular email address of a company, institution or association'
@@ -459,6 +465,8 @@ return array(
         => 'Die E-Mail Adresse %email% ist nicht registriert. Wir können nur dann ein Benutzerkonto für Sie anlegen, wenn bereits eine Interaktion stattgefunden hat und Sie z.B. eine Veranstaltung vorgeschlagen haben. Falls Sie einen Veranstalter oder einen Veranstaltungsort vertreten und Ihre öffentliche E-Mail Adresse nicht registriert ist, wenden Sie sich bitte an den Administrator.',
     'The event [%event_id%] will be repeated at %pattern_type% %pattern_day% of each %pattern_sequence%. month%exclude%'
         => 'Die Veranstaltung [%event_id%] wird am %pattern_type% %pattern_day% jedes %pattern_sequence%. Monat wiederholt%exclude%',
+    'The event [%event_id%] will be repeated each %week_sequence% week(s) at %week_day%%exclude%'
+        => 'Die Veranstaltung [%event_id%] wird jede %week_sequence%. Woche am %week_day% wiederholt%exclude%',
     'The event [%event_id%] will be repeated at each workday%exclude%'
         => 'Die Veranstaltung [%event_id%] wird an jedem Werktag wiederholt%exclude%',
     'The event [%event_id%] will be repeated at the %month_day%. day of each %month_sequence%. month%exclude%'
@@ -503,6 +511,8 @@ return array(
         => 'Der Datensatz mit der ID %id% wurde erfolgreich eingefügt.',
     'The record with the ID %id% was successfull updated.'
         => 'Der Datensatz mit der ID %id% wurde erfolgreich aktualisiert.',
+    'The recurring events where successfull deleted.'
+        => 'Die wiederholten Veranstaltungen wurden erfolgreich gelöscht.',
     'The repeat each x-year sequence must be greater than zero and less than 10!'
         => 'Der Wert für die jährliche Wiederholung muss größer als Null und kleiner als 10 sein!',
     'The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.'

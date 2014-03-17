@@ -24,6 +24,7 @@ use phpManufaktur\Event\Data\Event\Images;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Event\Data\Event\RecurringEvent;
 
 class EventEdit extends Backend {
 
@@ -36,6 +37,7 @@ class EventEdit extends Backend {
     protected $EventDescription = null;
     protected $Extra = null;
     protected $Images = null;
+    protected $RecurringData = null;
     protected static $config = null;
 
     public function __construct(Application $app=null)
@@ -57,6 +59,7 @@ class EventEdit extends Backend {
         $this->EventDescription = new EventDescription($this->app);
         $this->Extra = new Extra($this->app);
         $this->Images = new Images($this->app);
+        $this->RecurringData = new RecurringEvent($app);
         self::$config = $this->app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
     }
 
@@ -592,6 +595,10 @@ class EventEdit extends Backend {
                 $this->setAlert('The form is not valid, please check your input and try again!',
                     array(), self::ALERT_TYPE_DANGER);
             }
+        }
+
+        if (isset($event['event_recurring_id']) && ($event['event_recurring_id'] > 0)) {
+            $this->setAlert($this->RecurringData->getReadableCurringEvent($event['event_recurring_id']));
         }
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
