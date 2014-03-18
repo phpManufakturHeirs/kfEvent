@@ -137,6 +137,11 @@ class Configuration
                     'url' => ''
                 )
             ),
+            'fallback' => array(
+                'cms' => array(
+                    'url' => ''
+                )
+            ),
             'ical' => array(
                 'active' => true,
                 'framework' => array(

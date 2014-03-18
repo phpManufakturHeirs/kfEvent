@@ -245,6 +245,20 @@ class Update
     }
 
     /**
+     * Releas 2.0.35
+     */
+    protected function release_2035()
+    {
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+        if (!isset($config['fallback'])) {
+            $config['fallback']['cms']['url'] = '';
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
+        }
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -273,6 +287,9 @@ class Update
 
         // Release 2.0.33
         $this->release_2033();
+
+        // Release 2.0.35
+        $this->release_2035();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);

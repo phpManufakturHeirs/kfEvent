@@ -37,6 +37,10 @@ class Action extends Basic
     {
         try {
             $this->initParameters($app);
+
+            // get the config file
+            $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
+
             // get the kitCommand parameters
             $parameters = $this->getCommandParameters();
 
@@ -50,13 +54,17 @@ class Action extends Basic
                 $this->setCommandParameters($parameters);
             }
             if (!isset($parameters['action'])) {
-                // there is no 'mode' parameter set, so we show the "Welcome" page
-                $subRequest = Request::create('/basic/help/event/welcome', 'GET');
-                return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+                $fallback = (isset($config['fallback']['cms']['url']) && !empty($config['fallback']['cms']['url'])) ? $config['fallback']['cms']['url'] : '';
+                if (is_null($this->app['request']->query->all()) || empty($fallback)) {
+                    // there is no 'mode' parameter set, so we show the "Welcome" page
+                    $subRequest = Request::create('/basic/help/event/welcome', 'GET');
+                    return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+                }
+                else {
+                    // invalid PID - redirect to the fallback
+                    return $this->app->redirect($fallback);                }
             }
 
-            // get the config file
-            $config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
 
             if (!isset($config['permalink']['cms']['url']) || empty($config['permalink']['cms']['url'])) {
                 // missing the URL for permanent links and responses
