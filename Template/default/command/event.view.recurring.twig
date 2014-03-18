@@ -10,6 +10,8 @@
 {% extends getTemplateFile('@phpManufaktur/Basic/Template', 'kitcommand/iframe.body.twig') %}
 {% block title %}{{ event.description_title|striptags|escape }}{% endblock %}
 {% block description %}{{ event.description_short|striptags|escape }}{% endblock %}
+{% block robots %}noindex,follow{% endblock %}
+{% block canonical %}<link rel="canonical" url="{{ FRAMEWORK_URL }}/event/perma/id/{{ event.event_id }}">{% endblock %}
 {% block stylesheet %}
   {{ parent() }}
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.view.css" media="screen, projection" />
