@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.35** - 2014-03-18
+
+* fixed: if search engines access to invalid PID's Event can now fallback to a given URL
+* The event description templates set now a canonical link to the content
+
 **2.0.34** - 2014-03-17
 
 * added parameter `view[recurring]` to the kitCommand `~~ event ~~` to enable a special view of recurring events. Show the parent event and the next upcoming recurring dates.
