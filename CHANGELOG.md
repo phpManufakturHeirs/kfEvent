@@ -6,6 +6,11 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.36** - 2014-03-24
+
+* field `extra_type_description` set to required to avoid problem in validation
+* The subscribe form and the submitted mails have now also access to data of event, recurring and recurring_events - access them in your templates if needed.
+
 **2.0.35** - 2014-03-18
 
 * fixed: if search engines access to invalid PID's Event can now fallback to a given URL
