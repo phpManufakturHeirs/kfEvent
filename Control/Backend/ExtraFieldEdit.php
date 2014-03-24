@@ -54,7 +54,7 @@ class ExtraFieldEdit extends Backend {
             'label' => 'Field type'
         ))
         ->add('extra_type_description', 'textarea', array(
-            'required' => false,
+            'required' => true,
             'label' => 'Description'
         ))
         ->add('delete', 'choice', array(
