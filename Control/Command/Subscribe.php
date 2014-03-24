@@ -19,6 +19,8 @@ use phpManufaktur\Event\Data\Event\Event;
 use phpManufaktur\Contact\Data\Contact\Message as MessageData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use phpManufaktur\Event\Data\Event\Event as EventData;
+use phpManufaktur\Event\Data\Event\RecurringEvent as RecurringEventData;
 
 class Subscribe extends Basic
 {
@@ -33,7 +35,12 @@ class Subscribe extends Basic
     protected $EventData = null;
     protected static $config = null;
     protected $EventTools = null;
+    protected $RecurringData = null;
 
+    /**
+     * (non-PHPdoc)
+     * @see \phpManufaktur\Basic\Control\kitCommand\Basic::initParameters()
+     */
     protected function initParameters(Application $app, $parameter_id=-1)
     {
         parent::initParameters($app, $parameter_id);
@@ -56,10 +63,17 @@ class Subscribe extends Basic
         //$this->CommunicationData = new Communication($app);
         $this->EventData = new Event($app);
         $this->EventTools = new Tools($app);
+        $this->RecurringData = new RecurringEventData($app);
 
         self::$config = $app['utils']->readConfiguration(MANUFAKTUR_PATH.'/Event/config.event.json');
     }
 
+    /**
+     * Get the form fields
+     *
+     * @param array $subscribe
+     * @return form.factory fields
+     */
     protected function getFormFields($subscribe=array())
     {
         // get the communication types and values
@@ -265,6 +279,9 @@ class Subscribe extends Basic
 
             // get the event data
             $event = $this->EventData->selectEvent(self::$event_id);
+            $recurring = array();
+            $recurring_events = array();
+            $this->checkRecurringEvent($event);
 
             // check message
             $message_id = -1;
@@ -309,6 +326,8 @@ class Subscribe extends Basic
                         'basic' => $this->getBasicSettings(),
                         'contact' => $contact,
                         'event' => $event,
+                        'recurring' => $recurring,
+                        'recurring_events' => $recurring_events,
                         'confirm' => array(
                             'email' => ($new_contact && self::$config['contact']['confirm']['double_opt_in']),
                             'subscription' => self::$config['event']['subscription']['confirm']['double_opt_in']
@@ -347,7 +366,9 @@ class Subscribe extends Basic
                         array(
                             'basic' => $this->getBasicSettings(),
                             'contact' => $contact,
-                            'event' => $event
+                            'event' => $event,
+                            'recurring' => $recurring,
+                            'recurring_events' => $recurring_events
                         ));
                     // create the message
                     $to_array = $this->EventTools->getEMailArrayFromTypeArray($event, $contact, $check_array);
@@ -376,7 +397,9 @@ class Subscribe extends Basic
                         array(
                             'basic' => $this->getBasicSettings(),
                             'contact' => $contact,
-                            'event' => $event
+                            'event' => $event,
+                            'recurring' => $recurring,
+                            'recurring_events' => $recurring_events
                         ));
                     // create the message
                     $to_array = $this->EventTools->getEMailArrayFromTypeArray($event, $contact, $check_array);
@@ -413,7 +436,36 @@ class Subscribe extends Basic
                     'basic' => $this->getBasicSettings(),
                     'message' => $this->getMessage(),
                     'form' => $form->createView(),
+                    'event' => $event,
+                    'recurring' => $recurring,
+                    'recurring_events' => $recurring_events
                 ));
+        }
+    }
+
+    /**
+     * Check if this is a recurring event and set the desired data
+     *
+     * @param array reference $event
+     * @param array reference $recurring
+     * @param array reference $recurring_events
+     */
+    protected function checkRecurringEvent(&$event, &$recurring=array(), &$recurring_events=array())
+    {
+        if ($event['event_recurring_id'] > 0) {
+            if (false !== ($recurring = $this->RecurringData->select($event['event_recurring_id']))) {
+                // first get the parent event record
+                if (false !== ($event = $this->EventData->selectEvent($recurring['parent_event_id']))) {
+                    // get all active recurring events
+                    if (false !== ($items = $this->EventData->selectRecurringEvents($recurring['recurring_id']))) {
+                        foreach ($items as $item) {
+                            $route = base64_encode('/event/id/'.$event['event_id'].'/view/recurring');
+                            $item['link']['subscribe'] = FRAMEWORK_URL.'/event/subscribe/id/'.$item['event_id'].'/redirect/'.$route.'?pid='.$this->getParameterID();
+                            $recurring_events[] = $item;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -434,12 +486,22 @@ class Subscribe extends Basic
         // get the form
         $form = $subscribe_fields->getForm();
 
+        $recurring = array();
+        $recurring_events = array();
+        if (false !== ($event = $this->EventData->selectEvent($event_id))) {
+            $this->checkRecurringEvent($event, $recurring, $recurring_events);
+        }
+
+
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'command/subscribe.twig', $this->getPreferredTemplateStyle()),
             array(
                 'basic' => $this->getBasicSettings(),
                 'message' => $this->getMessage(),
                 'form' => $form->createView(),
+                'event' => $event,
+                'recurring' => $recurring,
+                'recurring_events' => $recurring_events
             ));
     }
 }
