@@ -72,6 +72,8 @@ return array(
 
     'Change account rights'
         => 'Änderung der Benutzerrechte',
+    'Change Event configuration'
+        => 'Event Konfiguration ändern',
     'Checking the GUID identifier'
         => 'Überprüfung der GUID Kennung',
     'CHOICE_ADMIN_ACCOUNT'

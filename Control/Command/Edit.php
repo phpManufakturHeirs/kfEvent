@@ -487,7 +487,7 @@ class Edit extends Basic
 
         $fields = $app['form.factory']->createBuilder('form')
         ->add('login', 'text', array(
-            'label' => 'Username or email address'
+            'label' => 'Email'
         ))
         ;
         $form = $fields->getForm();
@@ -864,7 +864,7 @@ class Edit extends Basic
             'data' => 'ROLE_EVENT_SUBMITTER'
         ))
         ->add('login', 'text', array(
-            'label' => 'Username or email address'
+            'label' => 'Email'
         ))
         ;
         $form = $fields->getForm();

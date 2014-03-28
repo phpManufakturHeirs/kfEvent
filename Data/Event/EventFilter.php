@@ -377,13 +377,13 @@ class EventFilter
                         if (!$start) {
                             $SQL .= " OR ";
                         }
-                        $SQL .= "`address_state`='".$this->app['utils']->utf8_entities(trim($state))."'";
+                        $SQL .= "`address_state` LIKE '".$this->app['utils']->utf8_entities(trim($state))."%'";
                         $start = false;
                     }
                     $SQL .= ") ";
                 }
                 else {
-                    $SQL .= "AND `address_state`='".$this->app['utils']->utf8_entities($filter['state'])."' ";
+                    $SQL .= "AND `address_state` LIKE '".$this->app['utils']->utf8_entities($filter['state'])."%' ";
                 }
             }
 
