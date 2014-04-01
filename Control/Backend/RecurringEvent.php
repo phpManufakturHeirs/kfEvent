@@ -315,7 +315,10 @@ class RecurringEvent extends Backend {
                 'SECOND' => 'At the second',
                 'THIRD' => 'At the third',
                 'FOURTH' => 'At the fourth',
-                'LAST' => 'At the last'
+                'LAST' => 'At the last',
+                'FIRST_THIRD' => 'At the first and third',
+                'SECOND_FOURTH' => 'At the second and fourth',
+                'SECOND_LAST' => 'At the second and last'
             ),
             'empty_value' => '- please select -',
             'expanded' => false,
@@ -1643,6 +1646,7 @@ class RecurringEvent extends Backend {
         $create = $start->copy();
         // skip the first date because it already exists
         $create_event = false;
+        $counter = 1;
 
         // loop through the recurring dates
         while ($create->lt($end)) {
@@ -1680,7 +1684,11 @@ class RecurringEvent extends Backend {
                     }
                     else {
                         // using a PATTERN
-                        $create->addMonths($recurring['month_sequence_month']);
+                        if (!in_array($recurring['month_pattern_type'], array('FIRST_THIRD','SECOND_FOURTH','SECOND_LAST')) ||
+                            ($counter % 2 == 0)) {
+                            // we need two loops for FIRST_THIRD, SECOND_FOURTH and SECOND_LAST!
+                            $create->addMonths($recurring['month_sequence_month']);
+                        }
                         // get the day of week integer value
                         $dayOfWeek = $this->RecurringData->getDayOfWeekInteger($recurring['month_pattern_day']);
                         // create the recurring date from type
@@ -1699,6 +1707,15 @@ class RecurringEvent extends Backend {
                                 break;
                             case 'LAST':
                                 $create->lastOfMonth($dayOfWeek);
+                                break;
+                            case 'FIRST_THIRD':
+                                ($counter % 2 == 0) ? $create->firstOfMonth($dayOfWeek) : $create->nthOfMonth(3, $dayOfWeek);
+                                break;
+                            case 'SECOND_FOURTH':
+                                ($counter % 2 == 0) ? $create->nthOfMonth(2, $dayOfWeek) : $create->nthOfMonth(4, $dayOfWeek);
+                                break;
+                            case 'SECOND_LAST':
+                                ($counter % 2 == 0) ? $create->nthOfMonth(2, $dayOfWeek) : $create->lastOfMonth($dayOfWeek);
                                 break;
                         }
                         break;
@@ -1739,6 +1756,8 @@ class RecurringEvent extends Backend {
                     return false;
             }
 
+            // increase the counter
+            $counter++;
         } // while
 
         return true;

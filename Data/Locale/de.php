@@ -50,6 +50,8 @@ return array(
         => 'Im Monat',
     'At the first'
         => 'Am ersten',
+    'At the first and third'
+        => 'Am ersten und dritten',
     'At the fourth'
         => 'Am vierten',
     'At the last'
@@ -60,6 +62,10 @@ return array(
         => 'Momentan liegen keine Anmeldungen zu Ihren Veranstaltungen vor.',
     'At the second'
         => 'Am zweiten',
+    'At the second and fourth'
+        => 'Am zweiten und vierten',
+    'At the second and last'
+        => 'Am zweiten und letzten',
     'At the third'
         => 'Am dritten',
 
@@ -214,6 +220,8 @@ return array(
         => 'Feld Typ',
     'first'
         => 'ersten',
+    'first_third'
+        => 'ersten und dritten',
     'Float'
         => 'Dezimalzahl',
     'fourth'
@@ -416,6 +424,10 @@ return array(
         => 'Veranstalter suchen',
     'second'
         => 'zweiten',
+    'second_fourth'
+        => 'zweiten und vierten',
+    'second_last'
+        => 'zweiten und letzten',
     'Select account type'
         => 'Kontotyp wählen',
     'Select event group'

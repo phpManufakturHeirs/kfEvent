@@ -51,7 +51,7 @@ class RecurringEvent
         `month_type` ENUM('SEQUENCE','PATTERN') NOT NULL DEFAULT 'SEQUENCE',
         `month_sequence_day` INT(11) NOT NULL DEFAULT 1,
         `month_sequence_month` INT(11) NOT NULL DEFAULT 1,
-        `month_pattern_type` ENUM('FIRST','SECOND','THIRD','FOURTH','LAST') NOT NULL DEFAULT 'FIRST',
+        `month_pattern_type` ENUM('FIRST','SECOND','THIRD','FOURTH','LAST','FIRST_THIRD','SECOND_FOURTH','SECOND_LAST') NOT NULL DEFAULT 'FIRST',
         `month_pattern_day` ENUM('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY') NOT NULL DEFAULT 'MONDAY',
         `month_pattern_sequence` INT(11) NOT NULL DEFAULT 1,
         `year_repeat` INT(11) NOT NULL DEFAULT 1,
