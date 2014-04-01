@@ -6,6 +6,12 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.37** - 2014-04-01
+
+* additional recurring patterns for month: `FIRST_THIRD`, `SECOND_FOURTH` and `SECOND_LAST`
+* optional contact field for subscriptions: `phone`, `cell`, `birthday`, `street`, `zip`, `city` and `country`
+* optional field for subscriptions: terms and conditions with link 
+
 **2.0.36** - 2014-03-24
 
 * field `extra_type_description` set to required to avoid problem in validation
