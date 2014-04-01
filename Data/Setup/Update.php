@@ -259,6 +259,95 @@ class Update
     }
 
     /**
+     * Release 2.0.36
+     */
+    protected function release_2036()
+    {
+        if (!$this->app['db.utils']->enumValueExists(FRAMEWORK_TABLE_PREFIX.'event_recurring_event', 'month_pattern_type', 'FIRST_THIRD')) {
+            $SQL = "ALTER TABLE `".FRAMEWORK_TABLE_PREFIX."event_recurring_event` CHANGE `month_pattern_type` `month_pattern_type` ENUM('FIRST','SECOND','THIRD','FOURTH','LAST','FIRST_THIRD','SECOND_FOURTH','SECOND_LAST') NOT NULL DEFAULT 'FIRST'";
+            $this->app['db']->query($SQL);
+            $this->app['monolog']->addInfo('[Event Update] Add enum values FIRST_THIRD, SECOND_FOURTH and SECOND_LAST to recurring events');
+        }
+
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+
+        if (!isset($config['event']['subscription']['contact'])) {
+            $config['event']['subscription']['contact'] = array(
+                'gender' => array(
+                    'name' => 'person_gender',
+                    'enabled' => true,
+                    'required' => true,
+                    'default' => 'MALE'
+                ),
+                'first_name' => array(
+                    'name' => 'person_first_name',
+                    'enabled' => true,
+                    'required' => false
+                ),
+                'last_name' => array(
+                    'name' => 'person_last_name',
+                    'enabled' => true,
+                    'required' => true
+                ),
+                'email' => array(
+                    'name' => 'email',
+                    'enabled' => true,
+                    'required' => true
+                ),
+                'phone' => array(
+                    'name' => 'phone',
+                    'enabled' => false,
+                    'required' => false
+                ),
+                'cell' => array(
+                    'name' => 'cell',
+                    'enabled' => false,
+                    'required' => false
+                ),
+                'birthday' => array(
+                    'name' => 'birthday',
+                    'enabled' => false,
+                    'required' => false
+                ),
+                'street' => array(
+                    'name' => 'street',
+                    'enabled' => false,
+                    'required' => false
+                ),
+                'zip' => array(
+                    'name' => 'zip',
+                    'enabled' => false,
+                    'required' => false
+                ),
+                'city' => array(
+                    'name' => 'city',
+                    'enabled' => false,
+                    'required' => false
+                ),
+                'country' => array(
+                    'name' => 'country',
+                    'enabled' => false,
+                    'required' => false,
+                    'default' => 'DE',
+                    'preferred' => array('DE','AT','CH')
+                )
+            );
+
+            $config['event']['subscription']['terms'] = array(
+                'name' => 'terms_conditions',
+                'enabled' => false,
+                'required' => true,
+                'label' => 'I accept the <a href="%url%" target="_blank">general terms and conditions</a>',
+                'url' => CMS_URL
+            );
+
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
+        }
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -290,6 +379,9 @@ class Update
 
         // Release 2.0.35
         $this->release_2035();
+
+        // Release 2.0.36
+        $this->release_2036();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);

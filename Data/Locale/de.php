@@ -243,6 +243,8 @@ return array(
     'Hello %name%'
         => 'Hallo %name%',
 
+    'I accept the <a href="%url%" target="_blank">general terms and conditions</a>'
+        => 'Ich akzeptiere die <a href="%url%" target="_blank">AGB</a>',
     "I really don't know the Organizer"
         => 'Der Veranstalter ist mir leider nicht bekannt',
     'If you are prompted to login, please use your username and password'

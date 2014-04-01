@@ -70,6 +70,73 @@ class Configuration
                             'provider',
                             'organizer'
                         )
+                    ),
+                    'contact' => array(
+                        'gender' => array(
+                            'name' => 'person_gender',
+                            'enabled' => true,
+                            'required' => true,
+                            'default' => 'MALE'
+                        ),
+                        'first_name' => array(
+                            'name' => 'person_first_name',
+                            'enabled' => true,
+                            'required' => false
+                        ),
+                        'last_name' => array(
+                            'name' => 'person_last_name',
+                            'enabled' => true,
+                            'required' => true
+                        ),
+                        'email' => array(
+                            'name' => 'email',
+                            'enabled' => true,
+                            'required' => true
+                        ),
+                        'phone' => array(
+                            'name' => 'phone',
+                            'enabled' => false,
+                            'required' => false
+                        ),
+                        'cell' => array(
+                            'name' => 'cell',
+                            'enabled' => false,
+                            'required' => false
+                        ),
+                        'birthday' => array(
+                            'name' => 'birthday',
+                            'enabled' => false,
+                            'required' => false
+                        ),
+                        'street' => array(
+                            'name' => 'street',
+                            'enabled' => false,
+                            'required' => false
+                        ),
+                        'zip' => array(
+                            'name' => 'zip',
+                            'enabled' => false,
+                            'required' => false
+                        ),
+                        'city' => array(
+                            'name' => 'city',
+                            'enabled' => false,
+                            'required' => false
+                        ),
+                        'country' => array(
+                            'name' => 'country',
+                            'enabled' => false,
+                            'required' => false,
+                            'default' => 'DE',
+                            'preferred' => array('DE','AT','CH')
+                        )
+                    ),
+                    'terms' => array(
+                        'name' => 'terms_conditions',
+                        'enabled' => false,
+                        'required' => true,
+                        'label' => 'I accept the <a href="%url%" target="_blank">general terms and conditions</a>',
+                        'url' => CMS_URL
                     )
                 ),
                 'description' => array(
