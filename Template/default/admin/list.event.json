@@ -1,6 +1,7 @@
 {
   "columns":[
     "event_id",
+    "pack_recurring",
     "event_date_from",
     "event_date_to",
     "description_title",

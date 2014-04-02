@@ -87,12 +87,16 @@
                     {% endif %}
                   {% endif %}
                   <th class="{{ head_class }}">
-                    {% if 'active asc' in head_class %}
-                      <i class="fa fa-sort-alpha-asc"></i>&nbsp;
-                    {% elseif 'active desc' in head_class %}
-                      <i class="fa fa-sort-alpha-desc"></i>&nbsp;
+                    {% if head == 'pack_recurring' %}
+                      &nbsp;
+                    {% else %}
+                      {% if 'active asc' in head_class %}
+                        <i class="fa fa-sort-alpha-asc"></i>&nbsp;
+                      {% elseif 'active desc' in head_class %}
+                        <i class="fa fa-sort-alpha-desc"></i>&nbsp;
+                      {% endif %}
+                      <a href="{{ FRAMEWORK_URL ~ route.pagination|replace({'{page}':current_page, '{order}':head, '{direction}':head_order}) }}" title="{% if head_order == 'asc' %}{{ 'Click to sort column ascending'|trans }}{% else %}{{ 'Click to sort column descending'|trans }}{% endif %}">{{ head|trans }}</a>
                     {% endif %}
-                    <a href="{{ FRAMEWORK_URL ~ route.pagination|replace({'{page}':current_page, '{order}':head, '{direction}':head_order}) }}" title="{% if head_order == 'asc' %}{{ 'Click to sort column ascending'|trans }}{% else %}{{ 'Click to sort column descending'|trans }}{% endif %}">{{ head|trans }}</a>
                   </th>
                 {% endif %}
               {% endfor %}
@@ -127,6 +131,12 @@
                     {% elseif (column == 'event_status') %}
                       {# translate this column value #}
                       <td class="{{ column }}">{{ value|trans }}</td>
+                    {% elseif (column == 'pack_recurring') %}
+                      {% if value|length > 0 %}
+                        <td class="{{ column }}"><i class="fa fa-refresh" title="{{ value }}"></i></td>
+                      {% else %}
+                        <td class="{{ column }}">&nbsp;</td>
+                      {% endif %}
                     {% else %}
                       <td class="{{ column }}">{{ value }}</td>
                     {% endif %}

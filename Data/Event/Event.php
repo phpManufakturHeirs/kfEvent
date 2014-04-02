@@ -213,6 +213,7 @@ EOD;
      * @param array $select_status tags, i.e. array('ACTIVE','LOCKED')
      * @param array $order_by fields to order by
      * @param string $order_direction 'ASC' (default) or 'DESC'
+     * @param array $columns the columns to add to the list
      * @throws \Exception
      * @return array selected records
      */
@@ -262,6 +263,11 @@ EOD;
             $result = $this->app['db']->fetchAll($SQL);
             $events = array();
             $participants_array = array('event_participants_confirmed', 'event_participants_pending', 'event_participants_canceled');
+
+            if (in_array('pack_recurring', $columns)) {
+                $RecurringEvent = new RecurringEvent($this->app);
+            }
+
             foreach ($result as $evt) {
                 $event = array();
                 foreach ($columns as $column) {
@@ -276,6 +282,23 @@ EOD;
                             case 'event_participants_canceled':
                                 $event[$column] = $this->Subscription->countParticipants($evt['event_id'], 'CANCELED');
                                 break;
+                        }
+                    }
+                    elseif ($column == 'pack_recurring') {
+                        // pack recurring events
+                        if ($evt['event_recurring_id'] > 0) {
+                            if (false !== ($recurring = $RecurringEvent->select($evt['event_recurring_id']))) {
+                                if ($recurring['parent_event_id'] == $evt['event_id']) {
+                                    // gather the recurring dates ...
+                                    $event[$column] = $RecurringEvent->getReadableCurringEvent($evt['event_recurring_id']);
+                                }
+                                else {
+                                    continue 2;
+                                }
+                            }
+                        }
+                        else {
+                            $event[$column] = '';
                         }
                     }
                     else {
