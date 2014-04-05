@@ -26,7 +26,7 @@
 {% block title %}{{ 'Event Administration - Categories list'|trans }}{% endblock %}
 {% block content %}
   <!-- {{ _self.getTemplateName() }} -->  
-  <div class="container">
+  <div class="container-fluid">
     {% include '@phpManufaktur/Event/Template/default/admin/toolbar.twig' with {toolbar: extra.toolbar} only %}
     {% if form.extra_type_id.vars.value > 0 %}
       <h1>{{ 'Edit extra field'|trans }}</h1> 
