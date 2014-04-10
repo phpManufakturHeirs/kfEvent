@@ -150,11 +150,16 @@
       <div class="cell width-150" >{%if event.event_costs > 0 %}{{ event.event_costs|number_format(2,',','.') }} &euro;{% else %}{{ 'free of charge'|trans }}{% endif %}</div>
     </div>
   </div>
-  
+    {{ parameter.limit }}
   <div class="recurring-dates">
     <h3>{{ 'Next event dates'|trans }}</h3>
+    {% set limit = parameter.limit|default(0) %}
+    {% set count = 0 %}  
     {% for item in recurring_events %}
-      <p><a href="{{ item.link.subscribe }}" title="{{ 'Click to subscribe'|trans }}">{{ item.event_date_from|date('DATE_FORMAT'|trans) }}</a></p>
+      {% if limit > count %} 
+        <p><a href="{{ item.link.subscribe }}" title="{{ 'Click to subscribe'|trans }}">{{ item.event_date_from|date('DATE_FORMAT'|trans) }}</a></p>
+        {% set count = count + 1 %} 
+      {% endif %}           
     {% endfor %}
   </div>
   
