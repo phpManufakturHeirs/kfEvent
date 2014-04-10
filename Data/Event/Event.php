@@ -173,15 +173,25 @@ EOD;
      * Count the records in the table
      *
      * @param array $status flags, i.e. array('ACTIVE','LOCKED')
+     * @param boolean $pack_recurring if true don't count recurring events
      * @throws \Exception
      * @return integer number of records
      */
-    public function count($status=null)
+    public function count($status=null, $pack_recurring=false)
     {
         try {
-            $SQL = "SELECT COUNT(*) FROM `".self::$table_name."`";
+            if ($pack_recurring) {
+                $recurring_table = FRAMEWORK_TABLE_PREFIX.'event_recurring_event';
+                $SQL = "SELECT COUNT(DISTINCT `event_id`) FROM `".self::$table_name."`, `$recurring_table` WHERE (`event_recurring_id` = -1 OR ".
+                    "(`event_recurring_id`=`recurring_id` AND `parent_event_id`=`event_id`)) AND ";
+            }
+            else {
+                $SQL = "SELECT COUNT(DISTINCT `event_id`) FROM `".self::$table_name."`";
+            }
             if (is_array($status) && !empty($status)) {
-                $SQL .= " WHERE ";
+                if (!$pack_recurring) {
+                    $SQL .= " WHERE ";
+                }
                 $use_status = false;
                 if (is_array($status) && !empty($status)) {
                     $use_status = true;
@@ -222,7 +232,15 @@ EOD;
         try {
             $event = self::$table_name;
             $desc = FRAMEWORK_TABLE_PREFIX.'event_description';
-            $SQL = "SELECT * FROM `$event`, `$desc` WHERE $event.event_id=$desc.event_id";
+            $recurring = FRAMEWORK_TABLE_PREFIX.'event_recurring_event';
+            if (in_array('pack_recurring', $columns)) {
+                $SQL = "SELECT * FROM `$event`, `$desc`, `$recurring` WHERE $event.event_id=$desc.event_id AND ".
+                    "(`event_recurring_id` = -1 OR ".
+                    "(`event_recurring_id`=`recurring_id` AND `parent_event_id`=$event.`event_id`)) ";
+            }
+            else {
+                $SQL = "SELECT * FROM `$event`, `$desc` WHERE $event.event_id=$desc.event_id";
+            }
             if (is_array($select_status) && !empty($select_status)) {
                 $SQL .= " AND ";
                 $use_status = false;
@@ -242,6 +260,7 @@ EOD;
                     $SQL .= ')';
                 }
             }
+            $SQL .= " GROUP BY $event.event_id";
             if (is_array($order_by) && !empty($order_by)) {
                 $SQL .= " ORDER BY ";
                 $start = true;

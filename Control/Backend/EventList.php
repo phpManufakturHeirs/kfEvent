@@ -91,8 +91,7 @@ class EventList extends Backend {
     protected function getList(&$list_page, $rows_per_page, $select_status=null, &$max_pages=null, $order_by=null, $order_direction='ASC')
     {
         // count rows
-        $count_rows = $this->EventData->count($select_status);
-
+        $count_rows = $this->EventData->count($select_status, in_array('pack_recurring', self::$columns));
         if ($count_rows < 1) {
             // nothing to do ...
             return null;
