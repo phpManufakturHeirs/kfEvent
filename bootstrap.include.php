@@ -81,11 +81,6 @@ if (!in_array($roles, $roles_provided)) {
     $app['security.roles_provided'] = $roles_provided;
 }
 
-// scan the /Locale directory and add all available languages
-$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale');
-// scan the /Locale/Custom directory and add all available languages
-$app['utils']->addLanguageFiles(MANUFAKTUR_PATH.'/Event/Data/Locale/Custom');
-
 /**
  * Use the EmbeddedAdministration feature to connect the extension with the CMS
  *
