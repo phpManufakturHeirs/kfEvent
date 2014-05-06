@@ -41,6 +41,17 @@
     
     {{ alert }}
     
+    {% if recurring_dates|length > 0 %}
+      <small>{{ 'The next recurring events'|trans }}:</small>
+      <div class="row">
+        {% for recurring in recurring_dates %}
+          <div class="col-md-1 col-sm-2 col-xs-4">
+            <a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ recurring.event_id ~ '?usage=' ~ usage }}">{{ recurring.event_date_from|date('DATE_FORMAT'|trans) }}</a>
+          </div>
+        {% endfor %}  
+      </div>
+    {% endif %}
+    
     <form action="{{ FRAMEWORK_URL }}/admin/event/edit?usage={{ usage }}" method="post" {{ form_enctype(form) }} role="form">
       
       {{ form_errors(form) }}

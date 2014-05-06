@@ -684,6 +684,14 @@ EOD;
         }
     }
 
+    /**
+     * Select all future event record which belong to the given Recurring ID and
+     * which are within the publishing period (only actual events)
+     *
+     * @param integer $recurring_id
+     * @throws \Exception
+     * @return Ambigous <boolean, array >
+     */
     public function selectRecurringEvents($recurring_id)
     {
         try {
@@ -692,12 +700,34 @@ EOD;
                 "`event_date_from` >= NOW() ORDER BY `event_date_from` ASC";
             $results = $this->app['db']->fetchAll($SQL);
             $events = array();
-            foreach ($results as $result) {
-                if (false !== ($event = $this->selectEvent($result['event_id']))) {
-                    $events[] = $event;
+            if (is_array($results)) {
+                foreach ($results as $result) {
+                    if (false !== ($event = $this->selectEvent($result['event_id']))) {
+                        $events[] = $event;
+                    }
                 }
             }
             return (!empty($events)) ? $events : false;
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
+    /**
+     * Select all future recurring events by the given Recurring ID. Does not look
+     * for the publishing period and return event_id adn event_date_from fields
+     *
+     * @param integer $recurring_id
+     * @throws \Exception
+     * @return Ambigous <boolean, unknown>
+     */
+    public function selectRecurringDates($recurring_id)
+    {
+        try {
+            $SQL = "SELECT `event_date_from`, `event_id` FROM `".self::$table_name."` WHERE `event_recurring_id`=$recurring_id AND ".
+                "`event_status`='ACTIVE' AND `event_date_from` >= NOW() ORDER BY `event_date_from` ASC";
+            $results = $this->app['db']->fetchAll($SQL);
+            return (!empty($results)) ? $results : false;
         } catch (\Doctrine\DBAL\DBALException $e) {
             throw new \Exception($e);
         }

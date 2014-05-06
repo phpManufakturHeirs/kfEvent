@@ -597,9 +597,12 @@ class EventEdit extends Backend {
             }
         }
 
+        $recurring_dates = null;
         if (isset($event['event_recurring_id']) && ($event['event_recurring_id'] > 0)) {
             $this->setAlert($this->RecurringData->getReadableCurringEvent($event['event_recurring_id']));
+            $recurring_dates = $this->EventData->selectRecurringDates($event['event_recurring_id']);
         }
+
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'admin/edit.event.twig'),
@@ -610,7 +613,8 @@ class EventEdit extends Backend {
                 'form' => $form->createView(),
                 'extra_info' => $extra_info,
                 'add_image_url' => $this->createAddImageURL(),
-                'images' => $this->Images->selectByEventID(self::$event_id)
+                'images' => $this->Images->selectByEventID(self::$event_id),
+                'recurring_dates' => $recurring_dates
             ));
     }
 
