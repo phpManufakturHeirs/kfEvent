@@ -37,6 +37,19 @@ class Configuration
     public static function getDefaultConfigArray()
     {
         return array(
+            'nav_tabs' => array(
+                'order' => array(
+                    'event_list',
+                    'event_edit',
+                    'subscription',
+                    'propose',
+                    'contact_list',
+                    'contact_edit',
+                    'group',
+                    'about'
+                ),
+                'default' => 'about'
+            ),
             'general' => array(
                 'max_execution_time' => 60
             ),

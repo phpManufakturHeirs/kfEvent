@@ -88,7 +88,7 @@ if (!in_array($roles, $roles_provided)) {
  */
 $app->get('/event/cms/{cms_information}', function ($cms_information) use ($app) {
     $administration = new EmbeddedAdministration($app);
-    return $administration->route('/admin/event/about', $cms_information);
+    return $administration->route('/admin/event', $cms_information);
 });
 
 /**
@@ -106,9 +106,7 @@ $admin->get('/event/uninstall',
     'phpManufaktur\Event\Data\Setup\Uninstall::exec');
 
 $app->get('/admin/event',
-    'phpManufaktur\Event\Control\Backend\About::exec');
-$app->get('/admin/event/',
-    'phpManufaktur\Event\Control\Backend\About::exec');
+    'phpManufaktur\Event\Control\Backend\Backend::ControllerSelectDefaultTab');
 $app->get('/admin/event/about',
     'phpManufaktur\Event\Control\Backend\About::exec');
 
@@ -276,8 +274,16 @@ $app->get('/admin/event/qrcode/rebuild',
     'phpManufaktur\Event\Control\Command\EventQRCode::ControllerRebuildAllQRCodeFiles');
 
 // handling of subscriptions
-$app->get('/admin/event/registration',
-    'phpManufaktur\Event\Control\Backend\Subscribe::controllerList');
+$app->get('/admin/event/subscription',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerList');
+$app->match('/admin/event/subscription/add/start',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerAddSubscriptionStart');
+$app->match('/admin/event/subscription/add/contact',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerAddContact');
+$app->match('/admin/event/subscription/add/event',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerSearchEvent');
+$app->match('/admin/event/subscription/add/finish',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerFinishSubscription');
 
 // handling of proposes
 $app->get('/admin/event/propose',

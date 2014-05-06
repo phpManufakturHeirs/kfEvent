@@ -13,12 +13,16 @@ namespace phpManufaktur\Event\Control\Backend;
 
 use Silex\Application;
 use phpManufaktur\Basic\Control\Pattern\Alert;
+use phpManufaktur\Event\Control\Configuration;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class Backend extends Alert
 {
 
     protected static $usage = null;
     protected static $usage_param = null;
+    protected static $config = null;
 
     /**
      *
@@ -35,6 +39,8 @@ class Backend extends Alert
         if (self::$usage != 'framework') {
             $app['translator']->setLocale($this->app['session']->get('CMS_LOCALE', 'en'));
         }
+        $Configuration = new Configuration($app);
+        self::$config = $Configuration->getConfiguration();
     }
 
     /**
@@ -44,66 +50,127 @@ class Backend extends Alert
      * @return multitype:multitype:string boolean
      */
     public function getToolbar($active) {
-        $toolbar_array = array(
-            'event_list' => array(
-                'name' => 'event_list',
-                'text' => 'Event list',
-                'hint' => 'List of all active events',
-                'link' => FRAMEWORK_URL.'/admin/event/list'.self::$usage_param,
-                'active' => ($active == 'event_list')
-            ),
-            'event_edit' => array(
-                'name' => 'event_edit',
-                'text' => 'Event',
-                'hint' => 'Create a new event',
-                'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
-                'active' => ($active == 'event_edit')
-            ),
-            'registration' => array(
-                'name' => 'registration',
-                'text' => 'Registrations',
-                'hint' => 'List of all registrations for events',
-                'link' => FRAMEWORK_URL.'/admin/event/registration'.self::$usage_param,
-                'active' => ($active == 'registration')
-            ),
-            'propose' => array(
-                'name' => 'propose',
-                'text' => 'Proposes',
-                'hint' => 'List of actual submitted proposes for events',
-                'link' => FRAMEWORK_URL.'/admin/event/propose'.self::$usage_param,
-                'active' => ($active == 'propose')
-            ),
-            'contact_list' => array(
-                'name' => 'contact_list',
-                'text' => 'Contact list',
-                'hint' => 'List of all available contacts (Organizer, Locations, Participants)',
-                'link' => FRAMEWORK_URL.'/admin/event/contact/list'.self::$usage_param,
-                'active' => ($active == 'contact_list')
-            ),
-            'contact_edit' => array(
-                'name' => 'contact_edit',
-                'text' => 'Contact',
-                'hint' => 'Create a new contact',
-                'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
-                'active' => ($active == 'contact_edit')
-            ),
-            'group' => array(
-                'name' => 'event_groups',
-                'text' => 'Groups',
-                'hint' => 'List of all available event groups',
-                'link' => FRAMEWORK_URL.'/admin/event/group/list'.self::$usage_param,
-                'active' => ($active == 'group')
-            ),
-
-            'about' => array(
-                'name' => 'about',
-                'text' => 'About',
-                'hint' => 'Information about the Event extension',
-                'link' => FRAMEWORK_URL.'/admin/event/about'.self::$usage_param,
-                'active' => ($active == 'about')
-                ),
-        );
-        return $toolbar_array;
+        $toolbar = array();
+        foreach (self::$config['nav_tabs']['order'] as $tab) {
+            switch ($tab) {
+                case 'event_list':
+                    $toolbar[$tab] = array(
+                        'name' => 'event_list',
+                        'text' => 'Event list',
+                        'hint' => 'List of all active events',
+                        'link' => FRAMEWORK_URL.'/admin/event/list'.self::$usage_param,
+                        'active' => ($active == 'event_list')
+                    );
+                    break;
+                case 'event_edit':
+                    $toolbar[$tab] = array(
+                        'name' => 'event_edit',
+                        'text' => 'Event',
+                        'hint' => 'Create a new event',
+                        'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
+                        'active' => ($active == 'event_edit')
+                    );
+                    break;
+                case 'subscription':
+                    $toolbar[$tab] = array(
+                        'name' => 'subscription',
+                        'text' => 'Subscriptions',
+                        'hint' => 'List of all subscriptions for events',
+                        'link' => FRAMEWORK_URL.'/admin/event/subscription'.self::$usage_param,
+                        'active' => ($active == 'subscription')
+                    );
+                    break;
+                case 'propose':
+                    $toolbar[$tab] = array(
+                        'name' => 'propose',
+                        'text' => 'Proposes',
+                        'hint' => 'List of actual submitted proposes for events',
+                        'link' => FRAMEWORK_URL.'/admin/event/propose'.self::$usage_param,
+                        'active' => ($active == 'propose')
+                    );
+                    break;
+                case 'contact_list':
+                    $toolbar[$tab] = array(
+                        'name' => 'contact_list',
+                        'text' => 'Contact list',
+                        'hint' => 'List of all available contacts (Organizer, Locations, Participants)',
+                        'link' => FRAMEWORK_URL.'/admin/event/contact/list'.self::$usage_param,
+                        'active' => ($active == 'contact_list')
+                    );
+                    break;
+                case 'contact_edit':
+                    $toolbar[$tab] = array(
+                        'name' => 'contact_edit',
+                        'text' => 'Contact',
+                        'hint' => 'Create a new contact',
+                        'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
+                        'active' => ($active == 'contact_edit')
+                    );
+                    break;
+                case 'group':
+                    $toolbar[$tab] = array(
+                        'name' => 'event_groups',
+                        'text' => 'Groups',
+                        'hint' => 'List of all available event groups',
+                        'link' => FRAMEWORK_URL.'/admin/event/group/list'.self::$usage_param,
+                        'active' => ($active == 'group')
+                    );
+                    break;
+                case 'about':
+                    $toolbar[$tab] = array(
+                        'name' => 'about',
+                        'text' => 'About',
+                        'hint' => 'Information about the Event extension',
+                        'link' => FRAMEWORK_URL.'/admin/event/about'.self::$usage_param,
+                        'active' => ($active == 'about')
+                        );
+                    break;
+            }
+        }
+        return $toolbar;
     }
 
+    /**
+     * Controller to select the default navigation tab.
+     *
+     * @param Application $app
+     * @throws \Exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function ControllerSelectDefaultTab(Application $app)
+    {
+        $this->initialize($app);
+
+        switch (self::$config['nav_tabs']['default']) {
+            case 'about':
+                $route = '/admin/event/about';
+                break;
+            case 'event_list':
+                $route = '/admin/event/list';
+                break;
+            case 'event_edit':
+                $route = '/admin/event/edit';
+                break;
+            case 'subscription':
+                $route = '/admin/event/subscription';
+                break;
+            case 'propose':
+                $route = '/admin/event/propose';
+                break;
+            case 'contact_list':
+                $route = '/admin/event/contact/list';
+                break;
+            case 'contact_edit':
+                $route = '/admin/event/contact/select';
+                break;
+            case 'group':
+                $route = '/admin/event/group/list';
+                break;
+            default:
+                throw new \Exception('Invalid default nav_tab in configuration: '.self::$config['nav_tabs']['default']);
+        }
+
+        $subRequest = Request::create($route, 'GET', array('usage' => self::$usage));
+        return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
 }

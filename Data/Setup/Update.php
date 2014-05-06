@@ -348,6 +348,34 @@ class Update
     }
 
     /**
+     * Release 2.0.39
+     */
+    protected function release_2039()
+    {
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+
+        if (!isset($config['nav_tabs'])) {
+            $config['nav_tabs'] = array(
+                'order' => array(
+                    'event_list',
+                    'event_edit',
+                    'subscription',
+                    'propose',
+                    'contact_list',
+                    'contact_edit',
+                    'group',
+                    'about'
+                ),
+                'default' => 'about'
+            );
+        }
+
+        $Configuration->setConfiguration($config);
+        $Configuration->saveConfiguration();
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -356,32 +384,16 @@ class Update
     {
         $this->app = $app;
 
-        // Release 2.0.14
         $this->release_2014();
-
-        // Release 2.0.16
         $this->release_2016();
-
-        // Release 2.0.18
         $this->release_2018();
-
-        // Release 2.0.25
         $this->release_2025();
-
-        // Release 2.0.28
         $this->release_2028();
-
-        // Release 2.0.32
         $this->release_2032();
-
-        // Release 2.0.33
         $this->release_2033();
-
-        // Release 2.0.35
         $this->release_2035();
-
-        // Release 2.0.36
         $this->release_2036();
+        $this->release_2039();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);
