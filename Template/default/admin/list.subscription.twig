@@ -31,6 +31,9 @@
     {% include '@phpManufaktur/Event/Template/default/admin/toolbar.twig' %}
     
     <div class="height-15"></div>
+    <a href="{{ FRAMEWORK_URL ~ '/admin/event/subscription/add/start?usage=' ~ usage }}" class="btn btn-default pull-right" role="button">{{ 'Add a subscription'|trans }}</a>
+    <div class="clearfix"></div>
+    <div class="height-15"></div>
     
     {{ alert }}
     

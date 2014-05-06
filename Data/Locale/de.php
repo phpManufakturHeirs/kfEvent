@@ -28,6 +28,8 @@ return array(
         => 'Das beantragte Benutzerrecht aktivieren',
     'Add a image'
         => 'Ein Bild hinzufügen',
+    'Add a subscription'
+        => 'Eine Anmeldung hinzufügen',
     'Add category'
         => 'Kategorie hinzufügen',
     'Add extra field'
@@ -276,7 +278,7 @@ return array(
         => 'Übersicht über alle verfügbaren Kontakte (Veranstalter, Orte, Teilnehmer)',
     'List of all available event groups'
         => 'Übersicht über alle verfügbaren Veranstaltungsgruppen',
-    'List of all registrations for events'
+    'List of all subscriptions for events'
         => 'Übersicht über alle Anmeldungen zu Veranstaltungen',
     'List single dates in format <b>%format%</b> separated by comma to exclude them from recurring'
         => 'Schließen Sie einzelne Daten im Format <b>%format%</b> durch ein Komma getrennt von der Sequenz aus.',
@@ -364,6 +366,8 @@ return array(
         => 'Bitte prüfen Sie die Angaben zu der Veranstaltung und verwenden Sie anschließend einen der folgenden Aktions-Links',
     'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.'
         => 'Bitte definieren Sie einen permanenten Link in der config.event.json. Ohne diesen Link kann Event keine Verweise auf Veranstaltungen erzeugen oder auf Anfragen von Veranstaltungsteilnehmern reagieren.',
+    'Please search for the contact you want to subscribe to an event or add a new contact, if you are shure that the person does not exists in Contacts.'
+        => 'Bitte suchen Sie nach dem Kontakt, den Sie zu einer Veranstaltung anmelden möchten. Fügen Sie einen neuen Kontakt hinzu, falls dieser noch nicht existiert.',
     'Please select action'
         => 'Bitte wählen Sie eine Aktion',
     'Please type in a long description with %minimum% characters at minimum.'
@@ -391,14 +395,14 @@ return array(
         => 'Serientermin',
     'Redirect to the parent event ID!'
         => 'Umgeleitet auf die ursprüngliche Veranstaltungs ID!',
-    'Registrations'
-        => 'Anmeldungen',
     'regular email address of a company, institution or association'
         => 'offizielle E-Mail Adresse einer Firma, Einrichtung oder eines Verein',
     'Reject the desired account role'
         => 'Das gewünschte Benutzerrecht zurückweisen',
     'Reject this event'
         => 'Veranstaltung ablehnen',
+    'Remark'
+        => 'Bemerkung',
     'Repeat each x-days'
         => 'Alle x-Tage wiederholen',
     'Repeat each x-month'
@@ -420,6 +424,8 @@ return array(
     'ROLE_EVENT_SUBMITTER'
         => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Benutzer vorgeschlagen wurden',
 
+    'Search event'
+        => 'Veranstaltung suchen',
     'Search Location'
         => 'Veranstaltungsort suchen',
     'Search Organizer'
@@ -432,6 +438,8 @@ return array(
         => 'zweiten und letzten',
     'Select account type'
         => 'Kontotyp wählen',
+    'Select event'
+        => 'Veranstaltung auswählen',
     'Select event group'
         => 'Veranstaltungsgruppe auswählen',
     'Select type'
@@ -442,8 +450,14 @@ return array(
         => 'Detailierte Informationen anzeigen',
     'Skipped kitEvent ID %event_id%: No valid value in %field%'
         => 'kitEvent ID <b>%event_id%</b> übersprungen: Ungültiger Wert in Feld %field%',
+    'Start a new search'
+        => 'Eine neue Suche starten',
     'Start import from kitEvent'
         => 'Import aus kitEvent starten',
+    'Start search'
+        => 'Suche starten',
+    'Submit subscription'
+        => 'Anmeldung übermitteln',
     'Submitter'
         => 'Übermittler',
     'Submitter ID'
@@ -452,6 +466,8 @@ return array(
         => 'Übermittler Status',
     'Subscribe to event'
         => 'Zu der Veranstaltung anmelden',
+    'Subscriptions'
+        => 'Anmeldungen',
     'Successfull inserted a recurring event'
         => 'Es wurden erfolgreich sich wiederholende Veranstaltungen angelegt.',
 
@@ -521,6 +537,8 @@ return array(
         => 'Der Veranstaltung wurde das Bild <b>%image%</b> hinzugefügt.',
     'The image with the ID %image_id% was successfull deleted.'
         => 'Das Bild mit der ID %image_id% wurde erfolgreich gelöscht.',
+    'The next recurring events'
+        => 'Die nächsten Veranstaltungstermine',
     'The publishing date ends before the event starts, this is not allowed!'
         => 'Der Veröffentlichungszeitraum endet vor dem Beginn der Veranstaltung, dies ist nicht gewünscht!',
     'The publishing date is behind the event start date!'
