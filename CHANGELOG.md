@@ -6,6 +6,16 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.39** - 2014-05-07
+
+* generally changed usage of class `container` to `container-fluid`
+* fixed the paging in backend event list if `pack_recurring` is activated
+* add parameter `limit[]` for recurring events in `event.recurring.twig` template
+* all language files are now loaded by the BASIC extension
+* The backend navigation tabs can now configured over `config.event.json`
+* Recurring events will be now shown with future dates in any event edit dialog to enable a direct access.
+* Subscriptions can now also manually inserted in the backend subscription list
+
 **2.0.38** - 2014-04-03
 
 * add feature `pack_recurring` to enable the [packing of recurring events](https://github.com/phpManufaktur/kfEvent/wiki/list.event.json#columns) in the administrative event list.
