@@ -506,7 +506,7 @@ class Subscribe extends Basic
                             'address_street' => isset($subscribe['street']) ? $subscribe['street'] : '',
                             'address_zip' => isset($subscribe['zip']) ? $subscribe['zip'] : '',
                             'address_city' => isset($subscribe['city']) ? $subscribe['city'] : '',
-                            'address_country_code' => isset($subscribe['country']) ? $subscribe['country'] : self::$config['event']['subscribe']['contact']['country']['default']
+                            'address_country_code' => isset($subscribe['country']) ? $subscribe['country'] : self::$config['event']['subscription']['contact']['country']['default']
                         )
                     );
                 }
@@ -558,7 +558,7 @@ class Subscribe extends Basic
                     'application_name' => 'Event',
                     'application_marker_type' => 'Subscription',
                     'application_marker_id' => self::$event_id,
-                    'message_title' => $event['description_title'],
+                    'message_title' => isset($event['description_title']) ? $event['description_title'] : '',
                     'message_content' => strip_tags($subscribe['message']),
                     'message_date' => date('Y-m-d H:i:s'),
                 );
