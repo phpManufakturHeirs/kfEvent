@@ -311,7 +311,7 @@ class EventEdit extends Backend {
             'mode' => 'public',
             'usage' => self::$usage
         )));
-        return FRAMEWORK_URL.'/admin/mediabrowser/init/'.$image_link_param;
+        return FRAMEWORK_URL.'/mediabrowser/init/'.$image_link_param;
     }
 
     /**
