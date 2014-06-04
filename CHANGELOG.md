@@ -6,6 +6,15 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.40** - 2014-06-04
+
+* fixed problems handling subscriptions
+* changed route for the MediaBrowser
+* fixed some problems in handling subscriptions 
+* added edit dialog for subscriptions in backend
+* subscription list can now be sorted and filtered
+* fixed some smaller problems in parameter checking
+
 **2.0.39** - 2014-05-07
 
 * generally changed usage of class `container` to `container-fluid`
