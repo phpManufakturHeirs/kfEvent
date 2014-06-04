@@ -71,6 +71,6 @@
 
   <div itemprop="offers" itemscope itemtype="http://schema.org/AggregateOffer">
     <meta itemprop="lowPrice" content="{%if event.event_costs > 0 %}{{ event.event_costs|number_format(2,',','.') }} &euro;{% else %}0,00 &euro;{% endif %}">
-    <meta itemprop="offerCount" content="{% if event.event_participants_max < 0 %}{{ config.event.microdata.offer_count_unlimited }}{% else %}{{ event.event_participants_max - event.event_participants_total }}{% endif %}">
+    <meta itemprop="offerCount" content="{% if event.event_participants_max is not null or event.event_participants_max < 0 %}{{ config.event.microdata.offer_count_unlimited }}{% else %}{{ event.event_participants_max - event.event_participants_total }}{% endif %}">
   </div>
 </div>
