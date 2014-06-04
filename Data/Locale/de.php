@@ -78,6 +78,8 @@ return array(
     'by selecting a event group'
         => 'durch Auswahl einer Veranstaltungsgruppe',
 
+    'CANCELED'
+        => 'Storniert',
     'Change account rights'
         => 'Änderung der Benutzerrechte',
     'Change Event configuration'
@@ -98,6 +100,8 @@ return array(
         => 'Kommentar Behandlung',
     'company, institution or association'
         => 'Firma, Institution oder Verein',
+    'CONFIRMED'
+        => 'Bestätigt',
     'Contact list'
         => 'Kontakte, Übersicht',
     'Contact type'
@@ -559,6 +563,8 @@ return array(
         => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
     'The submitted GUID %guid% does not exists.'
         => 'Die übermittelte GUID %guid% existiert nicht!',
+    'The subscription was successfull updated'
+        => 'Die Anmeldung wurde erfolgreich aktualisiert.',
     'The user %contact_name% with the ID %contact_id% and the email address %email% has proposed the following event'
         => 'Der Kontakt %contact_name% mit der der ID %contact_id% und der E-Mail Adresse %email% hat die folgende Veranstaltung vorgeschlagen',
     'The user %user% does not exists!'
@@ -610,8 +616,6 @@ return array(
         => 'Jährliche Wiederholung',
     'You are authenticated but not allowed to edit this event. Please contact the admin if you are of the mind that you should be able for.'
         => 'Sie sind korrekt angemeldet jedoch nicht berechtigt diese Veranstaltung zu bearbeiten. Bitte wenden Sie sich an den Administrator um die erforderliche Berechtigung zu erhalten.',
-    'Your are not authenticated, please login!'
-        => 'Sie sind nicht berechtigt auf diese Inhalte zuzugreifen, bitte melden Sie sich an!',
     'Your contact record is locked, so we can not perform any action. Please contact the administrator'
         => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
     'You have already subscribed to this Event at %datetime%, you can not subscribe again.'

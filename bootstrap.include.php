@@ -15,7 +15,7 @@ use phpManufaktur\Basic\Control\CMS\EmbeddedAdministration;
 $roles = $app['security.role_hierarchy'];
 if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
     $roles['ROLE_ADMIN'][] = 'ROLE_EVENT_ADMIN';
-    $roles['ROLE_EVENT_ADMIN'] =array(
+    $roles['ROLE_EVENT_ADMIN'] = array(
         'ROLE_EVENT_CONTACT',
         'ROLE_EVENT_EDIT_ADMIN',
         'ROLE_EVENT_EDIT_LOCATION',
@@ -24,7 +24,9 @@ if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
         'ROLE_EVENT_LOCATION',
         'ROLE_EVENT_ORGANIZER',
         'ROLE_EVENT_SUBMITTER',
-        'ROLE_EVENT_USER'
+        'ROLE_EVENT_USER',
+        'ROLE_MEDIABROWSER_ADMIN',
+        'ROLE_MDIABRROWSER_USER'
     );
     $app['security.role_hierarchy'] = $roles;
 }
@@ -284,6 +286,10 @@ $app->match('/admin/event/subscription/add/event',
     'phpManufaktur\Event\Control\Backend\Subscribe::ControllerSearchEvent');
 $app->match('/admin/event/subscription/add/finish',
     'phpManufaktur\Event\Control\Backend\Subscribe::ControllerFinishSubscription');
+$app->get('/admin/event/subscription/edit/{subscription_id}',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerEditSubscription');
+$app->post('/admin/event/subscription/edit/check',
+    'phpManufaktur\Event\Control\Backend\Subscribe::ControllerCheckSubscription');
 
 // handling of proposes
 $app->get('/admin/event/propose',

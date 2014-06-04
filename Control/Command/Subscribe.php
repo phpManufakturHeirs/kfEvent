@@ -576,7 +576,7 @@ class Subscribe extends Basic
                 'subscription_guid' => $guid,
                 // if any double_opt_in confirmation is needed the status must be PENDING
                 'subscription_status' => (self::$config['event']['subscription']['confirm']['double_opt_in'] ||
-                    self::$config['contact']['confirm']['double_opt_in']) ? 'PENDING' : 'CONFIRMED',
+                    (self::$config['contact']['confirm']['double_opt_in'] && $new_contact)) ? 'PENDING' : 'CONFIRMED',
             );
 
             $subscription_id = -1;

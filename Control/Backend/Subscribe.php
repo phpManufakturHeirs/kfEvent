@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use phpManufaktur\Event\Data\Event\EventSearch;
 use phpManufaktur\Event\Data\Event\Event as EventData;
+use phpManufaktur\Basic\Control\Pattern\Alert;
+use phpManufaktur\Contact\Data\Contact\Message;
 
 class Subscribe extends Backend {
 
@@ -343,7 +345,7 @@ class Subscribe extends Backend {
     }
 
     /**
-     * Show the about dialog for Event
+     * Show the list with the subscriptions
      *
      * @return string rendered dialog
      */
@@ -352,7 +354,7 @@ class Subscribe extends Backend {
         $this->initialize($app);
 
         $SubscriptionData = new Subscription($app);
-        $subscriptions = $SubscriptionData->selectList();
+        $subscriptions = $SubscriptionData->selectList(100, 30);
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'admin/list.subscription.twig'),
@@ -362,6 +364,147 @@ class Subscribe extends Backend {
                 'subscriptions' => $subscriptions,
                 'alert' => $this->getAlert()
             ));
+    }
+
+    /**
+     * Get the final subscription form fields
+     *
+     * @param array $data
+     */
+    protected function getSubscriptionEditFields($data=array())
+    {
+        $remark = '';
+        if (isset($data['subscription']['message_id']) && ($data['subscription']['message_id'] > 0)) {
+            $MessageData = new Message($this->app);
+            if (false === ($msg = $MessageData->select($data['subscription']['message_id']))) {
+                throw new \Exception('Missing the message ID '.$data['subscription']['message_id']);
+            }
+            $remark = $msg['message_content'];
+        }
+
+        return $this->app['form.factory']->createBuilder('form', $data)
+        ->add('subscription_id', 'hidden', array(
+            'data' => isset($data['subscription']['subscription_id']) ? $data['subscription']['subscription_id'] : -1
+        ))
+        ->add('status', 'choice', array(
+            'expanded' => false,
+            'multiple' => false,
+            'choices' => array(
+                'PENDING' => 'PENDING',
+                'CONFIRMED' => 'CONFIRMED',
+                'CANCELED' => 'CANCELED',
+                'LOCKED' => 'LOCKED'
+            ),
+            'data' => isset($data['subscription']['subscription_status']) ? $data['subscription']['subscription_status'] : 'LOCKED'
+        ))
+
+        ->add('remark', 'textarea', array(
+            'data' => $remark,
+            'required' => false
+        ))
+        ;
+    }
+
+    public function ControllerEditSubscription(Application $app, $subscription_id)
+    {
+        $this->initialize($app);
+
+        if (false === ($subscription = $this->SubscriptionData->select($subscription_id))) {
+            $this->setAlert('The Subscription with the ID %subscription_id% does not exists!',
+                array('%subscription_id%' => $subscription_id), Alert::ALERT_TYPE_DANGER);
+            return $this->ControllerList($app);
+        }
+        if (false === ($contact = $this->app['contact']->selectOverview($subscription['contact_id']))) {
+            $this->setAlert("The contact with the ID %contact_id% does not exists!",
+                array('%contact_id%' => $subscription['contact_id']), Alert::ALERT_TYPE_DANGER);
+            return $this->ControllerList($app);
+        }
+        if (false === ($event = $this->EventData->selectEvent($subscription['event_id'], false))) {
+            $this->setAlert('The record with the ID %id% does not exists!',
+                array('%id%' => $subscription['event_id']), Alert::ALERT_TYPE_DANGER);
+            return $this->ControllerList($app);
+        }
+
+        $data = array(
+            'subscription' => $subscription,
+            'contact' => $contact,
+            'event' => $event
+        );
+
+        $fields = $this->getSubscriptionEditFields($data);
+        $form = $fields->getForm();
+
+        return $this->app['twig']->render($this->app['utils']->getTemplateFile(
+            '@phpManufaktur/Event/Template', 'admin/edit.subscription.twig'),
+            array(
+                'usage' => self::$usage,
+                'toolbar' => $this->getToolbar('subscription'),
+                'alert' => $this->getAlert(),
+                'form' => $form->createView(),
+                'data' => $data
+            ));
+    }
+
+    public function ControllerCheckSubscription(Application $app)
+    {
+        $this->initialize($app);
+
+        $fields = $this->getSubscriptionEditFields();
+        $form = $fields->getForm();
+
+        $form->bind($this->app['request']);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            if (false === ($subscription = $this->SubscriptionData->select($data['subscription_id']))) {
+                $this->setAlert('The Subscription with the ID %subscription_id% does not exists!',
+                    array('%subscription_id%' => $data['subscription_id']), Alert::ALERT_TYPE_DANGER);
+                return $this->ControllerList($app);
+            }
+
+            $MessageData = new Message($this->app);
+
+            $remark = '';
+            if ($subscription['message_id'] > 0) {
+                if (false === ($msg = $MessageData->select($subscription['message_id']))) {
+                    throw new \Exception('Missing the message ID '.$subscription['message_id']);
+                }
+                $remark = $msg['message_content'];
+            }
+
+            if (($data['status'] != $subscription['subscription_status']) || ($data['remark'] != $remark)) {
+                if ($subscription['message_id'] > 0) {
+                    // update the message record
+                    $MessageData->update(array('message_content' => $data['remark']), $subscription['message_id']);
+                }
+                else {
+                    // create a new message record
+                    if (false === ($event = $this->EventData->selectEvent($subscription['event_id'], false))) {
+                        $this->setAlert('The record with the ID %id% does not exists!',
+                            array('%id%' => $subscription['event_id']), Alert::ALERT_TYPE_DANGER);
+                        return $this->ControllerList($app);
+                    }
+                    $MessageData->insert(array(
+                        'contact_id' => $subscription['contact_id'],
+                        'application_name' => 'Event',
+                        'application_marker_type' => 'Subscription',
+                        'application_marker_id' => $subscription['event_id'],
+                        'message_title' => isset($event['description_title']) ? $event['description_title'] : '',
+                        'message_content' => strip_tags($data['remark']),
+                        'message_date' => date('Y-m-d H:i:s')),
+                        $subscription['message_id']);
+                }
+                $this->SubscriptionData->update($data['subscription_id'], array(
+                    'subscription_status' => $data['status'],
+                    'message_id' => $subscription['message_id']
+                ));
+                $this->setAlert('The subscription was successfull updated');
+            }
+        }
+        else {
+            // general error (timeout, CSFR ...)
+            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+        }
+        return $this->ControllerList($app);
     }
 
 }
