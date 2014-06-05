@@ -13,7 +13,7 @@
 {% block stylesheet %}
   {{ parent() }}
   <link rel="stylesheet" type="text/css" href="{{ MANUFAKTUR_URL }}/Event/Template/default/command/css/event.view.css" media="screen, projection" />
-  <link href="{{ LIBRARY_URL ~ '/font-awesome/3.2.1/css/font-awesome.min.css' }}" rel="stylesheet">    
+  <link href="{{ LIBRARY_URL ~ '/font-awesome/latest/css/font-awesome.min.css' }}" rel="stylesheet">    
 {% endblock stylesheet %}
 {% block robots %}noindex,follow{% endblock %}
 {% block canonical %}<link rel="canonical" url="{{ FRAMEWORK_URL }}/event/perma/id/{{ event.event_id }}">{% endblock %}
