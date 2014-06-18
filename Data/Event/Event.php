@@ -732,4 +732,22 @@ EOD;
             throw new \Exception($e);
         }
     }
+
+    /**
+     * Count the ACTIVE recurring events for the given $recurring_id
+     *
+     * @param integer $recurring_id
+     * @throws \Exception
+     * @return integer
+     */
+    public function countRecurringEvents($recurring_id)
+    {
+        try {
+            $SQL = "SELECT COUNT(`event_date_from`) as 'count_recurring' FROM `".self::$table_name."` WHERE ".
+                "`event_recurring_id`=$recurring_id AND `event_status`='ACTIVE'";
+            return $this->app['db']->fetchColumn($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
 }

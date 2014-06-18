@@ -105,6 +105,7 @@ class Event extends Basic
 
         $recurring = array();
         $recurring_events = array();
+        $recurring_count = 0;
         if ($view == 'recurring') {
             if ($event['event_recurring_id'] < 1) {
                 // no recurring event
@@ -126,6 +127,8 @@ class Event extends Basic
                     $item['link']['subscribe'] = FRAMEWORK_URL.'/event/subscribe/id/'.$item['event_id'].'/redirect/'.$route.'?pid='.$this->getParameterID();
                     $recurring_events[] = $item;
                 }
+                // count all recurring events
+                $recurring_count = $this->EventData->countRecurringEvents($event['event_recurring_id']);
             }
             else {
                 // recurring ID does not exists
@@ -150,7 +153,8 @@ class Event extends Basic
                 'parameter' => self::$parameter,
                 'config' => self::$config,
                 'recurring' => $recurring,
-                'recurring_events' => $recurring_events
+                'recurring_events' => $recurring_events,
+                'recurring_count' => $recurring_count
             ));
     }
 
