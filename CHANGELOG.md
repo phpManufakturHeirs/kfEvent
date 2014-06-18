@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.41** - 2014-06-18
+
+* added counter for recurring events
+
 **2.0.40** - 2014-06-04
 
 * fixed problems handling subscriptions
