@@ -33,22 +33,6 @@ if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
 
 // add a access point for EVENT
 $entry_points = $app['security.role_entry_points'];
-/*
-if (!in_array('ROLE_EVENT_ADMIN', $entry_points)) {
-    $entry_points['ROLE_EVENT_ADMIN'] = array(
-        array(
-            'route' => '/admin/event',
-            'name' => 'Event',
-            'info' => 'Event management suite for freelancers and organizers',
-            'icon' => array(
-                'path' => MANUFAKTUR_PATH.'/Event/extension.jpg',
-                'url' => MANUFAKTUR_URL.'/Event/extension.jpg'
-            )
-        )
-    );
-    $app['security.role_entry_points'] = $entry_points;
-}
-*/
 $entry_points['ROLE_ADMIN'][] = array(
     'route' => '/admin/event',
     'name' => 'Event',
