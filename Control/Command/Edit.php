@@ -288,13 +288,6 @@ class Edit extends Basic
                 'displayname' => $Account->getDisplayName(),
                 'logout_url' => FRAMEWORK_URL.'/logout?pid='.$this->getParameterID().'&content='.urlencode($app['translator']->trans('Thank you, %name%', array('%name%' => $Account->getDisplayName())))
             ));
-
-
-
-        $token = $app['security']->getToken();
-        $roles = $token->getRoles();
-        print_r($roles);
-        return '<a href="'.FRAMEWORK_URL.'/logout?pid='.$this->getParameterID().'&content='.urlencode('<p>Bääääh!</p>').'">logout</a> edit event';
     }
 
     /**
