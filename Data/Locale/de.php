@@ -294,10 +294,6 @@ return array(
 
     'natural person'
         => 'Natürliche Person',
-    'Name'
-        => 'Bezeichner',
-    'Name (translated)'
-        => 'Bezeichner (übersetzt)',
     'New password'
         => 'Neues Passwort',
     'Next event dates'
