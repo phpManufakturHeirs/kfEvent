@@ -139,8 +139,6 @@ return array(
         => 'Datum und Uhrzeit',
     'Deadline'
         => 'Anmeldeschluß',
-    'delete this extra field'
-        => 'dieses Zusatzfeld löschen',
     'Delete this image'
         => 'Dieses Bild löschen',
     'Description'
@@ -218,12 +216,6 @@ return array(
     'Exclude dates'
         => 'Daten ausschließen',
 
-    'Field name'
-        => 'Bezeichner',
-    'Field name (translated)'
-        => 'Bezeichner (übersetzt)',
-    'Field type'
-        => 'Feld Typ',
     'first'
         => 'ersten',
     'first_third'
