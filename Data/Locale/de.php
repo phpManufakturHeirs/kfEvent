@@ -264,6 +264,9 @@ return array(
     'It is not allowed that the event start in the past!'
         => 'Der Veranstaltungsbeginn darf nicht in der Vergangenheit liegen!',
 
+    'Kitevent'
+        => 'kitEvent',
+
     'last'
         => 'letzten',
     'List of actual submitted proposes for events'

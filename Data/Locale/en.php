@@ -52,4 +52,6 @@ return array(
     'event_timestamp'
         => 'Timestamp',
 
+    'Kitevent'
+        => 'kitEvent',
 );
