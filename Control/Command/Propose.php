@@ -1243,7 +1243,7 @@ class Propose extends Basic
                     'communication_id' => -1,
                     'contact_id' => -1,
                     'communication_type' => 'URL',
-                    'communication_usage' => 'BUSINESS',
+                    'communication_usage' => 'PRIMARY',
                     'communication_value' => $request['url']
                 ),
 
@@ -1252,7 +1252,7 @@ class Propose extends Basic
                 array(
                     'address_id' => -1,
                     'contact_id' => -1,
-                    'address_type' => 'BUSINESS',
+                    'address_type' => 'PRIMARY',
                     'address_street' => $request['address_street'],
                     'address_zip' => $request['address_zip'],
                     'address_city' => $request['address_city'],
