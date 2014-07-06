@@ -112,17 +112,17 @@ $app->match('/admin/event/contact/select',
 $app->match('/admin/event/contact/edit/id/{contact_id}',
     'phpManufaktur\Event\Control\Backend\ContactSelect::exec');
 
+// Create and Edit Person contacts
 $app->match('/admin/event/contact/person/edit',
-    // Create and Edit Person contacts
-    'phpManufaktur\Event\Control\Backend\ContactPerson::exec');
+    'phpManufaktur\Event\Control\Backend\ContactPerson::Controller');
 $app->match('/admin/event/contact/person/edit/id/{contact_id}',
-    'phpManufaktur\Event\Control\Backend\ContactPerson::exec');
+    'phpManufaktur\Event\Control\Backend\ContactPerson::Controller');
 
 $app->match('/admin/event/contact/company/edit',
     // Create and Edit Company contacts
-    'phpManufaktur\Event\Control\Backend\ContactCompany::exec');
+    'phpManufaktur\Event\Control\Backend\ContactCompany::Controller');
 $app->match('/admin/event/contact/company/edit/id/{contact_id}',
-    'phpManufaktur\Event\Control\Backend\ContactCompany::exec');
+    'phpManufaktur\Event\Control\Backend\ContactCompany::Controller');
 
 $app->match('/admin/event/contact/category/list',
     // Category List

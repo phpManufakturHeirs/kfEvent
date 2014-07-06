@@ -369,10 +369,26 @@ class Update
                 ),
                 'default' => 'about'
             );
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
         }
+    }
 
-        $Configuration->setConfiguration($config);
-        $Configuration->saveConfiguration();
+    /**
+     * Release 2.0.42
+     */
+    protected function release_2042()
+    {
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+
+        if (!isset($config['contact']['person'])) {
+            $default = $Configuration->getDefaultConfigArray();
+            $config['contact']['person'] = $default['contact']['person'];
+            $config['contact']['company'] = $default['contact']['company'];
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
+        }
     }
 
     /**
@@ -394,6 +410,7 @@ class Update
         $this->release_2035();
         $this->release_2036();
         $this->release_2039();
+        $this->release_2042();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);

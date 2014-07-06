@@ -280,6 +280,7 @@ EOD;
             }
             $SQL .= " LIMIT $limit_from, $rows_per_page";
             $result = $this->app['db']->fetchAll($SQL);
+
             $events = array();
             $participants_array = array('event_participants_confirmed', 'event_participants_pending', 'event_participants_canceled');
 
