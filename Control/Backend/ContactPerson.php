@@ -37,7 +37,7 @@ class ContactPerson extends Backend
         }
 
         // set template namespace and file name
-        $ContactEdit->setTemplate('@phpManufaktur/Event/template', 'admin/contact/edit.contact.twig');
+        $ContactEdit->setTemplate('@phpManufaktur/Event/Template', 'admin/contact/edit.contact.twig');
         $ContactEdit->setFieldDefinition(self::$config['contact']['person']['field']);
 
         $extra = array(
