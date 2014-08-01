@@ -249,7 +249,7 @@ class Subscribe extends Basic
                 $contact = $this->app['contact']->select(self::$contact_id);
                 if ($contact['contact']['contact_type'] == 'COMPANY') {
                     // this is a COMPANY address !
-                    $this->setMessage('The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!',
+                    $this->setAlert('The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!',
                         array('%email%' => $contact['contact']['contact_login']), true);
                     // unset email address
                     unset($subscribe['email']);
@@ -261,7 +261,7 @@ class Subscribe extends Basic
 
                 if ($contact['contact']['contact_status'] != 'ACTIVE') {
                     // this contact is not ACTIVE, so we disallow the subscription - set message and write to logifle!
-                    $this->setMessage('The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.',
+                    $this->setAlert('The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.',
                         array('%status%' => $contact['contact']['contact_status'], '%email%' => SERVER_EMAIL_ADDRESS), true);
                     // return to the calling dialog
                     $subRequest = Request::create($subscribe['redirect'], 'GET', array('pid' => $this->getParameterID()));
@@ -294,9 +294,9 @@ class Subscribe extends Basic
 
                     if (!$this->app['contact']->update($data, self::$contact_id)) {
                         // something went wrong, throw an error
-                        throw new \Exception($this->app['contact']->getMessage());
+                        throw new \Exception($this->app['contact']->getAlert());
                     }
-                    $this->setMessage('The contact record was successfull updated.');
+                    $this->setAlert('The contact record was successfull updated.');
                 }
 
                 // check the communication entries
@@ -513,7 +513,7 @@ class Subscribe extends Basic
 
                 if (!$this->app['contact']->insert($contact, self::$contact_id)) {
                     // something went wrong, throw an error
-                    throw new \Exception($this->app['contact']->getMessage());
+                    throw new \Exception($this->app['contact']->getAlert());
                 }
                 $contact['contact']['contact_id'] = self::$contact_id;
                 // this is a new contact
@@ -537,7 +537,7 @@ class Subscribe extends Basic
             if (false !== ($subscription_id = $this->SubscriptionData->isAlreadySubscribedForEvent(self::$event_id, self::$contact_id))) {
                 $subscription_data = $this->SubscriptionData->select($subscription_id);
 
-                $this->setMessage('You have already subscribed to this Event at %datetime%, you can not subscribe again.',
+                $this->setAlert('You have already subscribed to this Event at %datetime%, you can not subscribe again.',
                     array('%datetime%' => date($this->app['translator']->trans('DATETIME_FORMAT'))));
                 // return to the calling dialog
                 $subRequest = Request::create($subscribe['redirect'], 'GET', array('pid' => $this->getParameterID()));
@@ -614,11 +614,11 @@ class Subscribe extends Basic
                 $this->app['mailer']->send($message);
                 if (($new_contact && self::$config['contact']['confirm']['double_opt_in']) ||
                     self::$config['event']['subscription']['confirm']['double_opt_in']) {
-                    $this->setMessage('Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!');
+                    $this->setAlert('Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!');
                 }
                 else {
                     // no confirmation needed
-                    $this->setMessage('Thank you for your subscription, we have send you a receipt at your email address.');
+                    $this->setAlert('Thank you for your subscription, we have send you a receipt at your email address.');
                 }
             }
 
@@ -689,11 +689,11 @@ class Subscribe extends Basic
         else {
             if (!$recaptcha_check) {
                 // ReCaptcha error
-                $this->setMessage($app['recaptcha']->getLastError());
+                $this->setAlert($app['recaptcha']->getLastError());
             }
             else {
                 // invalid form submission
-                $this->setMessage('The form is not valid, please check your input and try again!');
+                $this->setAlert('The form is not valid, please check your input and try again!');
             }
             // return the subscribe form
             return $this->getSubscribeForm();
@@ -748,7 +748,7 @@ class Subscribe extends Basic
             array(
                 'basic' => $this->getBasicSettings(),
                 'parameter' => self::$parameter,
-                'message' => $this->getMessage(),
+                'message' => $this->getAlert(),
                 'form' => $form->createView(),
                 'event' => $event,
                 'recurring' => $recurring,

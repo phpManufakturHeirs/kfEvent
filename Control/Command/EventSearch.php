@@ -31,18 +31,18 @@ class EventSearch extends Basic
         $this->initParameters($app);
 
         if (null == ($search = $this->app['request']->get('search'))) {
-            $this->setMessage('Please specify a search term!');
+            $this->setAlert('Please specify a search term!');
             return $this->controllerDialog($app);
         }
         else {
             $groups = $this->app['request']->get('groups');
             $SearchData = new Search($app);
             if (false === ($events = $SearchData->search($search, $groups, 'ACTIVE', '=', 'event_date_from', 'ASC', true, true))) {
-                $this->setMessage('No hits for the search term <i>%search%</i>!', array('%search%' => $search));
+                $this->setAlert('No hits for the search term <i>%search%</i>!', array('%search%' => $search));
                 return $this->controllerDialog($app);
             }
             else {
-                $this->setMessage('%count% hits for the search term </i>%search%</i>.', array('%count%' => count($events), '%search%' => $search));
+                $this->setAlert('%count% hits for the search term </i>%search%</i>.', array('%count%' => count($events), '%search%' => $search));
             }
         }
 

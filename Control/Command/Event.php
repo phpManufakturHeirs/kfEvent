@@ -270,7 +270,7 @@ class Event extends Basic
 
         if ($use_qrcode) {
             if (!self::$config['qrcode']['active']) {
-                $this->setMessage('Using qrcode[] is not enabled in config.event.json!');
+                $this->setAlert('Using qrcode[] is not enabled in config.event.json!');
                 return false;
             }
             $subdir = (self::$config['qrcode']['settings']['content'] == 'ical') ? 'ical' : 'link';
@@ -278,7 +278,7 @@ class Event extends Basic
                 list($width, $height) = getimagesize(FRAMEWORK_PATH.self::$config['qrcode']['framework']['path'][$subdir]."/".self::$parameter['id'].".png");
             }
             else {
-                $this->setMessage('The QR-Code file does not exists, please rebuild all QR-Code files.');
+                $this->setAlert('The QR-Code file does not exists, please rebuild all QR-Code files.');
                 return false;
             }
             self::$parameter['qrcode'] = array(

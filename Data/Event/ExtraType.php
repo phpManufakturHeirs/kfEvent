@@ -108,13 +108,13 @@ EOD;
     public function getTypeArrayForTwig()
     {
         return array(
-            'TEXT' => 'Text - plain',
-            'HTML' => 'Text - HTML',
-            'VARCHAR' => 'Text - 256 characters',
-            'INT' => 'Integer',
-            'FLOAT' => 'Float',
-            'DATE' => 'Date',
-            'DATETIME' => 'Date and Time'
+            'TEXT' => $this->app['translator']->trans('Text - plain'),
+            'HTML' => $this->app['translator']->trans('Text - HTML'),
+            'VARCHAR' => $this->app['translator']->trans('Text - 256 characters'),
+            'INT' => $this->app['translator']->trans('Integer'),
+            'FLOAT' => $this->app['translator']->trans('Float'),
+            'DATE' => $this->app['translator']->trans('Date'),
+            'DATETIME' => $this->app['translator']->trans('Date and Time')
         );
     }
 

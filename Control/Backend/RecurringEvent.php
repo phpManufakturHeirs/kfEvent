@@ -83,11 +83,11 @@ class RecurringEvent extends Backend {
         ))
         ->add('recurring_type', 'choice', array(
             'choices' => array(
-                'NONE' => 'No recurring event',
-                'DAY' => 'Daily recurring',
-                'WEEK' => 'Weekly recurring',
-                'MONTH' => 'Monthly recurring',
-                'YEAR' => 'Yearly recurring'
+                'NONE' => $this->app['translator']->trans('No recurring event'),
+                'DAY' => $this->app['translator']->trans('Daily recurring'),
+                'WEEK' => $this->app['translator']->trans('Weekly recurring'),
+                'MONTH' => $this->app['translator']->trans('Monthly recurring'),
+                'YEAR' => $this->app['translator']->trans('Yearly recurring')
             ),
             'expanded' => true,
             'required' => true,
@@ -116,8 +116,8 @@ class RecurringEvent extends Backend {
         ))
         ->add('day_type', 'choice', array(
             'choices' => array(
-                'DAILY' => 'Repeat each x-days',
-                'WORKDAYS' => 'Repeat at workdays'
+                'DAILY' => $this->app['translator']->trans('Repeat each x-days'),
+                'WORKDAYS' => $this->app['translator']->trans('Repeat at workdays')
             ),
             'expanded' => true,
             'required' => true,
@@ -230,8 +230,8 @@ class RecurringEvent extends Backend {
         ))
         ->add('month_type', 'choice', array(
             'choices' => array(
-                'SEQUENCE' => 'Repeat sequently at day x of month',
-                'PATTERN' => 'Repeat by pattern, i.e. at the last tuesday of the month',
+                'SEQUENCE' => $this->app['translator']->trans('Repeat sequently at day x of month'),
+                'PATTERN' => $this->app['translator']->trans('Repeat by pattern, i.e. at the last tuesday of the month'),
             ),
             'expanded' => true,
             'multiple' => false,
@@ -311,14 +311,14 @@ class RecurringEvent extends Backend {
         ))
         ->add('month_pattern_type', 'choice', array(
             'choices' => array(
-                'FIRST' => 'At the first',
-                'SECOND' => 'At the second',
-                'THIRD' => 'At the third',
-                'FOURTH' => 'At the fourth',
-                'LAST' => 'At the last',
-                'FIRST_THIRD' => 'At the first and third',
-                'SECOND_FOURTH' => 'At the second and fourth',
-                'SECOND_LAST' => 'At the second and last'
+                'FIRST' => $this->app['translator']->trans('At the first'),
+                'SECOND' => $this->app['translator']->trans('At the second'),
+                'THIRD' => $this->app['translator']->trans('At the third'),
+                'FOURTH' => $this->app['translator']->trans('At the fourth'),
+                'LAST' => $this->app['translator']->trans('At the last'),
+                'FIRST_THIRD' => $this->app['translator']->trans('At the first and third'),
+                'SECOND_FOURTH' => $this->app['translator']->trans('At the second and fourth'),
+                'SECOND_LAST' => $this->app['translator']->trans('At the second and last')
             ),
             'empty_value' => '- please select -',
             'expanded' => false,
@@ -382,8 +382,8 @@ class RecurringEvent extends Backend {
         ))
         ->add('year_type', 'choice', array(
             'choices' => array(
-                'SEQUENCE' => 'Repeat sequently at day x of month',
-                'PATTERN' => 'Repeat by pattern, i.e. at the last tuesday of the month',
+                'SEQUENCE' => $this->app['translator']->trans('Repeat sequently at day x of month'),
+                'PATTERN' => $this->app['translator']->trans('Repeat by pattern, i.e. at the last tuesday of the month'),
             ),
             'expanded' => true,
             'multiple' => false,
@@ -498,11 +498,11 @@ class RecurringEvent extends Backend {
         ))
         ->add('year_pattern_type', 'choice', array(
             'choices' => array(
-                'FIRST' => 'At the first',
-                'SECOND' => 'At the second',
-                'THIRD' => 'At the third',
-                'FOURTH' => 'At the fourth',
-                'LAST' => 'At the last'
+                'FIRST' => $this->app['translator']->trans('At the first'),
+                'SECOND' => $this->app['translator']->trans('At the second'),
+                'THIRD' => $this->app['translator']->trans('At the third'),
+                'FOURTH' => $this->app['translator']->trans('At the fourth'),
+                'LAST' => $this->app['translator']->trans('At the last')
             ),
             'empty_value' => '- please select -',
             'expanded' => false,
@@ -673,7 +673,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Daily recurring',
+                'header' => $this->app['translator']->trans('Daily recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/day/type?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -698,7 +698,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Daily recurring',
+                'header' => $this->app['translator']->trans('Daily recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/day/sequence?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -805,7 +805,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Weekly recurring',
+                'header' => $this->app['translator']->trans('Weekly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/week/sequence?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -872,7 +872,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Monthly recurring',
+                'header' => $this->app['translator']->trans('Monthly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/month/type?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -901,7 +901,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Monthly recurring',
+                'header' => $this->app['translator']->trans('Monthly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/month/sequence?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -931,7 +931,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Monthly recurring',
+                'header' => $this->app['translator']->trans('Monthly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/month/pattern?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -1085,7 +1085,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Yearly recurring',
+                'header' => $this->app['translator']->trans('Yearly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/year/type?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -1158,7 +1158,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Yearly recurring',
+                'header' => $this->app['translator']->trans('Yearly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/year/sequence?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -1234,7 +1234,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Yearly recurring',
+                'header' => $this->app['translator']->trans('Yearly recurring'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/year/pattern?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));
@@ -1313,7 +1313,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Recurring date end',
+                'header' => $this->app['translator']->trans('Recurring date end'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/date/end?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage,
                 'iframe_add_height' => 100
@@ -1521,7 +1521,7 @@ class RecurringEvent extends Backend {
                 'alert' => $this->getAlert(),
                 'toolbar' => $this->getToolbar('event_edit'),
                 'form' => $form->createView(),
-                'header' => 'Recurring event',
+                'header' => $this->app['translator']->trans('Recurring event'),
                 'action' => FRAMEWORK_URL.'/admin/event/recurring/check/type?usage='.self::$usage,
                 'abort' => FRAMEWORK_URL.'/admin/event/edit/id/'.self::$event_id.'?usage='.self::$usage
             ));

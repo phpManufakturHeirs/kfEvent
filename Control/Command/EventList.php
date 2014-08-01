@@ -70,9 +70,9 @@ class EventList extends Basic
         if (false === ($events = $EventFilter->filter(
             $filter, $messages, $SQL, $parameter['comments_info'], $parameter['comments_type']))) {
             foreach ($messages as $message) {
-                $this->setMessage($message);
+                $this->setAlert($message);
             }
-            $this->setMessage('No results for this filter!');
+            $this->setAlert('No results for this filter!');
         }
 
         $this->app['monolog']->addDebug("[EventFilter] SQL: $SQL",

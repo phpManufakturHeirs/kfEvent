@@ -27,29 +27,29 @@ return array(
         => '?',
 
     // event data columns
-    'event_costs'
+    'Event costs'
         => 'Costs',
-    'event_date_from'
+    'Event date from'
         => 'Date from',
-    'event_date_to'
+    'Event date to'
         => 'Date to',
-    'event_deadline'
+    'Event deadline'
         => 'Deadline',
-    'event_id'
+    'Event id'
         => 'ID',
-    'event_participants_confirmed'
+    'Event participants confirmed'
         => 'Part. conf.',
-    'event_participants_max'
+    'Event participants max'
         => 'max. Part.',
-    'event_participants_total'
+    'Event participants total'
         => 'Total',
-    'event_publish_from'
+    'Event publish from'
         => 'Publish from',
-    'event_publish_to'
+    'Event publish to'
         => 'Publish to',
-    'event_status'
+    'Event status'
         => 'Status',
-    'event_timestamp'
+    'Event timestamp'
         => 'Timestamp',
 
     'Kitevent'

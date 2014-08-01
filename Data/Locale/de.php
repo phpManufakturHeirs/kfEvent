@@ -22,6 +22,9 @@ return array(
     '- new group -'
         => '- neue Gruppe -',
 
+    'Abort'
+        => 'Abbruchi',
+
     'About'
         => '?',
     'Activate the desired account role'
@@ -100,7 +103,7 @@ return array(
         => 'Kommentar Behandlung',
     'company, institution or association'
         => 'Firma, Institution oder Verein',
-    'CONFIRMED'
+    'Confirmed'
         => 'Bestätigt',
     'Contact list'
         => 'Kontakte, Übersicht',
@@ -114,8 +117,6 @@ return array(
         => 'Eine neue Veranstaltung erstellen',
     'Create a new extra field'
         => 'Ein neues Zusatzfeld anlegen',
-    'Create a new group'
-        => 'Eine neue Gruppe anlegen',
     'Create a new Location record'
         => 'Einen neuen Veranstaltungsort anlegen',
     'Create a new Organizer record'
@@ -124,11 +125,11 @@ return array(
         => 'Neue sich wiederholende Veranstaltung mit der ID %event_id% angelegt.',
 
     // event data columns
-    'description_long'
+    'Description long'
         => 'Beschreibung',
-    'description_short'
+    'Description short'
         => 'Zusammenfassung',
-    'description_title'
+    'Description title'
         => 'Titel',
 
     'Daily recurring'
@@ -159,32 +160,6 @@ return array(
     'email usage'
         => 'Verwendung',
 
-    // event data columns
-    'event_costs'
-        => 'Kosten',
-    'event_date_from'
-        => 'Datum von',
-    'event_date_to'
-        => 'Datum bis',
-    'event_deadline'
-        => 'Anmeldeschluß',
-    'event_id'
-        => 'ID',
-    'event_participants_confirmed'
-        => 'Tln. best.',
-    'event_participants_max'
-        => 'max. Tln.',
-    'event_participants_total'
-        => 'Anmeldungen',
-    'event_publish_from'
-        => 'Veröffentlichen ab',
-    'event_publish_to'
-        => 'Veröffentlichen bis',
-    'event_status'
-        => 'Status',
-    'event_timestamp'
-        => 'Zeitstempel',
-
     'Event'
         => 'Veranstaltung',
     'Event costs'
@@ -195,7 +170,9 @@ return array(
         => 'Beginn der Veranstaltung',
     'Event date to'
         => 'Ende der Veranstaltung',
-    'Event ID'
+    'Event deadline'
+        => 'Anmeldeschluß',
+    'Event id'
         => 'Veranstaltung ID',
     'Event Title'
         => 'Titel der Veranstaltung',
@@ -209,26 +186,30 @@ return array(
         => 'Veranstaltungsort',
     'Event management suite for freelancers and organizers'
         => 'Veranstaltungs Verwaltung und Organisation',
+    'Event participants confirmed'
+        => 'Tln. best.',
+    'Event participants max'
+        => 'max. Tln.',
+    'Event participants total'
+        => 'Anmeldungen',
+    'Event publish from'
+        => 'Veröffentlichen ab',
+    'Event publish to'
+        => 'Veröffentlichen bis',
+    'Event status'
+        => 'Status',
     'Event successfull updated'
         => 'Die Veranstaltung wurde aktualisiert',
+    'Event timestamp'
+        => 'Zeitstempel',
     'Event url'
         => 'Veranstaltungs URL',
     'Exclude dates'
         => 'Daten ausschließen',
 
-    'first'
-        => 'ersten',
-    'first_third'
-        => 'ersten und dritten',
-    'Float'
-        => 'Dezimalzahl',
-    'fourth'
-        => 'vierten',
     'free of charge'
         => 'kostenlos',
 
-    'go back'
-        => 'Zurück',
     'Group'
         => 'Gruppe',
     'Group name'

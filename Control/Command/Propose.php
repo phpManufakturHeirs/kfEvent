@@ -696,7 +696,7 @@ class Propose extends Basic
         // check the event data
         if ($config['event']['description']['title']['required'] &&
             (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < $config['event']['description']['title']['min_length']))) {
-            $this->setMessage('Please type in a title with %minimum% characters at minimum.',
+            $this->setAlert('Please type in a title with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['title']['min_length']));
             return $this->controllerEvent($app);
         }
@@ -705,7 +705,7 @@ class Propose extends Basic
         }
         if ($config['event']['description']['short']['required'] &&
             (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < $config['event']['description']['short']['min_length']))) {
-            $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
+            $this->setAlert('Please type in a short description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['short']['min_length']));
             return $this->controllerEvent($app);
         }
@@ -714,7 +714,7 @@ class Propose extends Basic
         }
         if ($config['event']['description']['long']['required'] &&
             (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < $config['event']['description']['long']['min_length']))) {
-            $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
+            $this->setAlert('Please type in a long description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['long']['min_length']));
             return $this->controllerEvent($app);
         }
@@ -724,7 +724,7 @@ class Propose extends Basic
 
         if (!$config['event']['date']['event_date_from']['allow_date_in_past'] &&
             (strtotime($event['event_date_from']) < time())) {
-            $this->setMessage('It is not allowed that the event start in the past!');
+            $this->setAlert('It is not allowed that the event start in the past!');
             return $this->controllerEvent($app);
         }
 
@@ -767,15 +767,15 @@ class Propose extends Basic
 
 
         if (strtotime($event['event_date_from']) > strtotime($event['event_date_to'])) {
-            $this->setMessage('The event start date is behind the event end date!');
+            $this->setAlert('The event start date is behind the event end date!');
             return $this->controllerEvent($app);
         }
         if (strtotime($event['event_publish_to']) < strtotime($event['event_date_from'])) {
-            $this->setMessage('The publishing date ends before the event starts, this is not allowed!');
+            $this->setAlert('The publishing date ends before the event starts, this is not allowed!');
             return $this->controllerEvent($app);
         }
         if (strtotime($event['event_deadline']) > strtotime($event['event_date_from'])) {
-            $this->setMessage('The deadline ends after the event start date!');
+            $this->setAlert('The deadline ends after the event start date!');
             return $this->controllerEvent($app);
         }
 
@@ -975,7 +975,7 @@ class Propose extends Basic
 
         // check the search term
         if (!isset($form_request['new_location']) && (!isset($form_request['search']) || empty($form_request['search']))) {
-            $this->setMessage('Please search for for a location or select the checkbox to create a new one.');
+            $this->setAlert('Please search for for a location or select the checkbox to create a new one.');
             return $this->controllerSearchOrganizer($app);
         }
 
@@ -993,7 +993,7 @@ class Propose extends Basic
         $Overview = new Overview($app);
         if (false === ($locations = $Overview->searchContact($form_request['search'], $tags, 'ACTIVE', '='))) {
             // no search result
-            $this->setMessage('There exists no locations who fits to the search term %search%', array('%search%' => $form_request['search']));
+            $this->setAlert('There exists no locations who fits to the search term %search%', array('%search%' => $form_request['search']));
             return $this->controllerSearchLocation($app);
         }
 
@@ -1115,7 +1115,7 @@ class Propose extends Basic
                 $config['event']['location']['required']['name'] &&
                 empty($request['person_last_name'])) ||
                 (($request['create_type'] == 'organizer') && empty($request['person_last_name']))) {
-                $this->setMessage('You have selected <i>natural person</i> as contact type, so please give us the last name of the person.');
+                $this->setAlert('You have selected <i>natural person</i> as contact type, so please give us the last name of the person.');
                 return $this->createContact($request['create_type'], $request['group_id']);
             }
         }
@@ -1125,7 +1125,7 @@ class Propose extends Basic
                 $config['event']['location']['required']['name'] &&
                 empty($request['company_name'])) ||
                 (($request['create_type'] == 'organizer') && empty($request['company_name']))) {
-                $this->setMessage('You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name');
+                $this->setAlert('You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name');
                 return $this->createContact($request['create_type'], $request['group_id']);
             }
         }
@@ -1136,7 +1136,7 @@ class Propose extends Basic
             }
             else {
                 // at least we need one communication way
-                $this->setMessage('At least we need one communication channel, so please tell us a email address, phone or a URL');
+                $this->setAlert('At least we need one communication channel, so please tell us a email address, phone or a URL');
                 return $this->createContact($request['create_type'], $request['group_id']);
             }
         }
@@ -1584,7 +1584,7 @@ class Propose extends Basic
         // check the search term
         if ((!isset($form_request['new_organizer']) && (!isset($form_request['unknown_organizer']))) &&
             (!isset($form_request['search']) || empty($form_request['search']))) {
-            $this->setMessage('Please search for for a organizer or select the checkbox to create a new one.');
+            $this->setAlert('Please search for for a organizer or select the checkbox to create a new one.');
             return $this->controllerSearchOrganizer($app);
         }
 
@@ -1607,7 +1607,7 @@ class Propose extends Basic
         $Overview = new Overview($app);
         if (false === ($organizers = $Overview->searchContact($form_request['search'], $tags, 'ACTIVE', '='))) {
             // no search result
-            $this->setMessage('There exists no organizer who fits to the search term %search%', array('%search%' => $form_request['search']));
+            $this->setAlert('There exists no organizer who fits to the search term %search%', array('%search%' => $form_request['search']));
             return $this->controllerSearchOrganizer($app);
         }
 

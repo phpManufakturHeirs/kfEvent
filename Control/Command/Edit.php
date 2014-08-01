@@ -51,7 +51,7 @@ class Edit extends Basic
         // check the event data
         if ($config['event']['description']['title']['required'] &&
             (!isset($event['description_title']) || (strlen(trim($event['description_title'])) < $config['event']['description']['title']['min_length']))) {
-            $this->setMessage('Please type in a title with %minimum% characters at minimum.',
+            $this->setAlert('Please type in a title with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['title']['min_length']));
             return $this->controllerEditEvent($app);
         }
@@ -60,7 +60,7 @@ class Edit extends Basic
         }
         if ($config['event']['description']['short']['required'] &&
             (!isset($event['description_short']) || (strlen(trim($event['description_short'])) < $config['event']['description']['short']['min_length']))) {
-            $this->setMessage('Please type in a short description with %minimum% characters at minimum.',
+            $this->setAlert('Please type in a short description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['short']['min_length']));
             return $this->controllerEditEvent($app);
         }
@@ -69,7 +69,7 @@ class Edit extends Basic
         }
         if ($config['event']['description']['long']['required'] &&
             (!isset($event['description_long']) || (strlen(trim($event['description_long'])) < $config['event']['description']['long']['min_length']))) {
-            $this->setMessage('Please type in a long description with %minimum% characters at minimum.',
+            $this->setAlert('Please type in a long description with %minimum% characters at minimum.',
                 array('%minimum%' => $config['event']['description']['long']['min_length']));
             return $this->controllerEditEvent($app);
         }
@@ -124,15 +124,15 @@ class Edit extends Basic
 
 
         if (strtotime($event['event_date_from']) > strtotime($event['event_date_to'])) {
-            $this->setMessage('The event start date is behind the event end date!');
+            $this->setAlert('The event start date is behind the event end date!');
             return $this->controllerEditEvent($app);
         }
         if (strtotime($event['event_publish_to']) < strtotime($event['event_date_from'])) {
-            $this->setMessage('The publishing date ends before the event starts, this is not allowed!');
+            $this->setAlert('The publishing date ends before the event starts, this is not allowed!');
             return $this->controllerEditEvent($app);
         }
         if (strtotime($event['event_deadline']) > strtotime($event['event_date_from'])) {
-            $this->setMessage('The deadline ends after the event start date!');
+            $this->setAlert('The deadline ends after the event start date!');
             return $this->controllerEditEvent($app);
         }
 
@@ -154,7 +154,7 @@ class Edit extends Basic
         $EventData = new Event($app);
         $EventData->updateEvent($data, $event['event_id']);
 
-        $this->setMessage('Event successfull updated');
+        $this->setAlert('Event successfull updated');
 
         return $this->controllerEditEvent($app);
     }
@@ -305,7 +305,7 @@ class Edit extends Basic
         $Account = new Account($app);
 
         if (!$Account->isAuthenticated()) {
-            $this->setMessage('Your are not authenticated, please login!');
+            $this->setAlert('Your are not authenticated, please login!');
             return false;
         }
 
@@ -357,7 +357,7 @@ class Edit extends Basic
             }
         }
         // no fitting user role!
-        $this->setMessage('No fitting user role dectected!');
+        $this->setAlert('No fitting user role dectected!');
         return false;
     }
 
@@ -373,7 +373,7 @@ class Edit extends Basic
         $check = $app['request']->request->get('form', array());
         if (!isset($check['login']) || !isset($check['password']) ||
             !isset($check['redirect']) || !isset($check['event_id'])) {
-            $this->setMessage('Invalid submission, please try again');
+            $this->setAlert('Invalid submission, please try again');
             $subRequest = Request::create('/event/frontend/login', 'POST',
                 array(
                     'event_id' => isset($check['event_id']) ? $check['event_id'] : -1,
@@ -386,7 +386,7 @@ class Edit extends Basic
         $Account = new Account($app);
         $roles = array();
         if (!$Account->checkLogin($check['login'], $check['password'], $roles)) {
-            $this->setMessage('Invalid login');
+            $this->setAlert('Invalid login');
             $subRequest = Request::create('/event/frontend/login', 'POST',
                 array(
                     'event_id' => isset($check['event_id']) ? $check['event_id'] : -1,
@@ -431,7 +431,7 @@ class Edit extends Basic
 
         $Account = new Account($app);
         if (false === ($user = $Account->getUserData($check['login']))) {
-            $this->setMessage('The user %user% does not exists!', array('%user%' => $check['login']));
+            $this->setAlert('The user %user% does not exists!', array('%user%' => $check['login']));
             return $this->controllerLogin($app);
         }
 
@@ -465,7 +465,7 @@ class Edit extends Basic
             throw new \Exception("Can't send mail to: ".implode(',', $failedRecipients));
         }
 
-        $this->setMessage('We have send you a new password, please check your email account');
+        $this->setAlert('We have send you a new password, please check your email account');
         return $this->controllerLogin($app);
     }
 
@@ -682,7 +682,7 @@ class Edit extends Basic
         $ContactControl = new Contact($app);
         if (false === ($contact_id = $ContactControl->existsLogin($check['login']))) {
             // this email address is not registered
-            $this->setMessage('The email address %email% is not registered. We can only create a account for you '.
+            $this->setAlert('The email address %email% is not registered. We can only create a account for you '.
                 'if there was already a interaction, i.e. you have proposed a event. If you represent an organizer '.
                 'or a location and your public email address is not registered, please contact the administrator.',
                 array('%email%' => $check['login']));
@@ -711,7 +711,7 @@ class Edit extends Basic
             foreach ($roles as $role) {
                 if (in_array($role, self::$roles_event_edit)) {
                     // user has already a role which allow to edit events
-                    $this->setMessage('You have already the right to edit events (%role%). '.
+                    $this->setAlert('You have already the right to edit events (%role%). '.
                         'Please contact the administrator if you want to change or extend your account rights',
                         array('%role%' => $role));
                     // redirect to login and prompt the message
@@ -848,10 +848,10 @@ class Edit extends Basic
             'expanded' => true,
             'multiple' => false,
             'choices' => array(
-                'ROLE_EVENT_SUBMITTER' => 'CHOICE_SUBMITTER_ACCOUNT',
-                'ROLE_EVENT_ORGANIZER' => 'CHOICE_ORGANIZER_ACCOUNT',
-                'ROLE_EVENT_LOCATION' => 'CHOICE_LOCATION_ACCOUNT',
-                'ROLE_EVENT_ADMIN' => 'CHOICE_ADMIN_ACCOUNT'
+                'ROLE_EVENT_SUBMITTER' => $this->app['translator']->trans('CHOICE_SUBMITTER_ACCOUNT'),
+                'ROLE_EVENT_ORGANIZER' => $this->app['translator']->trans('CHOICE_ORGANIZER_ACCOUNT'),
+                'ROLE_EVENT_LOCATION' => $this->app['translator']->trans('CHOICE_LOCATION_ACCOUNT'),
+                'ROLE_EVENT_ADMIN' => $this->app['translator']->trans('CHOICE_ADMIN_ACCOUNT')
             ),
             'label' => 'Select account type',
             'data' => 'ROLE_EVENT_SUBMITTER'

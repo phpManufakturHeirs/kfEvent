@@ -56,8 +56,8 @@ class Backend extends Alert
                 case 'event_list':
                     $toolbar[$tab] = array(
                         'name' => 'event_list',
-                        'text' => 'Event list',
-                        'hint' => 'List of all active events',
+                        'text' => $this->app['translator']->trans('Event list'),
+                        'hint' => $this->app['translator']->trans('List of all active events'),
                         'link' => FRAMEWORK_URL.'/admin/event/list'.self::$usage_param,
                         'active' => ($active == 'event_list')
                     );
@@ -65,8 +65,8 @@ class Backend extends Alert
                 case 'event_edit':
                     $toolbar[$tab] = array(
                         'name' => 'event_edit',
-                        'text' => 'Event',
-                        'hint' => 'Create a new event',
+                        'text' => $this->app['translator']->trans('Event'),
+                        'hint' => $this->app['translator']->trans('Create a new event'),
                         'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
                         'active' => ($active == 'event_edit')
                     );
@@ -74,8 +74,8 @@ class Backend extends Alert
                 case 'subscription':
                     $toolbar[$tab] = array(
                         'name' => 'subscription',
-                        'text' => 'Subscriptions',
-                        'hint' => 'List of all subscriptions for events',
+                        'text' => $this->app['translator']->trans('Subscriptions'),
+                        'hint' => $this->app['translator']->trans('List of all subscriptions for events'),
                         'link' => FRAMEWORK_URL.'/admin/event/subscription'.self::$usage_param,
                         'active' => ($active == 'subscription')
                     );
@@ -83,8 +83,8 @@ class Backend extends Alert
                 case 'propose':
                     $toolbar[$tab] = array(
                         'name' => 'propose',
-                        'text' => 'Proposes',
-                        'hint' => 'List of actual submitted proposes for events',
+                        'text' => $this->app['translator']->trans('Proposes'),
+                        'hint' => $this->app['translator']->trans('List of actual submitted proposes for events'),
                         'link' => FRAMEWORK_URL.'/admin/event/propose'.self::$usage_param,
                         'active' => ($active == 'propose')
                     );
@@ -92,8 +92,8 @@ class Backend extends Alert
                 case 'contact_list':
                     $toolbar[$tab] = array(
                         'name' => 'contact_list',
-                        'text' => 'Contact list',
-                        'hint' => 'List of all available contacts (Organizer, Locations, Participants)',
+                        'text' => $this->app['translator']->trans('Contact list'),
+                        'hint' => $this->app['translator']->trans('List of all available contacts (Organizer, Locations, Participants)'),
                         'link' => FRAMEWORK_URL.'/admin/event/contact/list'.self::$usage_param,
                         'active' => ($active == 'contact_list')
                     );
@@ -101,8 +101,8 @@ class Backend extends Alert
                 case 'contact_edit':
                     $toolbar[$tab] = array(
                         'name' => 'contact_edit',
-                        'text' => 'Contact',
-                        'hint' => 'Create a new contact',
+                        'text' => $this->app['translator']->trans('Contact'),
+                        'hint' => $this->app['translator']->trans('Create a new contact'),
                         'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
                         'active' => ($active == 'contact_edit')
                     );
@@ -110,8 +110,8 @@ class Backend extends Alert
                 case 'group':
                     $toolbar[$tab] = array(
                         'name' => 'event_groups',
-                        'text' => 'Groups',
-                        'hint' => 'List of all available event groups',
+                        'text' => $this->app['translator']->trans('Groups'),
+                        'hint' => $this->app['translator']->trans('List of all available event groups'),
                         'link' => FRAMEWORK_URL.'/admin/event/group/list'.self::$usage_param,
                         'active' => ($active == 'group')
                     );
@@ -119,8 +119,8 @@ class Backend extends Alert
                 case 'about':
                     $toolbar[$tab] = array(
                         'name' => 'about',
-                        'text' => 'About',
-                        'hint' => 'Information about the Event extension',
+                        'text' => $this->app['translator']->trans('About'),
+                        'hint' => $this->app['translator']->trans('Information about the Event extension'),
                         'link' => FRAMEWORK_URL.'/admin/event/about'.self::$usage_param,
                         'active' => ($active == 'about')
                         );
