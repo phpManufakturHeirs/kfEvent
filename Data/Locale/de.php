@@ -23,7 +23,7 @@ return array(
         => '- neue Gruppe -',
 
     'Abort'
-        => 'Abbruchi',
+        => 'Abbruch',
 
     'About'
         => '?',
