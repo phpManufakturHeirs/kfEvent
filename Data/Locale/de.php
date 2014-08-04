@@ -107,8 +107,6 @@ return array(
         => 'Bestätigt',
     'Contact list'
         => 'Kontakte, Übersicht',
-    'Contact type'
-        => 'Kontakt Typ',
     'Costs'
         => 'Teilnahmegebühr',
     'Create a new contact'
@@ -519,8 +517,6 @@ return array(
         => 'Der Veröffentlichungszeitraum endet vor dem Beginn der Veranstaltung, dies ist nicht gewünscht!',
     'The publishing date is behind the event start date!'
         => 'Das Veröffentlichungsdatum liegt nach dem Veranstaltungsdatum!',
-    'The record with the ID %id% does not exists!'
-        => 'Der Datensatz mit der ID %id% existiert nicht!',
     'The record with the ID %id% was successfull deleted.'
         => 'Der Datensatz mit der ID %id% wurde gelöscht.',
     'The record with the ID %id% was successfull inserted.'

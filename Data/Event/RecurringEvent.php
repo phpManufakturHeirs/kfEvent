@@ -306,7 +306,7 @@ EOD;
                         return $this->app['translator']->trans('The event [%event_id%] will be repeated each %year_repeat%. year at %pattern_type% %pattern_day% of %pattern_month%%exclude%',
                             array('%event_id%' => $result['parent_event_id'],
                                 '%year_repeat%' => $result['year_repeat'],
-                                '%pattern_type%' => $this->app['translator']->trans(strtolower($result['year_pattern_type'])),
+                                '%pattern_type%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_pattern_type']))),
                                 '%pattern_day%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_pattern_day']))),
                                 '%pattern_month%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_pattern_month']))),
                                 '%exclude%' => $exclude_dates
