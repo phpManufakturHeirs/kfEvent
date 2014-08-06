@@ -737,8 +737,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectDayType($app);
         }
 
@@ -775,8 +776,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectDaySequence();
         }
     }
@@ -846,8 +848,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectWeekSequence();
         }
     }
@@ -972,8 +975,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectMonthPattern();
         }
     }
@@ -1018,8 +1022,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectMonthSequence();
         }
     }
@@ -1059,8 +1064,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectMonthType();
         }
     }
@@ -1124,8 +1130,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectYearType();
         }
     }
@@ -1200,8 +1207,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectYearSequence();
         }
     }
@@ -1277,8 +1285,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectYearPattern();
         }
     }
@@ -1398,8 +1407,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->selectYearPattern();
         }
     }
@@ -1461,8 +1471,9 @@ class RecurringEvent extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!',
-                array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             return $this->ControllerStart($app, self::$event_id);
         }
     }

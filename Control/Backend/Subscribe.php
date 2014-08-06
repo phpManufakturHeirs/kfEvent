@@ -144,7 +144,9 @@ class Subscribe extends Backend {
 
         if (!isset($data['contact_id']) || !isset($data['event_id'])) {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             $subRequest = Request::create('/admin/event/subscription/add/start', 'GET', array('usage' => self::$usage));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
@@ -233,14 +235,18 @@ class Subscribe extends Backend {
             }
             else {
                 // general error (timeout, CSFR ...)
-                $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+                $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                    self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                        'method' => __METHOD__, 'line' => __LINE__));
                 $subRequest = Request::create('/admin/event/subscription/add/start', 'GET', array('usage' => self::$usage));
                 return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             $subRequest = Request::create('/admin/event/subscription/add/start', 'GET', array('usage' => self::$usage));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
@@ -277,14 +283,18 @@ class Subscribe extends Backend {
             }
             else {
                 // general error (timeout, CSFR ...)
-                $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+                $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                    self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                        'method' => __METHOD__, 'line' => __LINE__));
                 $subRequest = Request::create('/admin/event/subscription/add/start', 'GET', array('usage' => self::$usage));
                 return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             }
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             $subRequest = Request::create('/admin/event/subscription/add/start', 'GET', array('usage' => self::$usage));
             return $app->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
@@ -326,7 +336,9 @@ class Subscribe extends Backend {
             }
             else {
                 // general error (timeout, CSFR ...)
-                $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+                $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                    self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                        'method' => __METHOD__, 'line' => __LINE__));
             }
         }
         else {
@@ -502,7 +514,9 @@ class Subscribe extends Backend {
         }
         else {
             // general error (timeout, CSFR ...)
-            $this->setAlert('The form is not valid, please check your input and try again!', array(), self::ALERT_TYPE_DANGER);
+            $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
         }
         return $this->ControllerList($app);
     }

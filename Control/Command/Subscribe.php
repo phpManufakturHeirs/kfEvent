@@ -693,7 +693,9 @@ class Subscribe extends Basic
             }
             else {
                 // invalid form submission
-                $this->setAlert('The form is not valid, please check your input and try again!');
+                $this->setAlert('The form is not valid, please check your input and try again!', array(),
+                self::ALERT_TYPE_DANGER, true, array('form_errors' => $form->getErrorsAsString(),
+                    'method' => __METHOD__, 'line' => __LINE__));
             }
             // return the subscribe form
             return $this->getSubscribeForm();
