@@ -68,9 +68,8 @@ class Action extends Basic
 
             if (!isset($config['permalink']['cms']['url']) || empty($config['permalink']['cms']['url'])) {
                 // missing the URL for permanent links and responses
-                $message = 'Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.';
-                $this->setAlert($message);
-                $app['monolog']->addError("kfEvent: $message");
+                $this->setAlert('Please define a permanent link in config.event.json. Without this link Event can not create permanent links or respond to user requests.',
+                    array(), self::ALERT_TYPE_WARNING);
             }
 
             switch (strtolower($parameters['action'])) {

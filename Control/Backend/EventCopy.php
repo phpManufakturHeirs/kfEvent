@@ -154,8 +154,8 @@ class EventCopy extends Backend
         ))
         ->add('comments', 'choice', array(
             'choices' => array(
-                'IGNORE' => 'Ignore existing comments',
-                'PASS_FROM' => 'Pass comments from parent'
+                'IGNORE' => $this->app['translator']->trans('Ignore existing comments'),
+                'PASS_FROM' => $this->app['translator']->trans('Pass comments from parent')
             ),
             'expanded' => true,
             'required' => true,

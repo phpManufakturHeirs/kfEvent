@@ -651,8 +651,8 @@ class Propose extends Basic
             'multiple' => false,
             'required' => true,
             'choices' => array(
-                'PERSON' => 'personal email address',
-                'COMPANY' => 'regular email address of a company, institution or association'
+                'PERSON' => $this->app['translator']->trans('personal email address'),
+                'COMPANY' => $this->app['translator']->trans('regular email address of a company, institution or association')
             ),
             'label' => 'email usage',
             'data' => isset($contact['email_type']) ? $contact['email_type'] : 'PERSON'
@@ -1042,7 +1042,7 @@ class Propose extends Basic
                 $EventGroup = new EventGroup($app);
                 if (false === ($group_id = $EventGroup->getGroupID($parameter['group']))) {
                     $Message = new Message($app);
-                    return $Message->render('The event group with the name %group% does not exists!',
+                    return $Message->render($this->app['translator']->trans('The event group with the name %group% does not exists!'),
                         array('%group%' => $parameter['group']), 'group[]', array(), true);
                 }
             }

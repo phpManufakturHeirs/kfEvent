@@ -14,10 +14,10 @@
   {% if user.status == 'GENERAL_ACCOUNT' %}
     <p>{{ 'This user has a account but was never in contact in context with events'|trans }}.</p>
   {% elseif user.status == 'CONTACT_ONLY' %}
-    <p>{{ 'This user has a contact record but was never in contact in context with events' }}.</p>
+    <p>{{ 'This user has a contact record but was never in contact in context with events'|trans }}.</p>
   {% endif %}
 {% endif %}
-<p>&nbsp;</p>  
+<p>&nbsp;</p>
 <p>{{ 'The user %user% want to get the right'|trans({'%user%':user.contact.contact_name}) }}:</p>
 <p><strong>{{ user.want_account|trans }}</strong></p>
 <p>&nbsp;</p>

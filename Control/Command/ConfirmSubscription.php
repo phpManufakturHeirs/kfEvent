@@ -105,7 +105,7 @@ class ConfirmSubscription extends Basic
                 $this->getPreferredTemplateStyle()),
                 array(
                     'basic' => $this->getBasicSettings(),
-                    'title' => 'Checking the GUID identifier',
+                    'title' => $this->app['translator']->trans('Checking the GUID identifier'),
                     'message' => $message
                     ));
         }
@@ -119,7 +119,7 @@ class ConfirmSubscription extends Basic
                 $this->getPreferredTemplateStyle()),
                 array(
                     'basic' => $this->getBasicSettings(),
-                    'title' => 'Checking the GUID identifier',
+                    'title' => $this->app['translator']->trans('Checking the GUID identifier'),
                     'message' => $app['translator']->trans('Your subscription for the event %event% is already confirmed.',
                         array('%event%' => $event['description_title']))
                 ));
@@ -137,7 +137,7 @@ class ConfirmSubscription extends Basic
                 $this->getPreferredTemplateStyle()),
                 array(
                     'basic' => $this->getBasicSettings(),
-                    'title' => 'Checking the GUID identifier',
+                    'title' => $this->app['translator']->trans('Checking the GUID identifier'),
                     'message' => $message
                 ));
         }
@@ -238,7 +238,7 @@ class ConfirmSubscription extends Basic
                     $this->getPreferredTemplateStyle()),
                     array(
                         'basic' => $this->getBasicSettings(),
-                        'title' => 'Checking the GUID identifier',
+                        'title' => $this->app['translator']->trans('Checking the GUID identifier'),
                         'message' => $message
                     ));
             }
@@ -293,7 +293,7 @@ class ConfirmSubscription extends Basic
                     $this->getPreferredTemplateStyle()),
                     array(
                         'basic' => $this->getBasicSettings(),
-                        'title' => 'Checking the GUID identifier',
+                        'title' => $this->app['translator']->trans('Checking the GUID identifier'),
                         'message' => $message
                     ));
             }

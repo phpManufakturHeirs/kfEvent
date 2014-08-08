@@ -41,17 +41,11 @@ return array(
         => 'Part. conf.',
     'Event participants max'
         => 'max. Part.',
-    'Event participants total'
-        => 'Total',
     'Event publish from'
         => 'Publish from',
     'Event publish to'
         => 'Publish to',
     'Event status'
         => 'Status',
-    'Event timestamp'
-        => 'Timestamp',
 
-    'Kitevent'
-        => 'kitEvent',
 );

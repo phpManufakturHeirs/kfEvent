@@ -81,8 +81,8 @@ class EventEdit extends Backend {
         ))
         ->add('create_by', 'choice', array(
             'choices' => array(
-                'GROUP' => 'by selecting a event group',
-                'COPY' => 'by copying from a existing event'),
+                'GROUP' => $this->app['translator']->trans('by selecting a event group'),
+                'COPY' => $this->app['translator']->trans('by copying from a existing event')),
             'expanded' => true,
             'label' => 'Create a new event',
             'data' => 'GROUP'

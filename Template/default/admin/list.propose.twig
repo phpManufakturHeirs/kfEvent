@@ -1,9 +1,9 @@
-{# 
+{#
   Event
 
   @author Team phpManufaktur <team@phpmanufaktur.de>
   @link https://kit2.phpmanufaktur.de
-  @link https://github.com/phpManufaktur/kitFramework/wiki  
+  @link https://github.com/phpManufaktur/kitFramework/wiki
   @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
   @license MIT License (MIT) http://www.opensource.org/licenses/MIT
 #}
@@ -24,18 +24,18 @@
   {% endif %}
 {% endblock stylesheet %}
 {% block title %}{{ 'Event Administration - About'|trans }}{% endblock %}
-  
+
 {% block content %}
-  <!-- {{ _self.getTemplateName() }} -->  
+  <!-- {{ _self.getTemplateName() }} -->
   <div class="container{% if usage != 'framework'%}-fluid{% endif %}">
     {% include '@phpManufaktur/Event/Template/default/admin/toolbar.twig' %}
-    
+
     <div class="height-15"></div>
-    
+
     {{ alert }}
-    
+
     {% if proposes|length < 1 %}
-      {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/alert.twig' 
+      {% include '@phpManufaktur/Basic/Template/default/pattern/bootstrap/alert.twig'
         with {content:'At the moment there are no proposed events'|trans} only %}
     {% else %}
       <div class="table-responsive">
@@ -43,16 +43,16 @@
           <thead>
             <tr>
               <th>{{ 'Date'|trans }}</th>
-              <th class="right">{{ 'Submitter ID' }}</th>
-              <th>{{ 'Submitter Status' }}</th>
-              <th>{{ 'Admin Status' }}</th>
+              <th class="right">{{ 'Submitter ID'|trans }}</th>
+              <th>{{ 'Submitter Status'|trans }}</th>
+              <th>{{ 'Admin Status'|trans }}</th>
               <th>&nbsp;</th>
               <th>&nbsp;</th>
-              <th class="right">{{ 'Event ID' }}</th>
+              <th class="right">{{ 'Event ID'|trans }}</th>
               <th>{{ 'Event Title'|trans }}</th>
               <th>{{ 'Date'|trans }}</th>
-              <th class="right">{{ 'Organizer ID' }}</th>
-              <th class="right">{{ 'Location ID' }}</th>
+              <th class="right">{{ 'Organizer ID'|trans }}</th>
+              <th class="right">{{ 'Location ID'|trans }}</th>
             </tr>
           </thead>
           <tbody>
@@ -90,4 +90,3 @@
     {% endif %}
   </div>
 {% endblock content %}
-    
