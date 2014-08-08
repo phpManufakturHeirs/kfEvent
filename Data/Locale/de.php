@@ -67,6 +67,16 @@ return array(
     => 'Am zweiten und letzten',
   'At the third'
     => 'Am dritten',
+  'by copying from a existing event'
+    => 'durch Kopieren einer existierenden Veranstaltung',
+  'by selecting a event group'
+    => 'durch Auswahl einer Veranstaltungsgruppe',
+  'Change account rights'
+    => 'Änderung der Benutzerrechte',
+  'Change Event configuration'
+    => 'Event Konfiguration ändern',
+  'Checking the GUID identifier'
+    => 'Überprüfung der GUID Kennung',
   'CHOICE_ADMIN_ACCOUNT'
     => 'Ich möchte als Administrator alle Veranstaltungen bearbeiten können',
   'CHOICE_LOCATION_ACCOUNT'
@@ -75,28 +85,26 @@ return array(
     => 'Ich vertrete einen Veranstalter, Verein oder eine Organisation und möchte deren Veranstaltungen bearbeiten können',
   'CHOICE_SUBMITTER_ACCOUNT'
     => 'Ich möchte Veranstaltungen bearbeiten können, die ich übermittelt habe',
-  'Change Event configuration'
-    => 'Event Konfiguration ändern',
-  'Change account rights'
-    => 'Änderung der Benutzerrechte',
-  'Checking the GUID identifier'
-    => 'Überprüfung der GUID Kennung',
   'Click to subscribe'
     => 'Anklicken um sich zu dieser Veranstaltung anzumelden',
+  'closed'
+    => 'geschlossen',
   'Comments handling'
     => 'Kommentar Behandlung',
+  'company, institution or association'
+    => 'Firma, Institution oder Verein',
   'Costs'
     => 'Teilnahmegebühr',
-  'Create a new Location record'
-    => 'Einen neuen Veranstaltungsort anlegen',
-  'Create a new Organizer record'
-    => 'Eine neue Veranstalter Adresse anlegen',
   'Create a new category'
     => 'Eine neue Kategorie anlegen',
   'Create a new event'
     => 'Eine neue Veranstaltung erstellen',
   'Create a new extra field'
     => 'Ein neues Zusatzfeld anlegen',
+  'Create a new Location record'
+    => 'Einen neuen Veranstaltungsort anlegen',
+  'Create a new Organizer record'
+    => 'Eine neue Veranstalter Adresse anlegen',
   'Create a new recurring event with the ID %event_id%'
     => 'Neue sich wiederholende Veranstaltung mit der ID %event_id% angelegt.',
   'Create a new title'
@@ -119,6 +127,8 @@ return array(
     => 'Zusammenfassung',
   'Description title'
     => 'Titel',
+  'description_title'
+    => 'Schlagzeile',
   'Detected a kitEvent installation (Release: %release%) with %count% active or locked events.'
     => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
   'Do not know how to handle the recurring type <b>%type%</b>.'
@@ -133,7 +143,13 @@ return array(
     => 'Weiß nicht, wie ich den Jahrestyp %type% behandeln soll!',
   'Edit event'
     => 'Veranstaltung bearbeiten',
+  'email'
+    => 'E-Mail',
+  'email usage'
+    => 'Verwendung',
   'Event'
+    => 'Veranstaltung',
+  'event'
     => 'Veranstaltung',
   'Event Administration - About'
     => 'Event Verwaltung - Über',
@@ -147,10 +163,6 @@ return array(
     => 'Event Administration - Veranstaltung erstellen oder bearbeiten',
   'Event Administration - Edit Contact'
     => 'Event Verwaltung - Kontakt bearbeiten',
-  'Event ID'
-    => 'ID',
-  'Event Title'
-    => 'Titel der Veranstaltung',
   'Event costs'
     => 'Eintrittspreis',
   'Event date from'
@@ -163,6 +175,8 @@ return array(
     => 'Gruppe',
   'Event id'
     => 'Veranstaltung ID',
+  'Event ID'
+    => 'ID',
   'Event list'
     => 'Veranstaltungen, Übersicht',
   'Event location'
@@ -181,14 +195,20 @@ return array(
     => 'Status',
   'Event successfull updated'
     => 'Die Veranstaltung wurde aktualisiert',
+  'Event Title'
+    => 'Titel der Veranstaltung',
   'Event url'
     => 'Veranstaltungs URL',
+  'event_date_to'
+    => 'Datum, bis',
   'Exclude dates'
     => 'Daten ausschließen',
   'Extra field'
     => 'Zusatzfeld',
   'Float'
     => 'Dezimalzahl',
+  'free of charge'
+    => 'kostenlos',
   'Google Map'
     => 'Google Map',
   'Group'
@@ -199,10 +219,16 @@ return array(
     => 'Zusatzfelder',
   'Group id'
     => 'ID',
+  'Group location contact tags'
+    => 'Veranstaltungsorte',
   'Group name'
     => 'Gruppen Bezeichner',
   'Group name (translated)'
     => 'Gruppen Bezeichner (übersetzt)',
+  'Group organizer contact tags'
+    => 'Veranstalter',
+  'Group participant contact tags'
+    => 'Teilnehmer',
   'Group status'
     => 'Status',
   'Groups'
@@ -243,6 +269,8 @@ return array(
     => 'Übersicht über alle Anmeldungen zu Veranstaltungen',
   'List single dates in format <b>%format%</b> separated by comma to exclude them from recurring'
     => 'Schließen Sie einzelne Daten im Format <b>%format%</b> durch ein Komma getrennt von der Sequenz aus.',
+  'location'
+    => 'Veranstaltungsort',
   'Location'
     => 'Veranstaltungsort',
   'Location ID'
@@ -255,24 +283,56 @@ return array(
     => 'Mitteilung von kitFramework Event',
   'Missing a valid Event ID!'
     => 'Vermisse eine gültige Veranstaltungs ID!',
+  'Month pattern day'
+    => 'Tag',
+  'Month pattern day view'
+    => 'Wochentag',
+  'Month pattern sequence'
+    => 'Wiederholung',
+  'Month pattern type'
+    => 'Typ',
+  'Month sequence day'
+    => 'Tag',
+  'Month sequence day view'
+    => 'Wochentag',
+  'Month sequence month'
+    => 'Monat',
+  'Month type'
+    => 'Typ',
+  'month_pattern_type'
+    => 'Typ',
   'Monthly recurring'
     => 'Monatliche Wiederholung',
+  'natural person'
+    => 'Natürliche Person',
+  'New event id'
+    => 'ID',
+  'New location'
+    => 'Neuer Veranstaltungsort',
+  'New organizer'
+    => 'Neuer Veranstalter',
   'New password'
     => 'Neues Passwort',
   'Next event dates'
     => 'Die nächsten Veranstaltungstermine',
+  'No image selected, nothing to do.'
+    => 'Es wurde keine Abbildung ausgewählt.',
   'No recurring event'
     => 'Keinen Serientermin festlegen',
   'No recurring event type selected'
     => 'Es wurde kein Serientermin Typ ausgewählt.',
   'No results for this filter!'
     => 'Dieser Filter lieferte kein Ergebnis!',
+  'organizer'
+    => 'Veranstalter',
   'Organizer'
     => 'Veranstalter',
   'Organizer ID'
     => 'Veranstalter ID',
   'Organizer Tags'
     => 'Veranstalter',
+  'Parent event id'
+    => 'ID',
   'Participant'
     => 'Teilnehmer',
   'Participant Tags'
@@ -287,10 +347,16 @@ return array(
     => 'Teilnehmer, unbestätigt',
   'Participants total'
     => 'Teilnehmer, angemeldet',
+  'Participants, maximum'
+    => 'Teilnehmer, max.',
+  'Participants, total'
+    => 'Teilnehmer, insgesamt',
   'Pass comments from parent'
     => 'Kommentare werden aktiv von der ursprünglichen Veranstaltung vererbt',
   'Permalink successfull changed'
     => 'Der Permanent Link wurde erfolgreich geändert',
+  'personal email address'
+    => 'persönliche E-Mail Adresse',
   'Pictures'
     => 'Bilder',
   'Please check the event data and use one of the following action links'
@@ -329,28 +395,28 @@ return array(
     => 'Vorgeschlagene Veranstaltung: %event%',
   'Proposes'
     => 'Vorschläge',
+  'Publish'
+    => 'Veröffentlichen',
   'Publish from'
     => 'Veröffentlichen ab',
   'Publish the event'
     => 'Veranstaltung veröffentlichen',
   'Publish to'
     => 'Veröffentlichen bis',
-  'ROLE_EVENT_ADMIN'
-    => 'Benutzerrecht: Veranstaltungen als Administrator bearbeiten',
-  'ROLE_EVENT_LOCATION'
-    => 'Benutzerrecht: Veranstaltungen bearbeiten, die diesem Veranstaltungsort zugewiesen sind',
-  'ROLE_EVENT_ORGANIZER'
-    => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Veranstalter zugewiesen sind',
-  'ROLE_EVENT_SUBMITTER'
-    => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Benutzer vorgeschlagen wurden',
   'Received request'
     => 'Anfrage erhalten',
   'Recurring date end'
     => 'Letzte Wiederholung',
   'Recurring event'
     => 'Serientermin',
+  'Recurring id'
+    => 'ID',
+  'Recurring type'
+    => 'Typ',
   'Redirect to the parent event ID!'
     => 'Umgeleitet auf die ursprüngliche Veranstaltungs ID!',
+  'regular email address of a company, institution or association'
+    => 'offizielle E-Mail Adresse einer Firma, Einrichtung oder eines Verein',
   'Reject the desired account role'
     => 'Das gewünschte Benutzerrecht zurückweisen',
   'Reject this event'
@@ -369,26 +435,52 @@ return array(
     => 'Wiederhole jedes x. Jahr',
   'Repeat x-month must be greater than zero and less then 13.'
     => 'Der Wert für Wiederhole jeden x. Monat muß größer als Null und kleiner als 13 sein.',
+  'Rewrite the the recurring event'
+    => 'Wiederholende Veranstaltung umschreiben',
+  'ROLE_EVENT_ADMIN'
+    => 'Benutzerrecht: Veranstaltungen als Administrator bearbeiten',
+  'ROLE_EVENT_LOCATION'
+    => 'Benutzerrecht: Veranstaltungen bearbeiten, die diesem Veranstaltungsort zugewiesen sind',
+  'ROLE_EVENT_ORGANIZER'
+    => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Veranstalter zugewiesen sind',
+  'ROLE_EVENT_SUBMITTER'
+    => 'Benutzerrecht: Veranstaltungen bearbeiten, die von diesem Benutzer vorgeschlagen wurden',
+  'Search event'
+    => 'Veranstaltung suchen',
   'Search Location'
     => 'Veranstaltungsort suchen',
   'Search Organizer'
     => 'Veranstalter suchen',
-  'Search event'
-    => 'Veranstaltung suchen',
+  'second'
+    => 'zweiten',
+  'second_fourth'
+    => 'zweiten und vierten',
+  'second_last'
+    => 'zweiten und letzten',
   'Select account type'
     => 'Kontotyp wählen',
   'Select event'
     => 'Veranstaltung auswählen',
   'Select event group'
     => 'Veranstaltungsgruppe auswählen',
+  'Select group'
+    => 'Gruppe wählen',
   'Select type'
     => 'Typ auswählen',
   'Short description'
     => 'Kurzbeschreibung',
   'Show detailed information'
     => 'Detailierte Informationen anzeigen',
+  'Skipped kitEvent ID %event_id%: Can not determine the Event Group ID for the kitEvent Group ID %group_id%.'
+    => 'kitEvent ID %event_id% übersprungen: Kann die Veranstaltungs Gruppen ID  für die ID %group_id% nicht ermitteln!',
+  'Skipped kitEvent ID %event_id%: Can not find the contact ID for the KIT ID %kit_id%.'
+    => 'kitEvent ID %event_id% übersprungen: Konnte die zugehörige Contact ID für die KIT ID %kit_id% nicht finden.',
+  'Skipped kitEvent ID %event_id%: Can not read the items for this event.'
+    => 'kitEvent ID %event_id% übersprungen: Kann die Einträge zu dieser Veranstaltung nicht lesen.',
   'Skipped kitEvent ID %event_id%: No valid value in %field%'
     => 'kitEvent ID <b>%event_id%</b> übersprungen: Ungültiger Wert in Feld %field%',
+  'Skipped kitEvent ID %event_id%: This entry exists already as Event ID %id%.'
+    => 'kitEvent ID %event_id% übersprungen: Dieser Eintrag existiert bereit als Event ID %id%',
   'Start a new search'
     => 'Eine neue Suche starten',
   'Start import from kitEvent'
@@ -401,8 +493,14 @@ return array(
     => 'Übermittler ID',
   'Submitter Status'
     => 'Übermittler Status',
+  'Subscribe'
+    => 'Anmelden',
   'Subscribe to event'
     => 'Zu der Veranstaltung anmelden',
+  'Subscriber'
+    => 'Anmeldender',
+  'Subscription id'
+    => 'ID',
   'Subscriptions'
     => 'Anmeldungen',
   'Successfull inserted a recurring event'
@@ -419,8 +517,12 @@ return array(
     => 'Vielen Dank für Ihre Anmeldung, wir haben Ihnen eine Bestätigung an Ihre E-Mail Adresse gesendet.',
   'Thank you for your subscription. We have send you an email, please use the submitted confirmation link to confirm your email address and to activate your subscription!'
     => 'Vielen Dank für Ihre Anmeldung. Wir haben Ihnen eine E-Mail geschickt, bitte benutzen Sie den enthaltenen Bestätigungslink um Ihre E-Mail Adresse zu bestätigen und die Anmeldung zu aktivieren.',
+  'Thank you, %name%'
+    => 'Vielen Dank, %name%',
   'Thank you, one of the admins will approve your request and contact you.'
     => 'Vielen Dank, ein Administrator wird Ihre Anfrage prüfen und sich mit Ihnen in Verbindung setzen.',
+  'The \'limit\' filter must be a integer value.'
+    => 'Der Parameter <em>limit</em> muss eine Ganzzahl sein.',
   'The action link was successfull executed'
     => 'Der Aktionslink wurde erfolgreich ausgeführt',
   'The change of your account rights is approved by admin'
@@ -435,6 +537,12 @@ return array(
     => 'Der Anmeldeschluß liegt nach dem Beginn der Veranstaltung!',
   'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
     => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
+  'The email address %email% is not registered. We can only create a account for you'
+    => 'Die E-Mail Adresse %email% ist nicht registriert. Wir können lediglich ein Benutzerkonto für Sie anlegen.',
+  'The email field must be always set for the subscription form and always enabled and required! Please check the config.event.json!'
+    => 'Das E-Mail Feld muss für Anmeldeformulare immer gesetzt werden und es muss sichtbar und als <em>benötigt</em> gekennzeichnet sein! Bitte prüfen Sie die <em>config.event.json</em>!',
+  'The event %title% was just published by the administrator'
+    => 'Die Veranstaltung %title% wurde gerade durch den Administrator veröffentlicht.',
   'The event [%event_id%] will be repeated at %pattern_type% %pattern_day% of each %pattern_sequence%. month%exclude%'
     => 'Die Veranstaltung [%event_id%] wird am %pattern_type% %pattern_day% jedes %pattern_sequence%. Monat wiederholt%exclude%',
   'The event [%event_id%] will be repeated at each workday%exclude%'
@@ -459,6 +567,16 @@ return array(
     => 'Die Veranstaltung mit der Bezeichnung %title% wurde veröffentlicht.',
   'The event with the title %title% was rejected.'
     => 'Die Veranstaltung mit der Bezeichnung %title% wurde zurückgewiesen.',
+  'The field with the name %name% is not supported.'
+    => 'Das Feld mit dem Bezeichner %name% wird nicht unterstützt.',
+  'The filter \'actual\' must be numeric or contain the keyword \'current\' as first parameter.'
+    => 'Der Filter <em>actual</em> muss eine Ganzzahl oder das Schlüsselwort <em>current</em> als ersten Parameter enthalten.',
+  'The filter for <em>day</em> must be numeric or contain the keyword <em>current</em>'
+    => 'Der Filter für <em>day</em> muss eine Ganzzahl oder das Schlüsselwort <em>current</em> enthalten.',
+  'The filter for <em>month</em> must be numeric or contain the keyword <em>current</em>'
+    => 'Der Filter <em>month</em> muss eine Ganzzahl oder das Schlüsselwort <em>current</em> enthalten.',
+  'The filter for <em>year</em> must be numeric or contain the keyword <em>current</em>'
+    => 'Der Filter für <em>year</em> muss eine Ganzzahl oder das Schlüsselwort <em>current</em> enthalten.',
   'The group list is empty, please define a group!'
     => 'Es existieren keine Gruppen, bitte legen Sie eine Gruppe an!',
   'The identifier %identifier% already exists!'
@@ -467,20 +585,40 @@ return array(
     => 'Der Veranstaltung wurde das Bild <b>%image%</b> hinzugefügt.',
   'The image with the ID %image_id% was successfull deleted.'
     => 'Das Bild mit der ID %image_id% wurde erfolgreich gelöscht.',
+  'The import from kitEvent was successfull finished.'
+    => 'Der Import aus kitEvent wurde abgeschlossen.',
   'The next recurring events'
     => 'Die nächsten Veranstaltungstermine',
   'The publishing date ends before the event starts, this is not allowed!'
     => 'Der Veröffentlichungszeitraum endet vor dem Beginn der Veranstaltung, dies ist nicht gewünscht!',
+  'The publishing of the event %title% was rejected by the administrator'
+    => 'Die Veröffentlichung der Veranstaltung %title% wurde vom Administrator zurückgewiesen.',
+  'The QR-Code file does not exists, please rebuild all QR-Code files.'
+    => 'Die QR-Code Datei existiert nicht, bitte erzeugen Sie alle QR-Code Dateien neu.',
+  'The recurring event was not changed.'
+    => 'Die wiederholende Veranstaltung wurde nicht geändert.',
   'The recurring events where successfull deleted.'
     => 'Die wiederholten Veranstaltungen wurden erfolgreich gelöscht.',
   'The repeat each x-year sequence must be greater than zero and less than 10!'
     => 'Der Wert für die jährliche Wiederholung muss größer als Null und kleiner als 10 sein!',
+  'The second parameter for the filter \'actual\' must be a positive integer value.'
+    => 'Der zweite Parameter für den Filter <em>actual</em> muss eine positive Ganzzahl sein.',
+  'The second parameter for the filter \'actual\' must be positive integer value.'
+    => 'Der zweite Parameter für den Filter <em>actual</em> muss eine positive Ganzzahl sein.',
+  'The status (%subscription_status%) of your subscription #%subscription_id% is ambiguous, the program can not confirm your subscription. Please contact the <a href='
+    => 'Der Status (%subscription_status%) Ihrer Anmeldung #%subscription_id% ist widersprüchlich, das Programm kann Ihre Anmeldung leider nicht bestätigen. Bitte kontaktieren Sie den <a href="%email%">Webmaster</a>.',
+  'The status for the contact with the ID %contact_id% is ambiguous, the program can not activate the account. Please contact the <a href='
+    => 'Der Status für den Kontaktdatensatz mit der ID %contact_id% ist nicht eindeutig, das Programm kann Ihr Benutzerkonto nicht aktivieren. Bitte kontaktieren Sie den <a href="%email%">webmaster</a>.',
   'The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.'
     => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
   'The submitted GUID %guid% does not exists.'
     => 'Die übermittelte GUID %guid% existiert nicht!',
+  'The subscription was successfull inserted.'
+    => 'Die Anmeldung wurde erfolgreich hinzugefügt.',
   'The subscription was successfull updated'
     => 'Die Anmeldung wurde erfolgreich aktualisiert.',
+  'The Subscription with the ID %subscription_id% does not exists!'
+    => 'Die Anmeldung mit der ID %subscription_id% existiert nicht!',
   'The user %contact_name% with the ID %contact_id% and the email address %email% has proposed the following event'
     => 'Der Kontakt %contact_name% mit der der ID %contact_id% und der E-Mail Adresse %email% hat die folgende Veranstaltung vorgeschlagen',
   'The user %user% does not exists!'
@@ -491,6 +629,8 @@ return array(
     => 'Der Kontakt %user% hat noch nie eine Veranstaltung vorgeschlagen',
   'The user %user% want to get the right'
     => 'Der Benutzer %user% möchte die Berechtigung erhalten',
+  'The value for \'order_direction\' can be \'ASC\' (ascending) or \'DESC\' (descending)'
+    => 'Der Wert für <em>order_direction</em> kann <em>ASC</em> (aufsteigend) oder <em>DESC</em> (absteigend) sein.',
   'The weekly sequence must be greater than zero!'
     => 'Die Sequenz der wöchentlichen Wiederholung muss größer als Null sein!',
   'There exists no kitEvent installation at the parent CMS!'
@@ -499,6 +639,8 @@ return array(
     => 'Es wurde kein Veranstaltungsort gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
   'There exists no organizer who fits to the search term %search%'
     => 'Es wurde kein Veranstalter gefunden, der zu dem Suchbegriff <i>%search%</i> passt.',
+  'third'
+    => 'dritten',
   'This activation link was already used and is no longer valid!'
     => 'Dieser Aktivierungslink wurde bereits verwendet und ist nicht mehr gültig!',
   'This event was copied from the event with the ID %id%. Be aware that you should change the dates before publishing to avoid duplicate events!'
@@ -511,18 +653,54 @@ return array(
     => 'Dieser Benutzer verfügt über einen Kontaktdatensatz, war jedoch im Zusammenhang mit Veranstaltungen noch nie im Kontakt',
   'Type'
     => 'Typ',
+  'Unknown organizer'
+    => 'Unbekannter Veranstalter',
+  'unlimited'
+    => 'unbegrenzt',
   'Using qrcode[] is not enabled in config.event.json!'
     => 'qrcode[] ist nicht in der config.event.json freigegeben!',
+  'Visit the event description'
+    => 'Besuchen Sie die Veranstaltungsbeschreibung',
   'We have send you a new password, please check your email account'
     => 'Wir haben Ihnen ein neues Passwort an Ihre E-Mail Adresse gesendet, bitte prüfen Sie Ihren Posteingang',
   'We send you a new password to your email address.'
     => 'Wir senden Ihnen ein neues Passwort an Ihre E-Mail Adresse.',
+  'Week day'
+    => 'Wochentag',
+  'Week day view'
+    => 'Wochentage',
+  'Week sequence'
+    => 'Wöchentliche Wiederholung',
   'Weekly recurring'
     => 'Wöchentliche Wiederholung',
+  'Year pattern day'
+    => 'Tag',
+  'Year pattern day view'
+    => 'Tag',
+  'Year pattern month'
+    => 'Monat',
+  'Year pattern month view'
+    => 'Monate',
+  'Year pattern type'
+    => 'Typ',
+  'Year repeat'
+    => 'Jährliche Wiederholung',
+  'Year sequence day'
+    => 'Tag',
+  'Year sequence day view'
+    => 'Tage',
+  'Year sequence month'
+    => 'Monat',
+  'Year sequence month view'
+    => 'Monate',
+  'Year type'
+    => 'Typ',
   'Yearly recurring'
     => 'Jährliche Wiederholung',
   'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
     => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
+  'You have already the right to edit events (%role%).'
+    => 'Sie haben bereits das Recht Veranstaltungen zu bearbeiten (%role%)',
   'You have now the additional right to: "%role%'
     => 'Sie verfügen jetzt über das zusätzliche Recht: "%role%',
   'You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name'
@@ -535,44 +713,6 @@ return array(
     => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
   'Your subscription for the event %event% is already confirmed.'
     => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
-  'by copying from a existing event'
-    => 'durch Kopieren einer existierenden Veranstaltung',
-  'by selecting a event group'
-    => 'durch Auswahl einer Veranstaltungsgruppe',
-  'closed'
-    => 'geschlossen',
-  'company, institution or association'
-    => 'Firma, Institution oder Verein',
-  'description_title'
-    => 'Schlagzeile',
-  'email'
-    => 'E-Mail',
-  'email usage'
-    => 'Verwendung',
-  'event'
-    => 'Veranstaltung',
-  'event_date_to'
-    => 'Datum, bis',
-  'free of charge'
-    => 'kostenlos',
-  'location'
-    => 'Veranstaltungsort',
-  'natural person'
-    => 'Natürliche Person',
-  'personal email address'
-    => 'persönliche E-Mail Adresse',
-  'regular email address of a company, institution or association'
-    => 'offizielle E-Mail Adresse einer Firma, Einrichtung oder eines Verein',
-  'second'
-    => 'zweiten',
-  'second_fourth'
-    => 'zweiten und vierten',
-  'second_last'
-    => 'zweiten und letzten',
-  'third'
-    => 'dritten',
-  'unlimited'
-    => 'unbegrenzt',
   'zip'
     => 'PLZ',
   

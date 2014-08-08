@@ -211,7 +211,7 @@ class EventFilter
                 else {
                     // filter is not valid
                     $skip = true;
-                    $messages[] = $this->app['translator']->trans("The filter for 'day' must be numeric or contain the keyword 'current'");
+                    $messages[] = $this->app['translator']->trans('The filter for <em>day</em> must be numeric or contain the keyword <em>current</em>');
                 }
 
                 if (!$skip) {
@@ -270,7 +270,7 @@ class EventFilter
                 else {
                     // filter is not valid
                     $skip = true;
-                    $messages[] = $this->app['translator']->trans("The filter for 'month' must be numeric or contain the keyword 'current'");
+                    $messages[] = $this->app['translator']->trans('The filter for <em>month</em> must be numeric or contain the keyword <em>current</em>');
                 }
 
                 if (!$skip) {
@@ -316,7 +316,7 @@ class EventFilter
                 else {
                     // filter is not valid
                     $skip = true;
-                    $messages[] = $this->app['translator']->trans("The filter for 'year' must be numeric or contain the keyword 'current'");
+                    $messages[] = $this->app['translator']->trans('The filter for <em>year</em> must be numeric or contain the keyword <em>current</em>');
                 }
 
                 if (!$skip) {
