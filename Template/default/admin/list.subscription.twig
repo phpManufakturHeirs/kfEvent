@@ -51,7 +51,7 @@
               <th>{{ 'Name'|trans }}</th>
               <th>{{ 'Email'|trans }}</th>
               <th>{{ 'Status'|trans }}</th>
-              <th>{{ 'ID'|trans }}</th>
+              <th>{{ 'ID'|humanize|trans }}</th>
               <th>{{ 'Event'|trans }}</th>
               <th>{{ 'Message'|trans }}</th>
             </tr>
@@ -62,7 +62,7 @@
                 <td><a href="{{ FRAMEWORK_URL ~ '/admin/event/subscription/edit/' ~ item.subscription.subscription_id ~ '?usage=' ~ usage }}">{{ item.subscription.subscription_date|date('DATETIME_FORMAT'|trans) }}</a></td>
                 <td{% if item.contact.contact_status == 'PENDING' %} class="pending" {% endif %}><a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ item.contact.contact_id ~ '?usage=' ~ usage }}">{{ item.contact.contact_name }}</a></td>
                 <td><a href="mailto:{{ item.contact.communication_email }}">{{ item.contact.communication_email }}</a></td>
-                <td class="{{ item.subscription.subscription_status|lower }}">{{ item.subscription.subscription_status|trans }}</td>
+                <td class="{{ item.subscription.subscription_status|lower }}">{{ item.subscription.subscription_status|humanize|trans }}</td>
                 <td><a href="{{ FRAMEWORK_URL ~ '/admin/event/edit/id/' ~ item.event.event_id ~ '?usage=' ~ usage }}">{{ item.event.event_id }}</a></td>
                 <td>{{ item.event.description_title }}</td> 
                 <td>{{ item.message }}</td>

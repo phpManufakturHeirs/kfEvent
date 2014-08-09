@@ -131,11 +131,10 @@ class EventEdit extends Backend {
             'data' => self::$event_id
         ))
         ->add('event_status', 'choice', array(
-            'choices' => array('ACTIVE' => 'active', 'LOCKED' => 'locked', 'DELETED' => 'deleted'),
+            'choices' => array('ACTIVE' => 'Active', 'LOCKED' => 'Locked', 'DELETED' => 'Deleted'),
             'empty_value' => false,
             'expanded' => false,
             'required' => true,
-            'label' => 'Status',
             'data' => $event['event_status']
         ))
         ->add('group_id', 'hidden', array(
@@ -151,7 +150,6 @@ class EventEdit extends Backend {
             'empty_value' => '- please select -',
             'expanded' => false,
             'required' => true,
-            'label' => 'Organizer',
             'data' => $event['event_organizer']
         ))
 
@@ -161,7 +159,6 @@ class EventEdit extends Backend {
             'empty_value' => '- please select -',
             'expanded' => false,
             'required' => true,
-            'label' => 'Event location',
             'data' => $event['event_location']
         ))
         // Participants

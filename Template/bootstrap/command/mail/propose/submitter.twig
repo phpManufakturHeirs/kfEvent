@@ -47,7 +47,7 @@
   {% if email_id > 0 %}
     {% for email in event.contact.location.communication %}
       {% if email.communication_id == email_id %}
-        {{ 'email'|trans }}: {{ email.communication_value }}<br />
+        {{ 'Email'|trans }}: {{ email.communication_value }}<br />
       {% endif %}
     {% endfor %}
   {% endif %}

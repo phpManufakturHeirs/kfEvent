@@ -71,17 +71,14 @@ class GroupEdit extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => false,
-            'label' => 'Status',
             'data' => $data['group_status']
         ))
         ->add('group_name', 'text', array(
             'read_only' => ($data['group_id'] > 0) ? true : false,
-            'label' => 'Group name',
             'data' => $data['group_name']
         ))
         ->add('group_description', 'textarea', array(
             'required' => false,
-            'label' => 'Description',
             'data' => $data['group_description']
         ))
         ->add('group_organizer_contact_tags', 'choice', array(
@@ -89,7 +86,6 @@ class GroupEdit extends Backend {
             'expanded' => true,
             'multiple' => true,
             'required' => true,
-            'label' => 'Organizer Tags',
             'data' => (false === ($tags = $this->OrganizerTag->selectTagNamesByGroupID(self::$group_id))) ? null : $tags
         ))
         ->add('group_location_contact_tags', 'choice', array(
@@ -97,7 +93,6 @@ class GroupEdit extends Backend {
             'expanded' => true,
             'multiple' => true,
             'required' => true,
-            'label' => 'Location Tags',
             'data' => (false === ($tags = $this->LocationTag->selectTagNamesByGroupID(self::$group_id))) ? null : $tags
         ))
         ->add('group_participant_contact_tags', 'choice', array(
@@ -105,7 +100,6 @@ class GroupEdit extends Backend {
             'expanded' => true,
             'multiple' => true,
             'required' => true,
-            'label' => 'Participant Tags',
             'data' => (false === ($tags = $this->ParticipantTag->selectTagNamesByGroupID(self::$group_id))) ? null : $tags
         ))
         ->add('group_extra_fields', 'hidden', array(
@@ -135,8 +129,7 @@ class GroupEdit extends Backend {
             'empty_value' => '- please select -',
             'expanded' => false,
             'multiple' => false,
-            'required' => false,
-            'label' => 'Add extra field'
+            'required' => false
         ));
 
         return $fields;

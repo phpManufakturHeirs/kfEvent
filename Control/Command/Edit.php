@@ -682,9 +682,7 @@ class Edit extends Basic
         $ContactControl = new Contact($app);
         if (false === ($contact_id = $ContactControl->existsLogin($check['login']))) {
             // this email address is not registered
-            $this->setAlert('The email address %email% is not registered. We can only create a account for you '.
-                'if there was already a interaction, i.e. you have proposed a event. If you represent an organizer '.
-                'or a location and your public email address is not registered, please contact the administrator.',
+            $this->setAlert('The email address %email% is not registered. We can only create a account for you if there was already a interaction, i.e. you have proposed a event. If you represent an organizer or a location and your public email address is not registered, please contact the administrator.',
                 array('%email%' => $check['login']));
             // redirect to login and prompt the message
             $subRequest = Request::create('/event/frontend/login', 'POST',
@@ -711,8 +709,7 @@ class Edit extends Basic
             foreach ($roles as $role) {
                 if (in_array($role, self::$roles_event_edit)) {
                     // user has already a role which allow to edit events
-                    $this->setAlert('You have already the right to edit events (%role%). '.
-                        'Please contact the administrator if you want to change or extend your account rights',
+                    $this->setAlert('You have already the right to edit events (%role%). Please contact the administrator if you want to change or extend your account rights',
                         array('%role%' => $role));
                     // redirect to login and prompt the message
                     $subRequest = Request::create('/event/frontend/login', 'POST',

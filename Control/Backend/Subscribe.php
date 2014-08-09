@@ -402,10 +402,10 @@ class Subscribe extends Backend {
             'expanded' => false,
             'multiple' => false,
             'choices' => array(
-                'PENDING' => 'PENDING',
-                'CONFIRMED' => 'CONFIRMED',
-                'CANCELED' => 'CANCELED',
-                'LOCKED' => 'LOCKED'
+                'PENDING' => 'Pending',
+                'CONFIRMED' => 'Confirmed',
+                'CANCELED' => 'Canceled',
+                'LOCKED' => 'Locked'
             ),
             'data' => isset($data['subscription']['subscription_status']) ? $data['subscription']['subscription_status'] : 'LOCKED'
         ))

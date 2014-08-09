@@ -36,7 +36,7 @@
     <div class="row">
       <div class="col-sm-3">{{ 'Subscriber'|trans }}</div>
       <div class="col-sm-6">
-        <p>{{ data.contact.person_gender|trans }}<br />
+        <p>{{ data.contact.person_gender|humanize|trans }}<br />
           <a href="{{ FRAMEWORK_URL ~ '/admin/event/contact/edit/id/' ~ data.contact.contact_id ~ '?usage=' ~ usage }}">{{ data.contact.person_first_name }} {{ data.contact.person_last_name }}</a></br>
           {{ data.contact.address_street }}<br />
           {{ data.contact.address_zip }} {{ data.contact.address_city }}<br />

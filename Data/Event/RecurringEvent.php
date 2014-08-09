@@ -257,7 +257,7 @@ EOD;
                     $dt = Carbon::createFromFormat('Y-m-d', $result['exclude_dates']);
                     $dates = array($dt->format($this->app['translator']->trans('DATE_FORMAT')));
                 }
-                $exclude_dates = $this->app['translator']->trans(' but not at %dates%.',
+                $exclude_dates = $this->app['translator']->trans('but not at %dates%.',
                     array('%dates%' => implode(', ', $dates)));
             }
 

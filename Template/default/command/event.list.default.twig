@@ -26,9 +26,9 @@
     <table>
       <thead>
         <tr>
-          <th>{{ 'event_date_from'|trans }}</th>
-          <th>{{ 'event_date_to'|trans }}</th>
-          <th>{{ 'description_title'|trans }}</th>
+          <th>{{ 'event_date_from'|humanize|trans }}</th>
+          <th>{{ 'event_date_to'|humanize|trans }}</th>
+          <th>{{ 'description_title'|humanize|trans }}</th>
           <th>{{ 'Location'|trans }}</th>
           <th>{{ 'Organizer'|trans }}</th>
           {% if parameter.rating and config.rating.active %}

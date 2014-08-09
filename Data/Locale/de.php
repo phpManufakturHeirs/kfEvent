@@ -17,8 +17,8 @@ if ('á' != "\xc3\xa1") {
 }
 
 return array(
-  ' but not at %dates%.'
-    => ', jedoch nicht am %dates%.',
+  '%type% Import'
+    => '%type% Import',
   '- delete field -'
     => '- Feld löschen -',
   '- new extra field -'
@@ -67,6 +67,8 @@ return array(
     => 'Am zweiten und letzten',
   'At the third'
     => 'Am dritten',
+  'but not at %dates%.'
+    => ', jedoch nicht am %dates%.',
   'by copying from a existing event'
     => 'durch Kopieren einer existierenden Veranstaltung',
   'by selecting a event group'
@@ -117,6 +119,10 @@ return array(
     => 'Datum',
   'Date and Time'
     => 'Datum und Uhrzeit',
+  'Day sequence'
+    => 'Alle x-Tage wiederholen',
+  'Day type'
+    => 'Typ',
   'Deadline'
     => 'Anmeldeschluß',
   'Delete this image'
@@ -127,8 +133,6 @@ return array(
     => 'Zusammenfassung',
   'Description title'
     => 'Titel',
-  'description_title'
-    => 'Schlagzeile',
   'Detected a kitEvent installation (Release: %release%) with %count% active or locked events.'
     => 'Es wurde eine kitEvent Installation (Release: %release%) mit %count% Veranstaltungen gefunden, die importiert werden können.',
   'Do not know how to handle the recurring type <b>%type%</b>.'
@@ -143,13 +147,11 @@ return array(
     => 'Weiß nicht, wie ich den Jahrestyp %type% behandeln soll!',
   'Edit event'
     => 'Veranstaltung bearbeiten',
-  'email'
-    => 'E-Mail',
   'email usage'
     => 'Verwendung',
-  'Event'
-    => 'Veranstaltung',
   'event'
+    => 'Veranstaltung',
+  'Event'
     => 'Veranstaltung',
   'Event Administration - About'
     => 'Event Verwaltung - Über',
@@ -173,10 +175,10 @@ return array(
     => 'Anmeldeschluß',
   'Event group'
     => 'Gruppe',
-  'Event id'
-    => 'Veranstaltung ID',
   'Event ID'
     => 'ID',
+  'Event id'
+    => 'Veranstaltung ID',
   'Event list'
     => 'Veranstaltungen, Übersicht',
   'Event location'
@@ -199,8 +201,6 @@ return array(
     => 'Titel der Veranstaltung',
   'Event url'
     => 'Veranstaltungs URL',
-  'event_date_to'
-    => 'Datum, bis',
   'Exclude dates'
     => 'Daten ausschließen',
   'Extra field'
@@ -269,14 +269,10 @@ return array(
     => 'Übersicht über alle Anmeldungen zu Veranstaltungen',
   'List single dates in format <b>%format%</b> separated by comma to exclude them from recurring'
     => 'Schließen Sie einzelne Daten im Format <b>%format%</b> durch ein Komma getrennt von der Sequenz aus.',
-  'location'
-    => 'Veranstaltungsort',
   'Location'
     => 'Veranstaltungsort',
   'Location ID'
     => 'Veranstaltungsort ID',
-  'Location Tags'
-    => 'Veranstaltungsorte',
   'Long description'
     => 'Langbeschreibung',
   'Message from the kitFramework Event application'
@@ -323,19 +319,13 @@ return array(
     => 'Es wurde kein Serientermin Typ ausgewählt.',
   'No results for this filter!'
     => 'Dieser Filter lieferte kein Ergebnis!',
-  'organizer'
-    => 'Veranstalter',
   'Organizer'
     => 'Veranstalter',
   'Organizer ID'
     => 'Veranstalter ID',
-  'Organizer Tags'
-    => 'Veranstalter',
   'Parent event id'
     => 'ID',
   'Participant'
-    => 'Teilnehmer',
-  'Participant Tags'
     => 'Teilnehmer',
   'Participants canceled'
     => 'Teilnehmer, storniert',
@@ -537,8 +527,8 @@ return array(
     => 'Der Anmeldeschluß liegt nach dem Beginn der Veranstaltung!',
   'The email address %email% is associated with a company contact record. At the moment you can only subscribe to a event with your personal email address!'
     => 'Die E-Mail Adresse %email% ist einer Firma oder Institution zugeordnet. Zur Zeit können Sie sich jedoch nur mit einer persönlichen E-Mail Adresse zu einer Veranstaltung anmelden.',
-  'The email address %email% is not registered. We can only create a account for you'
-    => 'Die E-Mail Adresse %email% ist nicht registriert. Wir können lediglich ein Benutzerkonto für Sie anlegen.',
+  'The email address %email% is not registered. We can only create a account for you if there was already a interaction, i.e. you have proposed a event. If you represent an organizer or a location and your public email address is not registered, please contact the administrator.'
+    => 'Die E-Mail Adresse %email% ist nicht registriert. Wir können nur dann ein Benutzerkonto für Sie anlegen, wenn bereits eine Interaktion stattgefunden hat, z.B. in dem Sie bereits eine Veranstaltung vorgeschlagen haben. Falls Sie einen Veranstalter oder einen Veranstaltungsort vertreten und ihre <em>öffentliche</em> E-Mail Adresse noch nicht registriert ist, nehmen Sie bitte Kontakt mit dem Administrator auf.',
   'The email field must be always set for the subscription form and always enabled and required! Please check the config.event.json!'
     => 'Das E-Mail Feld muss für Anmeldeformulare immer gesetzt werden und es muss sichtbar und als <em>benötigt</em> gekennzeichnet sein! Bitte prüfen Sie die <em>config.event.json</em>!',
   'The event %title% was just published by the administrator'
@@ -605,9 +595,9 @@ return array(
     => 'Der zweite Parameter für den Filter <em>actual</em> muss eine positive Ganzzahl sein.',
   'The second parameter for the filter \'actual\' must be positive integer value.'
     => 'Der zweite Parameter für den Filter <em>actual</em> muss eine positive Ganzzahl sein.',
-  'The status (%subscription_status%) of your subscription #%subscription_id% is ambiguous, the program can not confirm your subscription. Please contact the <a href='
+  'The status (%subscription_status%) of your subscription #%subscription_id% is ambiguous, the program can not confirm your subscription. Please contact the <a href="%email%">webmaster</a>.'
     => 'Der Status (%subscription_status%) Ihrer Anmeldung #%subscription_id% ist widersprüchlich, das Programm kann Ihre Anmeldung leider nicht bestätigen. Bitte kontaktieren Sie den <a href="%email%">Webmaster</a>.',
-  'The status for the contact with the ID %contact_id% is ambiguous, the program can not activate the account. Please contact the <a href='
+  'The status for the contact with the ID %contact_id% is ambiguous, the program can not activate the account. Please contact the <a href="%email%">webmaster</a>.'
     => 'Der Status für den Kontaktdatensatz mit der ID %contact_id% ist nicht eindeutig, das Programm kann Ihr Benutzerkonto nicht aktivieren. Bitte kontaktieren Sie den <a href="%email%">webmaster</a>.',
   'The status of your address record is actually %status%, so we can not accept your subscription. Please contact the <a href="mailto:%email%">webmaster</a>.'
     => 'Der Status Ihres Adressdatensatz ist zur Zeit auf %status% gesetzt, wir können Ihre Anmeldung daher nicht entgegennehmen. Bitte nehmen Sie Kontakt mit dem <a href="mailto:%email%">Webmaster</a> auf, um die Situation zu klären.',
@@ -699,8 +689,8 @@ return array(
     => 'Jährliche Wiederholung',
   'You have already subscribed to this Event at %datetime%, you can not subscribe again.'
     => 'Sie haben sich am %datetime% bereits zu dieser Veranstaltung angemeldet und können sich deshalb nicht erneut anmelden.',
-  'You have already the right to edit events (%role%).'
-    => 'Sie haben bereits das Recht Veranstaltungen zu bearbeiten (%role%)',
+  'You have already the right to edit events (%role%). Please contact the administrator if you want to change or extend your account rights'
+    => 'Sie verfügen bereits über das Recht Veranstaltungen zu bearbeiten (%role%). Bitte wenden Sie sich an den Administrator, wenn Sie Ihre Rechte ändern oder erweitern möchten.',
   'You have now the additional right to: "%role%'
     => 'Sie verfügen jetzt über das zusätzliche Recht: "%role%',
   'You have selected <i>Company, Institution or Association</i> as contact type, so please give us the name'
@@ -713,7 +703,5 @@ return array(
     => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
   'Your subscription for the event %event% is already confirmed.'
     => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
-  'zip'
-    => 'PLZ',
-  
+
 );

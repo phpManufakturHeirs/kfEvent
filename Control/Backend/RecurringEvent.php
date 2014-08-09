@@ -91,7 +91,6 @@ class RecurringEvent extends Backend {
             ),
             'expanded' => true,
             'required' => true,
-            'label' => 'Select type',
             'data' => !is_null(self::$recurring_type) ? self::$recurring_type : 'NONE'
         ));
     }
@@ -121,7 +120,6 @@ class RecurringEvent extends Backend {
             ),
             'expanded' => true,
             'required' => true,
-            'label' => 'Select type',
             'data' => !is_null(self::$day_type) ? self::$day_type : 'DAILY'
         ));
     }
@@ -148,7 +146,6 @@ class RecurringEvent extends Backend {
             'data' => self::$day_type
         ))
         ->add('day_sequence', 'number', array(
-            'label' => 'Repeat each x-days',
             'required' => true,
             'attr' => array(
                 'min' => 1,
@@ -178,7 +175,6 @@ class RecurringEvent extends Backend {
             'data' => self::$recurring_type
         ))
         ->add('week_sequence', 'integer', array(
-            'label' => 'Repeat each x-weeks',
             'required' => true,
             'data' => !is_null(self::$week_sequence) ? self::$week_sequence : 1,
             'attr' => array(
@@ -199,7 +195,6 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'Weekday',
             'data' => !is_null(self::$week_day) ? self::$week_day : 'MONDAY',
             'disabled' => true
         ))
@@ -236,7 +231,6 @@ class RecurringEvent extends Backend {
             'expanded' => true,
             'multiple' => false,
             'required' => true,
-            'label' => 'Select type',
             'data' => !is_null(self::$month_type) ? self::$month_type : 'SEQUENCE'
         ))
         ;
@@ -267,7 +261,6 @@ class RecurringEvent extends Backend {
             'data' => !is_null(self::$month_sequence_day) ? self::$month_sequence_day : 1
         ))
         ->add('month_sequence_day_view', 'integer', array(
-            'label' => 'At day x of month',
             'required' => true,
             'data' => !is_null(self::$month_sequence_day) ? self::$month_sequence_day : 1,
             'attr' => array(
@@ -277,7 +270,6 @@ class RecurringEvent extends Backend {
             'disabled' => true
         ))
         ->add('month_sequence_month', 'integer', array(
-            'label' => 'Repeat each x-month',
             'required' => true,
             'data' => !is_null(self::$month_sequence_month) ? self::$month_sequence_month : 1,
             'attr' => array(
@@ -324,7 +316,6 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'Select pattern',
             'data' => !is_null(self::$month_pattern_type) ? self::$month_pattern_type : 'FIRST',
             'required' => true
         ))
@@ -345,14 +336,12 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'Select day',
             'data' => !is_null(self::$month_pattern_day) ? self::$month_pattern_day : 'MONDAY',
             'required' => true,
             'disabled' => true
         ))
         ->add('month_pattern_sequence', 'integer', array(
             'required' => true,
-            'label' => 'Repeat each x-month',
             'data' => !is_null(self::$month_pattern_sequence) ? self::$month_pattern_sequence : 2,
             'attr' => array(
                 'min' => 1,
@@ -388,7 +377,6 @@ class RecurringEvent extends Backend {
             'expanded' => true,
             'multiple' => false,
             'required' => true,
-            'label' => 'Select type',
             'data' => !is_null(self::$year_type) ? self::$year_type : 'SEQUENCE'
         ))
         ;
@@ -417,7 +405,6 @@ class RecurringEvent extends Backend {
         ))
         ->add('year_repeat', 'integer', array(
             'required' => true,
-            'label' => 'Repeat each x-year',
             'data' => !is_null(self::$year_repeat) ? self::$year_repeat : 1,
             'attr' => array(
                 'min' => 1,
@@ -429,7 +416,6 @@ class RecurringEvent extends Backend {
         ))
         ->add('year_sequence_day_view', 'integer', array(
             'required' => true,
-            'label' => 'At day x of month',
             'data' => !is_null(self::$year_sequence_day) ? self::$year_sequence_day : 1,
             'attr' => array(
                 'min' => 1,
@@ -459,7 +445,6 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'At month',
             'data' => !is_null(self::$year_sequence_month) ? self::$year_sequence_month : 'JANUARY',
             'disabled' => true
         ))
@@ -489,7 +474,6 @@ class RecurringEvent extends Backend {
         ))
         ->add('year_repeat', 'number', array(
             'required' => true,
-            'label' => 'Repeat each x-year',
             'data' => !is_null(self::$year_repeat) ? self::$year_repeat : 1,
             'attr' => array(
                 'min' => 1,
@@ -508,7 +492,6 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'Select pattern',
             'data' => !is_null(self::$year_pattern_type) ? self::$year_pattern_type : 'FIRST',
             'required' => true
         ))
@@ -529,7 +512,6 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'Select day',
             'data' => !is_null(self::$year_pattern_day) ? self::$year_pattern_day : 'MONDAY',
             'required' => true,
             'disabled' => true
@@ -556,7 +538,6 @@ class RecurringEvent extends Backend {
             'expanded' => false,
             'multiple' => false,
             'required' => true,
-            'label' => 'At month',
             'data' => !is_null(self::$year_pattern_month) ? self::$year_pattern_month : 'JANUARY',
             'disabled' => true
         ))
@@ -640,7 +621,6 @@ class RecurringEvent extends Backend {
             'data' => self::$recurring_date_end
         ))
         ->add('exclude_dates', 'textarea', array(
-            'label' => 'Exclude dates',
             'required' => false,
             'data' => self::$exclude_dates,
             'attr' => array(
