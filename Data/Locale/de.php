@@ -39,14 +39,10 @@ return array(
     => 'Eine Anmeldung hinzufügen',
   'Admin Status'
     => 'Administrator Status',
-  'At day x of month'
-    => 'Jeden x. Tag des Monat',
   'At day x of month must be greater than zero and less than 28.'
     => 'Der Wert für Ausführen am x. Tag des Monats muss größer als Null und kleiner als 28 sein.',
   'At least we need one communication channel, so please tell us a email address, phone or a URL'
     => 'Wir benötigen mindestens einen Kommunikationsweg, bitte nennen Sie uns eine E-Mail Adresse, Telefonummer oder die URL der Homepage.',
-  'At month'
-    => 'Im Monat',
   'At the first'
     => 'Am ersten',
   'At the first and third'
@@ -417,12 +413,6 @@ return array(
     => 'An Werktagen wiederholen',
   'Repeat each x-days'
     => 'Alle x-Tage wiederholen',
-  'Repeat each x-month'
-    => 'Wiederhole jeden x. Monat',
-  'Repeat each x-weeks'
-    => 'Alle x-Wochen wiederholen',
-  'Repeat each x-year'
-    => 'Wiederhole jedes x. Jahr',
   'Repeat x-month must be greater than zero and less then 13.'
     => 'Der Wert für Wiederhole jeden x. Monat muß größer als Null und kleiner als 13 sein.',
   'Rewrite the the recurring event'
