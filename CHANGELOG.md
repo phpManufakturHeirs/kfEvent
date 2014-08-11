@@ -6,6 +6,16 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.42** - 2014-08-11
+
+* improved translation handling, added support for i18nEditor
+* generate extended debug information if the form submission is not valid 
+* removed no longer needed block with entry points
+* changed default address and communication usage type to PRIMARY
+* changed usage of the contact edit dialog
+* changed usage of library to `/latest`
+* removed deprecated folder in /Template - need another concept
+
 **2.0.41** - 2014-06-18
 
 * added counter for recurring events
