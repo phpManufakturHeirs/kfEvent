@@ -345,7 +345,7 @@ class Subscribe extends Basic
                     $checked = false;
                     foreach ($contact['communication'] as $communication) {
                         if (($communication['communication_type'] == 'CELL') &&
-                        ($communication['communication_usage'] == 'PRIVATE')) {
+                        ($communication['communication_usage'] == 'PRIMARY')) {
                             $checked = true;
                             if ($subscribe['cell'] != $communication['communication_value']) {
                                 $data = array(
@@ -373,7 +373,7 @@ class Subscribe extends Basic
                                 array(
                                     'communication_id' => -1,
                                     'communication_type' => 'CELL',
-                                    'communication_usage' => 'PRIVATE',
+                                    'communication_usage' => 'PRIMARY',
                                     'communication_value' => $subscribe['cell']
                                 )
                             )
@@ -414,7 +414,7 @@ class Subscribe extends Basic
                         'address' => array(
                             array(
                                 'address_id' => $contact['address'][0]['address_id'],
-                                'address_type' => 'PRIVATE',
+                                'address_type' => 'PRIMARY',
                                 'address_street' => (isset($subscribe['street']) && !empty($subscribe['street'])) ? $subscribe['street'] : $contact['address'][0]['address_street'],
                                 'address_zip' => (isset($subscribe['zip']) && !empty($subscribe['zip'])) ? $subscribe['zip'] : $contact['address'][0]['address_zip'],
                                 'address_city' => (isset($subscribe['city']) && !empty($subscribe['city'])) ? $subscribe['city'] : $contact['address'][0]['address_city'],
@@ -491,7 +491,7 @@ class Subscribe extends Basic
                         array(
                             'communication_id' => -1,
                             'communication_type' => 'CELL',
-                            'communication_usage' => 'PRIVATE',
+                            'communication_usage' => 'PRIMARY',
                             'communication_value' => trim($subscribe['cell'])
                         )
                     );
@@ -502,7 +502,7 @@ class Subscribe extends Basic
                     $contact['address'] = array(
                         array(
                             'address_id' => -1,
-                            'address_type' => 'PRIVATE',
+                            'address_type' => 'PRIMARY',
                             'address_street' => isset($subscribe['street']) ? $subscribe['street'] : '',
                             'address_zip' => isset($subscribe['zip']) ? $subscribe['zip'] : '',
                             'address_city' => isset($subscribe['city']) ? $subscribe['city'] : '',

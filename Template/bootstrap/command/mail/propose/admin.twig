@@ -13,7 +13,7 @@
     {{ event.contact.organizer.company.0.company_name }}
   {% else %}
     {% set person = event.contact.organizer.person.0 %}
-    {{ person.person_gender|trans }}
+    {{ person.person_gender|humanize|trans }}
     {% if person.person_first_name|length > 0 %}{{ person.person_first_name }} {% endif %}
     {{ person.last_name }}
   {% endif %}
