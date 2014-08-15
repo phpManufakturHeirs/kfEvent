@@ -69,6 +69,8 @@ return array(
     => 'durch Kopieren einer existierenden Veranstaltung',
   'by selecting a event group'
     => 'durch Auswahl einer Veranstaltungsgruppe',
+  'Canceled'
+    => 'Wiederrufen',
   'Change account rights'
     => 'Änderung der Benutzerrechte',
   'Change Event configuration'
@@ -91,6 +93,8 @@ return array(
     => 'Kommentar Behandlung',
   'company, institution or association'
     => 'Firma, Institution oder Verein',
+  'Confirmed'
+    => 'Bestätigt',
   'Costs'
     => 'Teilnahmegebühr',
   'Create a new category'
@@ -693,5 +697,5 @@ return array(
     => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
   'Your subscription for the event %event% is already confirmed.'
     => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
-
+  
 );

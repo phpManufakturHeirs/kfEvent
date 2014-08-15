@@ -402,10 +402,10 @@ class Subscribe extends Backend {
             'expanded' => false,
             'multiple' => false,
             'choices' => array(
-                'PENDING' => 'Pending',
-                'CONFIRMED' => 'Confirmed',
-                'CANCELED' => 'Canceled',
-                'LOCKED' => 'Locked'
+                'PENDING' => $this->app['translator']->trans('Pending'),
+                'CONFIRMED' => $this->app['translator']->trans('Confirmed'),
+                'CANCELED' => $this->app['translator']->trans('Canceled'),
+                'LOCKED' => $this->app['translator']->trans('Locked')
             ),
             'data' => isset($data['subscription']['subscription_status']) ? $data['subscription']['subscription_status'] : 'LOCKED'
         ))
