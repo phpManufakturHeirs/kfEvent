@@ -149,22 +149,16 @@ return array(
     => 'Veranstaltung bearbeiten',
   'email usage'
     => 'Verwendung',
-  'event'
-    => 'Veranstaltung',
   'Event'
+    => 'Veranstaltung',
+  'event'
     => 'Veranstaltung',
   'Event Administration - About'
     => 'Event Verwaltung - Über',
-  'Event Administration - Categories list'
-    => 'Event Verwaltung - Kategorien Liste',
-  'Event Administration - Contact list'
-    => 'Event Administration - Kontaktliste',
   'Event Administration - Copy Event'
     => 'Event Administration - Veranstaltung kopieren',
   'Event Administration - Create or edit event'
     => 'Event Administration - Veranstaltung erstellen oder bearbeiten',
-  'Event Administration - Edit Contact'
-    => 'Event Verwaltung - Kontakt bearbeiten',
   'Event costs'
     => 'Eintrittspreis',
   'Event date from'
@@ -175,10 +169,10 @@ return array(
     => 'Anmeldeschluß',
   'Event group'
     => 'Gruppe',
-  'Event ID'
-    => 'ID',
   'Event id'
     => 'Veranstaltung ID',
+  'Event ID'
+    => 'ID',
   'Event list'
     => 'Veranstaltungen, Übersicht',
   'Event location'
