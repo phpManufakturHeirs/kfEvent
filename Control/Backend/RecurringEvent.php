@@ -145,7 +145,7 @@ class RecurringEvent extends Backend {
         ->add('day_type', 'hidden', array(
             'data' => self::$day_type
         ))
-        ->add('day_sequence', 'number', array(
+        ->add('day_sequence', 'text', array(
             'required' => true,
             'attr' => array(
                 'min' => 1,
@@ -472,7 +472,7 @@ class RecurringEvent extends Backend {
         ->add('year_type', 'hidden', array(
             'data' => self::$year_type
         ))
-        ->add('year_repeat', 'number', array(
+        ->add('year_repeat', 'text', array(
             'required' => true,
             'data' => !is_null(self::$year_repeat) ? self::$year_repeat : 1,
             'attr' => array(
