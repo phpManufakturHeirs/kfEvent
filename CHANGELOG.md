@@ -6,6 +6,10 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.44** - 2014-09-05
+
+* changed form 'number' fields to 'text' due compatibility reason
+
 **2.0.43** - 2014-08-31 
 
 * smaller changes to fix and improve the translation handling
