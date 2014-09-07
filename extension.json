@@ -72,8 +72,8 @@
       "update":"\/admin\/event\/update",
       "uninstall":"\/admin\/event\/uninstall",
       "icon_path":{
-        "BlackCat":"\/extension\/phpmanufaktur\/phpManufaktur\/Event\/Data\/Setup\/icon\/icon.jpg",
-        "WebsiteBaker":"\/extension\/phpmanufaktur\/phpManufaktur\/Event\/Data\/Setup\/icon\/tool_icon.jpg"
+        "BlackCat":"\/extension\/phpmanufaktur\/phpManufaktur\/Event\/Data\/Setup\/icon\/icon.png",
+        "WebsiteBaker":"\/extension\/phpmanufaktur\/phpManufaktur\/Event\/Data\/Setup\/icon\/tool_icon.png"
       }
   },
   "license": {

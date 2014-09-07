@@ -27,6 +27,10 @@ label {
   text-align: left;
 }
 
+a.kitframework-icon {
+  color: #da251d !important;
+}
+
 /*
 @media (max-width: 767px) {
   label {

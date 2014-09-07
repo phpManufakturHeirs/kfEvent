@@ -21,7 +21,6 @@ class Backend extends Alert
 {
 
     protected static $usage = null;
-    protected static $usage_param = null;
     protected static $config = null;
 
     /**
@@ -34,7 +33,6 @@ class Backend extends Alert
 
         $cms = $this->app['request']->get('usage');
         self::$usage = is_null($cms) ? 'framework' : $cms;
-        self::$usage_param = (self::$usage != 'framework') ? '?usage='.self::$usage : '';
         // set the locale from the CMS locale
         if (self::$usage != 'framework') {
             $app['translator']->setLocale($this->app['session']->get('CMS_LOCALE', 'en'));
@@ -58,16 +56,16 @@ class Backend extends Alert
                         'name' => 'event_list',
                         'text' => $this->app['translator']->trans('Event list'),
                         'hint' => $this->app['translator']->trans('List of all active events'),
-                        'link' => FRAMEWORK_URL.'/admin/event/list'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/event/list',
                         'active' => ($active == 'event_list')
                     );
                     break;
                 case 'event_edit':
                     $toolbar[$tab] = array(
                         'name' => 'event_edit',
-                        'text' => $this->app['translator']->trans('Event'),
-                        'hint' => $this->app['translator']->trans('Create a new event'),
-                        'link' => FRAMEWORK_URL.'/admin/event/edit'.self::$usage_param,
+                        'text' => ($active === 'event_edit') ? $this->app['translator']->trans('Edit event') : $this->app['translator']->trans('Create event'),
+                        'hint' => $this->app['translator']->trans('Create or edit a event'),
+                        'link' => FRAMEWORK_URL.'/admin/event/edit',
                         'active' => ($active == 'event_edit')
                     );
                     break;
@@ -76,7 +74,7 @@ class Backend extends Alert
                         'name' => 'subscription',
                         'text' => $this->app['translator']->trans('Subscriptions'),
                         'hint' => $this->app['translator']->trans('List of all subscriptions for events'),
-                        'link' => FRAMEWORK_URL.'/admin/event/subscription'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/event/subscription',
                         'active' => ($active == 'subscription')
                     );
                     break;
@@ -85,7 +83,7 @@ class Backend extends Alert
                         'name' => 'propose',
                         'text' => $this->app['translator']->trans('Proposes'),
                         'hint' => $this->app['translator']->trans('List of actual submitted proposes for events'),
-                        'link' => FRAMEWORK_URL.'/admin/event/propose'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/event/propose',
                         'active' => ($active == 'propose')
                     );
                     break;
@@ -94,16 +92,16 @@ class Backend extends Alert
                         'name' => 'contact_list',
                         'text' => $this->app['translator']->trans('Contact list'),
                         'hint' => $this->app['translator']->trans('List of all available contacts (Organizer, Locations, Participants)'),
-                        'link' => FRAMEWORK_URL.'/admin/event/contact/list'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/event/contact/list',
                         'active' => ($active == 'contact_list')
                     );
                     break;
                 case 'contact_edit':
                     $toolbar[$tab] = array(
                         'name' => 'contact_edit',
-                        'text' => $this->app['translator']->trans('Contact'),
-                        'hint' => $this->app['translator']->trans('Create a new contact'),
-                        'link' => FRAMEWORK_URL.'/admin/event/contact/select'.self::$usage_param,
+                        'text' => ($active === 'contact_edit') ? $this->app['translator']->trans('Edit contact') : $this->app['translator']->trans('Create contact'),
+                        'hint' => $this->app['translator']->trans('Create or edit a contact record'),
+                        'link' => FRAMEWORK_URL.'/admin/event/contact/select',
                         'active' => ($active == 'contact_edit')
                     );
                     break;
@@ -112,7 +110,7 @@ class Backend extends Alert
                         'name' => 'event_groups',
                         'text' => $this->app['translator']->trans('Groups'),
                         'hint' => $this->app['translator']->trans('List of all available event groups'),
-                        'link' => FRAMEWORK_URL.'/admin/event/group/list'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/event/group/list',
                         'active' => ($active == 'group')
                     );
                     break;
@@ -121,7 +119,7 @@ class Backend extends Alert
                         'name' => 'about',
                         'text' => $this->app['translator']->trans('About'),
                         'hint' => $this->app['translator']->trans('Information about the Event extension'),
-                        'link' => FRAMEWORK_URL.'/admin/event/about'.self::$usage_param,
+                        'link' => FRAMEWORK_URL.'/admin/event/about',
                         'active' => ($active == 'about')
                         );
                     break;
