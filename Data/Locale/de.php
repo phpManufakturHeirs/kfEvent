@@ -111,6 +111,10 @@ return array(
     => 'Neue sich wiederholende Veranstaltung mit der ID %event_id% angelegt.',
   'Create a new title'
     => 'Eine neue Schlagzeile anlegen',
+  'Create event'
+    => 'Veranstaltung anlegen',
+  'Create or edit a event'
+    => 'Veranstaltung anlegen oder bearbeiten',
   'Created the tag %tag% in Contact.'
     => 'Das Schlagwort %tag% wurde in Contact angelegt.',
   'Daily recurring'
@@ -149,9 +153,9 @@ return array(
     => 'Veranstaltung bearbeiten',
   'email usage'
     => 'Verwendung',
-  'Event'
-    => 'Veranstaltung',
   'event'
+    => 'Veranstaltung',
+  'Event'
     => 'Veranstaltung',
   'Event Administration - About'
     => 'Event Verwaltung - Über',
