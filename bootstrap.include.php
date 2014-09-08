@@ -26,7 +26,7 @@ if (!in_array('ROLE_EVENT_ADMIN', $roles)) {
         'ROLE_EVENT_SUBMITTER',
         'ROLE_EVENT_USER',
         'ROLE_MEDIABROWSER_ADMIN',
-        'ROLE_MDIABRROWSER_USER'
+        'ROLE_MEDIABROWSER_USER'
     );
     $app['security.role_hierarchy'] = $roles;
 }
