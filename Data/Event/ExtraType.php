@@ -199,7 +199,7 @@ EOD;
             $results = $this->app['db']->fetchAll($SQL);
             $types = array();
             foreach ($results as $type) {
-                $types[$type['extra_type_name']] = ucfirst(str_replace('_', ' ', strtolower($type['extra_type_name'])));
+                $types[$type['extra_type_name']] = $this->app['utils']->humanize($type['extra_type_name']);
             }
             return $types;
         } catch (\Doctrine\DBAL\DBALException $e) {

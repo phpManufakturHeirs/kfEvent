@@ -140,7 +140,7 @@ class Subscribe extends Basic
                         ));
                         $form->add($field['name'], 'text', array(
                             'required' => $field['required'],
-                            'label' => ucfirst(strtolower($field['name'])),
+                            'label' => $this->app['utils']->humanize($field['name']),
                             'data' => isset($subscribe[$field['name']]) ? $subscribe[$field['name']] : ''
                         ));
                         break;
@@ -150,7 +150,7 @@ class Subscribe extends Basic
                         ));
                         $form->add($field['name'], 'text', array(
                             'required' => $field['required'],
-                            'label' => ucfirst(strtolower($field['name'])),
+                            'label' => $this->app['utils']->humanize($field['name']),
                             'data' => isset($subscribe[$field['name']]) ? $subscribe[$field['name']] : ''
                         ));
                         break;
@@ -171,7 +171,7 @@ class Subscribe extends Basic
                             'expanded' => false,
                             'multiple' => false,
                             'required' => $field['required'],
-                            'label' => ucfirst(strtolower($field['name'])),
+                            'label' => $this->app['utils']->humanize($field['name']),
                             'data' => isset($subscribe[$field['name']]) ? $subscribe[$field['name']] : $field['default'],
                             'preferred_choices' => $field['preferred']
                         ));
@@ -179,7 +179,7 @@ class Subscribe extends Basic
                     case 'birthday':
                         $form->add($field['name'], 'text', array(
                             'required' => $field['required'],
-                            'label' => ucfirst(strtolower($field['name'])),
+                            'label' => $this->app['utils']->humanize($field['name']),
                             'data' => (isset($subscribe['birthday']) && !empty($subscribe['birthday']) && ($subscribe['birthday'] != '0000-00-00')) ? date($this->app['translator']->trans('DATE_FORMAT'), strtotime($subscribe['birthday'])) : '',
                         ));
                         break;

@@ -273,9 +273,10 @@ EOD;
                             '%exclude%' => $exclude_dates));
                     }
                 case 'WEEK':
+                    $week_day = $this->app['utils']->humanize($result['week_day']);
                     return $this->app['translator']->trans('The event [%event_id%] will be repeated each %week_sequence% week(s) at %week_day%%exclude%',
                         array('%event_id%' => $result['parent_event_id'], '%week_sequence%' => $result['week_sequence'],
-                            '%week_day%' => $this->app['translator']->trans(ucfirst(strtolower($result['week_day']))),
+                            '%week_day%' => $this->app['translator']->trans($week_day),
                                 '%exclude%' => $exclude_dates));
                 case 'MONTH':
                     if ($result['month_type'] == 'SEQUENCE') {
@@ -285,30 +286,35 @@ EOD;
                     }
                     else {
                         // month type = PATTERN
+                        $month_pattern_day = $this->app['utils']->humanize($result['month_pattern_day']);
                         return $this->app['translator']->trans('The event [%event_id%] will be repeated at %pattern_type% %pattern_day% of each %pattern_sequence%. month%exclude%',
                             array('%event_id%' => $result['parent_event_id'],
                                 '%pattern_type%' => $this->app['translator']->trans(strtolower($result['month_pattern_type'])),
-                                '%pattern_day%' => $this->app['translator']->trans(ucfirst(strtolower($result['month_pattern_day']))),
+                                '%pattern_day%' => $this->app['translator']->trans($month_pattern_day),
                                 '%pattern_sequence%' => $result['month_pattern_sequence'],
                                 '%exclude%' => $exclude_dates
                             ));
                     }
                 case 'YEAR':
                     if ($result['year_type'] == 'SEQUENCE') {
+                        $year_sequence_month = $this->app['utils']->humanize($result['year_sequence_month']);
                         return $this->app['translator']->trans('The event [%event_id%] will be repeated each %year_repeat%. year at %month_day%. %month_name%%exclude%',
                             array('%event_id%' => $result['parent_event_id'], '%year_repeat%' => $result['year_repeat'],
                                 '%month_day%' => $result['year_sequence_day'],
-                                '%month_name%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_sequence_month']))),
+                                '%month_name%' => $this->app['translator']->trans($year_sequence_month),
                                 '%exclude%' => $exclude_dates));
                     }
                     else {
                         // year type == PATTERN
+                        $year_pattern_type = $this->app['utils']->humanize($result['year_pattern_type']);
+                        $year_pattern_day = $this->app['utils']->humanize($result['year_pattern_day']);
+                        $year_pattern_month = $this->app['utils']->humanize($result['year_pattern_month']);
                         return $this->app['translator']->trans('The event [%event_id%] will be repeated each %year_repeat%. year at %pattern_type% %pattern_day% of %pattern_month%%exclude%',
                             array('%event_id%' => $result['parent_event_id'],
                                 '%year_repeat%' => $result['year_repeat'],
-                                '%pattern_type%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_pattern_type']))),
-                                '%pattern_day%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_pattern_day']))),
-                                '%pattern_month%' => $this->app['translator']->trans(ucfirst(strtolower($result['year_pattern_month']))),
+                                '%pattern_type%' => $this->app['translator']->trans($year_pattern_type),
+                                '%pattern_day%' => $this->app['translator']->trans($year_pattern_day),
+                                '%pattern_month%' => $this->app['translator']->trans($year_pattern_month),
                                 '%exclude%' => $exclude_dates
                             ));
                     }

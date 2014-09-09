@@ -279,7 +279,7 @@ class EventEdit extends Backend {
             $fields->add($name, $form_type, array(
                 'attr' => array('class' => $name),
                 'data' => $value,
-                'label' => ucfirst(str_replace('_', ' ', strtolower($field['extra_type_name']))),
+                'label' => $this->app['utils']->humanize($field['extra_type_name']),
                 'required' => false
             ));
 

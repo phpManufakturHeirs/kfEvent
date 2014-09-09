@@ -265,7 +265,7 @@ EOD;
             $results = $this->app['db']->fetchAll($SQL);
             $groups = array();
             foreach ($results as $group) {
-                $groups[$group['group_id']] = ucfirst(strtolower($group['group_name']));
+                $groups[$group['group_id']] = $this->app['utils']->humanize($group['group_name']);
             }
             return $groups;
         } catch (\Doctrine\DBAL\DBALException $e) {
