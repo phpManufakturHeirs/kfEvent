@@ -41,6 +41,7 @@ class kitEvent extends Alert {
     protected $ParticipantTag = null;
     protected $Event = null;
     protected $Description = null;
+    protected static $usage = null;
 
     /**
      * Initialize the class
@@ -80,6 +81,12 @@ class kitEvent extends Alert {
                 }
             }
         }
+
+        self::$usage = $this->app['request']->get('usage', 'framework');
+        // set the locale from the CMS locale
+        if (self::$usage != 'framework') {
+            $app['translator']->setLocale($this->app['session']->get('CMS_LOCALE', 'en'));
+        }
     }
 
     /**
@@ -107,13 +114,14 @@ class kitEvent extends Alert {
         $this->app['session']->set('EVENT_IMPORT_EVENTS_IMPORTED', 0);
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/import/kitevent/start.twig'),
+            '@phpManufaktur/Event/Template', 'admin/import/kitevent/start.twig'),
             array(
                 'alert' => $this->getAlert(),
                 'records' => $records,
                 'import_is_possible' => self::$import_is_possible,
                 'kit_release' => self::$kit_release,
-                'event_release' => self::$event_release
+                'event_release' => self::$event_release,
+                'usage' => self::$usage
             ));
     }
 
@@ -355,13 +363,14 @@ class kitEvent extends Alert {
             $this->setAlert('There exists no kitEvent installation at the parent CMS!', array(), self::ALERT_TYPE_WARNING);
         }
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
-            '@phpManufaktur/Event/Template', 'bootstrap/admin/import/kitevent/result.twig'),
+            '@phpManufaktur/Event/Template', 'admin/import/kitevent/result.twig'),
             array(
                 'alert' => $this->getAlert(),
                 'events' => array(
                     'detected' => $events_detected,
                     'imported' => $events_imported
-                )
+                ),
+                'usage' => self::$usage
             ));
     }
 }
