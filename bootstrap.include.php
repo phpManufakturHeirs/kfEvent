@@ -42,6 +42,16 @@ $entry_points['ROLE_ADMIN'][] = array(
         'url' => MANUFAKTUR_URL.'/Event/extension.jpg'
     )
 );
+$entry_points['ROLE_ADMIN'][] = array(
+    'route' => '/admin/event/import',
+    'name' => 'Event Migrate',
+    'info' => $app['translator']->trans('Migrate data of a kitEvent installation into Event'),
+    'icon' => array(
+        'path' => '/extension/phpmanufaktur/phpManufaktur/Event/Data/Import/kitEvent/migrate.jpg',
+        'url' => MANUFAKTUR_URL.'/Event/Data/Import/kitEvent/migrate.jpg'
+    )
+);
+
 $app['security.role_entry_points'] = $entry_points;
 
 // add all ROLES provided and used by EVENT

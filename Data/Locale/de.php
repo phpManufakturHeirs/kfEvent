@@ -4,7 +4,7 @@
  * kitFramework::Event
  *
  * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://kit2.phpmanufaktur.de/Event
+ * @link https://kit2.phpmanufaktur.de
  * @copyright 2014 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  *
@@ -182,7 +182,7 @@ return array(
   'Event location'
     => 'Veranstaltungsort',
   'Event management suite for freelancers and organizers'
-    => 'Veranstaltungs Verwaltung und Organisation',
+    => 'Veranstaltungen, Konzerte, Seminare oder Vorlesungen verwalten und organisieren',
   'Event participants confirmed'
     => 'Tln. best.',
   'Event participants max'
@@ -275,6 +275,8 @@ return array(
     => 'Langbeschreibung',
   'Message from the kitFramework Event application'
     => 'Mitteilung von kitFramework Event',
+  'Migrate data of a kitEvent installation into Event'
+    => 'Veranstaltungsdaten von einer kitEvent Installation in Event übernehmen',
   'Missing a valid Event ID!'
     => 'Vermisse eine gültige Veranstaltungs ID!',
   'Month pattern day'
@@ -695,5 +697,4 @@ return array(
     => 'Ihr Kontakt Datensatz ist gesperrt, wir können keine Aktion durchführen. Bitte wenden Sie sich an den Administrator.',
   'Your subscription for the event %event% is already confirmed.'
     => 'Ihre Anmeldung für die Veranstaltung %event% wurde bereits bestätigt.',
-  
 );
