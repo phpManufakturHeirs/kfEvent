@@ -6,6 +6,19 @@ MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
 kitFramework - <https://kit2.phpmanufaktur.de>
 
+**2.0.45** - 2014-09-14
+
+* fixed wrong release date
+* changed toolbar handling
+* changed source for translation
+* fixed strong typo in `ROLE_MEDIABROWSER_USER`
+* replaced usage of `ucfirst()` with `$app['utils']->humanize()`
+* updated `@link` references
+* updated info URL
+* added URL for the changelog in the CMS Tool
+* fixed template path at import function
+* added entry point to import event data from kitEvent
+
 **2.0.44** - 2014-09-05
 
 * changed form 'number' fields to 'text' due compatibility reason
