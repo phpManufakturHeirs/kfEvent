@@ -57,12 +57,12 @@ class EventFilter
                 "WHERE `event_location`=`contact_id` AND `".FRAMEWORK_TABLE_PREFIX."event_event`.`group_id`=".
                 "`".FRAMEWORK_TABLE_PREFIX."event_group`.`group_id` ";
 
+            // set actual date
+            $dt = Carbon::now();
+            $today = $dt->toDateTimeString();
             if (empty($filter)) {
                 // no filter defined - select all active events one week back and four weeks ahead
 
-                // set actual date
-                $dt = Carbon::now();
-                $today = $dt->toDateTimeString();
                 // go a week back
                 $dt->subWeek();
                 $start_date = $dt->toDateTimeString();
@@ -176,7 +176,7 @@ class EventFilter
                         $SQL .= "(`event_date_to` BETWEEN '$start_date' AND '$end_date')) ";
                     }
                     if (!$ignore_publish) {
-                        $SQL .= "AND ('$start_date' BETWEEN `event_publish_from` AND `event_publish_to`) ";
+                        $SQL .= "AND ('$today' BETWEEN `event_publish_from` AND `event_publish_to`) ";
                     }
                     // unset the date filters
                     unset($filter['month']);
@@ -224,7 +224,7 @@ class EventFilter
                         $SQL .= "(`event_date_to` BETWEEN '$start_date' AND '$end_date')) ";
                     }
                     if (!$ignore_publish) {
-                        $SQL .= "AND ('$start_date' BETWEEN `event_publish_from` AND `event_publish_to`) ";
+                        $SQL .= "AND ('$today' BETWEEN `event_publish_from` AND `event_publish_to`) ";
                     }
                     // unset the date filters
                     unset($filter['month']);
@@ -283,7 +283,7 @@ class EventFilter
                     }
 
                     if ($ignore_publish) {
-                        $SQL .= "AND ('$start_date' BETWEEN `event_publish_from` AND `event_publish_to`) ";
+                        $SQL .= "AND ('$today' BETWEEN `event_publish_from` AND `event_publish_to`) ";
                     }
                     // unset the date filters
                     unset($filter['month']);
@@ -329,7 +329,7 @@ class EventFilter
                     }
 
                     if ($ignore_publish) {
-                        $SQL .= "AND ('$start_date' BETWEEN `event_publish_from` AND `event_publish_to`) ";
+                        $SQL .= "AND ('$today' BETWEEN `event_publish_from` AND `event_publish_to`) ";
                     }
                     // unset the date filters
                     unset($filter['month']);
