@@ -1,10 +1,16 @@
 ## Event ##
 
 (c) 2011, 2013 phpManufaktur by Ralf Hertsch
+(c) 2015       phpManufakturHeirs
 
 MIT License (MIT) - <http://www.opensource.org/licenses/MIT>
 
-kitFramework - <https://kit2.phpmanufaktur.de>
+kitFramework - <https://phpmanufaktur.info>
+
+**2.0.46** - 2015-07-21
+
+* fixed comments counter
+* changed links from phpmanufaktur.de to phpmanufaktur.info
 
 **2.0.45** - 2014-09-14
 
