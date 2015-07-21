@@ -3,8 +3,8 @@
 /**
  * Event
  *
- * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://kit2.phpmanufaktur.de/Event
+ * @author Team phpManufaktur <team@phpmanufaktur.info>
+ * @link http://www.phpmanufaktur.info/de/kitframework/erweiterungen/event.php
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */
@@ -80,7 +80,7 @@ if (!in_array($roles, $roles_provided)) {
 /**
  * Use the EmbeddedAdministration feature to connect the extension with the CMS
  *
- * @link https://github.com/phpManufaktur/kitFramework/wiki/Extensions-%23-Embedded-Administration
+ * @link https://github.com/phpManufakturHeirs/kitFramework/wiki/Extensions-%23-Embedded-Administration
  */
 $app->get('/event/cms/{cms_information}', function ($cms_information) use ($app) {
     $administration = new EmbeddedAdministration($app);

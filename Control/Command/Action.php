@@ -3,8 +3,8 @@
 /**
  * Event
  *
- * @author Team phpManufaktur <team@phpmanufaktur.de>
- * @link https://kit2.phpmanufaktur.de/Event
+ * @author Team phpManufaktur <team@phpmanufaktur.info>
+ * @link http://www.phpmanufaktur.info/de/kitframework/erweiterungen/event.php
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT
  */

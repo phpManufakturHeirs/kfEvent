@@ -2,7 +2,7 @@
   "command":"Event",
   "vendor": {
     "name":"phpManufaktur",
-    "url":"https://phpmanufaktur.de"
+    "url":"http://phpmanufaktur.info"
     },
   "name": {
     "en":"Organize and publish events",
@@ -14,7 +14,7 @@
   },
   "info": {
     "en": {
-      "link":"https://kit2.phpmanufaktur.de"
+      "link":"http://phpmanufaktur.info"
     }
   },
   "help": {
@@ -28,12 +28,12 @@
   },
   "issues": {
     "en": {
-      "link":"https://github.com/phpManufaktur/kfEvent/issues"
+      "link":"https://github.com/phpManufakturHeirs/kfEvent/issues"
     }
   },
   "support": {
     "en": {
-      "link":"https://support.phpmanufaktur.de"
+      "link":"http://phpmanufaktur.info"
     }
   }
 }

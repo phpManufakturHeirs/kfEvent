@@ -3,7 +3,7 @@
 /**
  * Event
  *
- * @author Team phpManufaktur <team@phpmanufaktur.de>
+ * @author Team phpManufaktur <team@phpmanufaktur.info>
  * @link https://addons.phpmanufaktur.de/event
  * @copyright 2013 Ralf Hertsch <ralf.hertsch@phpmanufaktur.de>
  * @license MIT License (MIT) http://www.opensource.org/licenses/MIT

@@ -62,7 +62,7 @@ kitFramework - <https://kit2.phpmanufaktur.de>
 
 **2.0.38** - 2014-04-03
 
-* add feature `pack_recurring` to enable the [packing of recurring events](https://github.com/phpManufaktur/kfEvent/wiki/list.event.json#columns) in the administrative event list.
+* add feature `pack_recurring` to enable the [packing of recurring events](https://github.com/phpManufakturHeirs/kfEvent/wiki/list.event.json#columns) in the administrative event list.
 
 **2.0.37** - 2014-04-01
 
