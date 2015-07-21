@@ -1042,7 +1042,7 @@ class Propose extends Basic
                 $EventGroup = new EventGroup($app);
                 if (false === ($group_id = $EventGroup->getGroupID($parameter['group']))) {
                     $Message = new Message($app);
-                    return $Message->render($this->app['translator']->trans('The event group with the name %group% does not exists!'),
+                    return $Message->render($this->app['translator']->trans('The event group with the name %group% does not exist!'),
                         array('%group%' => $parameter['group']), 'group[]', array(), true);
                 }
             }
@@ -1133,6 +1133,9 @@ class Propose extends Basic
         if (empty($request['email']) && empty($request['phone']) && empty($request['url'])) {
             if (($request['create_type'] == 'location') && !$config['event']['location']['required']['communication']) {
                 // skip ...
+            }
+            elseif(($request['create_type'] == 'organizer') && !$config['event']['organizer']['required']['communication']) {
+                // skip
             }
             else {
                 // at least we need one communication way

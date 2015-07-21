@@ -527,7 +527,9 @@ class EventFilter
                 $event = $this->Event->selectEvent($result['event_id']);
                 if ($comments_info) {
                     // add information about comments
-                    $event['comments']['count'] = $this->Comments->countComments($comments_type, $result['event_id']);
+                    $event['comments']['count']
+                        = $this->Comments->countComments($comments_type, $result['event_id'])
+                        + $this->Comments->countPassedComments($comments_type, $result['event_id']);
                 }
                 $events[] = $event;
             }

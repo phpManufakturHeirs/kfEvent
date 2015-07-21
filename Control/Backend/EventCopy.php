@@ -197,9 +197,15 @@ class EventCopy extends Backend
             $data = $form->getData();
 
             if (isset($data['comments']) && ($data['comments'] == 'PASS_FROM')) {
+                $app['monolog']->addDebug(sprintf('comments will be passed from [%d]',$data['event_id']),
+                    array(__METHOD__, __LINE__));
                 // pass the comments from the old EVENT ID to the new one
                 $CommentsPassed = new CommentsPassed($app);
                 $CommentsPassed->insertPassTo('EVENT', $data['event_id'], $data['new_event_id']);
+            }
+            else {
+                $app['monolog']->addDebug(sprintf('comments will NOT be passed from [%d]',$data['event_id']),
+                    array(__METHOD__, __LINE__));
             }
 
             // the request method must be GET not POST!
