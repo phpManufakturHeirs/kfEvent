@@ -123,6 +123,8 @@ return array(
     => 'Datum',
   'Date and Time'
     => 'Datum und Uhrzeit',
+  'Days'
+    => 'Tage',
   'Day sequence'
     => 'Alle x-Tage wiederholen',
   'Day type'
@@ -323,6 +325,8 @@ return array(
     => 'Veranstalter',
   'Organizer ID'
     => 'Veranstalter ID',
+  'out of'
+    => 'von',
   'Parent event id'
     => 'ID',
   'Participant'
@@ -451,10 +455,14 @@ return array(
     => 'Gruppe wählen',
   'Select type'
     => 'Typ auswählen',
+  'Settings'
+    => 'Einstellungen',
   'Short description'
     => 'Kurzbeschreibung',
   'Show detailed information'
     => 'Detailierte Informationen anzeigen',
+  'Showing'
+    => 'Zeige',
   'Skipped kitEvent ID %event_id%: Can not determine the Event Group ID for the kitEvent Group ID %group_id%.'
     => 'kitEvent ID %event_id% übersprungen: Kann die Veranstaltungs Gruppen ID  für die ID %group_id% nicht ermitteln!',
   'Skipped kitEvent ID %event_id%: Can not find the contact ID for the KIT ID %kit_id%.'
@@ -486,6 +494,8 @@ return array(
   'Subscription id'
     => 'ID',
   'Subscriptions'
+    => 'Anmeldungen',
+  'subscriptions'
     => 'Anmeldungen',
   'Successfull inserted a recurring event'
     => 'Es wurden erfolgreich sich wiederholende Veranstaltungen angelegt.',
