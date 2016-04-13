@@ -392,6 +392,25 @@ class Update
     }
 
     /**
+     * Release 2.0.47
+     */
+    protected function release_2047()
+    {
+        $Configuration = new Configuration($this->app);
+        $config = $Configuration->getConfiguration();
+        if (!isset($config['event']['subscription']['limit'])) {
+            $config['event']['subscription']['limit'] = 100;
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
+        }
+        if (!isset($config['event']['subscription']['add_days_to_event'])) {
+            $config['event']['subscription']['add_days_to_event'] = 30;
+            $Configuration->setConfiguration($config);
+            $Configuration->saveConfiguration();
+        }
+    }
+
+    /**
      * Execute the update for Event
      *
      * @param Application $app
@@ -411,6 +430,7 @@ class Update
         $this->release_2036();
         $this->release_2039();
         $this->release_2042();
+        $this->release_2047();
 
         // re-install or update the admin-tool
         $AdminTool = new InstallAdminTool($app);
