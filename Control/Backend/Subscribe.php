@@ -365,8 +365,19 @@ class Subscribe extends Backend {
     {
         $this->initialize($app);
 
+        $limit = ( isset(self::$config['event']['subscription']['limit']) && is_numeric(self::$config['event']['subscription']['limit']) )
+               ? self::$config['event']['subscription']['limit']
+               : 100
+               ;
+
+        $days  = ( isset(self::$config['event']['subscription']['add_days_to_event']) && is_numeric(self::$config['event']['subscription']['add_days_to_event']) )
+               ? self::$config['event']['subscription']['add_days_to_event']
+               : 30
+               ;
+
         $SubscriptionData = new Subscription($app);
-        $subscriptions = $SubscriptionData->selectList(100, 30);
+        $subscriptions = $SubscriptionData->selectList($limit, $days);
+        $sum = $SubscriptionData->countSubscriptions();
 
         return $this->app['twig']->render($this->app['utils']->getTemplateFile(
             '@phpManufaktur/Event/Template', 'admin/list.subscription.twig'),
@@ -374,7 +385,11 @@ class Subscribe extends Backend {
                 'usage' => self::$usage,
                 'toolbar' => $this->getToolbar('subscription'),
                 'subscriptions' => $subscriptions,
-                'alert' => $this->getAlert()
+                'alert' => $this->getAlert(),
+                'showing' => count($subscriptions),
+                'sum' => $sum,
+                'limit' => $limit,
+                'days' => $days
             ));
     }
 

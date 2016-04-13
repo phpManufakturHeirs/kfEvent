@@ -55,6 +55,11 @@
               <th>{{ 'Event'|trans }}</th>
               <th>{{ 'Message'|trans }}</th>
             </tr>
+            <tr>
+              <th colspan="7">
+                {{ 'Showing'|trans }} {{ showing }} {{ 'out of'|trans }} {{ sum }} {{ 'subscriptions'|trans }}
+                ({{ 'Settings'|trans }}: Limit: {{ limit }} | {{ 'Days'|trans }}: {{ days }} )
+              </th>
           </thead>
           <tbody>
             {% for item in subscriptions %}

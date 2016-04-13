@@ -161,6 +161,16 @@ EOD;
         }
     }
 
+    public function countSubscriptions($status='CONFIRMED', $status_operator='=')
+    {
+        try {
+            $SQL = "SELECT COUNT(`subscription_id`) AS `sum` FROM `".self::$table_name."` WHERE `subscription_status`$status_operator'$status'";
+            return $this->app['db']->fetchColumn($SQL);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new \Exception($e);
+        }
+    }
+
     public function countParticipants($event_id, $status='CONFIRMED', $status_operator='=')
     {
         try {
